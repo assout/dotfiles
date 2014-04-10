@@ -10,7 +10,6 @@ if has('win32') || has('win64') " At office
 	endfor
 	unlet s:path
 
-
 	" バックアップディレクトリを指定
 	set backupdir=D:\100.tmp\vimbackup
 	
@@ -41,10 +40,6 @@ if has('win32') || has('win64') " At office and home
 	let g:neocomplete#enable_ignore_case=1
 	let g:neocomplete#enable_smart_case=1
 
-	"## vimrcとgvimrcの編集、保存、読み込み
-	nnoremap <Leader>v :e $MYVIMRC<CR>
-	nnoremap <Leader>g :e $MYGVIMRC<CR>
-	nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 elseif has('unix') " At test environment
 	"# コマンドラインモードでのキーマッピングをEmacs風にする(pluginのemacscommandline.vimが使えない環境のみ)
@@ -130,6 +125,11 @@ nnoremap <silent> [t gT
 nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
+
+"## vimrcとgvimrcの編集、保存、読み込み
+nnoremap <Leader>v :e $MYVIMRC<CR>
+nnoremap <Leader>g :e $MYGVIMRC<CR>
+nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 "# let define
 

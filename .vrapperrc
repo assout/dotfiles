@@ -1,0 +1,51 @@
+"# Key bindings for eclipse to turn off for vrapper activation.
+"# For detail see http://vrapper.sourceforge.net/documentation
+" Ctrl+o
+" Ctrl+i
+" Ctrl+p
+" Ctrl+n
+" Ctrl+j
+" Ctrl+k
+
+"# Vim Settings
+source ~/.vimrc
+
+" <Tab>などを表示しない
+set nolist
+
+" ヤンク、ペーストをクリップボードに
+set clipboard=unnamed
+
+"# Vrapper Settings
+
+" インサートモードを抜けたらIMEオフ
+set imdisable
+
+" コンテンツアシストで<C-p>,<C-n>を有効にする
+set contentassistmode
+
+" タブ移動したらNORMAL MODEに変更する??
+set startnormalmode
+
+"# Key Mappings
+
+" /のvery magicへのマッピングを解除
+nunmap /
+
+noremap <C-j> <C-d>
+noremap <C-k> <C-u>
+
+noremap <C-h> gT
+noremap <C-l> gt
+
+nnoremap ]] :GotoNextMember<CR>
+nnoremap [[ :GotoPreviousMember<CR>
+
+"definition ID of the edit -> go to next member action 
+eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
+
+"definition ID of the edit -> go to previous member action 
+eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
+
+" vim: set filetype=vim :
+

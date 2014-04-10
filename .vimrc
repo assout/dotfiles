@@ -1,3 +1,22 @@
+set nocompatible
+filetype plugin indent off
+
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  call neobundle#rc(expand('~/.vim/bundle/'))
+endif
+
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+if has('lua')
+	NeoBundle 'Shougo/neocomplete.vim'
+endif
+NeoBundle 'kannokanno/previm'
+NeoBundle 'houtsnip/vim-emacscommandline'
+NeoBundle 'thinca/vim-singleton'
+NeoBundle 'w0ng/vim-hybrid'
+
 set encoding=utf-8
 set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 
@@ -13,35 +32,37 @@ if has('win32') || has('win64') " At office
 	" バックアップディレクトリを指定
 	set backupdir=D:\100.tmp\vimbackup
 	
-	" singgleton.vim
+endif
+
+"vimfilerセーフモードの設定(オフにする)
+let g:vimfiler_safe_mode_by_default=0
+" unite command
+" nnoremap [vimfiler] <Nop>
+" nmap <Space>f [vimfiler]
+" nnoremap <silent> [vimfiler]b :VimFilerBufferDir<CR>
+" nnoremap <silent> [vimfiler]d :VimFilerDouble<CR>
+" nnoremap <silent> [vimfiler]e :VimFilerExplorer<CR>
+
+" unite source=bookmarkのデフォルトアクションをvimfilerにする
+call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+" unite command
+" nnoremap [unite] <Nop>
+" nmap <Space>u [unite]
+" nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files buffer bookmark file<CR>
+" nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+" nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
+
+" neocomplete用設定
+let g:neocomplete#enable_at_startup=1
+let g:neocomplete#enable_ignore_case=1
+let g:neocomplete#enable_smart_case=1
+
+" singgleton.vim
+if has('gui_running')
 	call singleton#enable()
 endif
-if has('win32') || has('win64') " At office and home
-	"vimfilerセーフモードの設定(オフにする)
-	let g:vimfiler_safe_mode_by_default=0
-	" unite command
-	" nnoremap [vimfiler] <Nop>
-	" nmap <Space>f [vimfiler]
-	" nnoremap <silent> [vimfiler]b :VimFilerBufferDir<CR>
-	" nnoremap <silent> [vimfiler]d :VimFilerDouble<CR>
-	" nnoremap <silent> [vimfiler]e :VimFilerExplorer<CR>
-	
-	" unite source=bookmarkのデフォルトアクションをvimfilerにする
-	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-	" unite command
-	" nnoremap [unite] <Nop>
-	" nmap <Space>u [unite]
-	" nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files buffer bookmark file<CR>
-	" nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-	" nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
 
-	" neocomplete用設定
-	let g:neocomplete#enable_at_startup=1
-	let g:neocomplete#enable_ignore_case=1
-	let g:neocomplete#enable_smart_case=1
-
-
-elseif has('unix') " At test environment
+if has('unix') " At test environment
 	"# コマンドラインモードでのキーマッピングをEmacs風にする(pluginのemacscommandline.vimが使えない環境のみ)
 	" 行頭へ移動
 	cnoremap <C-a> <Home>

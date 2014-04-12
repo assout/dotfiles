@@ -16,6 +16,8 @@ NeoBundle 'kannokanno/previm'
 NeoBundle 'houtsnip/vim-emacscommandline'
 NeoBundle 'thinca/vim-singleton'
 NeoBundle 'w0ng/vim-hybrid'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'vim-scripts/rdark'
 
 set encoding=utf-8
 set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
@@ -118,6 +120,8 @@ set nrformats=""
 
 "# map define
 
+"ノーマルモードで改行を挿入
+noremap <CR> i<CR><ESC>
 " YをD,Cと一貫性のある挙動に変更
 nnoremap Y y$
 " very magicをデフォルトにする
@@ -163,11 +167,11 @@ augroup MyAutoGroup
 	
 	"## DoubleByteSpace highlight
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-	autocmd VimEnter,WinEnter,BufRead * match DoubleByteSpace /　/
-	
+	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+
 	"## markdown
-	autocmd MyAutoGroup BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	autocmd MyAutoGroup FileType markdown hi! def link markdownItalic LineNr
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd FileType markdown hi! def link markdownItalic LineNr
 	
 	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0

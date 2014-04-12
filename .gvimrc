@@ -1,6 +1,7 @@
 if has('win32')
 	" フォント変更
 	set guifont=MS_Gothic:h9:cSHIFTJIS
+elseif has('unix')
 endif
 
 " 縦幅 デフォルトは24
@@ -17,5 +18,5 @@ set guioptions-=T
 set showtabline=2
 
 " カラースキーム変更
-colorscheme hybrid
+colorscheme molokai
 

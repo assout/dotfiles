@@ -18,5 +18,5 @@ set guioptions-=T
 set showtabline=2
 
 " カラースキーム変更
-colorscheme molokai
+colorscheme hybrid
 

@@ -18,6 +18,7 @@ NeoBundle 'thinca/vim-singleton'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'vim-scripts/rdark'
+NeoBundle 'vim-jp/vimdoc-ja'
 
 set encoding=utf-8
 set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
@@ -183,11 +184,7 @@ augroup END
 " command実行結果をclipboardにキャプチャ
 func! s:func_copy_cmd_output(cmd)
 	" TODO *レジスタってgvim only?
-	if has('gui_running')
-		redir @*>
-	else
-		redir @">
-	endif
+	redir @">
 	execute a:cmd
 	redir END
 endfunc

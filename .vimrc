@@ -8,6 +8,7 @@ endif
 
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 if has('lua')
 	NeoBundle 'Shougo/neocomplete.vim'
@@ -107,7 +108,7 @@ set hlsearch
 " インクリメンタルサーチ
 set incsearch
 " ヤンク、ペーストをクリップボードに
-set clipboard+=unnamed
+set clipboard=unnamed,autoselect
 " コマンドラインモードの補完を使いやすくする
 set wildmenu
 " マクロなどを実行中は描画を中断
@@ -118,6 +119,13 @@ set scrolloff=5
 set sidescrolloff=5
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
+
+"# let define
+
+" netrwのデフォルト表示スタイル変更
+let g:netrw_liststyle=3
+" Leaderをスペースに変更
+let mapleader=" "
 
 "# map define
 
@@ -181,12 +189,6 @@ nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
 
-"# let define
-
-" netrwのデフォルト表示スタイル変更
-let g:netrw_liststyle=3
-" Leaderをスペースに変更
-let mapleader=" "
 
 "# autocom define
 augroup MyAutoGroup

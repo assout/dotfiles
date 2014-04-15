@@ -157,10 +157,36 @@ nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>g :e $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
+" カッコ等の入力補助
+inoremap {} {}<LEFT>
+inoremap [] []<LEFT>
+inoremap () ()<LEFT>
+inoremap "" ""<left>
+inoremap '' ''<left>
+inoremap $$ $$<left>
+inoremap <> <><left>
+inoremap `` ``<left>
+
+" コマンドラインでコマンド履歴をやりやすく 
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+
+" ウィンドウ移動を簡単に
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>H <C-w>H
+nnoremap <Leader>J <C-w>J
+nnoremap <Leader>K <C-w>K
+nnoremap <Leader>L <C-w>L
+
 "# let define
 
 " netrwのデフォルト表示スタイル変更
 let g:netrw_liststyle=3
+" Leaderをスペースに変更
+let mapleader=" "
 
 "# autocom define
 augroup MyAutoGroup
@@ -183,7 +209,6 @@ augroup END
 
 " command実行結果をclipboardにキャプチャ
 func! s:func_copy_cmd_output(cmd)
-	" TODO *レジスタってgvim only?
 	redir @">
 	execute a:cmd
 	redir END

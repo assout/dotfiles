@@ -56,7 +56,7 @@ let g:netrw_liststyle=3
 
 "# map define {{{
 "## at normal mode & visual mode {{{
-"### スクロール
+"### スクロール TODO これは見直す(なれちゃう前に)
 noremap <C-j> 10<C-e>
 noremap <C-k> 10<C-y>
 noremap <C-h> 10zh

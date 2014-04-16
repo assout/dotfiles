@@ -153,8 +153,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"# neobundle {{{
 	filetype plugin indent off
 	if has('vim_starting')
-	  set runtimepath+=~/.vim/bundle/neobundle.vim/
-	  call neobundle#rc(expand('~/.vim/bundle/'))
+		set runtimepath+=~/.vim/bundle/neobundle.vim/
+		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
 
 	NeoBundle 'Shougo/neobundle.vim'
@@ -165,7 +165,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		NeoBundle 'Shougo/neocomplete.vim'
 	end
 	NeoBundle 'kannokanno/previm'
-	NeoBundle 'houtsnip/vim-emacscommandline'
 	NeoBundle 'thinca/vim-singleton'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
@@ -175,7 +174,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 	filetype plugin indent on
 	"}}}
-
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。{{{
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')

@@ -1,5 +1,14 @@
-"# set define {{{
+"# INDEX {{{
+"1. set define
+"1. let define
+"1. key-mapping define
+"1. function define
+"1. runtime define
+"1. plugin define
+"1. autocommand define
+"}}}
 
+"# set define {{{
 " 内部encodingをutf-8
 set encoding=utf-8
 " ファイルエンコーディングを指定
@@ -38,70 +47,77 @@ set nrformats=""
 set textwidth=0
 " o,Oコマンドでの改行時のコメント継続をなくす
 set formatoptions-=o
-
 "}}}
 
 "# let define {{{
-
 " netrwのデフォルト表示スタイル変更
 let g:netrw_liststyle=3
-
 "}}}
 
 "# map define {{{
+"## at normal mode & visual mode {{{
+"### スクロール
+noremap <C-j> 10<C-e>
+noremap <C-k> 10<C-y>
+noremap <C-h> 10zh
+noremap <C-l> 10zl
+"}}}
 
+"## at normal mode {{{
+"改行を挿入
+nnoremap <CR> i<CR><ESC>
 " YをD,Cと一貫性のある挙動に変更
 nnoremap Y y$
 " very magicをデフォルトにする
 nnoremap / /\v
 " 検索結果ハイライトを解除
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
-
-"ノーマルモードで改行を挿入
-noremap <CR> i<CR><ESC>
-
-"## スクロール
-noremap <C-j> 10<C-e>
-noremap <C-k> 10<C-y>
-noremap <C-h> 10zh
-noremap <C-l> 10zl
-
-"## バッファ、ウィンドウ、タブ移動関連
+"### バッファ、ウィンドウ、タブ移動関連
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
 nnoremap <silent> ]B :blast<CR>
-
 nnoremap <silent> [w <C-W>W
 nnoremap <silent> ]w <C-W>w
 nnoremap <silent> [W <C-W><C-T>
 nnoremap <silent> ]W <C-W><C-B>
-
 nnoremap <silent> [t gT
 nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
-
-"## vimrcとgvimrcの編集、保存、読み込み
+"### vimrcとgvimrcの編集、保存、読み込み
 nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>g :e $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+"### ウィンドウ移動を簡単に
+nnoremap <Leader>h <C-w>h
+nnoremap <Leader>j <C-w>j
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>H <C-w>H
+nnoremap <Leader>J <C-w>J
+nnoremap <Leader>K <C-w>K
+nnoremap <Leader>L <C-w>L
+"}}}
 
-" カッコ等の入力補助
-"inoremap {} {}<LEFT>
-"inoremap [] []<LEFT>
-"inoremap () ()<LEFT>
-"inoremap "" ""<left>
-"inoremap '' ''<left>
-"inoremap $$ $$<left>
-"" inoremap <> <><left>
-"inoremap `` ``<left>
+"## at insert mode {{{
+"" カッコ等の入力補助 TODO カーソル移動が不自然になる
+"inoremap  {} {}<Left>
+"inoremap [] []<Left>
+"inoremap () ()<Left>
+"inoremap "" ""<Left>
+"inoremap '' ''<Left>
+"inoremap $$ $$<Left>
+"inoremap <> <><Left> TODO vrapperが正しく動かなくなる
+"inoremap `` ``<Left>
+"}}}
 
-"コマンドラインでコマンド履歴をやりやすく 
+"## at command mode {{{
+"コマンド履歴を表示
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
-
-"# コマンドラインモードでのキーマッピングをEmacs風にする(pluginのemacscommandline.vimが使えない環境のみ)
+"### コマンドラインモードでのキーマッピングをEmacs風にする
+" 行頭へ移動
 cnoremap <C-a> <Home>
 " 行末へ移動
 cnoremap <C-e> <End>
@@ -119,37 +135,11 @@ cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 " 次の単語へ移動
 cnoremap <M-f> <S-Right>
-
-"ウィンドウ移動を簡単に
-nnoremap <Leader>h <C-w>h
-nnoremap <Leader>j <C-w>j
-nnoremap <Leader>k <C-w>k
-nnoremap <Leader>l <C-w>l
-nnoremap <Leader>H <C-w>H
-nnoremap <Leader>J <C-w>J
-nnoremap <Leader>K <C-w>K
-nnoremap <Leader>L <C-w>L
-
-"# autocom define
-augroup MyAutoGroup
-	autocmd!
-	
-	"## DoubleByteSpace highlight
-	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-
-	"## markdown
-	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	autocmd FileType markdown hi! def link markdownItalic LineNr
-	
-	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
-	autocmd FileType * set textwidth=0
-	autocmd FileType * set formatoptions-=o
-augroup END
+"}}}
+"}}}
 
 "# function define {{{
-
-" command実行結果をclipboardにキャプチャ
+"## command実行結果を無名レジスタにキャプチャ
 func! s:func_copy_cmd_output(cmd)
 	redir @">
 	execute a:cmd
@@ -158,8 +148,7 @@ endfunc
 command! -nargs=1 -complete=command Capture call <SID>func_copy_cmd_output(<q-args>)
 "}}}
 
-"# plugin define {{{
-
+"# runtime define {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"# neobundle {{{
 	filetype plugin indent off
@@ -195,30 +184,48 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 		end
 	endfor
 	unlet s:path
+	"}}}
 endif
+"}}}
 
-"# vimfiler.vim {{{
-
-" セーフモードの設定(オフにする)
+"# plugin define {{{
+"## vimfiler.vim {{{
+" 非safe modeで起動
 let g:vimfiler_safe_mode_by_default=0
-
 "}}}
 
 "# unite.vim {{{
-
-" unite source=bookmarkのデフォルトアクションをvimfilerにする
+" source=bookmarkのデフォルトアクションをvimfilerにする
 call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-
 "}}}
 
 "# neocomplete.vim {{{
+" enabled
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#enable_ignore_case=1
 let g:neocomplete#enable_smart_case=1
 "}}}
 
-" singgleton.vim
+" singgleton.vim 
 call singleton#enable()
 
+"}}}
+
+"# autocom define {{{
+augroup MyAutoGroup
+	autocmd!
+	
+	"## DoubleByteSpace highlight
+	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+
+	"## markdown
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd FileType markdown hi! def link markdownItalic LineNr
+	
+	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
+	autocmd FileType * set textwidth=0
+	autocmd FileType * set formatoptions-=o
+augroup END
 "}}}
 

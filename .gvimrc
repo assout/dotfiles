@@ -1,8 +1,6 @@
 if has('win32')
 	set guifont=MS_Gothic:h9:cSHIFTJIS
-elseif has('unix')
 endif
-
 " 縦幅 デフォルトは24
 set lines=40
 " 横幅 デフォルトは80
@@ -15,7 +13,9 @@ set guioptions-=m
 set guioptions-=T
 " 常にタブラベルを表示する
 set showtabline=2
-
 " カラースキーム変更
-colorscheme molokai
-
+if has('unix')
+	colorscheme molokai
+elseif has('win32')
+	colorscheme hybrid
+endif

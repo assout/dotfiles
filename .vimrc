@@ -1,103 +1,18 @@
-set nocompatible
-filetype plugin indent off
+"# set define {{{
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-  call neobundle#rc(expand('~/.vim/bundle/'))
-endif
-
-NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/vimfiler.vim'
-if has('lua')
-	NeoBundle 'Shougo/neocomplete.vim'
-endif
-NeoBundle 'kannokanno/previm'
-NeoBundle 'houtsnip/vim-emacscommandline'
-NeoBundle 'thinca/vim-singleton'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'tomasr/molokai'
-NeoBundle 'vim-scripts/rdark'
-NeoBundle 'vim-jp/vimdoc-ja'
-
+" 内部encodingをutf-8
 set encoding=utf-8
+" ファイルエンコーディングを指定
 set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
-
-if has('win32') || has('win64') " At office
-	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。
-	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
-		if s:path !~# '\~$' && isdirectory(s:path)
-		let &runtimepath = &runtimepath.','.s:path
-		end
-	endfor
-	unlet s:path
-
-	" バックアップディレクトリを指定
-	set backupdir=D:\100.tmp\vimbackup
-	
-endif
-
-"vimfilerセーフモードの設定(オフにする)
-let g:vimfiler_safe_mode_by_default=0
-" unite command
-" nnoremap [vimfiler] <Nop>
-" nmap <Space>f [vimfiler]
-" nnoremap <silent> [vimfiler]b :VimFilerBufferDir<CR>
-" nnoremap <silent> [vimfiler]d :VimFilerDouble<CR>
-" nnoremap <silent> [vimfiler]e :VimFilerExplorer<CR>
-
-" unite source=bookmarkのデフォルトアクションをvimfilerにする
-call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-" unite command
-" nnoremap [unite] <Nop>
-" nmap <Space>u [unite]
-" nnoremap <silent> [unite]c :<C-u>UniteWithCurrentDir -buffer-name=files buffer bookmark file<CR>
-" nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-" nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
-
-" neocomplete用設定
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#enable_ignore_case=1
-let g:neocomplete#enable_smart_case=1
-
-" singgleton.vim
-if has('gui_running')
-	call singleton#enable()
-endif
-
-if has('unix') " At test environment
-	"# コマンドラインモードでのキーマッピングをEmacs風にする(pluginのemacscommandline.vimが使えない環境のみ)
-	" 行頭へ移動
-	cnoremap <C-a> <Home>
-	" 行末へ移動
-	cnoremap <C-e> <End>
-	" 一文字戻る
-	cnoremap <C-b> <Left>
-	" 一文字進む
-	cnoremap <C-f> <Right>
-	" カーソルの下の文字を削除(Delete)
-	cnoremap <C-d> <Del>
-	" コマンドライン履歴を一つ進む
-	cnoremap <C-n> <Down>
-	" コマンドライン履歴を一つ戻る
-	cnoremap <C-p> <Up>
-	" 前の単語へ移動
-	cnoremap <M-b> <S-Left>
-	" 次の単語へ移動
-	cnoremap <M-f> <S-Right>
-endif
-
-"# set define
-
 " 検索を循環しない
 set nowrapscan
 " 行折り返しなし
 set nowrap
 " 行番号あり
 set number
-" <Tab>などを表示する
+" 不可視文字を表示する
 set list
+" 表示する不可視文字を設定する
 set listchars=tab:>.,trail:_,extends:\
 " 検索で大文字小文字を区別しない
 set ignorecase
@@ -119,24 +34,31 @@ set scrolloff=5
 set sidescrolloff=5
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
+" 自動改行をなくす
+set textwidth=0
+" o,Oコマンドでの改行時のコメント継続をなくす
+set formatoptions-=o
 
-"# let define
+"}}}
+
+"# let define {{{
 
 " netrwのデフォルト表示スタイル変更
 let g:netrw_liststyle=3
-" Leaderをスペースに変更
-let mapleader=" "
 
-"# map define
+"}}}
 
-"ノーマルモードで改行を挿入
-noremap <CR> i<CR><ESC>
+"# map define {{{
+
 " YをD,Cと一貫性のある挙動に変更
 nnoremap Y y$
 " very magicをデフォルトにする
 nnoremap / /\v
 " 検索結果ハイライトを解除
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
+
+"ノーマルモードで改行を挿入
+noremap <CR> i<CR><ESC>
 
 "## スクロール
 noremap <C-j> 10<C-e>
@@ -166,20 +88,39 @@ nnoremap <Leader>g :e $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 " カッコ等の入力補助
-inoremap {} {}<LEFT>
-inoremap [] []<LEFT>
-inoremap () ()<LEFT>
-inoremap "" ""<left>
-inoremap '' ''<left>
-inoremap $$ $$<left>
-inoremap <> <><left>
-inoremap `` ``<left>
+"inoremap {} {}<LEFT>
+"inoremap [] []<LEFT>
+"inoremap () ()<LEFT>
+"inoremap "" ""<left>
+"inoremap '' ''<left>
+"inoremap $$ $$<left>
+"" inoremap <> <><left>
+"inoremap `` ``<left>
 
-" コマンドラインでコマンド履歴をやりやすく 
+"コマンドラインでコマンド履歴をやりやすく 
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
-" ウィンドウ移動を簡単に
+"# コマンドラインモードでのキーマッピングをEmacs風にする(pluginのemacscommandline.vimが使えない環境のみ)
+cnoremap <C-a> <Home>
+" 行末へ移動
+cnoremap <C-e> <End>
+" 一文字戻る
+cnoremap <C-b> <Left>
+" 一文字進む
+cnoremap <C-f> <Right>
+" カーソルの下の文字を削除(Delete)
+cnoremap <C-d> <Del>
+" コマンドライン履歴を一つ進む
+cnoremap <C-n> <Down>
+" コマンドライン履歴を一つ戻る
+cnoremap <C-p> <Up>
+" 前の単語へ移動
+cnoremap <M-b> <S-Left>
+" 次の単語へ移動
+cnoremap <M-f> <S-Right>
+
+"ウィンドウ移動を簡単に
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
@@ -188,7 +129,6 @@ nnoremap <Leader>H <C-w>H
 nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
-
 
 "# autocom define
 augroup MyAutoGroup
@@ -207,7 +147,7 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 
-"# function define
+"# function define {{{
 
 " command実行結果をclipboardにキャプチャ
 func! s:func_copy_cmd_output(cmd)
@@ -216,4 +156,69 @@ func! s:func_copy_cmd_output(cmd)
 	redir END
 endfunc
 command! -nargs=1 -complete=command Capture call <SID>func_copy_cmd_output(<q-args>)
+"}}}
+
+"# plugin define {{{
+
+if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
+	"# neobundle {{{
+	filetype plugin indent off
+	if has('vim_starting')
+	  set runtimepath+=~/.vim/bundle/neobundle.vim/
+	  call neobundle#rc(expand('~/.vim/bundle/'))
+	endif
+
+	NeoBundle 'Shougo/neobundle.vim'
+	NeoBundle 'Shougo/unite.vim'
+	NeoBundle 'Shougo/neomru.vim'
+	NeoBundle 'Shougo/vimfiler.vim'
+	if has('lua')
+		NeoBundle 'Shougo/neocomplete.vim'
+	end
+	NeoBundle 'kannokanno/previm'
+	NeoBundle 'houtsnip/vim-emacscommandline'
+	NeoBundle 'thinca/vim-singleton'
+	"# colorscheme
+	NeoBundle 'w0ng/vim-hybrid'
+	NeoBundle 'tomasr/molokai'
+	NeoBundle 'vim-scripts/rdark'
+	NeoBundle 'vim-jp/vimdoc-ja'
+
+	filetype plugin indent on
+	"}}}
+
+elseif isdirectory($HOME . '/vimfiles/plugins') " At office
+	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。{{{
+	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
+		if s:path !~# '\~$' && isdirectory(s:path)
+			let &runtimepath = &runtimepath.','.s:path
+		end
+	endfor
+	unlet s:path
+endif
+
+"# vimfiler.vim {{{
+
+" セーフモードの設定(オフにする)
+let g:vimfiler_safe_mode_by_default=0
+
+"}}}
+
+"# unite.vim {{{
+
+" unite source=bookmarkのデフォルトアクションをvimfilerにする
+call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+
+"}}}
+
+"# neocomplete.vim {{{
+let g:neocomplete#enable_at_startup=1
+let g:neocomplete#enable_ignore_case=1
+let g:neocomplete#enable_smart_case=1
+"}}}
+
+" singgleton.vim
+call singleton#enable()
+
+"}}}
 

@@ -1,5 +1,5 @@
-"# INDEX {{{
-"1. set define
+"# Section: index {{{
+"1. Section: set
 "1. let define
 "1. key-mapping define
 "1. function define
@@ -32,7 +32,7 @@ set hlsearch
 " インクリメンタルサーチ
 set incsearch
 " ヤンク、ペーストをクリップボードに
-set clipboard=unnamed,autoselect
+set clipboard=unnamed,unnamedplus,autoselect
 " コマンドラインモードの補完を使いやすくする
 set wildmenu
 " マクロなどを実行中は描画を中断
@@ -55,7 +55,7 @@ let g:netrw_liststyle=3
 "}}}
 
 "# map define {{{
-"## at normal mode & visual mode {{{
+"## normal mode & visual mode {{{
 "### スクロール TODO これは見直す(なれちゃう前に)
 noremap <C-j> 10<C-e>
 noremap <C-k> 10<C-y>
@@ -63,7 +63,7 @@ noremap <C-h> 10zh
 noremap <C-l> 10zl
 "}}}
 
-"## at normal mode {{{
+"## normal mode {{{
 "改行を挿入
 nnoremap <CR> i<CR><ESC>
 " YをD,Cと一貫性のある挙動に変更
@@ -100,7 +100,7 @@ nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
 "}}}
 
-"## at insert mode {{{
+"## insert mode {{{
 "" カッコ等の入力補助 TODO カーソル移動が不自然になる
 "inoremap  {} {}<Left>
 "inoremap [] []<Left>
@@ -112,7 +112,7 @@ nnoremap <Leader>L <C-w>L
 "inoremap `` ``<Left>
 "}}}
 
-"## at command mode {{{
+"## command mode {{{
 "コマンド履歴を表示
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
@@ -136,6 +136,7 @@ cnoremap <M-b> <S-Left>
 " 次の単語へ移動
 cnoremap <M-f> <S-Right>
 "}}}
+
 "}}}
 
 "# function define {{{

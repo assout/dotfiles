@@ -1,14 +1,13 @@
-"# Section: index {{{
-"1. Section: set
-"1. let define
-"1. key-mapping define
-"1. function define
-"1. runtime define
-"1. plugin define
-"1. autocommand define
-"}}}
+" # Index {{{1
+" 1. Options
+" 1. Lets
+" 1. Key-mappings
+" 1. Functions
+" 1. Plugins
+" 1. Autocommands
+" }}}1
 
-"# set define {{{
+" # Section; Options {{{1
 " 内部encodingをutf-8
 set encoding=utf-8
 " ファイルエンコーディングを指定
@@ -32,7 +31,7 @@ set hlsearch
 " インクリメンタルサーチ
 set incsearch
 " ヤンク、ペーストをクリップボードに
-set clipboard=unnamed,unnamedplus,autoselect
+set clipboard+=clipboard,autoselect
 " コマンドラインモードの補完を使いやすくする
 set wildmenu
 " マクロなどを実行中は描画を中断
@@ -47,32 +46,38 @@ set nrformats=""
 set textwidth=0
 " o,Oコマンドでの改行時のコメント継続をなくす
 set formatoptions-=o
-"}}}
-
-"# let define {{{
+" バックアップファイルを作らない
+set nobackup
+" tab幅
+set tabstop=4
+" フォーマット時などの幅
+set shiftwidth=4
+" }}}1
+" # Section; Lets {{{1
 " netrwのデフォルト表示スタイル変更
 let g:netrw_liststyle=3
-"}}}
+" }}}1
 
-"# map define {{{
-"## normal mode & visual mode {{{
-"### スクロール TODO これは見直す(なれちゃう前に)
+" # Section; Key-mappings {{{1
+" ## normal & visual mode {{{2
+" ### スクロール TODO これは見直す(なれちゃう前に)
 noremap <C-j> 10<C-e>
 noremap <C-k> 10<C-y>
 noremap <C-h> 10zh
 noremap <C-l> 10zl
-"}}}
+" }}}2
 
-"## normal mode {{{
-"改行を挿入
+" ## normal mode {{{2
+" 改行を挿入
 nnoremap <CR> i<CR><ESC>
 " YをD,Cと一貫性のある挙動に変更
 nnoremap Y y$
 " very magicをデフォルトにする
 nnoremap / /\v
+nnoremap ? ?\v
 " 検索結果ハイライトを解除
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
-"### バッファ、ウィンドウ、タブ移動関連
+" ### バッファ、ウィンドウ、タブ移動関連
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
@@ -85,11 +90,11 @@ nnoremap <silent> [t gT
 nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
-"### vimrcとgvimrcの編集、保存、読み込み
+" ### vimrcとgvimrcの編集、保存、読み込み
 nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>g :e $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-"### ウィンドウ移動を簡単に
+" ### ウィンドウ移動を簡単に
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
@@ -98,25 +103,22 @@ nnoremap <Leader>H <C-w>H
 nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
-"}}}
+" }}}2
 
-"## insert mode {{{
-"" カッコ等の入力補助 TODO カーソル移動が不自然になる
-"inoremap  {} {}<Left>
-"inoremap [] []<Left>
-"inoremap () ()<Left>
-"inoremap "" ""<Left>
-"inoremap '' ''<Left>
-"inoremap $$ $$<Left>
-"inoremap <> <><Left> TODO vrapperが正しく動かなくなる
-"inoremap `` ``<Left>
-"}}}
+" ## insert mode {{{1
+" " カッコ等の入力補助 TODO カーソル移動が不自然になる
+" inoremap  {} {}<Left>
+" inoremap [] []<Left>
+" inoremap () ()<Left>
+" inoremap "" ""<Left>
+" inoremap '' ''<Left>
+" inoremap $$ $$<Left>
+" inoremap <> <><Left> TODO vrapperが正しく動かなくなる
+" inoremap `` ``<Left>
+" }}}1
 
-"## command mode {{{
-"コマンド履歴を表示
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-"### コマンドラインモードでのキーマッピングをEmacs風にする
+" ## command mode {{{2
+" ### コマンドラインモードでのキーマッピングをEmacs風にする
 " 行頭へ移動
 cnoremap <C-a> <Home>
 " 行末へ移動
@@ -135,23 +137,33 @@ cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 " 次の単語へ移動
 cnoremap <M-f> <S-Right>
-"}}}
+" }}}2
 
-"}}}
+" }}}1
 
-"# function define {{{
-"## command実行結果を無名レジスタにキャプチャ
-func! s:func_copy_cmd_output(cmd)
-	redir @">
+" # Section; Functions {{{1
+" ## command実行結果をキャプチャ
+function! s:capture_cmd_output(cmd)
+	if has("clipboard")
+		redir @*>
+	else 
+		redir @">
+	endif	
 	execute a:cmd
 	redir END
 endfunc
-command! -nargs=1 -complete=command Capture call <SID>func_copy_cmd_output(<q-args>)
-"}}}
+command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
-"# runtime define {{{
+function! s:has_plugin(plugin)
+	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
+				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
+endfunction
+" }}}1
+
+" # Section Plugins {{{1
+" ## Setup runtime {{{2
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	"# neobundle {{{
+	"# neobundle {{{3
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -167,6 +179,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	end
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'thinca/vim-singleton'
+	NeoBundle 'tomtom/tcomment_vim'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -174,43 +187,47 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-jp/vimdoc-ja'
 
 	filetype plugin indent on
-	"}}}
+	"}}}3
+
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。{{{
+	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。{{{3
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:path !~# '\~$' && isdirectory(s:path)
 			let &runtimepath = &runtimepath.','.s:path
 		end
 	endfor
 	unlet s:path
-	"}}}
+	"}}}3
 endif
-"}}}
+" }}}2
 
-"# plugin define {{{
-"## vimfiler.vim {{{
+" ## vimfiler.vim {{{2
 " 非safe modeで起動
 let g:vimfiler_safe_mode_by_default=0
-"}}}
+" }}}2
 
-"# unite.vim {{{
-" source=bookmarkのデフォルトアクションをvimfilerにする
-call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
-"}}}
+" # unite.vim {{{2
+if s:has_plugin("unite")
+	" source=bookmarkのデフォルトアクションをvimfilerにする
+	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+endif
+" }}}2
 
-"# neocomplete.vim {{{
-" enabled
+" # neocomplete.vim {{{2
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#enable_ignore_case=1
 let g:neocomplete#enable_smart_case=1
-"}}}
+" }}}2:
 
-" singgleton.vim 
-call singleton#enable()
+" singgleton.vim {{{2
+if s:has_plugin("singleton") && has("clientserver")
+	call singleton#enable()
+endif
+" }}}2
 
-"}}}
+" }}}1
 
-"# autocom define {{{
+" # Section; Autocommands {{{1
 augroup MyAutoGroup
 	autocmd!
 	
@@ -219,12 +236,11 @@ augroup MyAutoGroup
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 
 	"## markdown
-	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd BufNewFile,BufRead *.{txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
 	
 	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
 augroup END
-"}}}
-
+" }}}1

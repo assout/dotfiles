@@ -53,6 +53,7 @@ set tabstop=4
 " フォーマット時などの幅
 set shiftwidth=4
 " }}}1
+
 " # Section; Lets {{{1
 " netrwのデフォルト表示スタイル変更
 let g:netrw_liststyle=3
@@ -169,7 +170,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
-
 	NeoBundle 'Shougo/neobundle.vim'
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
@@ -230,15 +230,12 @@ endif
 " # Section; Autocommands {{{1
 augroup MyAutoGroup
 	autocmd!
-	
 	"## DoubleByteSpace highlight
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-
 	"## markdown
 	autocmd BufNewFile,BufRead *.{txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
-	
 	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o

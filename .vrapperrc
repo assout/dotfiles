@@ -1,52 +1,56 @@
-" # Key bindings for eclipse to turn off for vrapper activation.
-" # For detail see http://vrapper.sourceforge.net/documentation
-" Ctrl+o
-" Ctrl+i
-" Ctrl+p
-" Ctrl+n
-" Ctrl+j
-" Ctrl+k
+" # Note {{{1
+" vrapperのキーバインドを有効にするにはeclipseのデフォルトキーバインドを変更する必要がある。
+" 詳細は http://vrapper.sourceforge.net/documentation
+" 
+" eclipseのデフォルトキーバインドをCtrl+Shift+Alt+hogeのバインドに退避することとする。
+" 例えば,Ctrl+o(QuickOutline)は、Ctrl+Shift+Alt+oに退避する。
+" 以下に退避するキーバインドの一覧を示す。
+" 
+" Ctrl+o - Quick Outline
+" Ctrl+i - Correct Indentation,Format Active Elements
+" Ctrl+p - Print (In Wwindows)
+" Ctrl+n - New (In Wwindows)
+" Ctrl+j - Incremental Find
+" Ctrl+k - Find Next
+" }}}1
 
-" # Vim Settings
-source ~/.vimrc
-
-" <Tab>などを表示しない
-set nolist
-
-" ヤンク、ペーストをクリップボードに
+" # Section; Vim Settings {{{1
+" load vimrc
+source C:\Users\admin\_vimrc
+" ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
+" 検索結果をハイライト TODO vimrcでも設定しているがなぜか適用されない
+set hlsearch
+" }}}1
 
-" # Vrapper Settings
-
+" # Section; Vrapper Settings {{{1
 " インサートモードを抜けたらIMEオフ
 set imdisable
-
 " コンテンツアシストで<C-p>,<C-n>を有効にする
 set contentassistmode
-
-" タブ移動したらNORMAL MODEに変更する??
+" タブ移動したらNORMAL MODEに変更する
 set startnormalmode
+" }}}1
 
-" # Key Mappings
-
+" # Section; Key-mappings {{{1
 " very magicへのマッピングを解除
 nunmap /
 nunmap ?
 
 noremap <C-j> <C-d>
 noremap <C-k> <C-u>
-
 noremap <C-h> gT
 noremap <C-l> gt
+noremap <Space>h gT
+noremap <Space>l gt
 
 nnoremap ]] :GotoNextMember<CR>
 nnoremap [[ :GotoPreviousMember<CR>
 
 " definition ID of the edit -> go to next member action 
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
-
 " definition ID of the edit -> go to previous member action 
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
+" }}}1
 
 " vim: set filetype=vim :
-

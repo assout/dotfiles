@@ -31,7 +31,7 @@ set hlsearch
 " インクリメンタルサーチ
 set incsearch
 " ヤンク、ペーストをクリップボードに
-set clipboard+=clipboard,autoselect
+set clipboard+=unnamed,autoselect
 " コマンドラインモードの補完を使いやすくする
 set wildmenu
 " マクロなどを実行中は描画を中断

@@ -1,7 +1,7 @@
 if has('win32')
 	set guifont=MS_Gothic:h9:cSHIFTJIS
 else
-	set guifont=Ricty\ Diminished\ 12
+	set guifont=Ricty\ Diminished\ 14
 endif
 " 縦幅 デフォルトは24
 set lines=40

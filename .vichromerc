@@ -12,8 +12,21 @@ alias history TabOpenNew chrome://history
 nmap <Space>tw :TabOpenNew http://www.twitter.com
 nmap <Space>gr :TabOpenNew http://www.google.com/reader
 nmap <Space>m  :TabOpenNew https://mail.google.com/mail/#inbox
+
 nmap <C-j> :PageHalfDown
 nmap <C-k> :PageHalfUp
+
+nmap <C-h> :TabFocusPrev
+nmap <C-l> :TabFocusNext
+
+nmap <C-o> :BackHist
+nmap <C-i> :ForwardHist
+
+nmap H <NOP>
+nmap L <NOP>
+
+cmap <C-p> :FocusPrevCandidate
+cmap <C-u> :FocusNextCandidate
 
 # F for continuous f-Mode
 # this is recomended setting but commented out by default.
@@ -32,8 +45,8 @@ nmap <C-k> :PageHalfUp
 # in this example you can use <C-l>, <C-h> for moving between tabs
 # on all web pages regardless of your ignored list setting
 # because pagecmd has higher priority than ignored URLs.
-pagecmd * nmap <C-l> :TabFocusNext
-pagecmd * nmap <C-h> :TabFocusPrev
+#pagecmd * nmap <C-l> :TabFocusNext
+#pagecmd * nmap <C-h> :TabFocusPrev
 
 # almost all Vichrome functions don't work properly for pdf contents
 # so it's useful to enable default key bindings for pdf file.
@@ -42,4 +55,3 @@ pagecmd *.pdf nmap <C-f> <NOP>
 # if you want to use twitter web's key binding, write settings like below
 #pagecmd http*://twitter.com/* nmap f <NOP>
 #pagecmd http*://twitter.com/* nmap r <NOP>
-

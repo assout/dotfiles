@@ -1,10 +1,10 @@
 " # Index {{{1
-" 1. Options
-" 1. Lets
-" 1. Key-mappings
-" 1. Functions
-" 1. Plugins
-" 1. Autocommands
+" * Options
+" * Lets
+" * Key-mappings
+" * Functions
+" * Plugins
+" * Autocommands
 " }}}1
 
 " # Section; Options {{{1
@@ -41,7 +41,7 @@ set scrolloff=5
 " カーソル行の水平に表示する行数
 set sidescrolloff=5
 " インクリメンタル/デクリメンタルを常に10進数として扱う
-set nrformats=""
+set nrformats=
 " 自動改行をなくす
 set textwidth=0
 " o,Oコマンドでの改行時のコメント継続をなくす
@@ -106,8 +106,8 @@ nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
 " }}}2
 
-" ## insert mode {{{1
-" " カッコ等の入力補助 TODO カーソル移動が不自然になる
+" ## insert mode {{{2
+" カッコ等の入力補助 TODO カーソル移動が不自然になる
 " inoremap  {} {}<Left>
 " inoremap [] []<Left>
 " inoremap () ()<Left>
@@ -116,7 +116,7 @@ nnoremap <Leader>L <C-w>L
 " inoremap $$ $$<Left>
 " inoremap <> <><Left> TODO vrapperが正しく動かなくなる
 " inoremap `` ``<Left>
-" }}}1
+" }}}2
 
 " ## command mode {{{2
 " ### コマンドラインモードでのキーマッピングをEmacs風にする
@@ -162,7 +162,7 @@ endfunction
 " }}}1
 
 " # Section Plugins {{{1
-" ## Setup runtime {{{2
+" ## Setup plugin runtime path {{{2
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"# neobundle {{{3
 	filetype plugin indent off

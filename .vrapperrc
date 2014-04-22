@@ -1,7 +1,7 @@
 " # Note {{{1
 " vrapperのキーバインドを有効にするにはeclipseのデフォルトキーバインドを変更する必要がある。
 " 詳細は http://vrapper.sourceforge.net/documentation
-" 
+"
 " eclipseのデフォルトキーバインドをCtrl+Shift+Alt+hogeのバインドに退避することとする。
 " 例えば,Ctrl+o(QuickOutline)は、Ctrl+Shift+Alt+oに退避する。
 " 以下に退避するキーバインドの一覧を示す。
@@ -12,15 +12,16 @@
 " Ctrl+n - New (In Wwindows)
 " Ctrl+j - Incremental Find
 " Ctrl+k - Find Next
+" Ctrl+h - Open Search Dialog (In Windows)
+" Ctrl+l - Go to Line
 " }}}1
 
 " # Section; Vim Settings {{{1
 " load vimrc
 source C:\Users\admin\_vimrc
+source /home/oji/.vimrc
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
-" 検索結果をハイライト TODO vimrcでも設定しているがなぜか適用されない
-set hlsearch
 " }}}1
 
 " # Section; Vrapper Settings {{{1

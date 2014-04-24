@@ -17,19 +17,19 @@
 " }}}1
 
 " # Section; Vim Settings {{{1
-" load vimrc
-source C:\Users\admin\_vimrc
+" load vimrc.
 source /home/oji/.vimrc
+source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
 " }}}1
 
 " # Section; Vrapper Settings {{{1
-" インサートモードを抜けたらIMEオフ
+" インサートモードを抜けたらIMEオフ.
 set imdisable
-" コンテンツアシストで<C-p>,<C-n>を有効にする
+" コンテンツアシストで<C-p>,<C-n>を有効にする.
 set contentassistmode
-" タブ移動したらNORMAL MODEに変更する
+" タブ移動したらNORMAL MODEに変更する.
 set startnormalmode
 " }}}1
 

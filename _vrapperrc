@@ -14,10 +14,11 @@
 " Ctrl+k - Find Next
 " Ctrl+h - Open Search Dialog (In Windows)
 " Ctrl+l - Go to Line
+" Ctrl+w - Close,Close Rendering
 " }}}1
 
 " # Section; Vim Settings {{{1
-" load vimrc.
+" load vimrc. TODO if statements.
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
@@ -31,6 +32,10 @@ set imdisable
 set contentassistmode
 " タブ移動したらNORMAL MODEに変更する.
 set startnormalmode
+" マウス選択時にビジュアルモードにしない.
+set novisualmouse
+" GVimパス指定. TODO if statements.
+set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
 " # Section; Key-mappings {{{1

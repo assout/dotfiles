@@ -48,6 +48,8 @@ set textwidth=0
 set formatoptions-=o
 " バックアップファイルを作らない.
 set nobackup
+" tab使う.
+set noexpandtab
 " tab幅.
 set tabstop=4
 " フォーマット時などの幅.

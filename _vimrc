@@ -54,6 +54,8 @@ set noexpandtab
 set tabstop=4
 " フォーマット時などの幅.
 set shiftwidth=4
+" 常にタブラベルを表示する.
+set showtabline=2
 " }}}1
 
 " # Section; Lets {{{1
@@ -63,9 +65,9 @@ let g:netrw_liststyle=3
 
 " # Section; Key-mappings {{{1
 " ## normal & visual mode {{{2
-" ### スクロール TODO これは見直す(なれちゃう前に)
-noremap <C-j> 10<C-e>
-noremap <C-k> 10<C-y>
+" ### <C-hoge> TODO これは見直す?(なれちゃう前に).
+noremap <C-j> 10j
+noremap <C-k> 10k
 noremap <C-h> 10zh
 noremap <C-l> 10zl
 " }}}2
@@ -154,12 +156,13 @@ function! s:capture_cmd_output(cmd)
 	endif	
 	execute a:cmd
 	redir END
-endfunc
+endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
 function! s:has_plugin(plugin)
 	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
 				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
+					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
 endfunction
 " }}}1
 
@@ -182,12 +185,13 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'tomtom/tcomment_vim'
+	NeoBundle 'vim-jp/vimdoc-ja'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
 	NeoBundle 'vim-scripts/rdark'
-	NeoBundle 'vim-jp/vimdoc-ja'
-
+	NeoBundle 'vim-scripts/newspaper.vim'
+	NeoBundle 'altercation/vim-colors-solarized'
 	filetype plugin indent on
 	"}}}3
 
@@ -227,6 +231,12 @@ if s:has_plugin("singleton") && has("clientserver")
 endif
 " }}}2
 
+" colorsheme {{{2
+let colorName="hybrid-light"
+if  s:has_plugin(colorName)
+	execute "colorscheme" colorName
+endif
+" }}}2
 " }}}1
 
 " # Section; Autocommands {{{1
@@ -243,3 +253,4 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}1
+

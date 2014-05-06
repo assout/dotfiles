@@ -8,17 +8,21 @@
 " 
 " Ctrl+o - Quick Outline
 " Ctrl+i - Correct Indentation,Format Active Elements
-" Ctrl+p - Print (In Wwindows)
-" Ctrl+n - New (In Wwindows)
+" Ctrl+p - Print
+" Ctrl+n - New
 " Ctrl+j - Incremental Find
 " Ctrl+k - Find Next
-" Ctrl+h - Open Search Dialog (In Windows)
+" Ctrl+h - Open Search Dialog
 " Ctrl+l - Go to Line
 " Ctrl+w - Close,Close Rendering
+" Ctrl+f - Find and Replace
+" Ctrl+b - Build All
+" Ctrl+d - Delete Line
+" Ctrl+u - Execute
 " }}}1
 
 " # Section; Vim Settings {{{1
-" load vimrc. TODO if statements.
+" load vimrc.
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
@@ -34,7 +38,7 @@ set contentassistmode
 set startnormalmode
 " マウス選択時にビジュアルモードにしない.
 set novisualmouse
-" GVimパス指定. TODO if statements.
+" GVimパス指定.
 set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
@@ -43,8 +47,8 @@ set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 nunmap /
 nunmap ?
 
-noremap <C-j> <C-d>
-noremap <C-k> <C-u>
+noremap <C-j> 10j
+noremap <C-k> 10k
 noremap <C-h> gT
 noremap <C-l> gt
 noremap <Space>h gT

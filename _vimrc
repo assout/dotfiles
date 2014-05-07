@@ -68,8 +68,8 @@ let g:netrw_liststyle=3
 " ### <C-hoge> TODO これは見直す?(なれちゃう前に).
 noremap <C-j> 10j
 noremap <C-k> 10k
-noremap <C-h> 10zh
-noremap <C-l> 10zl
+noremap <C-h> 10h
+noremap <C-l> 10l
 " }}}2
 
 " ## normal mode {{{2
@@ -151,9 +151,9 @@ cnoremap <M-f> <S-Right>
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
 		redir @*>
-	else 
+	else
 		redir @">
-	endif	
+	endif
 	execute a:cmd
 	redir END
 endfunction

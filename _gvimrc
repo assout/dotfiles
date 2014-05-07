@@ -1,6 +1,6 @@
 if has('win32')
 	set guifont=Consolas:h10
-	set guifontwide=MS_Gothic:h10
+	set guifontwide=MS_Gothic:h10:cSHIFTJIS
 else
 	set guifont=Ricty\ Diminished\ 14
 endif
@@ -14,4 +14,3 @@ set guioptions+=b
 set guioptions-=m
 " ツールバーを非表示.
 set guioptions-=T
-

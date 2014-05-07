@@ -144,6 +144,11 @@ cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 " }}}2
 
+" ## visual mode {{{2
+" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない
+vnoremap y y`>
+" }}}2
+
 " }}}1
 
 " # Section; Functions {{{1

@@ -186,6 +186,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
+	NeoBundle 'tpope/vim-surround'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -202,12 +203,17 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 			let &runtimepath = &runtimepath.','.s:path
 		end
 	endfor
+	for s:path in split(glob($HOME.'/vimfiles/colors/*'), '\n')
+		if s:path !~# '\~$' && isdirectory(s:path)
+			let &runtimepath = &runtimepath.','.s:path
+		end
+	endfor
 	unlet s:path
 	"}}}3
 endif
 " }}}2
 
-" ## vimfiler.vim {{{2
+" # vimfiler.vim {{{2
 " 非safe modeで起動
 let g:vimfiler_safe_mode_by_default=0
 " }}}2
@@ -225,15 +231,15 @@ let g:neocomplete#enable_ignore_case=1
 let g:neocomplete#enable_smart_case=1
 " }}}2:
 
-" singgleton.vim {{{2
+" singleton.vim {{{2
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
 endif
 " }}}2
 
 " colorsheme {{{2
-let colorName="hybrid-light"
-if  s:has_plugin(colorName)
+let colorName="morning"
+if s:has_plugin(colorName)
 	execute "colorscheme" colorName
 endif
 " }}}2
@@ -253,4 +259,3 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}1
-

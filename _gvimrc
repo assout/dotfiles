@@ -1,5 +1,6 @@
 if has('win32')
-	set guifont=MS_Gothic:h9:cSHIFTJIS
+	set guifont=Consolas:h10
+	set guifontwide=MS_Gothic:h10
 else
 	set guifont=Ricty\ Diminished\ 14
 endif

@@ -19,6 +19,8 @@
 " Ctrl+b - Build All
 " Ctrl+d - Delete Line
 " Ctrl+u - Execute
+" Ctrl+a - Select All
+" Ctrl+x - Cut
 " }}}1
 
 " # Section; Vim Settings {{{1
@@ -39,7 +41,7 @@ set startnormalmode
 " マウス選択時にビジュアルモードにしない.
 set novisualmouse
 " GVimパス指定.
-set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
+" set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
 " # Section; Key-mappings {{{1

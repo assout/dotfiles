@@ -38,8 +38,8 @@ set imdisable
 set contentassistmode
 " タブ移動したらNORMAL MODEに変更する.
 set startnormalmode
-" マウス選択時にビジュアルモードにしない.
-set novisualmouse
+" マウス選択時にビジュアルモードにする.
+set visualmouse
 " GVimパス指定.
 " set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " }}}1
@@ -66,4 +66,3 @@ eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous
 " }}}1
 
 " vim: set filetype=vim :
-

@@ -59,7 +59,7 @@ set showtabline=2
 " }}}1
 
 " # Section; Lets {{{1
-" netrwのデフォルト表示スタイル変更
+" netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle=3
 " }}}1
 
@@ -73,16 +73,16 @@ noremap <C-l> 10l
 " }}}2
 
 " ## normal mode {{{2
-" 改行を挿入
+" 改行を挿入.
 nnoremap <CR> i<CR><ESC>
-" YをD,Cと一貫性のある挙動に変更
+" YをD,Cと一貫性のある挙動に変更.
 nnoremap Y y$
-" very magicをデフォルトにする
+" very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
-" 検索結果ハイライトを解除
+" 検索結果ハイライトを解除.
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
-" ### バッファ、ウィンドウ、タブ移動関連
+" ### バッファ、ウィンドウ、タブ移動関連.
 nnoremap <silent> [b :bprevious<CR>
 nnoremap <silent> ]b :bnext<CR>
 nnoremap <silent> [B :bfirst<CR>
@@ -95,11 +95,11 @@ nnoremap <silent> [t gT
 nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
-" ### vimrcとgvimrcの編集、保存、読み込み
+" ### vimrcとgvimrcの編集、保存、読み込み.
 nnoremap <Leader>v :e $MYVIMRC<CR>
 nnoremap <Leader>g :e $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-" ### ウィンドウ移動を簡単に
+" ### ウィンドウ移動を簡単に.
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>j <C-w>j
 nnoremap <Leader>k <C-w>k
@@ -123,36 +123,36 @@ nnoremap <Leader>L <C-w>L
 " }}}2
 
 " ## command mode {{{2
-" ### コマンドラインモードでのキーマッピングをEmacs風にする
-" 行頭へ移動
+" ### コマンドラインモードでのキーマッピングをEmacs風にする.
+" 行頭へ移動.
 cnoremap <C-a> <Home>
-" 行末へ移動
+" 行末へ移動.
 cnoremap <C-e> <End>
-" 一文字戻る
+" 一文字戻る.
 cnoremap <C-b> <Left>
-" 一文字進む
+" 一文字進む.
 cnoremap <C-f> <Right>
-" カーソルの下の文字を削除(Delete)
+" カーソルの下の文字を削除(Delete).
 cnoremap <C-d> <Del>
-" コマンドライン履歴を一つ進む
+" コマンドライン履歴を一つ進む.
 cnoremap <C-n> <Down>
-" コマンドライン履歴を一つ戻る
+" コマンドライン履歴を一つ戻る.
 cnoremap <C-p> <Up>
-" 前の単語へ移動
+" 前の単語へ移動.
 cnoremap <M-b> <S-Left>
-" 次の単語へ移動
+" 次の単語へ移動.
 cnoremap <M-f> <S-Right>
 " }}}2
 
 " ## visual mode {{{2
-" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない
-vnoremap y y`>
+" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
+vnoremap y y'>
 " }}}2
 
 " }}}1
 
 " # Section; Functions {{{1
-" ## command実行結果をキャプチャ
+" ## command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
 		redir @*>
@@ -202,7 +202,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"}}}3
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する。{{{3
+	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{3
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:path !~# '\~$' && isdirectory(s:path)
 			let &runtimepath = &runtimepath.','.s:path
@@ -219,13 +219,13 @@ endif
 " }}}2
 
 " # vimfiler.vim {{{2
-" 非safe modeで起動
+" 非safe modeで起動.
 let g:vimfiler_safe_mode_by_default=0
 " }}}2
 
 " # unite.vim {{{2
 if s:has_plugin("unite")
-	" source=bookmarkのデフォルトアクションをvimfilerにする
+	" source=bookmarkのデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
 endif
 " }}}2
@@ -253,13 +253,13 @@ endif
 " # Section; Autocommands {{{1
 augroup MyAutoGroup
 	autocmd!
-	"## DoubleByteSpace highlight
+	"## DoubleByteSpace highlight.
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-	"## markdown
+	"## markdown.
 	autocmd BufNewFile,BufRead *.{txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
-	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
+	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
 augroup END

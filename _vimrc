@@ -1,13 +1,13 @@
-" # Index {{{1
+" # Index {{{
 " * Options
 " * Lets
 " * Key-mappings
 " * Functions
 " * Plugins
 " * Autocommands
-" }}}1
+" }}}
 
-" # Section; Options {{{1
+" # Section; Options {{{
 " 内部encodingをutf-8.
 set encoding=utf-8
 " ファイルエンコーディングを指定.
@@ -56,23 +56,23 @@ set tabstop=4
 set shiftwidth=4
 " 常にタブラベルを表示する.
 set showtabline=2
-" }}}1
+" }}}
 
-" # Section; Lets {{{1
+" # Section; Lets {{{
 " netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle=3
-" }}}1
+" }}}
 
-" # Section; Key-mappings {{{1
-" ## normal & visual mode {{{2
-" ### <C-hoge> TODO これは見直す?(なれちゃう前に).
+" # Section; Key-mappings {{{
+" ## normal & visual mode {{{
+" ###TODO これは見直す?(なれちゃう前に).
 noremap <C-j> 10j
 noremap <C-k> 10k
 noremap <C-h> 10h
 noremap <C-l> 10l
-" }}}2
+" }}}
 
-" ## normal mode {{{2
+" ## normal mode {{{
 " 改行を挿入.
 nnoremap <CR> i<CR><ESC>
 " YをD,Cと一貫性のある挙動に変更.
@@ -108,9 +108,9 @@ nnoremap <Leader>H <C-w>H
 nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
-" }}}2
+" }}}
 
-" ## insert mode {{{2
+" ## insert mode {{{
 " カッコ等の入力補助 TODO カーソル移動が不自然になる
 " inoremap  {} {}<Left>
 " inoremap [] []<Left>
@@ -120,9 +120,9 @@ nnoremap <Leader>L <C-w>L
 " inoremap $$ $$<Left>
 " inoremap <> <><Left> TODO vrapperが正しく動かなくなる
 " inoremap `` ``<Left>
-" }}}2
+" }}}
 
-" ## command mode {{{2
+" ## command mode {{{
 " ### コマンドラインモードでのキーマッピングをEmacs風にする.
 " 行頭へ移動.
 cnoremap <C-a> <Home>
@@ -142,16 +142,16 @@ cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 " 次の単語へ移動.
 cnoremap <M-f> <S-Right>
-" }}}2
+" }}}
 
-" ## visual mode {{{2
+" ## visual mode {{{
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
-" }}}2
+" }}}
 
-" }}}1
+" }}}
 
-" # Section; Functions {{{1
+" # Section; Functions {{{
 " ## command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
@@ -169,12 +169,12 @@ function! s:has_plugin(plugin)
 				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
 					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
 endfunction
-" }}}1
+" }}}
 
-" # Section Plugins {{{1
-" ## Setup plugin runtime path {{{2
+" # Section Plugins {{{
+" ## Setup plugin runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	"# neobundle {{{3
+	"# neobundle {{{
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -199,10 +199,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-scripts/newspaper.vim'
 	NeoBundle 'altercation/vim-colors-solarized'
 	filetype plugin indent on
-	"}}}3
+	"}}}
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{3
+	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:path !~# '\~$' && isdirectory(s:path)
 			let &runtimepath = &runtimepath.','.s:path
@@ -214,43 +214,44 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 		end
 	endfor
 	unlet s:path
-	"}}}3
+	"}}}
 endif
-" }}}2
+" }}}
 
-" # vimfiler.vim {{{2
+" # vimfiler.vim {{{
 " 非safe modeで起動.
 let g:vimfiler_safe_mode_by_default=0
-" }}}2
+" }}}
 
-" # unite.vim {{{2
+" # unite.vim {{{
 if s:has_plugin("unite")
 	" source=bookmarkのデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
 endif
-" }}}2
+" }}}
 
-" # neocomplete.vim {{{2
+" # neocomplete.vim {{{
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#enable_ignore_case=1
 let g:neocomplete#enable_smart_case=1
-" }}}2:
+" }}}:
 
-" singleton.vim {{{2
+" singleton.vim {{{
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
 endif
-" }}}2
+" }}}
 
-" colorsheme {{{2
-let colorName="morning"
-if s:has_plugin(colorName)
-	execute "colorscheme" colorName
+" colorsheme {{{
+if $USER == 'oji'
+	colorscheme hybrid-light
+else
+	colorscheme default
 endif
-" }}}2
-" }}}1
+" }}}
+" }}}
 
-" # Section; Autocommands {{{1
+" # Section; Autocommands {{{
 augroup MyAutoGroup
 	autocmd!
 	"## DoubleByteSpace highlight.
@@ -263,4 +264,4 @@ augroup MyAutoGroup
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
 augroup END
-" }}}1
+" }}}

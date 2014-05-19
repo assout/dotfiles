@@ -68,8 +68,10 @@ let g:netrw_liststyle=3
 " ###TODO これは見直す?(なれちゃう前に).
 noremap <C-j> 10j
 noremap <C-k> 10k
-noremap <C-h> 10h
-noremap <C-l> 10l
+" noremap <C-h> 10zh
+" noremap <C-l> 10zl
+noremap <C-h> gT
+noremap <C-l> gt
 " }}}
 
 " ## normal mode {{{
@@ -96,8 +98,8 @@ nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
 " ### vimrcとgvimrcの編集、保存、読み込み.
-nnoremap <Leader>v :e $MYVIMRC<CR>
-nnoremap <Leader>g :e $MYGVIMRC<CR>
+nnoremap <Leader>v :tabe $MYVIMRC<CR>
+nnoremap <Leader>g :tabe $MYGVIMRC<CR>
 nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 " ### ウィンドウ移動を簡単に.
 nnoremap <Leader>h <C-w>h
@@ -108,6 +110,11 @@ nnoremap <Leader>H <C-w>H
 nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
+
+nnoremap <SID>[test] <Nop>
+nmap <Space>l <SID>[test]
+
+
 " }}}
 
 " ## insert mode {{{
@@ -192,6 +199,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'tpope/vim-surround'
+	NeoBundle 'tpope/vim-repeat'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -227,6 +235,8 @@ let g:vimfiler_safe_mode_by_default=0
 if s:has_plugin("unite")
 	" source=bookmarkのデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+	"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される.
+	let g:unite_source_file_mru_filename_format=''
 endif
 " }}}
 
@@ -244,6 +254,8 @@ endif
 
 " colorsheme {{{
 if $USER == 'oji'
+	colorscheme hybrid-light
+elseif has('gui_running')
 	colorscheme hybrid-light
 else
 	colorscheme default
@@ -265,3 +277,4 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}
+

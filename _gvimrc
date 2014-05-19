@@ -1,3 +1,6 @@
+" メニューバー非表示の場合この設定で起動が高速化するらしい.
+let g:did_install_default_menus=1
+" フォント設定.
 if has('win32')
 	set guifont=Consolas:h10
 	set guifontwide=MS_Gothic:h10:cSHIFTJIS

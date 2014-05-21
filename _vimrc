@@ -1,10 +1,10 @@
 " # Index {{{
-" * Options
-" * Lets
-" * Key-mappings
-" * Functions
-" * Plugins
-" * Autocommands
+" * Options.
+" * Lets.
+" * Key-mappings.
+" * Functions.
+" * Plug-ins.
+" * Auto-commands.
 " }}}
 
 " # Section; Options {{{
@@ -14,14 +14,16 @@ set encoding=utf-8
 set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 " 検索を循環しない.
 set nowrapscan
-" 行折り返しなし.
-set nowrap
+" 行折り返しあり.
+set wrap
 " 行番号あり.
 set number
 " 不可視文字を表示する.
 set list
 " 表示する不可視文字を設定する.
 set listchars=tab:>.,trail:_,extends:\
+" バッファが放棄されるとき隠れ状態にする.
+set hidden
 " 検索で大文字小文字を区別しない.
 set ignorecase
 " 検索で大文字を含むときは大小を区別する.
@@ -52,10 +54,16 @@ set nobackup
 set noexpandtab
 " tab幅.
 set tabstop=4
+" スペルチェックで日本語は除外する.
+set spelllang+=cjk
 " フォーマット時などの幅.
 set shiftwidth=4
 " 常にタブラベルを表示する.
 set showtabline=2
+if has('win32')
+	" swapfile作らない(vimfilerでのネットワークフォルダ閲覧時の速度低下防止).
+	set noswapfile
+endif
 " }}}
 
 " # Section; Lets {{{
@@ -64,8 +72,13 @@ let g:netrw_liststyle=3
 " }}}
 
 " # Section; Key-mappings {{{
+
+nmap <Space> [space]
+nnoremap [space]h zH
+nnoremap [space]l zL
+
 " ## normal & visual mode {{{
-" ###TODO これは見直す?(なれちゃう前に).
+" TODO これは見直す?(なれちゃう前に).
 noremap <C-j> 10j
 noremap <C-k> 10k
 " noremap <C-h> 10zh
@@ -110,10 +123,6 @@ nnoremap <Leader>H <C-w>H
 nnoremap <Leader>J <C-w>J
 nnoremap <Leader>K <C-w>K
 nnoremap <Leader>L <C-w>L
-
-nnoremap <SID>[test] <Nop>
-nmap <Space>l <SID>[test]
-
 
 " }}}
 
@@ -178,8 +187,8 @@ function! s:has_plugin(plugin)
 endfunction
 " }}}
 
-" # Section Plugins {{{
-" ## Setup plugin runtime path {{{
+" # Section; Plug-ins {{{
+" ## Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"# neobundle {{{
 	filetype plugin indent off
@@ -227,16 +236,36 @@ endif
 " }}}
 
 " # vimfiler.vim {{{
-" 非safe modeで起動.
-let g:vimfiler_safe_mode_by_default=0
+if s:has_plugin("vimfiler")
+	" 非safe modeで起動.
+	let g:vimfiler_safe_mode_by_default=0
+	" key-mappings.
+	nnoremap [vimfiler] <Nop>
+	nmap [space]v [vimfiler]
+	nnoremap <silent> [vimfiler]b :<C-u>VimFilerBufferDir<CR>
+	nnoremap <silent> [vimfiler]d :<C-u>VimFilerDouble<CR>
+	nnoremap <silent> [vimfiler]s :<C-u>VimFilerSplit<CR>
+endif
 " }}}
 
 " # unite.vim {{{
 if s:has_plugin("unite")
-	" source=bookmarkのデフォルトアクションをvimfilerにする.
-	call unite#custom_default_action('source/bookmark/directory' , 'vimfiler')
+	" source=bookmark,のデフォルトアクションをvimfilerにする.
+	call unite#custom_default_action('directory', 'vimfiler')
 	"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される.
 	let g:unite_source_file_mru_filename_format=''
+	" show mru help.
+	let g:neomru#do_validate=0
+	let g:neomru#file_mru_limit=10
+	let g:neomru#directory_mru_limit=10
+	" key-mappings.
+	nnoremap [unite] <Nop>
+	nmap [space]u [unite]
+	nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+	nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
+	nnoremap <silent> [unite]f :<C-u>Unite neomru/file<CR>
+	nnoremap <silent> [unite]d :<C-u>Unite neomru/directory<CR>
+	nnoremap <silent> [unite]r :<C-u>Unite register<CR>
 endif
 " }}}
 
@@ -252,7 +281,7 @@ if s:has_plugin("singleton") && has("clientserver")
 endif
 " }}}
 
-" colorsheme {{{
+" color-scheme {{{
 if $USER == 'oji'
 	colorscheme hybrid-light
 elseif has('gui_running')
@@ -263,7 +292,7 @@ endif
 " }}}
 " }}}
 
-" # Section; Autocommands {{{
+" # Section; Auto-commands {{{
 augroup MyAutoGroup
 	autocmd!
 	"## DoubleByteSpace highlight.
@@ -277,4 +306,3 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}
-

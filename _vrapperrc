@@ -45,16 +45,15 @@ set visualmouse
 " }}}1
 
 " # Section; Key-mappings {{{1
+" vimrcでのマッピングを解除.
+nunmap j
+nunmap k
 " very magicへのマッピングを解除
 nunmap /
 nunmap ?
 
-noremap <C-j> 10j
-noremap <C-k> 10k
 noremap <C-h> gT
 noremap <C-l> gt
-noremap <Space>h gT
-noremap <Space>l gt
 
 nnoremap ]] :GotoNextMember<CR>
 nnoremap [[ :GotoPreviousMember<CR>

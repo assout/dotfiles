@@ -81,10 +81,13 @@ nnoremap [space]l zL
 " TODO これは見直す?(なれちゃう前に).
 noremap <C-j> 10j
 noremap <C-k> 10k
-" noremap <C-h> 10zh
-" noremap <C-l> 10zl
 noremap <C-h> gT
 noremap <C-l> gt
+
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
 " }}}
 
 " ## normal mode {{{
@@ -252,20 +255,25 @@ endif
 if s:has_plugin("unite")
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
-	"file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される.
-	let g:unite_source_file_mru_filename_format=''
-	" show mru help.
-	let g:neomru#do_validate=0
-	let g:neomru#file_mru_limit=10
-	let g:neomru#directory_mru_limit=10
 	" key-mappings.
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
 	nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 	nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
-	nnoremap <silent> [unite]f :<C-u>Unite neomru/file<CR>
-	nnoremap <silent> [unite]d :<C-u>Unite neomru/directory<CR>
 	nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+
+	" # neomru.vim {{{
+	if s:has_plugin("neomru")
+		" show mru help.
+		let g:neomru#filename_format=''
+		let g:neomru#do_validate=0
+		let g:neomru#file_mru_limit=20
+		let g:neomru#directory_mru_limit=20
+		" key-mappings.
+		nnoremap <silent> [unite]f :<C-u>Unite neomru/file<CR>
+		nnoremap <silent> [unite]d :<C-u>Unite neomru/directory<CR>
+	endif
+	" }}}
 endif
 " }}}
 

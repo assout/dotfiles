@@ -15,7 +15,7 @@ set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp
 " 検索を循環しない.
 set nowrapscan
 " 行折り返しあり.
-set wrap
+set nowrap
 " 行番号あり.
 set number
 " 不可視文字を表示する.
@@ -113,6 +113,14 @@ nnoremap <silent> [t gT
 nnoremap <silent> ]t gt
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
+nnoremap <silent> [a :Next<CR>
+nnoremap <silent> ]a :next<CR>
+nnoremap <silent> [A :first<CR>
+nnoremap <silent> ]A :last<CR>
+nnoremap <silent> [q :cprevious
+nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [Q :cfirst<CR>
+nnoremap <silent> ]Q :clast<CR>
 " ### vimrcとgvimrcの編集、保存、読み込み.
 nnoremap <Leader>v :tabe $MYVIMRC<CR>
 nnoremap <Leader>g :tabe $MYGVIMRC<CR>
@@ -283,13 +291,13 @@ let g:neocomplete#enable_ignore_case=1
 let g:neocomplete#enable_smart_case=1
 " }}}:
 
-" singleton.vim {{{
+" # singleton.vim {{{
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
 endif
 " }}}
 
-" color-scheme {{{
+" # color-scheme {{{
 if $USER == 'oji'
 	colorscheme hybrid-light
 elseif has('gui_running')
@@ -314,3 +322,4 @@ augroup MyAutoGroup
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}
+

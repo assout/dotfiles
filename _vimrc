@@ -1,4 +1,6 @@
 " # Index {{{
+" * Begen.
+" * Commands.
 " * Options.
 " * Lets.
 " * Key-mappings.
@@ -7,61 +9,76 @@
 " * Auto-commands.
 " }}}
 
+" # Section; Begen {{{
+" vi互換性.
+set nocompatible
+" }}}
+
+" # Section; Commands {{{
+" ファイルタイプ判別.
+filetype on
+" }}}
+
 " # Section; Options {{{
-" 内部encodingをutf-8.
+" バックアップファイル作成有無.
+set nobackup
+" ヤンク、ペーストのクリップボード共有.
+set clipboard+=unnamed,autoselect
+" 内部encoding.
 set encoding=utf-8
-" ファイルエンコーディングを指定.
-set fileencodings=ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
-" 検索を循環しない.
-set nowrapscan
-" 行折り返しあり.
-set nowrap
-" 行番号あり.
-set number
-" 不可視文字を表示する.
-set list
-" 表示する不可視文字を設定する.
-set listchars=tab:>.,trail:_,extends:\
-" バッファが放棄されるとき隠れ状態にする.
+" ソフトタブ.
+set noexpandtab
+" ファイルエンコーディング.
+set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+" フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
+set formatoptions-=o
+" バッファ破棄設定.
 set hidden
-" 検索で大文字小文字を区別しない.
-set ignorecase
-" 検索で大文字を含むときは大小を区別する.
-set smartcase
-" 検索結果をハイライト.
+" 検索結果ハイライト.
 set hlsearch
+" 検索での大文字小文字区別.
+set ignorecase
 " インクリメンタルサーチ.
 set incsearch
-" ヤンク、ペーストをクリップボードに.
-set clipboard+=unnamed,autoselect
-" コマンドラインモードの補完を使いやすくする.
-set wildmenu
+" 不可視文字表示.
+set list
+" 表示する不可視文字.
+set listchars=tab:>.,trail:_,extends:\
+" ステータスラインの表示設定.
+set laststatus=2
 " マクロなどを実行中は描画を中断.
 set lazyredraw
-" カーソル行の上下に表示する行数.
-set scrolloff=5
-" カーソル行の水平に表示する行数.
-set sidescrolloff=5
+" 行番号.
+set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う.
 set nrformats=
-" 自動改行をなくす.
-set textwidth=0
-" o,Oコマンドでの改行時のコメント継続をなくす.
-set formatoptions-=o
-" バックアップファイルを作らない.
-set nobackup
-" tab使う.
-set noexpandtab
-" tab幅.
-set tabstop=4
-" スペルチェックで日本語は除外する.
-set spelllang+=cjk
+" カーソル行の上下に表示する行数.
+set scrolloff=5
 " フォーマット時などの幅.
 set shiftwidth=4
 " 常にタブラベルを表示する.
 set showtabline=2
+" カーソル行の水平に表示する行数.
+set sidescrolloff=5
+" 検索で大文字を含むときは大小を区別するか.
+set smartcase
+" スペルチェックで日本語は除外する.
+set spelllang+=cjk
+" tab幅.
+set tabstop=4
+" 自動改行をなくす.
+set textwidth=0
+" タイトルを表示するか.
+set title
+" コマンドラインモードの補完を使いやすくする.
+set wildmenu
+" 行折り返し.
+set nowrap
+" 検索循環.
+set nowrapscan
+" windows only.
 if has('win32')
-	" swapfile作らない(vimfilerでのネットワークフォルダ閲覧時の速度低下防止).
+	" swapfile作成有無(vimfilerでのネットワークフォルダ閲覧時の速度低下防止(効果は不明)).
 	set noswapfile
 endif
 " }}}
@@ -69,6 +86,8 @@ endif
 " # Section; Lets {{{
 " netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle=3
+" shellのハイライトをbash基準にする.
+let b:is_bash=1
 " }}}
 
 " # Section; Key-mappings {{{
@@ -220,6 +239,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'schickling/vim-bufonly'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -253,9 +273,12 @@ if s:has_plugin("vimfiler")
 	" key-mappings.
 	nnoremap [vimfiler] <Nop>
 	nmap [space]v [vimfiler]
+	nnoremap <silent> [vimfiler]v :<C-u>VimFiler<CR>
 	nnoremap <silent> [vimfiler]b :<C-u>VimFilerBufferDir<CR>
+	nnoremap <silent> [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
 	nnoremap <silent> [vimfiler]d :<C-u>VimFilerDouble<CR>
 	nnoremap <silent> [vimfiler]s :<C-u>VimFilerSplit<CR>
+	nnoremap <silent> [vimfiler]t :<C-u>VimFilerTab<CR>
 endif
 " }}}
 
@@ -266,20 +289,22 @@ if s:has_plugin("unite")
 	" key-mappings.
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
-	nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-	nnoremap <silent> [unite]m :<C-u>Unite bookmark<CR>
-	nnoremap <silent> [unite]r :<C-u>Unite register<CR>
+	" nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+	nnoremap <silent> [unite]b :<C-u>Unite bookmark<CR>
+	nnoremap <silent> [unite]f :<C-u>Unite file_rec<CR>
+	nnoremap <silent> [unite]d :<C-u>Unite directory_rec<CR>
+	nnoremap <silent> [unite]r :<C-u>Unite resume -buffer-name=search<CR>
 
 	" # neomru.vim {{{
 	if s:has_plugin("neomru")
 		" show mru help.
 		let g:neomru#filename_format=''
 		let g:neomru#do_validate=0
-		let g:neomru#file_mru_limit=20
-		let g:neomru#directory_mru_limit=20
+		let g:neomru#file_mru_limit=40
+		let g:neomru#directory_mru_limit=40
 		" key-mappings.
-		nnoremap <silent> [unite]f :<C-u>Unite neomru/file<CR>
-		nnoremap <silent> [unite]d :<C-u>Unite neomru/directory<CR>
+		nnoremap <silent> [unite]mf :<C-u>Unite neomru/file<CR>
+		nnoremap <silent> [unite]md :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif
@@ -315,11 +340,10 @@ augroup MyAutoGroup
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	"## markdown.
-	autocmd BufNewFile,BufRead *.{txt,md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
 	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
 augroup END
 " }}}
-

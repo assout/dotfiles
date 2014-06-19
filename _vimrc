@@ -240,6 +240,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'tpope/vim-fugitive'
 	"# colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'

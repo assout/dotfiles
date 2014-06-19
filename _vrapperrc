@@ -55,8 +55,8 @@ nunmap ?
 noremap <C-h> gT
 noremap <C-l> gt
 
-nnoremap ]] :GotoNextMember<CR>
-nnoremap [[ :GotoPreviousMember<CR>
+nnoremap <C-j> :GotoNextMember<CR>
+nnoremap <C-k> :GotoPreviousMember<CR>
 
 " definition ID of the edit -> go to next member action 
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member

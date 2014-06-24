@@ -27,6 +27,8 @@ set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
+" grepプログラム.
+set grepprg=pt\ --nogroup\ -iS
 " バッファ破棄設定.
 set hidden
 " 検索結果ハイライト.
@@ -123,20 +125,23 @@ nnoremap <silent> [w <C-W>W
 nnoremap <silent> ]w <C-W>w
 nnoremap <silent> [W <C-W><C-T>
 nnoremap <silent> ]W <C-W><C-B>
-nnoremap <silent> [t gT
-nnoremap <silent> ]t gt
+nnoremap <silent> [t :tabprevious<CR>
+nnoremap <silent> ]t :tabnext<CR>
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
-nnoremap <silent> [a :Next<CR>
-nnoremap <silent> ]a :next<CR>
-nnoremap <silent> [A :first<CR>
-nnoremap <silent> ]A :last<CR>
-nnoremap <silent> [q :cprevious
-nnoremap <silent> ]q :cnext<CR>
-nnoremap <silent> [Q :cfirst<CR>
-nnoremap <silent> ]Q :clast<CR>
+nnoremap <silent> [n :previous<CR>
+nnoremap <silent> ]n :next<CR>
+nnoremap <silent> [N :first<CR>
+nnoremap <silent> ]N :last<CR>
+nnoremap <silent> [c :cprevious<CR>
+nnoremap <silent> ]c :cnext<CR>
+nnoremap <silent> [C :cfirst<CR>
+nnoremap <silent> ]C :clast<CR>
+nnoremap <silent> [q :cpfile<CR>
+nnoremap <silent> ]q :cnfile<CR>
+
 " ### vimrcとgvimrcの編集、保存、読み込み.
-if $USER == 'oji' " TODO work around fugitveで対象にならない.
+if $USER == 'oji' " TODO work around fugitveで対象にならないため.
 	nnoremap <Leader>v :tabe ~/development/dotfiles/_vimrc<CR>
 	nnoremap <Leader>g :tabe ~/development/dotfiles/_gvimrc<CR>
 else
@@ -224,8 +229,8 @@ function! s:has_plugin(plugin)
 				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
 					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
 endfunction
-" }}}
-
+" " }}}
+"
 " # Section; Plug-ins {{{
 " ## Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
@@ -250,6 +255,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'tpope/vim-fugitive'
+	" NeoBundle 'rking/ag.vim'
 	" NeoBundle 'vim-scripts/ShowMarks'
 	" # colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
@@ -295,16 +301,32 @@ endif
 
 " unite.vim {{{
 if s:has_plugin("unite")
+	let g:unite_enable_ignore_case=1
+	let g:unite_enable_smart_case=1
+	" unite-grepのバックエンドをplatinum searcherにきりかえる. {{{
+	if executable('pt')
+		" let g:unite_source_grep_command='ag'
+		let g:unite_source_grep_default_opts='--nogroup --nocolor'
+		let g:unite_source_grep_recursive_opt=''
+		let g:unite_source_grep_max_candidates = 200
+		let g:unite_source_rec_async_command='pt'
+	endif
+	" }}}
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
 	" key-mappings.
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
-	" nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 	nnoremap [unite]b :<C-u>Unite bookmark<CR>
-	nnoremap [unite]f :<C-u>Unite file_rec<CR>
-	nnoremap [unite]d :<C-u>Unite directory_rec<CR>
-	nnoremap [unite]r :<C-u>Unite resume -buffer-name=search<CR>
+	nnoremap [unite]r :<C-u>Unite resume<CR>
+	nnoremap [unite]g :<C-u>Unite grep<CR>
+	if has('unix')
+		nnoremap [unite]f :<C-u>Unite file_rec/async<CR>
+		nnoremap [unite]d :<C-u>Unite directory_rec/async<CR>
+	else
+		nnoremap [unite]f :<C-u>Unite file_rec<CR>
+		nnoremap [unite]d :<C-u>Unite directory_rec<CR>
+	endif
 
 	" # neomru.vim {{{
 	if s:has_plugin("neomru")
@@ -314,8 +336,10 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit=40
 		let g:neomru#directory_mru_limit=40
 		" key-mappings.
-		nnoremap <silent> [unite]mf :<C-u>Unite neomru/file<CR>
-		nnoremap <silent> [unite]md :<C-u>Unite neomru/directory<CR>
+		nnoremap [unite_mru] <Nop>
+		nmap [space]m [unite_mru]
+		nnoremap <silent> [unite_mru]f :<C-u>Unite neomru/file<CR>
+		nnoremap <silent> [unite_mru]d :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif
@@ -345,7 +369,7 @@ let showmarks_enable=1
 " Show which marks.
 let showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " help、quickfixと編集不可のバッファについて、マークを表示しない.
-" let showmarks_ignore_type="hqm"
+" let showmarks_ignore_type=hqm
 " Hilight lower & upper marks
 " let showmarks_hlline_lower = 1
 " let showmarks_hlline_upper = 1

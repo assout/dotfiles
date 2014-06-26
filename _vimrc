@@ -86,9 +86,9 @@ endif
 
 " # Section; Lets {{{
 " netrwのデフォルト表示スタイル変更.
-let g:netrw_liststyle=3
+let g:netrw_liststyle = 3
 " shellのハイライトをbash基準にする.
-let b:is_bash=1
+let b:is_bash = 1
 " }}}
 
 " # Section; Key-mappings {{{
@@ -145,14 +145,14 @@ nnoremap <silent> [q :cpfile<CR>
 nnoremap <silent> ]q :cnfile<CR>
 
 " ### vimrcとgvimrcの編集、保存、読み込み.
-if $USER == 'oji' " TODO work around fugitveで対象にならないため.
-	nnoremap <Leader>v :tabe ~/development/dotfiles/_vimrc<CR>
-	nnoremap <Leader>g :tabe ~/development/dotfiles/_gvimrc<CR>
+if $USER == 'oji' " TODO work around, fugitveで対象にならないため.
+	nnoremap <Leader>v :tabedit ~/development/dotfiles/_vimrc<CR>
+	nnoremap <Leader>g :tabedit ~/development/dotfiles/_gvimrc<CR>
 else
-	nnoremap <Leader>v :tabe $MYVIMRC<CR>
-	nnoremap <Leader>g :tabe $MYGVIMRC<CR>
+	nnoremap <Leader>v :tabedit $MYVIMRC<CR>
+	nnoremap <Leader>g :tabedit $MYGVIMRC<CR>
 endif
-nnoremap <Leader>s :up $MYVIMRC<Bar>:up $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+nnoremap <Leader>s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 " ### ウィンドウ移動を簡単に.
 nnoremap <Leader>h <C-w>h
 nnoremap <Leader>j <C-w>j
@@ -294,7 +294,7 @@ endif
 " vimfiler.vim {{{
 if s:has_plugin("vimfiler")
 	" 非safe modeで起動.
-	let g:vimfiler_safe_mode_by_default=0
+	let g:vimfiler_safe_mode_by_default = 0
 	" key-mappings.
 	nnoremap [vimfiler] <Nop>
 	nmap [space]v [vimfiler]
@@ -309,8 +309,8 @@ endif
 
 " unite.vim {{{
 if s:has_plugin("unite")
-	let g:unite_enable_ignore_case=1
-	let g:unite_enable_smart_case=1
+	let g:unite_enable_ignore_case = 1
+	let g:unite_enable_smart_case = 1
 	" unite-grepのバックエンドをきりかえる. {{{
 	if executable('pt')
 		" Use pt in unite grep source.
@@ -319,7 +319,7 @@ if s:has_plugin("unite")
 		let g:unite_source_grep_default_opts = '-iS --nogroup --nocolor'
 		let g:unite_source_grep_recursive_opt = ''
 		" Using pt as recursive command.
-		let g:unite_source_rec_async_command='pt --nocolor --nogroup -g .'
+		let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g .'
 	elseif executable('ag')
 		" Use ag in unite grep source.
 		let g:unite_source_grep_command = 'ag'
@@ -358,10 +358,10 @@ if s:has_plugin("unite")
 	" # neomru.vim {{{
 	if s:has_plugin("neomru")
 		" show mru help.
-		let g:neomru#filename_format=''
-		let g:neomru#do_validate=0
-		let g:neomru#file_mru_limit=40
-		let g:neomru#directory_mru_limit=40
+		let g:neomru#filename_format = ''
+		let g:neomru#do_validate = 0
+		let g:neomru#file_mru_limit = 40
+		let g:neomru#directory_mru_limit = 40
 		" key-mappings.
 		nnoremap [mru] <Nop>
 		nmap [space]m [mru]
@@ -373,9 +373,9 @@ endif
 " }}}
 
 " neocomplete.vim {{{
-let g:neocomplete#enable_at_startup=1
-let g:neocomplete#enable_ignore_case=1
-let g:neocomplete#enable_smart_case=1
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_ignore_case = 1
+let g:neocomplete#enable_smart_case = 1
 " }}}:
 
 " singleton.vim {{{
@@ -392,11 +392,11 @@ endif
 "  <Leader>ma カレントバッファのマークを全部削除。
 " -------------------------
 " Enable ShowMarks.
-let showmarks_enable=1
+let showmarks_enable = 1
 " Show which marks.
-let showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " help、quickfixと編集不可のバッファについて、マークを表示しない.
-" let showmarks_ignore_type=hqm
+" let showmarks_ignore_type = hqm
 " Hilight lower & upper marks
 " let showmarks_hlline_lower = 1
 " let showmarks_hlline_upper = 1

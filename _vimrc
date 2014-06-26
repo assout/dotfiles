@@ -20,7 +20,9 @@ set nobackup
 " ヤンク、ペーストのクリップボード共有.
 set clipboard=unnamed,unnamedplus
 " 内部encoding.
-set encoding=utf-8
+if has('gui_running')
+	set encoding=utf-8
+endif
 " ソフトタブ.
 set noexpandtab
 " ファイルエンコーディング.
@@ -28,7 +30,9 @@ set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
 " grepプログラム.
-set grepprg=pt\ --nogroup\ -iS
+if executable('pt')
+	set grepprg=pt\ -iS
+endif
 " バッファ破棄設定.
 set hidden
 " 検索結果ハイライト.
@@ -241,6 +245,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
 	NeoBundle 'Shougo/neobundle.vim'
+	NeoBundle 'Shougo/vimproc'
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
@@ -255,6 +260,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'tpope/vim-fugitive'
+	NeoBundle 'thinca/vim-qfreplace'
+	NeoBundle 'nelstrom/vim-qargs'
+	NeoBundle 'Arkham/vim-quickfixdo'
 	" NeoBundle 'rking/ag.vim'
 	" NeoBundle 'vim-scripts/ShowMarks'
 	" # colorscheme
@@ -303,23 +311,41 @@ endif
 if s:has_plugin("unite")
 	let g:unite_enable_ignore_case=1
 	let g:unite_enable_smart_case=1
-	" unite-grepのバックエンドをplatinum searcherにきりかえる. {{{
+	" unite-grepのバックエンドをきりかえる. {{{
 	if executable('pt')
-		" let g:unite_source_grep_command='ag'
-		let g:unite_source_grep_default_opts='--nogroup --nocolor'
-		let g:unite_source_grep_recursive_opt=''
-		let g:unite_source_grep_max_candidates = 200
-		let g:unite_source_rec_async_command='pt'
+		" Use pt in unite grep source.
+		" https://github.com/monochromegane/the_platinum_searcher
+		let g:unite_source_grep_command = 'pt'
+		let g:unite_source_grep_default_opts = '-iS --nogroup --nocolor'
+		let g:unite_source_grep_recursive_opt = ''
+		" Using pt as recursive command.
+		let g:unite_source_rec_async_command='pt --nocolor --nogroup -g .'
+	elseif executable('ag')
+		" Use ag in unite grep source.
+		let g:unite_source_grep_command = 'ag'
+		let g:unite_source_grep_default_opts =
+					\ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
+					\  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+		let g:unite_source_grep_recursive_opt = ''
+		" Using ag as recursive command.
+		let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
+	elseif executable('ack-grep')
+		" Use ack in unite grep source.
+		let g:unite_source_grep_command = 'ack-grep'
+		let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
+		let g:unite_source_grep_recursive_opt = ''
+		" Using ack-grep as recursive command.
+		let g:unite_source_rec_async_command = 'ack -f --nofilter'
 	endif
 	" }}}
+	let g:unite_source_grep_max_candidates = 200
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
 	" key-mappings.
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
 	nnoremap [unite]b :<C-u>Unite bookmark<CR>
-	nnoremap [unite]r :<C-u>Unite resume<CR>
-	nnoremap [unite]g :<C-u>Unite grep<CR>
+	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	if has('unix')
 		nnoremap [unite]f :<C-u>Unite file_rec/async<CR>
 		nnoremap [unite]d :<C-u>Unite directory_rec/async<CR>
@@ -327,6 +353,7 @@ if s:has_plugin("unite")
 		nnoremap [unite]f :<C-u>Unite file_rec<CR>
 		nnoremap [unite]d :<C-u>Unite directory_rec<CR>
 	endif
+	nnoremap [unite]r :<C-u>UniteResume<CR>
 
 	" # neomru.vim {{{
 	if s:has_plugin("neomru")
@@ -336,10 +363,10 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit=40
 		let g:neomru#directory_mru_limit=40
 		" key-mappings.
-		nnoremap [unite_mru] <Nop>
-		nmap [space]m [unite_mru]
-		nnoremap <silent> [unite_mru]f :<C-u>Unite neomru/file<CR>
-		nnoremap <silent> [unite_mru]d :<C-u>Unite neomru/directory<CR>
+		nnoremap [mru] <Nop>
+		nmap [space]m [mru]
+		nnoremap <silent> [mru]f :<C-u>Unite neomru/file<CR>
+		nnoremap <silent> [mru]d :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif

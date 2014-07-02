@@ -32,6 +32,8 @@ set formatoptions-=o
 " grepプログラム.
 if executable('pt')
 	set grepprg=pt\ -iS
+elseif executable('ag')
+	set grepprg=ag\ --nogroup\ -iS
 endif
 " バッファ破棄設定.
 set hidden
@@ -118,6 +120,9 @@ nnoremap Y y$
 " very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
+nnoremap g/ /
+nnoremap g? ?
+
 " 検索結果ハイライトを解除.
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
 " ### バッファ、ウィンドウ、タブ移動関連.
@@ -133,35 +138,28 @@ nnoremap <silent> [t :tabprevious<CR>
 nnoremap <silent> ]t :tabnext<CR>
 nnoremap <silent> [T :tabfirst<CR>
 nnoremap <silent> ]T :tablast<CR>
-nnoremap <silent> [n :previous<CR>
-nnoremap <silent> ]n :next<CR>
-nnoremap <silent> [N :first<CR>
-nnoremap <silent> ]N :last<CR>
-nnoremap <silent> [c :cprevious<CR>
-nnoremap <silent> ]c :cnext<CR>
-nnoremap <silent> [C :cfirst<CR>
-nnoremap <silent> ]C :clast<CR>
-nnoremap <silent> [q :cpfile<CR>
-nnoremap <silent> ]q :cnfile<CR>
+nnoremap <silent> [a :previous<CR>
+nnoremap <silent> ]a :next<CR>
+nnoremap <silent> [A :first<CR>
+nnoremap <silent> ]A :last<CR>
+nnoremap <silent> [q :cprevious<CR>
+nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [Q :cfirst<CR>
+nnoremap <silent> ]Q :clast<CR>
+nnoremap <silent> [f :cpfile<CR>
+nnoremap <silent> ]f :cnfile<CR>
 
 " ### vimrcとgvimrcの編集、保存、読み込み.
+nnoremap [vimrc] <Nop>
+nmap [space]r [vimrc]
+nnoremap [vimrc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にならないため.
-	nnoremap <Leader>v :tabedit ~/development/dotfiles/_vimrc<CR>
-	nnoremap <Leader>g :tabedit ~/development/dotfiles/_gvimrc<CR>
+	nnoremap [vimrc]v :tabedit ~/development/dotfiles/_vimrc<CR>
+	nnoremap [vimrc]g :tabedit ~/development/dotfiles/_gvimrc<CR>
 else
-	nnoremap <Leader>v :tabedit $MYVIMRC<CR>
-	nnoremap <Leader>g :tabedit $MYGVIMRC<CR>
+	nnoremap [vimrc]v :tabedit $MYVIMRC<CR>
+	nnoremap [vimrc]g :tabedit $MYGVIMRC<CR>
 endif
-nnoremap <Leader>s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-" ### ウィンドウ移動を簡単に.
-nnoremap <Leader>h <C-w>h
-nnoremap <Leader>j <C-w>j
-nnoremap <Leader>k <C-w>k
-nnoremap <Leader>l <C-w>l
-nnoremap <Leader>H <C-w>H
-nnoremap <Leader>J <C-w>J
-nnoremap <Leader>K <C-w>K
-nnoremap <Leader>L <C-w>L
 
 " }}}
 
@@ -249,6 +247,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
+	" NeoBundle 'Shougo/neossh.vim'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete.vim'
 	end
@@ -363,10 +362,8 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit = 40
 		let g:neomru#directory_mru_limit = 40
 		" key-mappings.
-		nnoremap [mru] <Nop>
-		nmap [space]m [mru]
-		nnoremap <silent> [mru]f :<C-u>Unite neomru/file<CR>
-		nnoremap <silent> [mru]d :<C-u>Unite neomru/directory<CR>
+		nnoremap [unite]mf :<C-u>Unite neomru/file<CR>
+		nnoremap [unite]md :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif
@@ -433,3 +430,4 @@ endif
 " }}}
 
 " }}}
+

@@ -345,14 +345,14 @@ if s:has_plugin("unite")
 	nmap [space]u [unite]
 	nnoremap [unite]b :<C-u>Unite bookmark<CR>
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
-	if has('unix')
-		nnoremap [unite]f :<C-u>Unite file_rec/async<CR>
-		nnoremap [unite]d :<C-u>Unite directory_rec/async<CR>
-	else
-		nnoremap [unite]f :<C-u>Unite file_rec<CR>
-		nnoremap [unite]d :<C-u>Unite directory_rec<CR>
-	endif
 	nnoremap [unite]r :<C-u>UniteResume<CR>
+	if has('unix')
+		nnoremap [unite]F :<C-u>Unite file_rec/async<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec/async<CR>
+	else
+		nnoremap [unite]F :<C-u>Unite file_rec<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
+	endif
 
 	" # neomru.vim {{{
 	if s:has_plugin("neomru")
@@ -362,8 +362,8 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit = 40
 		let g:neomru#directory_mru_limit = 40
 		" key-mappings.
-		nnoremap [unite]mf :<C-u>Unite neomru/file<CR>
-		nnoremap [unite]md :<C-u>Unite neomru/directory<CR>
+		nnoremap [unite]f :<C-u>Unite neomru/file<CR>
+		nnoremap [unite]d :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif

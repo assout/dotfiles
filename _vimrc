@@ -264,6 +264,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Arkham/vim-quickfixdo'
 	" NeoBundle 'rking/ag.vim'
 	" NeoBundle 'vim-scripts/ShowMarks'
+	NeoBundle 'mattn/webapi-vim'
+	NeoBundle 'mattn/excitetranslate-vim'
+	NeoBundle 'mattn/googletranslate-vim'
 	" # colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'

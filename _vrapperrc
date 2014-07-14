@@ -21,6 +21,8 @@
 " Ctrl+u - Execute
 " Ctrl+a - Select All
 " Ctrl+x - Cut
+" Ctrl+e - Quick Switch Editor
+" Ctrl+y - Redo
 " }}}1
 
 " # Section; Vim Settings {{{1

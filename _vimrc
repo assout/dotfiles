@@ -405,13 +405,13 @@ let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " key-mappings.
 nnoremap [migemo] <Nop>
 nmap [space]m [migemo]
-nnoremap [migemo] :<C-u>Migemo 
+nnoremap [migemo] :<C-u>Migemo<Space>
 " }}}
 
 " codic-vim {{{
 nnoremap [codic] <Nop>
 nmap [space]c [codic]
-nnoremap [codic] :<C-u>Codic 
+nnoremap [codic] :<C-u>Codic<Space>
 " }}}
 
 " }}}

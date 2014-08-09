@@ -43,7 +43,7 @@ set startnormalmode
 " マウス選択時にビジュアルモードにする.
 set visualmouse
 " GVimパス指定.
-" set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
+set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
 " # Section; Key-mappings {{{1

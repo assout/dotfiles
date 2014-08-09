@@ -67,3 +67,4 @@ eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous
 " }}}1
 
 " vim: set filetype=vim :
+

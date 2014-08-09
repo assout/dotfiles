@@ -169,7 +169,7 @@ inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-e> <End>
 inoremap <C-a> <Home>
-inoremap <C-d> <Del> 
+inoremap <C-d> <Del>
 inoremap <C-u> <C-o>d0
 inoremap <C-k> <c-o>D
 

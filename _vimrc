@@ -120,45 +120,45 @@ nnoremap Y y$
 " very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
-nnoremap g/ /
-nnoremap g? ?
+" nnoremap g/ /
+" nnoremap g? ?
 
 " 検索結果ハイライトを解除.
-nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
+nnoremap <ESC><ESC> :nohlsearch<CR>
 " ### バッファ、ウィンドウ、タブ移動関連.
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
-nnoremap <silent> [w <C-W>W
-nnoremap <silent> ]w <C-W>w
-nnoremap <silent> [W <C-W><C-T>
-nnoremap <silent> ]W <C-W><C-B>
-nnoremap <silent> [t :tabprevious<CR>
-nnoremap <silent> ]t :tabnext<CR>
-nnoremap <silent> [T :tabfirst<CR>
-nnoremap <silent> ]T :tablast<CR>
-nnoremap <silent> [a :previous<CR>
-nnoremap <silent> ]a :next<CR>
-nnoremap <silent> [A :first<CR>
-nnoremap <silent> ]A :last<CR>
-nnoremap <silent> [q :cprevious<CR>
-nnoremap <silent> ]q :cnext<CR>
-nnoremap <silent> [Q :cfirst<CR>
-nnoremap <silent> ]Q :clast<CR>
-nnoremap <silent> [f :cpfile<CR>
-nnoremap <silent> ]f :cnfile<CR>
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
+nnoremap [B :bfirst<CR>
+nnoremap ]B :blast<CR>
+nnoremap [w <C-W>W
+nnoremap ]w <C-W>w
+nnoremap [W <C-W><C-T>
+nnoremap ]W <C-W><C-B>
+nnoremap [t :tabprevious<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [T :tabfirst<CR>
+nnoremap ]T :tablast<CR>
+nnoremap [a :previous<CR>
+nnoremap ]a :next<CR>
+nnoremap [A :first<CR>
+nnoremap ]A :last<CR>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+nnoremap [Q :cfirst<CR>
+nnoremap ]Q :clast<CR>
+nnoremap [f :cpfile<CR>
+nnoremap ]f :cnfile<CR>
 
 " ### vimrcとgvimrcの編集、保存、読み込み.
-nnoremap [vimrc] <Nop>
-nmap [space]r [vimrc]
-nnoremap [vimrc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+nnoremap [rc] <Nop>
+nmap [space]r [rc]
+nnoremap [rc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にならないため.
-	nnoremap [vimrc]v :tabedit ~/development/dotfiles/_vimrc<CR>
-	nnoremap [vimrc]g :tabedit ~/development/dotfiles/_gvimrc<CR>
+	nnoremap [rc]v :tabedit ~/development/dotfiles/_vimrc<CR>
+	nnoremap [rc]g :tabedit ~/development/dotfiles/_gvimrc<CR>
 else
-	nnoremap [vimrc]v :tabedit $MYVIMRC<CR>
-	nnoremap [vimrc]g :tabedit $MYGVIMRC<CR>
+	nnoremap [rc]v :tabedit $MYVIMRC<CR>
+	nnoremap [rc]g :tabedit $MYGVIMRC<CR>
 endif
 
 " }}}
@@ -264,12 +264,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Arkham/vim-quickfixdo'
 	" NeoBundle 'rking/ag.vim'
 	" NeoBundle 'vim-scripts/ShowMarks'
-	NeoBundle 'mattn/webapi-vim'
-	NeoBundle 'mattn/excitetranslate-vim'
-	NeoBundle 'mattn/googletranslate-vim'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'haya14busa/vim-migemo'
-	" NeoBundle 'rhysd/migemo-search.vim'
 	" # colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -410,6 +406,12 @@ let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 nnoremap [migemo] <Nop>
 nmap [space]m [migemo]
 nnoremap [migemo] :<C-u>Migemo 
+" }}}
+
+" codic-vim {{{
+nnoremap [codic] <Nop>
+nmap [space]c [codic]
+nnoremap [codic] :<C-u>Codic 
 " }}}
 
 " }}}

@@ -267,6 +267,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/googletranslate-vim'
+	NeoBundle 'koron/codic-vim'
+	NeoBundle 'haya14busa/vim-migemo'
+	" NeoBundle 'rhysd/migemo-search.vim'
 	" # colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'
@@ -400,6 +403,13 @@ let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 " Hilight lower & upper marks
 " let showmarks_hlline_lower = 1
 " let showmarks_hlline_upper = 1
+" }}}
+
+" vim-migemo {{{
+" key-mappings.
+nnoremap [migemo] <Nop>
+nmap [space]m [migemo]
+nnoremap [migemo] :<C-u>Migemo 
 " }}}
 
 " }}}

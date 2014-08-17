@@ -161,9 +161,8 @@ if $USER == 'oji' " TODO work around, fugitveで対象にならないため.
 else
 	nnoremap [rc]v :tabedit $MYVIMRC<CR>
 	nnoremap [rc]g :tabedit $MYGVIMRC<CR>
-	" TOOD 
-	" nnoremap [rc]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
-	" nnoremap [rc]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
+	nnoremap [rc]r :tabedit D:\admin\_vrapperrc<CR>
+	nnoremap [rc]b :tabedit C:\Users\admin\_my_bashrc<CR>
 endif
 
 " }}}

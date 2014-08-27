@@ -247,7 +247,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
 	NeoBundle 'Shougo/neobundle.vim'
-	NeoBundle 'Shougo/vimproc'
+	" NeoBundle 'Shougo/vimproc'
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
@@ -270,6 +270,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" NeoBundle 'vim-scripts/ShowMarks'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'haya14busa/vim-migemo'
+	NeoBundle 'fuenor/qfixhowm'
 	" # colorscheme
 	NeoBundle 'w0ng/vim-hybrid'
 	NeoBundle 'tomasr/molokai'

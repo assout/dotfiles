@@ -254,10 +254,12 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'nelstrom/vim-qargs'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
+	if has('lua')
+		NeoBundle 'Shougo/neocomplete.vim'
+	endif
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
-	NeoBundle 'Shougo/neocomplete.vim'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'tpope/vim-repeat'

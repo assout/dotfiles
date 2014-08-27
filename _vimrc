@@ -246,6 +246,14 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
+	NeoBundle 'Arkham/vim-quickfixdo'
+	NeoBundle 'fuenor/qfixhowm'
+	NeoBundle 'haya14busa/vim-migemo'
+	NeoBundle 'kannokanno/previm'
+	NeoBundle 'koron/codic-vim'
+	NeoBundle 'nelstrom/vim-qargs'
+	" NeoBundle 'rking/ag.vim'
+	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	" NeoBundle 'Shougo/vimproc'
 	NeoBundle 'Shougo/unite.vim'
@@ -255,28 +263,20 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete.vim'
 	end
-	NeoBundle 'kannokanno/previm'
 	NeoBundle 'thinca/vim-singleton'
-	NeoBundle 'tomtom/tcomment_vim'
-	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'tpope/vim-repeat'
-	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'thinca/vim-qfreplace'
-	NeoBundle 'nelstrom/vim-qargs'
-	NeoBundle 'Arkham/vim-quickfixdo'
-	" NeoBundle 'rking/ag.vim'
+	NeoBundle 'vim-jp/vimdoc-ja'
 	" NeoBundle 'vim-scripts/ShowMarks'
-	NeoBundle 'koron/codic-vim'
-	NeoBundle 'haya14busa/vim-migemo'
-	NeoBundle 'fuenor/qfixhowm'
-	" # colorscheme
-	NeoBundle 'w0ng/vim-hybrid'
+	" # colorschemes.
+	NeoBundle 'altercation/vim-colors-solarized'
 	NeoBundle 'tomasr/molokai'
 	NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'vim-scripts/newspaper.vim'
-	NeoBundle 'altercation/vim-colors-solarized'
+	NeoBundle 'w0ng/vim-hybrid'
 	filetype plugin indent on
 	"}}}
 

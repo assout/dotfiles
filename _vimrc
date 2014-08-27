@@ -252,17 +252,12 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'nelstrom/vim-qargs'
-	" NeoBundle 'rking/ag.vim'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
-	" NeoBundle 'Shougo/vimproc'
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
-	" NeoBundle 'Shougo/neossh.vim'
-	if has('lua')
-		NeoBundle 'Shougo/neocomplete.vim'
-	end
+	NeoBundle 'Shougo/neocomplete.vim'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'tpope/vim-repeat'
@@ -270,7 +265,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'thinca/vim-qfreplace'
 	NeoBundle 'vim-jp/vimdoc-ja'
-	" NeoBundle 'vim-scripts/ShowMarks'
 	" # colorschemes.
 	NeoBundle 'altercation/vim-colors-solarized'
 	NeoBundle 'tomasr/molokai'
@@ -386,24 +380,6 @@ let g:neocomplete#enable_smart_case = 1
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
 endif
-" }}}
-
-" showmarks.vim {{{
-" -------------------------
-"  <Leader>mt ON/OFFトグル。
-"  <Leader>mm 次の使えるマークを使ってマーク。
-"  <Leader>mh カレント行のマークを削除。
-"  <Leader>ma カレントバッファのマークを全部削除。
-" -------------------------
-" Enable ShowMarks.
-let showmarks_enable = 1
-" Show which marks.
-let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-" help、quickfixと編集不可のバッファについて、マークを表示しない.
-" let showmarks_ignore_type = hqm
-" Hilight lower & upper marks
-" let showmarks_hlline_lower = 1
-" let showmarks_hlline_upper = 1
 " }}}
 
 " vim-migemo {{{

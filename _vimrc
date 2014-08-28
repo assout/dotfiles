@@ -256,6 +256,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/vimfiler.vim'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
+	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
@@ -427,6 +428,8 @@ augroup MyAutoGroup
 	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
+	" QuickFixを自動で開く.
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
 augroup END
 " }}}
 

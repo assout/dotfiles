@@ -258,6 +258,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'tomtom/tcomment_vim'
+	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'tpope/vim-surround'
@@ -288,23 +289,68 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-" vimfiler.vim {{{
-if s:has_plugin("vimfiler")
-	" 非safe modeで起動.
-	let g:vimfiler_safe_mode_by_default = 0
+" codic-vim {{{
+if s:has_plugin("Codic")
+	nnoremap [codic] <Nop>
+	nmap [space]c [codic]
+	nnoremap [codic] :<C-u>Codic<CR>
 
-	nnoremap [vimfiler] <Nop>
-	nmap [space]v [vimfiler]
-	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
-	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
-	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
-	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
-	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
-	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
+	nnoremap [Codic] <Nop>
+	nmap [space]C [Codic]
+	nnoremap [Codic] :<C-u>Codic<SPACE>
 endif
 " }}}
 
-" unite.vim {{{
+" memolist {{{
+if s:has_plugin("memolist")
+	if has('unix') 
+		let g:memolist_path = '~/Dropbox/memolist'
+	else
+		let g:memolist_path = 'D:/admin/Documents/memolist'
+	endif
+	if s:has_plugin('unite')
+		let g:memolist_unite = 1
+		let g:memolist_unite_option = '-auto-preview -start-insert'
+	endif
+	nnoremap [memolist] <Nop>
+	nmap [space]m [memolist]
+	nnoremap [memolist]n :<C-u>MemoNew<CR>
+	nnoremap [memolist]l :<C-u>MemoList<CR>
+	nnoremap [memolist]g :<C-u>MemoGrep<CR>
+endif
+" }}}
+
+" neocomplete {{{
+if s:has_plugin("neocomplete")
+	let g:neocomplete#enable_at_startup = 1
+	let g:neocomplete#enable_ignore_case = 1
+	let g:neocomplete#enable_smart_case = 1
+endif
+" }}}
+
+" previm {{{
+if s:has_plugin("previm")
+	nnoremap [previm] <Nop>
+	nmap [space]p [previm]
+	nnoremap [previm] :<C-u>PrevimOpen<CR>
+endif
+" }}}
+
+" quickfun {{{
+if s:has_plugin("quickrun")
+	nnoremap [quickrun] <Nop>
+	nmap [space]q [quickrun]
+	nnoremap [quickrun] :<C-u>QuickRun<CR>
+endif
+" }}}
+
+" singleton.vim {{{
+if s:has_plugin("singleton") && has("clientserver")
+	call singleton#enable()
+endif
+" }}}
+
+" unite {{{
 if s:has_plugin("unite")
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
@@ -354,7 +400,7 @@ if s:has_plugin("unite")
 		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
 	endif
 
-	" # neomru.vim {{{
+	" neomru.vim {{{
 	if s:has_plugin("neomru")
 		" show mru help.
 		let g:neomru#filename_format = ''
@@ -369,48 +415,19 @@ if s:has_plugin("unite")
 endif
 " }}}
 
-" neocomplete.vim {{{
-if s:has_plugin("neocomplete")
-	let g:neocomplete#enable_at_startup = 1
-	let g:neocomplete#enable_ignore_case = 1
-	let g:neocomplete#enable_smart_case = 1
-endif
-" }}}
+" vimfiler {{{
+if s:has_plugin("vimfiler")
+	" 非safe modeで起動.
+	let g:vimfiler_safe_mode_by_default = 0
 
-" singleton.vim {{{
-if s:has_plugin("singleton") && has("clientserver")
-	call singleton#enable()
-endif
-" }}}
-
-" codic-vim {{{
-if s:has_plugin("Codic")
-	nnoremap [codic] <Nop>
-	nmap [space]c [codic]
-	nnoremap [codic] :<C-u>Codic<CR>
-
-	nnoremap [Codic] <Nop>
-	nmap [space]C [Codic]
-	nnoremap [Codic] :<C-u>Codic<SPACE>
-endif
-" }}}
-
-" memolist.vim{{{
-if s:has_plugin("memolist")
-	if has('unix') 
-		let g:memolist_path = '~/Dropbox/memolist'
-	else
-		let g:memolist_path = 'D:/admin/Documents/memolist'
-	endif
-	if s:has_plugin('unite')
-		let g:memolist_unite = 1
-		let g:memolist_unite_option = '-auto-preview -start-insert'
-	endif
-	nnoremap [memolist] <Nop>
-	nmap [space]m [memolist]
-	nnoremap [memolist]n :<C-u>MemoNew<CR>
-	nnoremap [memolist]l :<C-u>MemoList<CR>
-	nnoremap [memolist]g :<C-u>MemoGrep<CR>
+	nnoremap [vimfiler] <Nop>
+	nmap [space]v [vimfiler]
+	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
+	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
+	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
+	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
+	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
+	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
 endif
 " }}}
 

@@ -1,7 +1,7 @@
 " # Index {{{
 " * Begen.
 " * Options.
-" * Lets.
+" * Let defines.
 " * Key-mappings.
 " * Functions.
 " * Plug-ins.
@@ -29,12 +29,6 @@ set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
-" grepプログラム.
-if executable('pt')
-	set grepprg=pt\ -iS
-elseif executable('ag')
-	set grepprg=ag\ --nogroup\ -iS
-endif
 " バッファ破棄設定.
 set hidden
 " 検索結果ハイライト.
@@ -313,32 +307,32 @@ endif
 if s:has_plugin("unite")
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
-	" unite-grepのバックエンドをきりかえる. {{{
-	if executable('pt')
-		" Use pt in unite grep source.
-		" https://github.com/monochromegane/the_platinum_searcher
-		let g:unite_source_grep_command = 'pt'
-		let g:unite_source_grep_default_opts = '-iS --nogroup --nocolor'
-		let g:unite_source_grep_recursive_opt = ''
-		" Using pt as recursive command.
-		let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g .'
-	elseif executable('ag')
-		" Use ag in unite grep source.
-		let g:unite_source_grep_command = 'ag'
-		let g:unite_source_grep_default_opts =
-					\ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
-					\  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-		let g:unite_source_grep_recursive_opt = ''
-		" Using ag as recursive command.
-		let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
-	elseif executable('ack-grep')
-		" Use ack in unite grep source.
-		let g:unite_source_grep_command = 'ack-grep'
-		let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
-		let g:unite_source_grep_recursive_opt = ''
-		" Using ack-grep as recursive command.
-		let g:unite_source_rec_async_command = 'ack -f --nofilter'
-	endif
+	" " unite-grepのバックエンドをきりかえる. {{{
+	" if executable('pt')
+	" 	" Use pt in unite grep source.
+	" 	" https://github.com/monochromegane/the_platinum_searcher
+	" 	let g:unite_source_grep_command = 'pt'
+	" 	let g:unite_source_grep_default_opts = '-iS --nogroup --nocolor'
+	" 	let g:unite_source_grep_recursive_opt = ''
+	" 	" Using pt as recursive command.
+	" 	let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g .'
+	" elseif executable('ag')
+	" 	" Use ag in unite grep source.
+	" 	let g:unite_source_grep_command = 'ag'
+	" 	let g:unite_source_grep_default_opts =
+	" 				\ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
+	" 				\  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+	" 	let g:unite_source_grep_recursive_opt = ''
+	" 	" Using ag as recursive command.
+	" 	let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
+	" elseif executable('ack-grep')
+	" 	" Use ack in unite grep source.
+	" 	let g:unite_source_grep_command = 'ack-grep'
+	" 	let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
+	" 	let g:unite_source_grep_recursive_opt = ''
+	" 	" Using ack-grep as recursive command.
+	" 	let g:unite_source_rec_async_command = 'ack -f --nofilter'
+	" endif
 	" }}}
 	let g:unite_source_grep_max_candidates = 200
 	" source=bookmark,のデフォルトアクションをvimfilerにする.

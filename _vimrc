@@ -246,12 +246,12 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#rc(expand('~/.vim/bundle/'))
 	endif
-	NeoBundle 'Arkham/vim-quickfixdo'
-	NeoBundle 'fuenor/qfixhowm'
-	NeoBundle 'haya14busa/vim-migemo'
+	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
+	NeoBundle 'fuenor/im_control.vim'
+	NeoBundle 'glidenote/memolist.vim'
+	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
-	NeoBundle 'nelstrom/vim-qargs'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -261,17 +261,17 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
 	NeoBundle 'thinca/vim-singleton'
-	NeoBundle 'tpope/vim-surround'
-	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
-	NeoBundle 'thinca/vim-qfreplace'
+	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	" # colorschemes.
 	NeoBundle 'altercation/vim-colors-solarized'
 	NeoBundle 'tomasr/molokai'
-	NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'vim-scripts/newspaper.vim'
+	NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'w0ng/vim-hybrid'
 	filetype plugin indent on
 	"}}}
@@ -297,10 +297,10 @@ endif
 if s:has_plugin("vimfiler")
 	" 非safe modeで起動.
 	let g:vimfiler_safe_mode_by_default = 0
-	" key-mappings.
+
 	nnoremap [vimfiler] <Nop>
 	nmap [space]v [vimfiler]
-	nnoremap [vimfiler]v :<C-u>VimFiler<CR>
+	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
 	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
 	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
@@ -343,10 +343,12 @@ if s:has_plugin("unite")
 	let g:unite_source_grep_max_candidates = 200
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
-	" key-mappings.
+
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
-	nnoremap [unite]b :<C-u>Unite bookmark<CR>
+	nnoremap [unite]<CR> :<C-u>Unite<CR>
+	nnoremap [unite]b :<C-u>Unite buffer<CR>
+	nnoremap [unite]B :<C-u>Unite bookmark<CR>
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	nnoremap [unite]r :<C-u>UniteResume<CR>
 	if has('unix')
@@ -364,7 +366,7 @@ if s:has_plugin("unite")
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 40
 		let g:neomru#directory_mru_limit = 40
-		" key-mappings.
+
 		nnoremap [unite]f :<C-u>Unite neomru/file<CR>
 		nnoremap [unite]d :<C-u>Unite neomru/directory<CR>
 	endif
@@ -373,10 +375,12 @@ endif
 " }}}
 
 " neocomplete.vim {{{
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_ignore_case = 1
-let g:neocomplete#enable_smart_case = 1
-" }}}:
+if s:has_plugin("neocomplete")
+	let g:neocomplete#enable_at_startup = 1
+	let g:neocomplete#enable_ignore_case = 1
+	let g:neocomplete#enable_smart_case = 1
+endif
+" }}}
 
 " singleton.vim {{{
 if s:has_plugin("singleton") && has("clientserver")
@@ -384,17 +388,35 @@ if s:has_plugin("singleton") && has("clientserver")
 endif
 " }}}
 
-" vim-migemo {{{
-" key-mappings.
-nnoremap [migemo] <Nop>
-nmap [space]m [migemo]
-nnoremap [migemo] :<C-u>Migemo<Space>
+" codic-vim {{{
+if s:has_plugin("Codic")
+	nnoremap [codic] <Nop>
+	nmap [space]c [codic]
+	nnoremap [codic] :<C-u>Codic<CR>
+
+	nnoremap [Codic] <Nop>
+	nmap [space]C [Codic]
+	nnoremap [Codic] :<C-u>Codic<SPACE>
+endif
 " }}}
 
-" codic-vim {{{
-nnoremap [codic] <Nop>
-nmap [space]c [codic]
-nnoremap [codic] :<C-u>Codic<Space>
+" memolist.vim{{{
+if s:has_plugin("memolist")
+	if has('unix') 
+		let g:memolist_path = '~/Dropbox/memolist'
+	else
+		let g:memolist_path = 'D:/admin/Documents/memolist'
+	endif
+	if s:has_plugin('unite')
+		let g:memolist_unite = 1
+		let g:memolist_unite_option = '-auto-preview -start-insert'
+	endif
+	nnoremap [memolist] <Nop>
+	nmap [space]m [memolist]
+	nnoremap [memolist]n :<C-u>MemoNew<CR>
+	nnoremap [memolist]l :<C-u>MemoList<CR>
+	nnoremap [memolist]g :<C-u>MemoGrep<CR>
+endif
 " }}}
 
 " }}}
@@ -425,7 +447,9 @@ elseif has('gui_running')
 else
 	colorscheme default
 endif
+
+" :qで誤って終了してしまうのを防ぐため，closeにしちゃう.
+cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
 
 " }}}
-

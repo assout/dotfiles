@@ -1,4 +1,4 @@
-" # Index {{{
+" Index {{{
 " * Begen.
 " * Options.
 " * Let defines.
@@ -9,12 +9,12 @@
 " * Commands.
 " }}}
 
-" # Section; Begen {{{
+" Section; Begen {{{
 " vi互換性.
 set nocompatible
 " }}}
 
-" # Section; Options {{{
+" Section; Options {{{
 " バックアップファイル作成有無.
 set nobackup
 " ヤンク、ペーストのクリップボード共有.
@@ -33,8 +33,7 @@ set formatoptions-=o
 set hidden
 " 検索結果ハイライト.
 set hlsearch
-" 検索での大文字小文字区別.
-set ignorecase
+" 検索での大文字小文字区別.  set ignorecase
 " インクリメンタルサーチ.
 set incsearch
 " 不可視文字表示.
@@ -80,45 +79,38 @@ if has('win32')
 endif
 " }}}
 
-" # Section; Lets {{{
+" Section; Lets {{{
 " netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle = 3
 " shellのハイライトをbash基準にする.
 let b:is_bash = 1
 " }}}
 
-" # Section; Key-mappings {{{
-
+" Section; Key-mappings {{{
 nmap <Space> [space]
-nnoremap [space]h zH
-nnoremap [space]l zL
-
-" ## normal & visual mode {{{
-" TODO これは見直す?(なれちゃう前に).
+" <C-j,k,h,l>, TODO これは見直す?.
 noremap <C-j> 10j
 noremap <C-k> 10k
 noremap <C-h> gT
 noremap <C-l> gt
 
+" 横スクロール.
+nnoremap [space]h zH
+nnoremap [space]l zL
+" 表示位置でカーソル移動.
 nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
-" }}}
-
-" ## normal mode {{{
 " 改行を挿入.
-nnoremap <CR> i<CR><ESC>
+nnoremap <CR> i<CR><Esc>
 " YをD,Cと一貫性のある挙動に変更.
 nnoremap Y y$
 " very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
-" nnoremap g/ /
-" nnoremap g? ?
-
 " 検索結果ハイライトを解除.
-nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap <Esc><Esc> :nohlsearch<CR>
 " ### バッファ、ウィンドウ、タブ移動関連.
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
@@ -142,11 +134,10 @@ nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
-
-" ### vimrcとgvimrcの編集、保存、読み込み.
+" vimrcとgvimrcの編集、保存、読み込み.
 nnoremap [rc] <Nop>
 nmap [space]r [rc]
-nnoremap [rc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<BAR>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+nnoremap [rc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にならないため.
 	nnoremap [rc]v :tabedit ~/development/dotfiles/_vimrc<CR>
 	nnoremap [rc]g :tabedit ~/development/dotfiles/_gvimrc<CR>
@@ -159,9 +150,6 @@ else
 	nnoremap [rc]b :tabedit C:\Users\admin\_my_bashrc<CR>
 endif
 
-" }}}
-
-" ## insert mode {{{
 " emacs 風にする.
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
@@ -171,19 +159,7 @@ inoremap <C-d> <Del>
 inoremap <C-u> <C-o>d0
 inoremap <C-k> <c-o>D
 
-" カッコ等の入力補助 TODO カーソル移動が不自然になる
-" inoremap  {} {}<Left>
-" inoremap [] []<Left>
-" inoremap () ()<Left>
-" inoremap "" ""<Left>
-" inoremap '' ''<Left>
-" inoremap $$ $$<Left>
-" inoremap <> <><Left> TODO vrapperが正しく動かなくなる
-" inoremap `` ``<Left>
-" }}}
-
-" ## command mode {{{
-" ### コマンドラインモードでのキーマッピングをEmacs風にする.
+" コマンドラインモードでのキーマッピングをEmacs風にする.
 " 行頭へ移動.
 cnoremap <C-a> <Home>
 " 行末へ移動.
@@ -202,17 +178,14 @@ cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 " 次の単語へ移動.
 cnoremap <M-f> <S-Right>
-" }}}
 
-" ## visual mode {{{
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
-" }}}
 
 " }}}
 
-" # Section; Functions {{{
-" ## command実行結果をキャプチャ.
+" Section; Functions {{{
+" command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
 		redir @*>
@@ -223,18 +196,18 @@ function! s:capture_cmd_output(cmd)
 	redir END
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
-
+" pluginが存在するか調べる.
 function! s:has_plugin(plugin)
 	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
 				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
 					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
 endfunction
-" " }}}
-"
-" # Section; Plug-ins {{{
-" ## Setup plug-in runtime path {{{
+" }}}
+
+" Section; Plug-ins {{{
+" Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	" # neobundle {{{
+	" Setup neobundle {{{
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -275,7 +248,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	"}}}
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	"# $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
+	" $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:path !~# '\~$' && isdirectory(s:path)
 			let &runtimepath = &runtimepath.','.s:path
@@ -291,15 +264,15 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-" Codic {{{
-if s:has_plugin("Codic")
+" codic {{{
+if s:has_plugin("codic")
 	nnoremap [codic] <Nop>
 	nmap [space]c [codic]
 	nnoremap [codic] :<C-u>Codic<CR>
 
 	nnoremap [Codic] <Nop>
 	nmap [space]C [Codic]
-	nnoremap [Codic] :<C-u>Codic<SPACE>
+	nnoremap [Codic] :<C-u>Codic<Space>
 endif
 " }}}
 
@@ -312,7 +285,7 @@ if s:has_plugin("memolist")
 	endif
 	if s:has_plugin('unite')
 		let g:memolist_unite = 1
-		let g:memolist_unite_option = '-auto-preview -start-insert'
+		let g:memolist_unite_option = '-auto-preview'
 	endif
 	nnoremap [memolist] <Nop>
 	nmap [space]m [memolist]
@@ -435,27 +408,27 @@ endif
 
 " }}}
 
-" # Section; Auto-commands {{{
+" Section; Auto-commands {{{
 augroup MyAutoGroup
 	autocmd!
-	"## DoubleByteSpace highlight.
+	" DoubleByteSpace highlight.
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-	"## markdown.
+	" markdown.
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
-	"## 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
+	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0
 	autocmd FileType * set formatoptions-=o
 	" QuickFixを自動で開く.
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep if len(getqflist()) != 0 | copen | endif
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif
 augroup END
 " }}}
 
-" # Section; Commands {{{
+" Section; Commands {{{
 " ファイルタイプ判別.
 filetype on
-" color-scheme {{{
+" color-scheme
 if $USER == 'oji'
 	colorscheme hybrid-light
 elseif has('gui_running')
@@ -464,8 +437,7 @@ else
 	colorscheme default
 endif
 
-" :qで誤って終了してしまうのを防ぐため，closeにしちゃう.
+" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
 
-" }}}

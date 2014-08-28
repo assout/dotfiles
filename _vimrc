@@ -158,7 +158,7 @@ inoremap <C-e> <End>
 inoremap <C-a> <Home>
 inoremap <C-d> <Del>
 inoremap <C-u> <C-o>d0
-inoremap <C-k> <c-o>D
+inoremap <C-k> <C-o>D
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
 " 行頭へ移動.
@@ -439,6 +439,6 @@ else
 endif
 
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
-cabbrev q <c-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
 

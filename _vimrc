@@ -249,7 +249,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
-		NeoBundle 'Shougo/neocomplete.vim'
+		NeoBundle 'Shougo/neocomplete'
+		NeoBundle 'Shougo/neosnippet'
+		NeoBundle 'Shougo/neosnippet-snippets'
 	endif
 	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'

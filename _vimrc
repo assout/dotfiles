@@ -33,7 +33,8 @@ set formatoptions-=o
 set hidden
 " 検索結果ハイライト.
 set hlsearch
-" 検索での大文字小文字区別.  set ignorecase
+" 検索での大文字小文字区別.
+set ignorecase
 " インクリメンタルサーチ.
 set incsearch
 " 不可視文字表示.

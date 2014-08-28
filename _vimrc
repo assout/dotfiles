@@ -291,7 +291,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-" codic-vim {{{
+" Codic {{{
 if s:has_plugin("Codic")
 	nnoremap [codic] <Nop>
 	nmap [space]c [codic]
@@ -346,7 +346,7 @@ if s:has_plugin("quickrun")
 endif
 " }}}
 
-" singleton.vim {{{
+" singleton {{{
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
 endif

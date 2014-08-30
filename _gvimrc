@@ -17,4 +17,6 @@ set guioptions+=b
 set guioptions-=m
 " ツールバーを非表示.
 set guioptions-=T
+" colorscheme.
+colorscheme hybrid-light
 

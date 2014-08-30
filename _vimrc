@@ -29,6 +29,10 @@ set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
+if has('win32') && executable('grep')
+	" grep.
+	set grepprg=grep\ -nH
+endif
 " バッファ破棄設定.
 set hidden
 " 検索結果ハイライト.
@@ -67,6 +71,10 @@ set tabstop=4
 set textwidth=0
 " タイトルを表示するか.
 set title
+" Undoファイルの有効無効.
+if has('win32')
+	set noundofile
+endif
 " コマンドラインモードの補完を使いやすくする.
 set wildmenu
 " 行折り返し.
@@ -304,6 +312,32 @@ if s:has_plugin("neocomplete")
 endif
 " }}}
 
+" neosnippet {{{
+if s:has_plugin("neosnippet")
+	" Plugin key-mappings.
+	imap <C-k> <Plug>(neosnippet_expand_or_jump)
+	smap <C-k> <Plug>(neosnippet_expand_or_jump)
+	xmap <C-k> <Plug>(neosnippet_expand_target)
+	xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
+
+	" SuperTab like snippets' behavior.
+	"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+	" \ "\<Plug>(neosnippet_expand_or_jump)"
+	" \: pumvisible() ? "\<C-n>" : "\<TAB>"
+	"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+	" \ "\<Plug>(neosnippet_expand_or_jump)"
+	" \: "\<TAB>"
+
+	" For snippet_complete marker.
+	if has('conceal')
+	  set conceallevel=2 concealcursor=i
+	endif
+
+	" Enable snipMate compatibility feature.
+	" let g:neosnippet#enable_snipmate_compatibility = 1
+endif
+" }}}
+
 " previm {{{
 if s:has_plugin("previm")
 	nnoremap [previm] <Nop>
@@ -312,7 +346,7 @@ if s:has_plugin("previm")
 endif
 " }}}
 
-" quickfun {{{
+" quickrun {{{
 if s:has_plugin("quickrun")
 	nnoremap [quickrun] <Nop>
 	nmap [space]q [quickrun]
@@ -432,10 +466,8 @@ filetype on
 " color-scheme
 if $USER == 'oji'
 	colorscheme hybrid-light
-elseif has('gui_running')
-	colorscheme hybrid-light
 else
-	colorscheme default
+	colorscheme desert
 endif
 
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.

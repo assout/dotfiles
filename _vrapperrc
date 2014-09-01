@@ -1,4 +1,4 @@
-" # Note {{{1
+" # Note {{{
 " vrapperのキーバインドを有効にするにはeclipseのデフォルトキーバインドを変更する必要がある。
 " 詳細は http://vrapper.sourceforge.net/documentation
 "
@@ -23,17 +23,17 @@
 " Ctrl+x - Cut
 " Ctrl+e - Quick Switch Editor
 " Ctrl+y - Redo
-" }}}1
+" }}}
 
-" # Section; Vim Settings {{{1
+" # Section; Vim Settings {{{
 " load vimrc.
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
-" }}}1
+" }}}
 
-" # Section; Vrapper Settings {{{1
+" # Section; Vrapper Settings {{{
 " インサートモードを抜けたらIMEオフ.
 set imdisable
 " コンテンツアシストで<C-p>,<C-n>を有効にする.
@@ -44,9 +44,9 @@ set startnormalmode
 set visualmouse
 " GVimパス指定.
 set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
-" }}}1
+" }}}
 
-" # Section; Key-mappings {{{1
+" Section; Key-mappings {{{
 " vimrcでのマッピングを解除.
 nunmap j
 nunmap k
@@ -59,12 +59,13 @@ noremap <C-l> gt
 
 nnoremap <C-j> :GotoNextMember<CR>
 nnoremap <C-k> :GotoPreviousMember<CR>
+" }}}
 
+" Section; Define commands {{{
 " definition ID of the edit -> go to next member action 
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
 " definition ID of the edit -> go to previous member action 
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
-" }}}1
+" }}}
 
 " vim: set filetype=vim :
-

@@ -98,8 +98,8 @@ let b:is_bash = 1
 " Section; Key-mappings {{{
 nmap <Space> [space]
 " <C-j,k,h,l>, TODO これは見直す?.
-noremap <C-j> 10j
-noremap <C-k> 10k
+noremap <C-j> }
+noremap <C-k> {
 noremap <C-h> gT
 noremap <C-l> gt
 
@@ -254,7 +254,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'w0ng/vim-hybrid'
 	filetype plugin indent on
-	"}}}
+	" }}}
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	" $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
@@ -269,7 +269,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 		end
 	endfor
 	unlet s:path
-	"}}}
+	" }}}
 endif
 " }}}
 
@@ -429,6 +429,7 @@ endif
 if s:has_plugin("vimfiler")
 	" 非safe modeで起動.
 	let g:vimfiler_safe_mode_by_default = 0
+	let g:vimfiler_as_default_explorer = 1
 
 	nnoremap [vimfiler] <Nop>
 	nmap [space]v [vimfiler]
@@ -450,7 +451,7 @@ augroup MyAutoGroup
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	" markdown.
-	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*,txt} set filetype=markdown
 	autocmd FileType markdown hi! def link markdownItalic LineNr
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0
@@ -473,4 +474,3 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
-

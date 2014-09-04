@@ -1,5 +1,5 @@
 " Index {{{
-" * Begen.
+" * Begin.
 " * Options.
 " * Let defines.
 " * Key-mappings.
@@ -9,7 +9,7 @@
 " * Commands.
 " }}}
 
-" Section; Begen {{{
+" Section; Begin {{{
 " vi互換性.
 set nocompatible
 " }}}
@@ -26,7 +26,7 @@ endif
 " ソフトタブ.
 set noexpandtab
 " ファイルエンコーディング.
-set fileencodings=utf-8,ucs-bom,iso-2022-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,utf-8
+set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
 if has('win32') && executable('grep')
@@ -63,6 +63,16 @@ set showtabline=2
 set sidescrolloff=5
 " 検索で大文字を含むときは大小を区別するか.
 set smartcase
+" スペルチェック.
+if has('win32') || $USER == 'oji'
+	set spell
+endif
+" スペルチェック用辞書ファイル.
+if has('win32')
+	set spellfile=D:/admin/Documents/spell/en.utf-8.add
+elseif $USER == 'oji'
+	set spellfile=~/Dropbox/spell/en.utf-8.add
+endif
 " スペルチェックで日本語は除外する.
 set spelllang+=cjk
 " tab幅.
@@ -207,9 +217,9 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
-	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
-				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
-					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
+	return !empty(globpath(&runtimepath, '**/plugin/**/' . a:plugin . '.vim'))
+				\ || !empty(globpath(&runtimepath, '**/autoload/**' . a:plugin . '.vim'))
+					\ || !empty(globpath(&runtimepath, '**/colors/**' . a:plugin . '.vim'))
 endfunction
 " }}}
 
@@ -226,6 +236,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	" NeoBundle 'haya14busa/vim-migemo'
+	NeoBundle 'kana/vim-textobj-user'
+	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'schickling/vim-bufonly'
@@ -247,7 +259,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'tpope/vim-surround'
 	NeoBundle 'vim-jp/vimdoc-ja'
-	" # colorschemes.
+	" # color schemes.
 	NeoBundle 'altercation/vim-colors-solarized'
 	NeoBundle 'tomasr/molokai'
 	NeoBundle 'vim-scripts/newspaper.vim'
@@ -287,7 +299,7 @@ endif
 
 " memolist {{{
 if s:has_plugin("memolist")
-	if has('unix') 
+	if has('unix')
 		let g:memolist_path = '~/Dropbox/memolist'
 	else
 		let g:memolist_path = 'D:/admin/Documents/memolist'
@@ -427,7 +439,6 @@ endif
 
 " vimfiler {{{
 if s:has_plugin("vimfiler")
-	" 非safe modeで起動.
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
@@ -464,7 +475,7 @@ augroup END
 " Section; Commands {{{
 " ファイルタイプ判別.
 filetype on
-" color-scheme
+" colorscheme
 if $USER == 'oji'
 	colorscheme hybrid-light
 else
@@ -474,3 +485,4 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
+

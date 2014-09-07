@@ -200,7 +200,6 @@ cnoremap <M-f> <S-Right>
 
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
-nnoremap yae yae'>
 
 " }}}
 
@@ -218,9 +217,7 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
-	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
-				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
-					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
+	return !empty(globpath(&runtimepath, "**/" . a:plugin . '.vim'))
 endfunction
 " }}}
 
@@ -370,6 +367,13 @@ endif
 " singleton {{{
 if s:has_plugin("singleton") && has("clientserver")
 	call singleton#enable()
+endif
+" }}}
+
+" vim-textobj-entire {{{
+if s:has_plugin("entire")
+	nmap yae yae<C-o>
+	nmap yie yie<C-o>
 endif
 " }}}
 

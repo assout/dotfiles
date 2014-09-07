@@ -65,7 +65,7 @@ set sidescrolloff=5
 set smartcase
 " スペルチェック.
 if has('win32') || $USER == 'oji'
-	set spell
+	" set spell
 endif
 " スペルチェック用辞書ファイル.
 if has('win32')
@@ -200,6 +200,7 @@ cnoremap <M-f> <S-Right>
 
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
+nnoremap yae yae'>
 
 " }}}
 
@@ -217,9 +218,9 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
-	return !empty(globpath(&runtimepath, '**/plugin/**/' . a:plugin . '.vim'))
-				\ || !empty(globpath(&runtimepath, '**/autoload/**' . a:plugin . '.vim'))
-					\ || !empty(globpath(&runtimepath, '**/colors/**' . a:plugin . '.vim'))
+	return !empty(globpath(&runtimepath, 'plugin/' . a:plugin . '.vim'))
+				\ || !empty(globpath(&runtimepath, 'autoload/' . a:plugin . '.vim'))
+					\ || !empty(globpath(&runtimepath, 'colors/' . a:plugin . '.vim'))
 endfunction
 " }}}
 
@@ -406,6 +407,7 @@ if s:has_plugin("unite")
 	let g:unite_source_grep_max_candidates = 200
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
+	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
 
 	nnoremap [unite] <Nop>
 	nmap [space]u [unite]
@@ -415,11 +417,11 @@ if s:has_plugin("unite")
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	nnoremap [unite]r :<C-u>UniteResume<CR>
 	if has('unix')
-		nnoremap [unite]F :<C-u>Unite file_rec/async<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec/async<CR>
+		nnoremap [unite]f :<C-u>Unite file_rec/async<CR>
+		nnoremap [unite]d :<C-u>Unite directory_rec/async<CR>
 	else
-		nnoremap [unite]F :<C-u>Unite file_rec<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
+		nnoremap [unite]f :<C-u>Unite file_rec<CR>
+		nnoremap [unite]d :<C-u>Unite directory_rec<CR>
 	endif
 
 	" neomru.vim {{{
@@ -430,8 +432,8 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit = 40
 		let g:neomru#directory_mru_limit = 40
 
-		nnoremap [unite]f :<C-u>Unite neomru/file<CR>
-		nnoremap [unite]d :<C-u>Unite neomru/directory<CR>
+		nnoremap [unite]mf :<C-u>Unite neomru/file<CR>
+		nnoremap [unite]md :<C-u>Unite neomru/directory<CR>
 	endif
 	" }}}
 endif

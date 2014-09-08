@@ -207,7 +207,7 @@ vnoremap y y'>
 " command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
-		redir @*>
+		redir @+>
 	else
 		redir @">
 	endif
@@ -215,10 +215,16 @@ function! s:capture_cmd_output(cmd)
 	redir END
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
+
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
-	return !empty(globpath(&runtimepath, "**/" . a:plugin . '.vim'))
+	if has('unix')
+		return !empty(globpath('~/.vim/bundle', '*' . a:plugin . '*'))
+	elseif
+		return !empty(globpath(&runtimepath, '*' . a:plugin . '*'))
+	endif
 endfunction
+
 " }}}
 
 " Section; Plug-ins {{{
@@ -267,13 +273,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" }}}
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
+	let &runtimepath = &runtimepath.',/vimfiles/plugins'
 	" $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
 	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
-		if s:path !~# '\~$' && isdirectory(s:path)
-			let &runtimepath = &runtimepath.','.s:path
-		end
-	endfor
-	for s:path in split(glob($HOME.'/vimfiles/colors/*'), '\n')
 		if s:path !~# '\~$' && isdirectory(s:path)
 			let &runtimepath = &runtimepath.','.s:path
 		end
@@ -281,6 +283,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	unlet s:path
 	" }}}
 endif
+
 " }}}
 
 " codic {{{
@@ -297,6 +300,7 @@ endif
 
 " memolist {{{
 if s:has_plugin("memolist")
+    let g:memolist_memo_suffix = "md"
 	if has('unix')
 		let g:memolist_path = '~/Dropbox/memolist'
 	else
@@ -304,7 +308,6 @@ if s:has_plugin("memolist")
 	endif
 	if s:has_plugin('unite')
 		let g:memolist_unite = 1
-		let g:memolist_unite_option = '-auto-preview'
 	endif
 	nnoremap [memolist] <Nop>
 	nmap [space]m [memolist]
@@ -381,33 +384,6 @@ endif
 if s:has_plugin("unite")
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
-	" " unite-grepのバックエンドをきりかえる. {{{
-	" if executable('pt')
-	" 	" Use pt in unite grep source.
-	" 	" https://github.com/monochromegane/the_platinum_searcher
-	" 	let g:unite_source_grep_command = 'pt'
-	" 	let g:unite_source_grep_default_opts = '-iS --nogroup --nocolor'
-	" 	let g:unite_source_grep_recursive_opt = ''
-	" 	" Using pt as recursive command.
-	" 	let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g .'
-	" elseif executable('ag')
-	" 	" Use ag in unite grep source.
-	" 	let g:unite_source_grep_command = 'ag'
-	" 	let g:unite_source_grep_default_opts =
-	" 				\ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
-	" 				\  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-	" 	let g:unite_source_grep_recursive_opt = ''
-	" 	" Using ag as recursive command.
-	" 	let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden -g ""'
-	" elseif executable('ack-grep')
-	" 	" Use ack in unite grep source.
-	" 	let g:unite_source_grep_command = 'ack-grep'
-	" 	let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
-	" 	let g:unite_source_grep_recursive_opt = ''
-	" 	" Using ack-grep as recursive command.
-	" 	let g:unite_source_rec_async_command = 'ack -f --nofilter'
-	" endif
-	" }}}
 	let g:unite_source_grep_max_candidates = 200
 	" source=bookmark,のデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
@@ -418,14 +394,16 @@ if s:has_plugin("unite")
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
 	nnoremap [unite]b :<C-u>Unite buffer<CR>
 	nnoremap [unite]B :<C-u>Unite bookmark<CR>
+	nnoremap [unite]f :<C-u>Unite file<CR>
+	nnoremap [unite]d :<C-u>Unite directory<CR>
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	nnoremap [unite]r :<C-u>UniteResume<CR>
 	if has('unix')
-		nnoremap [unite]f :<C-u>Unite file_rec/async<CR>
-		nnoremap [unite]d :<C-u>Unite directory_rec/async<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec/async<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec/async<CR>
 	else
-		nnoremap [unite]f :<C-u>Unite file_rec<CR>
-		nnoremap [unite]d :<C-u>Unite directory_rec<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
 	endif
 
 	" neomru.vim {{{

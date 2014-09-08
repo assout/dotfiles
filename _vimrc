@@ -396,15 +396,10 @@ if s:has_plugin("unite")
 	nnoremap [unite]B :<C-u>Unite bookmark<CR>
 	nnoremap [unite]f :<C-u>Unite file<CR>
 	nnoremap [unite]d :<C-u>Unite directory<CR>
+	nnoremap [unite]F :<C-u>Unite file_rec<CR>
+	nnoremap [unite]D :<C-u>Unite directory_rec<CR>
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	nnoremap [unite]r :<C-u>UniteResume<CR>
-	if has('unix')
-		nnoremap [unite]F :<C-u>Unite file_rec/async<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec/async<CR>
-	else
-		nnoremap [unite]F :<C-u>Unite file_rec<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
-	endif
 
 	" neomru.vim {{{
 	if s:has_plugin("neomru")

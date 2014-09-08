@@ -98,7 +98,7 @@ if has('win32')
 endif
 " }}}
 
-" Section; Lets {{{
+" Section; Let defines {{{
 " netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle = 3
 " shellのハイライトをbash基準にする.
@@ -401,9 +401,8 @@ if s:has_plugin("unite")
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
 	nnoremap [unite]r :<C-u>UniteResume<CR>
 
-	" neomru.vim {{{
+	" neomru {{{
 	if s:has_plugin("neomru")
-		" show mru help.
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 40

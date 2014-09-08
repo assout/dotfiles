@@ -385,7 +385,7 @@ if s:has_plugin("unite")
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
-	" source=bookmark,のデフォルトアクションをvimfilerにする.
+	" source=directoryのデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')
 	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
 

@@ -281,7 +281,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
-	NeoBundle 'tpope/vim-surround'
+	" NeoBundle 'tpope/vim-surround'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	" color schemes.
 	NeoBundle 'altercation/vim-colors-solarized'

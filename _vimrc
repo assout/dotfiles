@@ -341,10 +341,10 @@ if s:has_plugin("memolist")
 	endif
 	if s:has_plugin('unite')
 		let g:unite_source_alias_aliases = {
-					\   "memolist" : {
-					\       "source" : "file",
-					\       "args" : g:memolist_path,
-					\   },
+					\	"memolist" : {
+					\		"source" : "file",
+					\		"args" : g:memolist_path,
+					\	},
 					\}
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
 	endif
@@ -362,7 +362,7 @@ endif
 " neosnippet {{{
 " if s:has_plugin("neosnippet")
 " 	" Plugin key-mappings.
-" 	imap <C-k> <Plug>(neosnippet_expand_or_jump)
+" 	imap <C-k> <Pug>(neosnippet_expand_or_jump)
 " 	smap <C-k> <Plug>(neosnippet_expand_or_jump)
 " 	xmap <C-k> <Plug>(neosnippet_expand_target)
 " 	xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
@@ -409,26 +409,26 @@ if s:has_plugin("unite")
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
-	nnoremap [unite]b :<C-u>Unite buffer<CR>
-	nnoremap [unite]B :<C-u>Unite bookmark<CR>
-	nnoremap [unite]f :<C-u>Unite file<CR>
-	nnoremap [unite]d :<C-u>Unite directory<CR>
+	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
+	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
+	nnoremap [unite]f :<C-u>Unite file -buffer-name=file-buffer<CR>
+	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory-buffer<CR>
 	if has('win32')
-		nnoremap [unite]F :<C-u>Unite file_rec<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec-buffer<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec-buffer<CR>
 	else
-		nnoremap [unite]F :<C-u>Unite file_rec/async<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec/async<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async-buffer<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async-buffer<CR>
 	endif
-	nnoremap [unite]g :<C-u>Unite grep -buffer-name=search-buffer<CR>
-	nnoremap [unite]r :<C-u>UniteResume<CR>
-	nnoremap [unite]R :<C-u>Unite register<CR>
-	nnoremap [unite]y :<C-u>Unite history/yank<CR>
+	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep-buffer<CR>
+	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume-buffer<CR>
+	nnoremap [unite]R :<C-u>Unite register -buffer-name=register-buffer<CR>
+	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
 
 	" neomru {{{
 	if s:has_plugin("neomru")
-		nnoremap [unite]m :<C-u>Unite neomru/file<CR>
-		nnoremap [unite]M :<C-u>Unite neomru/directory<CR>
+		nnoremap [unite]m :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
+		nnoremap [unite]M :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
 
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
@@ -538,4 +538,3 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
-

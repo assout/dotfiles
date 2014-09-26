@@ -330,7 +330,7 @@ if s:has_plugin("memolist")
 	nmap [space]m [memolist]
 	nnoremap [memolist] <Nop>
 	nnoremap [memolist]n :<C-u>MemoNew<CR>
-	nnoremap [memolist]l :<C-u>Unite memolist<CR>
+	nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
 	let g:memolist_memo_suffix = "md"
@@ -518,7 +518,7 @@ augroup MyAutoGroup
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	" markdown.
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*,txt} set filetype=markdown
-	autocmd FileType markdown hi! def link markdownItalic LineNr
+	autocmd FileType markdown highlight! def link markdownItalic LineNr | set spell
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
@@ -538,3 +538,4 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
+

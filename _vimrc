@@ -336,8 +336,10 @@ if s:has_plugin("memolist")
 	let g:memolist_memo_suffix = "md"
 	if has('unix')
 		let g:memolist_path = '~/Dropbox/memolist'
+		let g:memolist_template_dir_path = '~/Dropbox/memolist'
 	else
 		let g:memolist_path = 'D:/admin/Documents/memolist'
+		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
 	if s:has_plugin('unite')
 		let g:unite_source_alias_aliases = {
@@ -518,7 +520,7 @@ augroup MyAutoGroup
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	" markdown.
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*,txt} set filetype=markdown
-	autocmd FileType markdown highlight! def link markdownItalic LineNr | set spell
+	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.

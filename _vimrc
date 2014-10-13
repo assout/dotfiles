@@ -112,9 +112,8 @@ let g:mapleader = '[space]d'
 " vimfilerと競合防ぐため.
 nmap <Space> [space]
 
-" TODO これは見直す?.
-noremap <C-j> }
-noremap <C-k> {
+noremap <C-j> 10j
+noremap <C-k> 10k
 noremap <C-h> gT
 noremap <C-l> gt
 

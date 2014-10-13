@@ -450,6 +450,8 @@ if s:has_plugin("unite")
 	" ignore files.
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	" sort rank
+	call unite#custom_source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
 endif
 " }}}
 

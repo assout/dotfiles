@@ -5,23 +5,24 @@
 " eclipseのデフォルトキーバインドをCtrl+Shift+Alt+hogeのバインドに退避することとする。
 " 例えば,Ctrl+o(QuickOutline)は、Ctrl+Shift+Alt+oに退避する。
 " 以下に退避するキーバインドの一覧を示す。
-" 
-" Ctrl+o - Quick Outline
-" Ctrl+i - Correct Indentation,Format Active Elements
-" Ctrl+p - Print
-" Ctrl+n - New
-" Ctrl+j - Incremental Find
-" Ctrl+k - Find Next
-" Ctrl+h - Open Search Dialog
-" Ctrl+l - Go to Line
-" Ctrl+w - Close,Close Rendering
-" Ctrl+f - Find and Replace
+"
+" Ctrl+a - Select All
 " Ctrl+b - Build All
 " Ctrl+d - Delete Line
-" Ctrl+u - Execute
-" Ctrl+a - Select All
-" Ctrl+x - Cut
 " Ctrl+e - Quick Switch Editor
+" Ctrl+f - Find and Replace
+" Ctrl+h - Open Search Dialog
+" Ctrl+i - Correct Indentation,Format Active Elements
+" Ctrl+j - Incremental Find
+" Ctrl+k - Find Next
+" Ctrl+l - Go to Line
+" Ctrl+n - New
+" Ctrl+o - Quick Outline
+" Ctrl+p - Print
+" Ctrl+u - Execute
+" Ctrl+v - Paste
+" Ctrl+w - Close,Close Rendering
+" Ctrl+x - Cut
 " Ctrl+y - Redo
 " }}}
 
@@ -44,6 +45,8 @@ set startnormalmode
 set visualmouse
 " GVimパス指定.
 set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
+" Search Regex
+set regexsearch
 " }}}
 
 " Section; Key-mappings {{{
@@ -57,8 +60,8 @@ nunmap ?
 noremap <C-h> gT
 noremap <C-l> gt
 
-nnoremap <C-j> :GotoNextMember<CR>
 nnoremap <C-k> :GotoPreviousMember<CR>
+nnoremap <C-j> :GotoNextMember<CR>
 " }}}
 
 " Section; Define commands {{{
@@ -69,4 +72,3 @@ eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous
 " }}}
 
 " vim: set filetype=vim :
-

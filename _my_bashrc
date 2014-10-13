@@ -9,15 +9,13 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-
-alias v="vim"
-
 function cdls() {
-    # cdがaliasでループするので\をつける
-    \cd $1;
-    ls;
+	# cdがaliasでループするので\をつける
+	\cd $1;
+	ls;
 }
 alias cd=cdls
+alias v="vim"
 
 # User specific aliases and functions.
 stty stop undef

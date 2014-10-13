@@ -411,8 +411,8 @@ if s:has_plugin("unite")
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
-	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
-	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
+	nnoremap [unite]b :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
+	nnoremap [unite]B :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
 	nnoremap [unite]f :<C-u>Unite file -buffer-name=file-buffer<CR>
 	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory-buffer<CR>
 	if has('win32')
@@ -507,6 +507,8 @@ endif
 if s:has_plugin("vim-textobj-entire")
 	nmap yae yae<C-o>
 	nmap yie yie<C-o>
+	nmap =ae =ae<C-o>
+	nmap =ie =ie<C-o>
 endif
 " }}}
 

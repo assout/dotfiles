@@ -15,7 +15,11 @@ function cdls() {
 	ls;
 }
 alias cd=cdls
-alias v="vim"
+if [ -e ~/.vimrc ] ; then
+	alias v="vi"
+else
+	alias v="vi -S /tmp/.myvimrc"
+fi
 
 # User specific aliases and functions.
 stty stop undef

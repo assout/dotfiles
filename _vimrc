@@ -459,31 +459,24 @@ if s:has_plugin("unite")
 	" }}}
 	" unite-todo {{{
 	if s:has_plugin("unite-todo")
-		nmap [space]t [todo]
-		vmap [space]t [todo]
-		nnoremap [todo] <Nop>
-		vnoremap [todo] <Nop>
-
-		vnoremap [todo]a :UniteTodoAddSimple<CR>
-		vnoremap [todo]A :UniteTodoAddSimple -tag -memo<CR>
-		vnoremap [todo]t :UniteTodoAddSimple -tag<CR>
-		vnoremap [todo]m :UniteTodoAddSimple -memo<CR>
-
-		nnoremap [todo]a :<C-u>UniteTodoAddSimple<CR>
-		nnoremap [todo]A :<C-u>UniteTodoAddSimple -tag -memo<CR>
-		nnoremap [todo]t :<C-u>UniteTodoAddSimple -tag<CR>
-		nnoremap [todo]m :<C-u>UniteTodoAddSimple -memo<CR>
-
-		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
-		nnoremap [todo]L :<C-u>Unite todo<CR>
-		" todo path変数化. あと動かない.
-		" nnoremap [todo]g :<C-u>Unite vimgrep:'~/admin/Documents/todo':<CR>
 		let g:unite_todo_note_suffix = 'md'
 		if has('unix')
 			let g:unite_todo_data_directory = '/home/oji/Dropbox'
 		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
+
+		map [space]t [todo]
+		noremap [todo] <Nop>
+
+		noremap [todo]a :UniteTodoAddSimple<CR>
+		noremap [todo]A :UniteTodoAddSimple -tag -memo<CR>
+		noremap [todo]t :UniteTodoAddSimple -tag<CR>
+		noremap [todo]m :UniteTodoAddSimple -memo<CR>
+
+		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
+		nnoremap [todo]L :<C-u>Unite todo<CR>
+		nnoremap [todo]g :grep -r <CR>
 	endif
 	" }}}
 

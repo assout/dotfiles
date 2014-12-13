@@ -105,12 +105,14 @@ let g:netrw_liststyle = 3
 let b:is_bash = 1
 " for dicwin.vim.
 let g:mapleader = '[space]d'
-" let g:dicwin_mapleader = '[space]d'
+" let g:dicwin_maplead
+" er = '[space]d'
 " }}}
 
 " Section; Key-mappings {{{
 " vimfilerと競合防ぐため.
 nmap <Space> [space]
+vmap <Space> [space]
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -157,21 +159,26 @@ nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
-" vimrcとgvimrcの編集、保存、読み込み.
-nmap [space]r [rc]
-nnoremap [rc] <Nop>
-nnoremap [rc]s :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+
+" define prefix.
+nmap [space]e [edit]
+nnoremap [edit] <Nop>
+nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
+nnoremap [edit]h :tabedit C:/Windows/System32/drivers/etc/hosts<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にするため.
-	nnoremap [rc]v :tabedit ~/development/dotfiles/_vimrc<CR>
-	nnoremap [rc]g :tabedit ~/development/dotfiles/_gvimrc<CR>
-	nnoremap [rc]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
-	nnoremap [rc]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
+	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
+	nnoremap [edit]g :tabedit ~/development/dotfiles/_gvimrc<CR>
+	nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
+	nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
 else
-	nnoremap [rc]v :tabedit $MYVIMRC<CR>
-	nnoremap [rc]g :tabedit $MYGVIMRC<CR>
-	nnoremap [rc]r :tabedit D:\admin\_vrapperrc<CR>
-	nnoremap [rc]b :tabedit C:\Users\admin\_my_bashrc<CR>
+	nnoremap [edit]v :tabedit $MYVIMRC<CR>
+	nnoremap [edit]g :tabedit $MYGVIMRC<CR>
+	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
+	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
 endif
+
+" vimrc,gvimrcの反映.
+nnoremap [space]s :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 " emacs 風にする.
 inoremap <C-b> <Left>
@@ -246,10 +253,12 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
+	NeoBundle 'h1mesuke/unite-outline'
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kannokanno/previm'
+	NeoBundle 'kannokanno/unite-todo'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
@@ -309,7 +318,7 @@ endif
 
 " alignta {{{
 if s:has_plugin("alignta")
-	xnoremap al :Alignta<Space>
+	xnoremap [space]a :Alignta<Space>
 endif
 " }}}
 
@@ -322,7 +331,7 @@ endif
 
 " excitetranslate {{{
 if s:has_plugin("excitetranslate")
-	nnoremap [space]e :<C-u>ExciteTranslate<CR>
+	nnoremap [space]E :<C-u>ExciteTranslate<CR>
 endif
 " }}}
 
@@ -330,7 +339,8 @@ endif
 if s:has_plugin("memolist")
 	nmap [space]m [memolist]
 	nnoremap [memolist] <Nop>
-	nnoremap [memolist]n :<C-u>MemoNew<CR>
+	" unite-todo に合わせ追加のprefixは[a](add).
+	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
@@ -412,8 +422,8 @@ if s:has_plugin("unite")
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
-	nnoremap [unite]b :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
-	nnoremap [unite]B :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
+	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
+	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
 	nnoremap [unite]f :<C-u>Unite file -buffer-name=file-buffer<CR>
 	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory-buffer<CR>
 	if has('win32')
@@ -427,23 +437,60 @@ if s:has_plugin("unite")
 	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume-buffer<CR>
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register-buffer<CR>
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
+	nnoremap [unite]o :<C-u>Unite outline<CR>
 
 	" neomru {{{
 	if s:has_plugin("neomru")
-		nnoremap [unite]m :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
-		nnoremap [unite]M :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
-
+		nmap [space]n [neomru]
+		nnoremap [neomru] <Nop>
+		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
+		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 50
 		let g:neomru#directory_mru_limit = 50
 	endif
+	" }}}
+	" unite-todo {{{
+	if s:has_plugin("unite-outline")
+		" TODO work around. http://totem3.hatenablog.jp/entry/2014/07/16/051101
+		let g:unite_abbr_highlight = 'Normal'
+	endif
+	" }}}
+	" unite-todo {{{
+	if s:has_plugin("unite-todo")
+		nmap [space]t [todo]
+		vmap [space]t [todo]
+		nnoremap [todo] <Nop>
+		vnoremap [todo] <Nop>
+
+		vnoremap [todo]a :UniteTodoAddSimple<CR>
+		vnoremap [todo]A :UniteTodoAddSimple -tag -memo<CR>
+		vnoremap [todo]t :UniteTodoAddSimple -tag<CR>
+		vnoremap [todo]m :UniteTodoAddSimple -memo<CR>
+
+		nnoremap [todo]a :<C-u>UniteTodoAddSimple<CR>
+		nnoremap [todo]A :<C-u>UniteTodoAddSimple -tag -memo<CR>
+		nnoremap [todo]t :<C-u>UniteTodoAddSimple -tag<CR>
+		nnoremap [todo]m :<C-u>UniteTodoAddSimple -memo<CR>
+
+		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
+		nnoremap [todo]L :<C-u>Unite todo<CR>
+		" todo path変数化. あと動かない.
+		" nnoremap [todo]g :<C-u>Unite vimgrep:'~/admin/Documents/todo':<CR>
+		let g:unite_todo_note_suffix = 'md'
+		if has('unix')
+			let g:unite_todo_data_directory = '/home/oji/Dropbox'
+		else
+			let g:unite_todo_data_directory = 'D:/admin/Documents'
+		endif
+	endif
+	" }}}
 
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
 	let g:unite_source_history_yank_enable = 1
-	" }}}
 
 	" source=directoryのデフォルトアクションをvimfilerにする.
 	call unite#custom_default_action('directory', 'vimfiler')

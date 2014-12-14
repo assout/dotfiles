@@ -499,7 +499,6 @@ if s:has_plugin("unite")
 		nnoremap [todo]g :call Todo_grep()<CR>
 	endif
 	" }}}
-
 endif
 " }}}
 

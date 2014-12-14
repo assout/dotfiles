@@ -111,8 +111,7 @@ let g:mapleader = '[space]d'
 
 " Section; Key-mappings {{{
 " vimfilerと競合防ぐため.
-nmap <Space> [space]
-vmap <Space> [space]
+map <Space> [space]
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -337,13 +336,6 @@ endif
 
 " memolist {{{
 if s:has_plugin("memolist")
-	nmap [space]m [memolist]
-	nnoremap [memolist] <Nop>
-	" unite-todo に合わせ追加のprefixは[a](add).
-	nnoremap [memolist]a :<C-u>MemoNew<CR>
-	nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
-	nnoremap [memolist]g :<C-u>MemoGrep<CR>
-
 	let g:memolist_memo_suffix = "md"
 	if has('unix')
 		let g:memolist_path = '~/Dropbox/memolist'
@@ -352,6 +344,7 @@ if s:has_plugin("memolist")
 		let g:memolist_path = 'D:/admin/Documents/memolist'
 		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
+
 	if s:has_plugin('unite')
 		let g:unite_source_alias_aliases = {
 					\	"memolist" : {
@@ -361,6 +354,13 @@ if s:has_plugin("memolist")
 					\}
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
 	endif
+
+	nmap [space]m [memolist]
+	nnoremap [memolist] <Nop>
+	" unite-todo に合わせ追加のprefixは[a](add).
+	nnoremap [memolist]a :<C-u>MemoNew<CR>
+	nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
+	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 endif
 " }}}
 
@@ -419,6 +419,20 @@ endif
 
 " unite {{{
 if s:has_plugin("unite")
+	let g:unite_enable_ignore_case = 1
+	let g:unite_enable_smart_case = 1
+	let g:unite_source_grep_max_candidates = 200
+	let g:unite_source_history_yank_enable = 1
+
+	" source=directoryのデフォルトアクションをvimfilerにする.
+	call unite#custom_default_action('directory', 'vimfiler')
+	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
+	" ignore files.
+	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	" sort rank
+	call unite#custom_source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
+
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
@@ -441,22 +455,25 @@ if s:has_plugin("unite")
 
 	" neomru {{{
 	if s:has_plugin("neomru")
-		nmap [space]n [neomru]
-		nnoremap [neomru] <Nop>
-		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
-		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 50
 		let g:neomru#directory_mru_limit = 50
+
+		nmap [space]n [neomru]
+		nnoremap [neomru] <Nop>
+		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
+		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
 	endif
 	" }}}
-	" unite-todo {{{
+
+	" unite-outline {{{
 	if s:has_plugin("unite-outline")
 		" TODO work around. http://totem3.hatenablog.jp/entry/2014/07/16/051101
 		let g:unite_abbr_highlight = 'Normal'
 	endif
 	" }}}
+
 	" unite-todo {{{
 	if s:has_plugin("unite-todo")
 		let g:unite_todo_note_suffix = 'md'
@@ -468,36 +485,28 @@ if s:has_plugin("unite")
 
 		map [space]t [todo]
 		noremap [todo] <Nop>
-
 		noremap [todo]a :UniteTodoAddSimple<CR>
 		noremap [todo]A :UniteTodoAddSimple -tag -memo<CR>
 		noremap [todo]t :UniteTodoAddSimple -tag<CR>
 		noremap [todo]m :UniteTodoAddSimple -memo<CR>
-
 		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
 		nnoremap [todo]L :<C-u>Unite todo<CR>
-		nnoremap [todo]g :grep -r <CR>
+		" TODO
+		" function! g:(output)
+		" 	nnoremap [todo]g :grep -r <CR>
+		" endfunction
+		" nnoremap [todo]g :grep -r <CR>
 	endif
 	" }}}
 
-	let g:unite_enable_ignore_case = 1
-	let g:unite_enable_smart_case = 1
-	let g:unite_source_grep_max_candidates = 200
-	let g:unite_source_history_yank_enable = 1
-
-	" source=directoryのデフォルトアクションをvimfilerにする.
-	call unite#custom_default_action('directory', 'vimfiler')
-	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
-	" ignore files.
-	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	" sort rank
-	call unite#custom_source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
 endif
 " }}}
 
 " vimfiler {{{
 if s:has_plugin("vimfiler")
+	let g:vimfiler_safe_mode_by_default = 0
+	let g:vimfiler_as_default_explorer = 1
+
 	nmap [space]v [vimfiler]
 	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
@@ -506,19 +515,11 @@ if s:has_plugin("vimfiler")
 	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
 	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
 	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
-
-	let g:vimfiler_safe_mode_by_default = 0
-	let g:vimfiler_as_default_explorer = 1
 endif
 " }}}
 
 " vim-ref {{{
 if s:has_plugin("vim-ref")
-	nmap [space]R [vim-ref]
-	nnoremap [vim-ref] <Nop>
-	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
-	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
-
 	" webdictサイトの設定.
 	let g:ref_source_webdict_sites = {
 				\   'je': {
@@ -544,6 +545,11 @@ if s:has_plugin("vim-ref")
 	function! g:ref_source_webdict_sites.wiki.filter(output)
 		return join(split(a:output, "\n")[17 :], "\n")
 	endfunction
+
+	nmap [space]R [vim-ref]
+	nnoremap [vim-ref] <Nop>
+	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
+	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif
 
 " vim-textobj-entire {{{

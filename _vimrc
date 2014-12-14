@@ -491,11 +491,12 @@ if s:has_plugin("unite")
 		noremap [todo]m :UniteTodoAddSimple -memo<CR>
 		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
 		nnoremap [todo]L :<C-u>Unite todo<CR>
-		" TODO
-		" function! g:(output)
-		" 	nnoremap [todo]g :grep -r <CR>
-		" endfunction
-		" nnoremap [todo]g :grep -r <CR>
+
+		function! Todo_grep()
+			let word = input("TodoGrep word: ")
+			execute ":grep " . l:word . " " . g:unite_todo_data_directory . "/todo/note/*"
+		endfunction
+		nnoremap [todo]g :call Todo_grep()<CR>
 	endif
 	" }}}
 

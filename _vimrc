@@ -29,6 +29,10 @@ endif
 set noexpandtab
 " ファイルエンコーディング.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
+" 折りたたみレベル.
+set foldlevelstart=99
+" 折りたたみ方法
+set foldmethod=marker
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
 if has('win32') && executable('grep')
@@ -97,6 +101,7 @@ if has('win32')
 	" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明)).
 	set noswapfile
 endif
+" }}}
 
 " Section; Let defines {{{
 " netrwのデフォルト表示スタイル変更.
@@ -112,6 +117,7 @@ let g:mapleader = '[space]d'
 " Section; Key-mappings {{{
 " vimfilerと競合防ぐため.
 map <Space> [space]
+map gf :e <cfile><CR>
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -159,11 +165,11 @@ nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
 
-" define prefix.
+" [edit]prefix.
 nmap [space]e [edit]
 nnoremap [edit] <Nop>
+" TODO home
 nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
-nnoremap [edit]h :tabedit C:/Windows/System32/drivers/etc/hosts<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にするため.
 	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
 	nnoremap [edit]g :tabedit ~/development/dotfiles/_gvimrc<CR>
@@ -176,8 +182,18 @@ else
 	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
 endif
 
-" vimrc,gvimrcの反映.
-nnoremap [space]s :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+" [insert]prefix.
+map [space]i [insert]
+noremap [insert] <Nop>
+" TODO >,#,*などmarkdown編集用のコマンドを追加.
+noremap [insert]<CR> :call InsertPrefix("")<CR>
+noremap [insert]t :call InsertPrefix("TODO ")<CR>
+noremap [insert]* :call InsertPrefix("* ")<CR>
+noremap [insert]> :call InsertPrefix("> ")<CR>
+noremap [insert]n <ESC>A<space><C-r>=strftime("[%Y-%m-%d %H:%M:%S]")<CR><ESC>
+noremap [insert]l <ESC>A<space><space><ESC>
+" vimrc,gvimrcの反映(reload).
+nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 " emacs 風にする.
 inoremap <C-b> <Left>
@@ -185,7 +201,7 @@ inoremap <C-f> <Right>
 inoremap <C-e> <End>
 inoremap <C-a> <Home>
 inoremap <C-d> <Del>
-inoremap <C-u> <C-o>d0
+inoremap <C-u> <C-k>d0
 inoremap <C-k> <C-o>D
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
@@ -237,6 +253,17 @@ function! OpenModifiableQF()
 	set modifiable
 	set nowrap
 endfunction
+
+function! InsertPrefix(prefix) range
+	let str = a:prefix == '' ? input("prefix:") : a:prefix
+	execute "'<,'>normal 0i" . l:str
+endfunction
+
+function! InsertSufix(sufix) range
+	let str = a:sufix == '' ? input("sufix:") : a:sufix
+	execute "'<,'>normal A" . l:str
+endfunction
+
 " }}}
 
 " Section; Plug-ins {{{
@@ -353,6 +380,7 @@ if s:has_plugin("memolist")
 					\	},
 					\}
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
+		call unite#custom_source('memolist', 'matchers', ["converter_tail_abbr", "matcher_default"])
 	endif
 
 	nmap [space]m [memolist]
@@ -460,7 +488,7 @@ if s:has_plugin("unite")
 		let g:neomru#file_mru_limit = 50
 		let g:neomru#directory_mru_limit = 50
 
-		nmap [space]n [neomru]
+		nmap [unite]n [neomru]
 		nnoremap [neomru] <Nop>
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
@@ -485,8 +513,8 @@ if s:has_plugin("unite")
 
 		map [space]t [todo]
 		noremap [todo] <Nop>
+		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
 		noremap [todo]a :UniteTodoAddSimple<CR>
-		noremap [todo]A :UniteTodoAddSimple -tag -memo<CR>
 		noremap [todo]t :UniteTodoAddSimple -tag<CR>
 		noremap [todo]m :UniteTodoAddSimple -memo<CR>
 		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
@@ -494,7 +522,10 @@ if s:has_plugin("unite")
 
 		function! Todo_grep()
 			let word = input("TodoGrep word: ")
-			execute ":grep " . l:word . " " . g:unite_todo_data_directory . "/todo/note/*"
+			if word == ''
+				return
+			endif
+			execute ":grep -i " . l:word . " " . g:unite_todo_data_directory . "/todo/note/*"
 		endfunction
 		nnoremap [todo]g :call Todo_grep()<CR>
 	endif
@@ -591,4 +622,3 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}
-

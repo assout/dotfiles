@@ -185,13 +185,16 @@ endif
 " [insert]prefix.
 map [space]i [insert]
 noremap [insert] <Nop>
-" TODO >,#,*などmarkdown編集用のコマンドを追加.
-noremap [insert]<CR> :call InsertPrefix("")<CR>
+noremap [insert]p :call InsertPrefix("")<CR>
 noremap [insert]t :call InsertPrefix("TODO ")<CR>
+noremap [insert]1 :call InsertPrefix("# ")<CR>
+noremap [insert]2 :call InsertPrefix("## ")<CR>
+noremap [insert]3 :call InsertPrefix("### ")<CR>
 noremap [insert]* :call InsertPrefix("* ")<CR>
 noremap [insert]> :call InsertPrefix("> ")<CR>
-noremap [insert]n <ESC>A<space><C-r>=strftime("[%Y-%m-%d %H:%M:%S]")<CR><ESC>
-noremap [insert]l <ESC>A<space><space><ESC>
+noremap [insert]s :call InsertSuffix("")<CR>
+noremap [insert]n :call InsertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
+noremap [insert]l :call InsertSuffix("  ")<CR>
 " vimrc,gvimrcの反映(reload).
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
@@ -255,13 +258,17 @@ function! OpenModifiableQF()
 endfunction
 
 function! InsertPrefix(prefix) range
+	:NeoCompleteDisable
 	let str = a:prefix == '' ? input("prefix:") : a:prefix
-	execute "'<,'>normal 0i" . l:str
+	execute a:firstline . "," . a:lastline . "normal 0i" . l:str
+	:NeoCompleteEnable
 endfunction
 
-function! InsertSufix(sufix) range
-	let str = a:sufix == '' ? input("sufix:") : a:sufix
-	execute "'<,'>normal A" . l:str
+function! InsertSuffix(suffix) range
+	:NeoCompleteDisable
+	let str = a:suffix == '' ? input("suffix:") : a:suffix
+	execute a:firstline . "," . a:lastline . "normal A" . l:str
+	:NeoCompleteEnable
 endfunction
 
 " }}}

@@ -296,6 +296,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
+	NeoBundle 'plasticboy/vim-markdown'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -537,6 +538,19 @@ if s:has_plugin("unite")
 		nnoremap [todo]g :call Todo_grep()<CR>
 	endif
 	" }}}
+
+	" OpenBrowser file:/
+	let openbrowser_file = {
+				\ 'description' : 'OpenBrowser file:/{word}',
+				\ 'is_selectable' : 1,
+				\ }
+	function! openbrowser_file.func(candidates)"{{{
+		for l:candidate in a:candidates
+			call openbrowser#open('file:/'.l:candidate.action__path)
+		endfor
+	endfunction"}}}
+	call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
+	unlet openbrowser_file
 endif
 " }}}
 

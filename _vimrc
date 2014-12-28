@@ -296,7 +296,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
-	NeoBundle 'plasticboy/vim-markdown'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -550,6 +549,9 @@ if s:has_plugin("unite")
 		endfor
 	endfunction"}}}
 	call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
+	" TODO xにマッピングしたい.
+	call unite#custom#alias('file,directory', 'tabopen', 'start')
+	" call unite#custom_default_action('file,directory', 'start')
 	unlet openbrowser_file
 endif
 " }}}

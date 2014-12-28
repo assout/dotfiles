@@ -517,7 +517,6 @@ if s:has_plugin("unite")
 		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
-
 		map [space]t [todo]
 		noremap [todo] <Nop>
 		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
@@ -549,10 +548,12 @@ if s:has_plugin("unite")
 		endfor
 	endfunction"}}}
 	call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
-	" TODO xにマッピングしたい.
-	call unite#custom#alias('file,directory', 'tabopen', 'start')
-	" call unite#custom_default_action('file,directory', 'start')
 	unlet openbrowser_file
+
+	autocmd FileType unite call s:unite_my_keymappings()
+	function! s:unite_my_keymappings()
+		nnoremap <silent><buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+	endfunction
 endif
 " }}}
 

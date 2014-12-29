@@ -117,7 +117,6 @@ let g:mapleader = '[space]d'
 " Section; Key-mappings {{{
 " vimfilerと競合防ぐため.
 map <Space> [space]
-map gf :e <cfile><CR>
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -168,7 +167,6 @@ nnoremap ]f :cnfile<CR>
 " [edit]prefix.
 nmap [space]e [edit]
 nnoremap [edit] <Nop>
-" TODO home
 nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
 if $USER == 'oji' " TODO work around, fugitveで対象にするため.
 	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
@@ -504,7 +502,7 @@ if s:has_plugin("unite")
 
 	" unite-outline {{{
 	if s:has_plugin("unite-outline")
-		" TODO work around. http://totem3.hatenablog.jp/entry/2014/07/16/051101
+		" Work around. http://totem3.hatenablog.jp/entry/2014/07/16/051101
 		let g:unite_abbr_highlight = 'Normal'
 	endif
 	" }}}
@@ -517,14 +515,6 @@ if s:has_plugin("unite")
 		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
-		map [space]t [todo]
-		noremap [todo] <Nop>
-		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap [todo]a :UniteTodoAddSimple<CR>
-		noremap [todo]t :UniteTodoAddSimple -tag<CR>
-		noremap [todo]m :UniteTodoAddSimple -memo<CR>
-		nnoremap [todo]l :<C-u>Unite todo:undone<CR>
-		nnoremap [todo]L :<C-u>Unite todo<CR>
 
 		function! Todo_grep()
 			let word = input("TodoGrep word: ")
@@ -533,7 +523,16 @@ if s:has_plugin("unite")
 			endif
 			execute ":grep -i " . l:word . " " . g:unite_todo_data_directory . "/todo/note/*"
 		endfunction
-		nnoremap [todo]g :call Todo_grep()<CR>
+
+		map [space]t [todo]
+		noremap [todo] <Nop>
+		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap [todo]a :UniteTodoAddSimple<CR>
+		noremap [todo]t :UniteTodoAddSimple -tag<CR>
+		noremap [todo]m :UniteTodoAddSimple -memo<CR>
+		noremap [todo]l :<C-u>Unite todo:undone<CR>
+		noremap [todo]L :<C-u>Unite todo<CR>
+		noremap [todo]g :call Todo_grep()<CR>
 	endif
 	" }}}
 

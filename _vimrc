@@ -177,7 +177,7 @@ nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
 nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
 nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
 nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
-if has('win32') " at office.
+if s:isOfficeWin()
 	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
 	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
 	nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>

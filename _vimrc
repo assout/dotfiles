@@ -1,4 +1,4 @@
-" Index {{{
+" Index {{{1
 " * Begin.
 " * Options.
 " * Let defines.
@@ -7,14 +7,14 @@
 " * Plug-ins.
 " * Auto-commands.
 " * Commands.
-" }}}
+" }}}1
 
-" Section; Begin {{{
+" Section; Begin {{{1
 " vi互換性.
 set nocompatible
-" }}}
+" }}}1
 
-" Section; Options {{{
+" Section; Options {{{1
 " バックアップファイル作成有無.
 set nobackup
 " ヤンク、ペーストのクリップボード共有.
@@ -101,22 +101,57 @@ if has('win32')
 	" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明)).
 	set noswapfile
 endif
-" }}}
+" }}}1
 
-" Section; Let defines {{{
+" Section; Let defines {{{1
 " netrwのデフォルト表示スタイル変更.
 let g:netrw_liststyle = 3
 " shellのハイライトをbash基準にする.
 let b:is_bash = 1
 " for dicwin.vim.
 let g:mapleader = '[space]d'
-" let g:dicwin_maplead
-" er = '[space]d'
-" }}}
+" let g:dicwin_mapleader = '[space]d'
+" }}}1
 
-" Section; Key-mappings {{{
+" Section; Key-mappings {{{1
 " vimfilerと競合防ぐため.
 map <Space> [space]
+
+" [edit]prefix.
+nmap [space]e [edit]
+nnoremap [edit] <Nop>
+nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
+if $USER == 'oji' " TODO work around, fugitveで対象にするため.
+	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
+	nnoremap [edit]g :tabedit ~/development/dotfiles/_gvimrc<CR>
+	nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
+	nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
+else
+	nnoremap [edit]v :tabedit $MYVIMRC<CR>
+	nnoremap [edit]g :tabedit $MYGVIMRC<CR>
+	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
+	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
+endif
+
+" [insert]prefix.
+map [space]i [insert]
+noremap [insert] <Nop>
+noremap [insert]p :call InsertPrefix("")<CR>
+noremap [insert]t :call InsertPrefix("TODO ")<CR>
+noremap [insert]1 :call InsertPrefix("# ")<CR>
+noremap [insert]2 :call InsertPrefix("## ")<CR>
+noremap [insert]3 :call InsertPrefix("### ")<CR>
+noremap [insert]* :call InsertPrefix("* ")<CR>
+noremap [insert]> :call InsertPrefix("> ")<CR>
+noremap [insert]s :call InsertSuffix("")<CR>
+noremap [insert]n :call InsertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
+noremap [insert]l :call InsertSuffix("  ")<CR>
+
+" format json.
+xnoremap [space]j !python -m json.tool<CR>
+
+" vimrc,gvimrcのreload.
+nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -164,39 +199,7 @@ nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
 
-" [edit]prefix.
-nmap [space]e [edit]
-nnoremap [edit] <Nop>
-nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
-if $USER == 'oji' " TODO work around, fugitveで対象にするため.
-	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
-	nnoremap [edit]g :tabedit ~/development/dotfiles/_gvimrc<CR>
-	nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
-	nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
-else
-	nnoremap [edit]v :tabedit $MYVIMRC<CR>
-	nnoremap [edit]g :tabedit $MYGVIMRC<CR>
-	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
-	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
-endif
-
-" [insert]prefix.
-map [space]i [insert]
-noremap [insert] <Nop>
-noremap [insert]p :call InsertPrefix("")<CR>
-noremap [insert]t :call InsertPrefix("TODO ")<CR>
-noremap [insert]1 :call InsertPrefix("# ")<CR>
-noremap [insert]2 :call InsertPrefix("## ")<CR>
-noremap [insert]3 :call InsertPrefix("### ")<CR>
-noremap [insert]* :call InsertPrefix("* ")<CR>
-noremap [insert]> :call InsertPrefix("> ")<CR>
-noremap [insert]s :call InsertSuffix("")<CR>
-noremap [insert]n :call InsertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
-noremap [insert]l :call InsertSuffix("  ")<CR>
-" vimrc,gvimrcの反映(reload).
-nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-
-" emacs 風にする.
+" インサートモードでのキーマッピングをEmacs風にする.
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-e> <End>
@@ -206,31 +209,21 @@ inoremap <C-u> <C-k>d0
 inoremap <C-k> <C-o>D
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
-" 行頭へ移動.
 cnoremap <C-a> <Home>
-" 行末へ移動.
 cnoremap <C-e> <End>
-" 一文字戻る.
 cnoremap <C-b> <Left>
-" 一文字進む.
 cnoremap <C-f> <Right>
-" カーソルの下の文字を削除(Delete).
 cnoremap <C-d> <Del>
-" コマンドライン履歴を一つ進む.
 cnoremap <C-n> <Down>
-" コマンドライン履歴を一つ戻る.
 cnoremap <C-p> <Up>
-" 前の単語へ移動.
 cnoremap <M-b> <S-Left>
-" 次の単語へ移動.
 cnoremap <M-f> <S-Right>
 
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
+" }}}1
 
-" }}}
-
-" Section; Functions {{{
+" Section; Functions {{{1
 " command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
@@ -268,10 +261,9 @@ function! InsertSuffix(suffix) range
 	execute a:firstline . "," . a:lastline . "normal A" . l:str
 	:NeoCompleteEnable
 endfunction
+" }}}1
 
-" }}}
-
-" Section; Plug-ins {{{
+" Section; Plug-ins {{{1
 " Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" Setup neobundle {{{
@@ -294,6 +286,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
+	NeoBundle 'moznion/hateblo.vim'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -366,6 +359,19 @@ if s:has_plugin("excitetranslate")
 endif
 " }}}
 
+" hateblo {{{
+if s:has_plugin("hateblo")
+	let g:hateblo_vim = {
+		\ 'user':         'assout',
+		\ 'api_key':      'bogslyrvmi',
+		\ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
+		\ 'WYSIWYG_mode': 0,
+		\ 'always_yes':   0,
+		\ 'edit_command': 'edit'
+	\ }
+endif
+"}}}
+
 " memolist {{{
 if s:has_plugin("memolist")
 	let g:memolist_memo_suffix = "md"
@@ -386,13 +392,14 @@ if s:has_plugin("memolist")
 					\}
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
 		call unite#custom_source('memolist', 'matchers', ["converter_tail_abbr", "matcher_default"])
+		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
+	else
+		nnoremap [memolist]l :<C-u>MemoList<CR>
 	endif
 
 	nmap [space]m [memolist]
 	nnoremap [memolist] <Nop>
-	" unite-todo に合わせ追加のprefixは[a](add).
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
-	nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 endif
 " }}}
@@ -536,7 +543,7 @@ if s:has_plugin("unite")
 	endif
 	" }}}
 
-	" OpenBrowser file:/
+	" OpenBrowser file: {{{
 	let openbrowser_file = {
 				\ 'description' : 'OpenBrowser file:/{word}',
 				\ 'is_selectable' : 1,
@@ -552,7 +559,10 @@ if s:has_plugin("unite")
 	autocmd FileType unite call s:unite_my_keymappings()
 	function! s:unite_my_keymappings()
 		nnoremap <silent><buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+		nnoremap <silent><buffer><expr> m unite#smart_map('m', unite#do_action('move'))
+		nnoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
 	endfunction
+	" }}}
 endif
 " }}}
 
@@ -614,10 +624,9 @@ if s:has_plugin("vim-textobj-entire")
 	nmap =ie =ie<C-o>
 endif
 " }}}
+" }}}1
 
-" }}}
-
-" Section; Auto-commands {{{
+" Section; Auto-commands {{{1
 augroup MyAutoGroup
 	autocmd!
 	" DoubleByteSpace highlight.
@@ -631,9 +640,9 @@ augroup MyAutoGroup
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call OpenModifiableQF()
 augroup END
-" }}}
+" }}}1
 
-" Section; Commands {{{
+" Section; Commands {{{1
 " ファイルタイプ判別.
 filetype on
 " colorscheme
@@ -644,4 +653,4 @@ else
 endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
-" }}}
+" }}}1

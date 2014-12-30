@@ -2,8 +2,8 @@
 " * Begin.
 " * Options.
 " * Let defines.
-" * Key-mappings.
 " * Functions.
+" * Key-mappings.
 " * Plug-ins.
 " * Auto-commands.
 " * Commands.
@@ -113,39 +113,75 @@ let g:mapleader = '[space]d'
 " let g:dicwin_mapleader = '[space]d'
 " }}}1
 
+" Section; Functions {{{1
+" command実行結果をキャプチャ.
+function! s:capture_cmd_output(cmd)
+	if has("clipboard")
+		redir @+>
+	else
+		redir @">
+	endif
+	execute a:cmd
+	redir END
+endfunction
+command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
+
+" pluginが存在するか調べる.
+function! s:has_plugin(plugin)
+	return !empty(matchstr(&runtimepath, a:plugin))
+endfunction
+
+" quickfix: 編集許可と折り返し表示無効.
+function! s:openModifiableQF()
+	cw
+	set modifiable
+	set nowrap
+endfunction
+
+function! s:insertPrefix(str) range
+	execute a:firstline . "," . a:lastline . "s/^/" . a:str
+endfunction
+
+function! s:insertSuffix(str) range
+	execute a:firstline . "," . a:lastline . "s/$/" . a:str
+endfunction
+
+" }}}1
+
+
 " Section; Key-mappings {{{1
-" vimfilerと競合防ぐため.
+" vimfilerとかと競合防ぐため.
 map <Space> [space]
 
 " [edit]prefix.
 nmap [space]e [edit]
 nnoremap [edit] <Nop>
-nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
-if $USER == 'oji' " TODO work around, fugitveで対象にするため.
-	nnoremap [edit]v :tabedit ~/development/dotfiles/_vimrc<CR>
-	nnoremap [edit]g :tabedit ~/development/dotfiles/_gvimrc<CR>
-	nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
-	nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
-else
-	nnoremap [edit]v :tabedit $MYVIMRC<CR>
-	nnoremap [edit]g :tabedit $MYGVIMRC<CR>
+nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
+nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
+nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
+nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
+if has('win32') " at office.
 	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
 	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
+	nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
 endif
 
 " [insert]prefix.
 map [space]i [insert]
 noremap [insert] <Nop>
-noremap [insert]p :call InsertPrefix("")<CR>
-noremap [insert]t :call InsertPrefix("TODO ")<CR>
-noremap [insert]1 :call InsertPrefix("# ")<CR>
-noremap [insert]2 :call InsertPrefix("## ")<CR>
-noremap [insert]3 :call InsertPrefix("### ")<CR>
-noremap [insert]* :call InsertPrefix("* ")<CR>
-noremap [insert]> :call InsertPrefix("> ")<CR>
-noremap [insert]s :call InsertSuffix("")<CR>
-noremap [insert]n :call InsertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
-noremap [insert]l :call InsertSuffix("  ")<CR>
+noremap [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
+noremap [insert]t :call <SID>insertPrefix("TODO ")<CR>
+noremap [insert]1 :call <SID>insertPrefix("# ")<CR>
+noremap [insert]2 :call <SID>insertPrefix("## ")<CR>
+noremap [insert]3 :call <SID>insertPrefix("### ")<CR>
+noremap [insert]* :call <SID>insertPrefix("* ")<CR>
+noremap [insert]> :call <SID>insertPrefix("> ")<CR>
+noremap [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
+noremap [insert]n :call <SID>insertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
+noremap [insert]l :call <SID>insertSuffix("  ")<CR>
+noremap [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
+noremap [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
+noremap [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
 " format json.
 xnoremap [space]j !python -m json.tool<CR>
@@ -221,46 +257,6 @@ cnoremap <M-f> <S-Right>
 
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない.
 vnoremap y y'>
-" }}}1
-
-" Section; Functions {{{1
-" command実行結果をキャプチャ.
-function! s:capture_cmd_output(cmd)
-	if has("clipboard")
-		redir @+>
-	else
-		redir @">
-	endif
-	execute a:cmd
-	redir END
-endfunction
-command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
-
-" pluginが存在するか調べる.
-function! s:has_plugin(plugin)
-	return !empty(matchstr(&runtimepath, a:plugin))
-endfunction
-
-" quickfix: 編集許可と折り返し表示無効.
-function! OpenModifiableQF()
-	cw
-	set modifiable
-	set nowrap
-endfunction
-
-function! InsertPrefix(prefix) range
-	:NeoCompleteDisable
-	let str = a:prefix == '' ? input("prefix:") : a:prefix
-	execute a:firstline . "," . a:lastline . "normal 0i" . l:str
-	:NeoCompleteEnable
-endfunction
-
-function! InsertSuffix(suffix) range
-	:NeoCompleteDisable
-	let str = a:suffix == '' ? input("suffix:") : a:suffix
-	execute a:firstline . "," . a:lastline . "normal A" . l:str
-	:NeoCompleteEnable
-endfunction
 " }}}1
 
 " Section; Plug-ins {{{1
@@ -369,6 +365,14 @@ if s:has_plugin("hateblo")
 		\ 'always_yes':   0,
 		\ 'edit_command': 'edit'
 	\ }
+	nmap [space]h [hateblo]
+	nnoremap [hateblo] <Nop>
+	nnoremap [hateblo]l :<C-u>HatebloList<CR>
+	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
+	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
+	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
+	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
+
 endif
 "}}}
 
@@ -638,7 +642,7 @@ augroup MyAutoGroup
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call OpenModifiableQF()
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
 augroup END
 " }}}1
 

@@ -150,12 +150,13 @@ endfunction
 
 
 " Section; Key-mappings {{{1
+" Prefix key mappings {{{2
+
 " vimfilerとかと競合防ぐため.
 map <Space> [space]
 
-" [edit]prefix.
+" [edit] mappings
 nmap [space]e [edit]
-nnoremap [edit] <Nop>
 nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
 nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
 nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
@@ -166,9 +167,8 @@ if has('win32') " at office.
 	nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
 endif
 
-" [insert]prefix.
+" [insert] mappings.
 map [space]i [insert]
-noremap [insert] <Nop>
 noremap [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
 noremap [insert]t :call <SID>insertPrefix("TODO ")<CR>
 noremap [insert]1 :call <SID>insertPrefix("# ")<CR>
@@ -183,11 +183,14 @@ noremap [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
 noremap [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
 noremap [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
-" format json.
-xnoremap [space]j !python -m json.tool<CR>
+" [json] mappings
+map [space]j [json]
+nnoremap [json] :%!python -m json.tool<CR>
+xnoremap [space] :!python -m json.tool<CR>
 
 " vimrc,gvimrcのreload.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+" }}}2
 
 noremap <C-j> 10j
 noremap <C-k> 10k
@@ -260,9 +263,9 @@ vnoremap y y'>
 " }}}1
 
 " Section; Plug-ins {{{1
-" Setup plug-in runtime path {{{
+" Setup plug-in runtime path {{{2
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	" Setup neobundle {{{
+	" Setup neobundle {{{3
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -311,30 +314,27 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tpope/vim-repeat'
 	" NeoBundle 'tpope/vim-surround'
 	NeoBundle 'vim-jp/vimdoc-ja'
+
 	" color schemes.
-	NeoBundle 'altercation/vim-colors-solarized'
-	NeoBundle 'tomasr/molokai'
-	NeoBundle 'vim-scripts/newspaper.vim'
-	NeoBundle 'vim-scripts/rdark'
+	" NeoBundle 'altercation/vim-colors-solarized'
+	" NeoBundle 'tomasr/molokai'
+	" NeoBundle 'vim-scripts/newspaper.vim'
+	" NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'w0ng/vim-hybrid'
 
 	call neobundle#end()
 	filetype plugin indent on
-	" }}}
+	" }}}3
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
-	" $HOME/vimfiles/plugins下のディレクトリをruntimepathへ追加する. {{{
-	for s:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
-		if s:path !~# '\~$' && isdirectory(s:path)
-			let &runtimepath = &runtimepath.','.s:path
+	for l:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
+		if l:path !~# '\~$' && isdirectory(l:path)
+			let &runtimepath = &runtimepath.','.l:path
 		end
 	endfor
-	unlet s:path
-	" }}}
 endif
-
-" }}}
+" }}}2
 
 " alignta {{{
 if s:has_plugin("alignta")
@@ -366,7 +366,6 @@ if s:has_plugin("hateblo")
 		\ 'edit_command': 'edit'
 	\ }
 	nmap [space]h [hateblo]
-	nnoremap [hateblo] <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
@@ -402,7 +401,6 @@ if s:has_plugin("memolist")
 	endif
 
 	nmap [space]m [memolist]
-	nnoremap [memolist] <Nop>
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 endif
@@ -478,7 +476,6 @@ if s:has_plugin("unite")
 	call unite#custom_source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
 
 	nmap [space]u [unite]
-	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
 	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
 	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
@@ -505,7 +502,6 @@ if s:has_plugin("unite")
 		let g:neomru#directory_mru_limit = 50
 
 		nmap [unite]n [neomru]
-		nnoremap [neomru] <Nop>
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
 	endif
@@ -536,7 +532,6 @@ if s:has_plugin("unite")
 		endfunction
 
 		map [space]t [todo]
-		noremap [todo] <Nop>
 		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
 		noremap [todo]a :UniteTodoAddSimple<CR>
 		noremap [todo]t :UniteTodoAddSimple -tag<CR>
@@ -576,7 +571,6 @@ if s:has_plugin("vimfiler")
 	let g:vimfiler_as_default_explorer = 1
 
 	nmap [space]v [vimfiler]
-	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
 	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
@@ -615,7 +609,6 @@ if s:has_plugin("vim-ref")
 	endfunction
 
 	nmap [space]R [vim-ref]
-	nnoremap [vim-ref] <Nop>
 	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif

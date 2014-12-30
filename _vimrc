@@ -373,13 +373,13 @@ endif
 if s:has_plugin("hateblo")
 	" api_keyはvimrc.localから設定.
 	let g:hateblo_vim = {
-		\ 'user':         'assout',
-		\ 'api_key': g:hateblo_api_key,
-		\ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
-		\ 'WYSIWYG_mode': 0,
-		\ 'always_yes':   0,
-		\ 'edit_command': 'edit'
-	\ }
+				\ 'user':         'assout',
+				\ 'api_key': g:hateblo_api_key,
+				\ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
+				\ 'WYSIWYG_mode': 0,
+				\ 'always_yes':   0,
+				\ 'edit_command': 'edit'
+				\ }
 	nmap [space]h [hateblo]
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
@@ -454,6 +454,14 @@ endif
 " 	" let g:neosnippet#enable_snipmate_compatibility = 1
 " endif
 " }}}
+
+" open-browser {{{
+if s:has_plugin("open-browser")
+	let g:netrw_nogx = 1 " disable netrw's gx mapping.
+	nmap gx <Plug>(openbrowser-smart-search)
+	vmap gx <Plug>(openbrowser-smart-search)
+endif
+"}}}
 
 " previm {{{
 if s:has_plugin("previm")

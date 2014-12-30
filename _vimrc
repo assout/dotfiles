@@ -521,8 +521,8 @@ if s:has_plugin("unite")
 	if s:has_plugin("neomru")
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 50
-		let g:neomru#directory_mru_limit = 50
+		let g:neomru#file_mru_limit = 20
+		let g:neomru#directory_mru_limit = 20
 
 		nmap [unite]n [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>

@@ -73,14 +73,10 @@ set showtabline=2
 set sidescrolloff=5
 " 検索で大文字を含むときは大小を区別するか.
 set smartcase
-" スペルチェック.
-if has('win32') || $USER == 'oji'
-	" set spell
-endif
 " スペルチェック用辞書ファイル.
-if has('win32')
+if s:isOfficeWin()
 	set spellfile=D:/admin/Documents/spell/en.utf-8.add
-elseif $USER == 'oji'
+elseif s:isHomeUnix()
 	set spellfile=~/Dropbox/spell/en.utf-8.add
 endif
 " スペルチェックで日本語は除外する.
@@ -148,6 +144,22 @@ endfunction
 
 function! s:insertSuffix(str) range
 	execute a:firstline . "," . a:lastline . "s/$/" . a:str
+endfunction
+
+function! s:isHomeUnix()
+	return $USER == 'oji' && has('unix')
+endfunction
+
+function! s:isHomeWin()
+	return $USER == 'oji' && has('win32')
+endfunction
+
+function! s:isOfficeUnix()
+	return $USER != 'oji' && has('unix')
+endfunction
+
+function! s:isOfficeWin()
+	return $USER != 'oji' && has('win32')
 endfunction
 
 " }}}1
@@ -647,12 +659,12 @@ augroup END
 " ファイルタイプ判別.
 filetype on
 " colorscheme
-if $USER == 'oji'
+if s:isHomeUnix() || s:isOfficeWin()
 	colorscheme hybrid-light
 else
 	colorscheme peachpuff
 endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
-
 " }}}1
+

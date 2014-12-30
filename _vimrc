@@ -12,6 +12,10 @@
 " Section; Begin {{{1
 " vi互換性.
 set nocompatible
+" load local vimrc.
+if filereadable(expand('~/.vimrc.local'))
+	source ~/.vimrc.local
+endif
 " }}}1
 
 " Section; Options {{{1
@@ -263,9 +267,8 @@ vnoremap y y'>
 " }}}1
 
 " Section; Plug-ins {{{1
-" Setup plug-in runtime path {{{2
+" Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	" Setup neobundle {{{3
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -324,7 +327,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 	call neobundle#end()
 	filetype plugin indent on
-	" }}}3
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
@@ -334,7 +336,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 		end
 	endfor
 endif
-" }}}2
+" }}}
 
 " alignta {{{
 if s:has_plugin("alignta")
@@ -357,9 +359,10 @@ endif
 
 " hateblo {{{
 if s:has_plugin("hateblo")
+	" api_keyはvimrc.localから設定.
 	let g:hateblo_vim = {
 		\ 'user':         'assout',
-		\ 'api_key':      'bogslyrvmi',
+		\ 'api_key': g:hateblo_api_key,
 		\ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
 		\ 'WYSIWYG_mode': 0,
 		\ 'always_yes':   0,
@@ -612,6 +615,7 @@ if s:has_plugin("vim-ref")
 	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif
+" }}}
 
 " vim-textobj-entire {{{
 if s:has_plugin("vim-textobj-entire")
@@ -650,4 +654,5 @@ else
 endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+
 " }}}1

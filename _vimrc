@@ -393,10 +393,10 @@ endif
 " memolist {{{
 if s:has_plugin("memolist")
 	let g:memolist_memo_suffix = "md"
-	if has('unix')
+	if s:isHomeUnix()
 		let g:memolist_path = '~/Dropbox/memolist'
 		let g:memolist_template_dir_path = '~/Dropbox/memolist'
-	else
+	elseif s:isOfficeWin()
 		let g:memolist_path = 'D:/admin/Documents/memolist'
 		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
@@ -532,9 +532,9 @@ if s:has_plugin("unite")
 	" unite-todo {{{
 	if s:has_plugin("unite-todo")
 		let g:unite_todo_note_suffix = 'md'
-		if has('unix')
+		if s:isHomeUnix()
 			let g:unite_todo_data_directory = '/home/oji/Dropbox'
-		else
+		elseif s:isOfficeWin()
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
 

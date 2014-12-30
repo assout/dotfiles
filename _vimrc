@@ -1,8 +1,8 @@
 " Index {{{1
 " * Begin.
+" * Functions.
 " * Options.
 " * Let defines.
-" * Functions.
 " * Key-mappings.
 " * Plug-ins.
 " * Auto-commands.
@@ -16,6 +16,56 @@ set nocompatible
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
+" }}}1
+
+" Section; Functions {{{1
+" command実行結果をキャプチャ.
+function! s:capture_cmd_output(cmd)
+	if has("clipboard")
+		redir @+>
+	else
+		redir @">
+	endif
+	execute a:cmd
+	redir END
+endfunction
+command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
+
+" pluginが存在するか調べる.
+function! s:has_plugin(plugin)
+	return !empty(matchstr(&runtimepath, a:plugin))
+endfunction
+
+" quickfix: 編集許可と折り返し表示無効.
+function! s:openModifiableQF()
+	cw
+	set modifiable
+	set nowrap
+endfunction
+
+function! s:insertPrefix(str) range
+	execute a:firstline . "," . a:lastline . "s/^/" . a:str
+endfunction
+
+function! s:insertSuffix(str) range
+	execute a:firstline . "," . a:lastline . "s/$/" . a:str
+endfunction
+
+function! s:isHomeUnix()
+	return $USER == 'oji' && has('unix')
+endfunction
+
+function! s:isHomeWin()
+	return $USER == 'oji' && has('win32')
+endfunction
+
+function! s:isOfficeUnix()
+	return $USER != 'oji' && has('unix')
+endfunction
+
+function! s:isOfficeWin()
+	return $USER != 'oji' && has('win32')
+endfunction
 " }}}1
 
 " Section; Options {{{1
@@ -112,58 +162,6 @@ let b:is_bash = 1
 let g:mapleader = '[space]d'
 " let g:dicwin_mapleader = '[space]d'
 " }}}1
-
-" Section; Functions {{{1
-" command実行結果をキャプチャ.
-function! s:capture_cmd_output(cmd)
-	if has("clipboard")
-		redir @+>
-	else
-		redir @">
-	endif
-	execute a:cmd
-	redir END
-endfunction
-command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
-
-" pluginが存在するか調べる.
-function! s:has_plugin(plugin)
-	return !empty(matchstr(&runtimepath, a:plugin))
-endfunction
-
-" quickfix: 編集許可と折り返し表示無効.
-function! s:openModifiableQF()
-	cw
-	set modifiable
-	set nowrap
-endfunction
-
-function! s:insertPrefix(str) range
-	execute a:firstline . "," . a:lastline . "s/^/" . a:str
-endfunction
-
-function! s:insertSuffix(str) range
-	execute a:firstline . "," . a:lastline . "s/$/" . a:str
-endfunction
-
-function! s:isHomeUnix()
-	return $USER == 'oji' && has('unix')
-endfunction
-
-function! s:isHomeWin()
-	return $USER == 'oji' && has('win32')
-endfunction
-
-function! s:isOfficeUnix()
-	return $USER != 'oji' && has('unix')
-endfunction
-
-function! s:isOfficeWin()
-	return $USER != 'oji' && has('win32')
-endfunction
-
-" }}}1
-
 
 " Section; Key-mappings {{{1
 " Prefix key mappings {{{2

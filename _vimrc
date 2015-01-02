@@ -486,8 +486,7 @@ if s:has_plugin("unite")
 
 	function! s:unite_my_keymappings()
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('move'))
-		nnoremap <buffer><expr> r unite#smart_map('r', unite#do_action('relative_move'))
+		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
 		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
 	endfunction
 
@@ -537,7 +536,7 @@ if s:has_plugin("unite")
 		let s:openbrowser_file = { 'description' : 'OpenBrowser file:/{word}', 'is_selectable' : 1, }
 		function! s:openbrowser_file.func(candidates)"{{{
 			for l:candidate in a:candidates
-				call openbrowser#open('file:/'.l:candidate.action__path)
+				call openbrowser#open('file:/' . l:candidate.action__path)
 			endfor
 		endfunction"}}}
 		call unite#custom_action('openable', 'openbrowser_file', s:openbrowser_file)

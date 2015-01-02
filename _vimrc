@@ -219,7 +219,6 @@ nnoremap j gj
 nnoremap k gk
 nnoremap gj j
 nnoremap gk k
-" 改行を挿入.
 nnoremap <CR> i<CR><Esc>
 " YをD,Cと一貫性のある挙動に変更.
 nnoremap Y y$
@@ -329,10 +328,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-jp/vimdoc-ja'
 
 	" color schemes.
-	" NeoBundle 'altercation/vim-colors-solarized'
-	" NeoBundle 'tomasr/molokai'
-	" NeoBundle 'vim-scripts/newspaper.vim'
-	" NeoBundle 'vim-scripts/rdark'
 	NeoBundle 'w0ng/vim-hybrid'
 
 	call neobundle#end()
@@ -384,7 +379,6 @@ if s:has_plugin("hateblo")
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
 	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
-
 endif
 "}}}
 
@@ -399,6 +393,10 @@ if s:has_plugin("memolist")
 		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
 
+	nmap [space]m [memolist]
+	nnoremap [memolist]a :<C-u>MemoNew<CR>
+	nnoremap [memolist]g :<C-u>MemoGrep<CR>
+
 	if s:has_plugin('unite')
 		let g:unite_source_alias_aliases = {
 					\	"memolist" : {
@@ -412,10 +410,6 @@ if s:has_plugin("memolist")
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>
 	endif
-
-	nmap [space]m [memolist]
-	nnoremap [memolist]a :<C-u>MemoNew<CR>
-	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 endif
 " }}}
 
@@ -515,6 +509,28 @@ if s:has_plugin("unite")
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
 	nnoremap [unite]o :<C-u>Unite outline<CR>
 
+	" Custom actions {{{
+	let s:my_relative_move = {'description' : 'move before lcd', 'is_selectable' : 1, 'is_quit' : 0 }
+	function! s:my_relative_move.func(candidates)
+		let candidate = a:candidates[0]
+		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
+		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
+		call unite#take_action('move', a:candidates)
+	endfunction
+	call unite#custom_action('file,directory', 'relative_move', s:my_relative_move)
+	unlet s:my_relative_move
+	" }}}
+
+	" Key-mappings in Unite {{{
+	function! s:unite_my_keymappings()
+		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('move'))
+		nnoremap <buffer><expr> r unite#smart_map('r', unite#do_action('relative_move'))
+		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
+	endfunction
+	autocmd FileType unite call s:unite_my_keymappings()
+	" }}}
+
 	" neomru {{{
 	if s:has_plugin("neomru")
 		let g:neomru#filename_format = ''
@@ -525,6 +541,22 @@ if s:has_plugin("unite")
 		nmap [unite]n [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
+	endif
+	" }}}
+
+	" open-browser {{{
+	if s:has_plugin("open-browser")
+		let openbrowser_file = {
+					\ 'description' : 'OpenBrowser file:/{word}',
+					\ 'is_selectable' : 1,
+					\ }
+		function! openbrowser_file.func(candidates)"{{{
+			for l:candidate in a:candidates
+				call openbrowser#open('file:/'.l:candidate.action__path)
+			endfor
+		endfunction"}}}
+		call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
+		unlet openbrowser_file
 	endif
 	" }}}
 
@@ -561,27 +593,6 @@ if s:has_plugin("unite")
 		noremap [todo]L :<C-u>Unite todo<CR>
 		noremap [todo]g :call Todo_grep()<CR>
 	endif
-	" }}}
-
-	" OpenBrowser file: {{{
-	let openbrowser_file = {
-				\ 'description' : 'OpenBrowser file:/{word}',
-				\ 'is_selectable' : 1,
-				\ }
-	function! openbrowser_file.func(candidates)"{{{
-		for l:candidate in a:candidates
-			call openbrowser#open('file:/'.l:candidate.action__path)
-		endfor
-	endfunction"}}}
-	call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
-	unlet openbrowser_file
-
-	autocmd FileType unite call s:unite_my_keymappings()
-	function! s:unite_my_keymappings()
-		nnoremap <silent><buffer><expr> x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <silent><buffer><expr> m unite#smart_map('m', unite#do_action('move'))
-		nnoremap <silent><buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
-	endfunction
 	" }}}
 endif
 " }}}

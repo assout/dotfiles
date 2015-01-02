@@ -165,7 +165,6 @@ let g:mapleader = '[space]d'
 
 " Section; Key-mappings {{{1
 " Prefix key mappings {{{2
-
 " vimfilerとかと競合防ぐため.
 map <Space> [space]
 
@@ -421,7 +420,7 @@ if s:has_plugin("neocomplete")
 endif
 " }}}
 
-" neosnippet {{{
+" " neosnippet {{{
 " if s:has_plugin("neosnippet")
 " 	" Plugin key-mappings.
 " 	imap <C-k> <Pug>(neosnippet_expand_or_jump)
@@ -430,12 +429,8 @@ endif
 " 	xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
 "
 " 	" SuperTab like snippets' behavior.
-" 	"imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-" 	" \ "\<Plug>(neosnippet_expand_or_jump)"
-" 	" \: pumvisible() ? "\<C-n>" : "\<TAB>"
-" 	"smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-" 	" \ "\<Plug>(neosnippet_expand_or_jump)"
-" 	" \: "\<TAB>"
+" 	imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+" 	smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "
 " 	" For snippet_complete marker.
 " 	if has('conceal')
@@ -443,9 +438,9 @@ endif
 " 	endif
 "
 " 	" Enable snipMate compatibility feature.
-" 	" let g:neosnippet#enable_snipmate_compatibility = 1
+" 	let g:neosnippet#enable_snipmate_compatibility = 1
 " endif
-" }}}
+" " }}}
 
 " open-browser {{{
 if s:has_plugin("open-browser")
@@ -480,15 +475,30 @@ if s:has_plugin("unite")
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
 	let g:unite_source_history_yank_enable = 1
+	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-	" source=directoryのデフォルトアクションをvimfilerにする.
-	call unite#custom_default_action('directory', 'vimfiler')
+	function! s:my_relative_move.func(candidates)
+		let candidate = a:candidates[0]
+		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
+		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
+		call unite#take_action('move', a:candidates)
+	endfunction
+
+	function! s:unite_my_keymappings()
+		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('move'))
+		nnoremap <buffer><expr> r unite#smart_map('r', unite#do_action('relative_move'))
+		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
+	endfunction
+
+	call unite#custom#default_action('directory', 'vimfiler')
+	call unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
 	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
-	" ignore files.
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	" sort rank
-	call unite#custom_source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
+	call unite#custom#source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
+
+	autocmd FileType unite call s:unite_my_keymappings()
 
 	nmap [space]u [unite]
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
@@ -509,28 +519,6 @@ if s:has_plugin("unite")
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
 	nnoremap [unite]o :<C-u>Unite outline<CR>
 
-	" Custom actions {{{
-	let s:my_relative_move = {'description' : 'move before lcd', 'is_selectable' : 1, 'is_quit' : 0 }
-	function! s:my_relative_move.func(candidates)
-		let candidate = a:candidates[0]
-		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
-		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
-		call unite#take_action('move', a:candidates)
-	endfunction
-	call unite#custom_action('file,directory', 'relative_move', s:my_relative_move)
-	unlet s:my_relative_move
-	" }}}
-
-	" Key-mappings in Unite {{{
-	function! s:unite_my_keymappings()
-		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('move'))
-		nnoremap <buffer><expr> r unite#smart_map('r', unite#do_action('relative_move'))
-		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
-	endfunction
-	autocmd FileType unite call s:unite_my_keymappings()
-	" }}}
-
 	" neomru {{{
 	if s:has_plugin("neomru")
 		let g:neomru#filename_format = ''
@@ -546,17 +534,13 @@ if s:has_plugin("unite")
 
 	" open-browser {{{
 	if s:has_plugin("open-browser")
-		let openbrowser_file = {
-					\ 'description' : 'OpenBrowser file:/{word}',
-					\ 'is_selectable' : 1,
-					\ }
-		function! openbrowser_file.func(candidates)"{{{
+		let s:openbrowser_file = { 'description' : 'OpenBrowser file:/{word}', 'is_selectable' : 1, }
+		function! s:openbrowser_file.func(candidates)"{{{
 			for l:candidate in a:candidates
 				call openbrowser#open('file:/'.l:candidate.action__path)
 			endfor
 		endfunction"}}}
-		call unite#custom_action('openable', 'openbrowser_file', openbrowser_file)
-		unlet openbrowser_file
+		call unite#custom_action('openable', 'openbrowser_file', s:openbrowser_file)
 	endif
 	" }}}
 

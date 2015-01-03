@@ -25,6 +25,8 @@ nmap <C-i> :ForwardHist
 nmap H <NOP>
 nmap L <NOP>
 
+nmap o <NOP>
+
 cmap <C-p> :FocusPrevCandidate
 cmap <C-u> :FocusNextCandidate
 

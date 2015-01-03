@@ -288,6 +288,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'h1mesuke/vim-alignta'
 	NeoBundle 'h1mesuke/unite-outline'
 	" NeoBundle 'haya14busa/vim-migemo'
+	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kannokanno/previm'
@@ -297,6 +298,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'moznion/hateblo.vim'
+	NeoBundle 'rhysd/vim-operator-surround'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -592,6 +594,14 @@ if s:has_plugin("vimfiler")
 	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
 	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
 	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
+endif
+" }}}
+
+" vim-operator-surround {{{
+if s:has_plugin("vim-operator-surround")
+	map <silent>sa <Plug>(operator-surround-append)
+	map <silent>sd <Plug>(operator-surround-delete)
+	map <silent>sr <Plug>(operator-surround-replace)
 endif
 " }}}
 

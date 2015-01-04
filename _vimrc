@@ -317,13 +317,14 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ },
 				\ }
 	NeoBundle 'thinca/vim-ref'
-	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
 	NeoBundle 'thinca/vim-quickrun'
+	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'tomtom/tcomment_vim'
-	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'tyru/open-browser.vim'
+	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
 
 	" color schemes.
@@ -455,6 +456,13 @@ endif
 if s:has_plugin("quickrun")
 	nnoremap [space]q :<C-u>QuickRun<CR>
 	nnoremap [space]Q :<C-u>QuickRun<Space>
+endif
+" }}}
+
+" {{{
+if s:has_plugin("restart.vim")
+	command! -bar RestartWithSession
+	\   let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif
 " }}}
 

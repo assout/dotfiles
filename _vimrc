@@ -343,27 +343,23 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-" alignta {{{
-if s:has_plugin("alignta")
+if s:has_plugin("alignta") " {{{
 	xnoremap [space]a :Alignta<Space>
 endif
 " }}}
 
-" codic {{{
-if s:has_plugin("codic")
+if s:has_plugin("codic") " {{{
 	nnoremap [space]c :<C-u>Codic<CR>
 	nnoremap [space]C :<C-u>Codic<Space>
 endif
 " }}}
 
-" excitetranslate {{{
-if s:has_plugin("excitetranslate")
+if s:has_plugin("excitetranslate") " {{{
 	nnoremap [space]E :<C-u>ExciteTranslate<CR>
 endif
 " }}}
 
-" hateblo {{{
-if s:has_plugin("hateblo")
+if s:has_plugin("hateblo") " {{{
 	" api_keyはvimrc.localから設定.
 	let g:hateblo_vim = {
 				\ 'user':         'assout',
@@ -382,8 +378,7 @@ if s:has_plugin("hateblo")
 endif
 "}}}
 
-" memolist {{{
-if s:has_plugin("memolist")
+if s:has_plugin("memolist") " {{{
 	let g:memolist_memo_suffix = "md"
 	if s:isHomeUnix()
 		let g:memolist_path = '~/Dropbox/memolist'
@@ -408,16 +403,14 @@ if s:has_plugin("memolist")
 endif
 " }}}
 
-" neocomplete {{{
-if s:has_plugin("neocomplete")
+if s:has_plugin("neocomplete") " {{{
 	let g:neocomplete#enable_at_startup = 1
 	let g:neocomplete#enable_ignore_case = 1
 	let g:neocomplete#enable_smart_case = 1
 endif
 " }}}
 
-" " neosnippet {{{
-" if s:has_plugin("neosnippet")
+" if s:has_plugin("neosnippet") " {{{
 " 	" Plugin key-mappings.
 " 	imap <C-k> <Pug>(neosnippet_expand_or_jump)
 " 	smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -438,42 +431,36 @@ endif
 " endif
 " " }}}
 
-" open-browser {{{
-if s:has_plugin("open-browser")
+if s:has_plugin("open-browser") " {{{
 	let g:netrw_nogx = 1 " disable netrw's gx mapping.
 	nmap gx <Plug>(openbrowser-smart-search)
 	vmap gx <Plug>(openbrowser-smart-search)
 endif
 "}}}
 
-" previm {{{
-if s:has_plugin("previm")
+if s:has_plugin("previm") " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
 endif
 " }}}
 
-" quickrun {{{
-if s:has_plugin("quickrun")
+if s:has_plugin("quickrun") " {{{
 	nnoremap [space]q :<C-u>QuickRun<CR>
 	nnoremap [space]Q :<C-u>QuickRun<Space>
 endif
 " }}}
 
-" {{{
-if s:has_plugin("restart.vim")
+if s:has_plugin("restart.vim") " {{{
 	command! -bar RestartWithSession
 	\   let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif
 " }}}
 
-" singleton {{{
-if s:has_plugin("singleton") && has("clientserver")
+if s:has_plugin("singleton") && has("clientserver") " {{{
 	call singleton#enable()
 endif
 " }}}
 
-" unite {{{
-if s:has_plugin("unite")
+if s:has_plugin("unite") " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
@@ -521,8 +508,7 @@ if s:has_plugin("unite")
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
 	nnoremap [unite]o :<C-u>Unite outline<CR>
 
-	" neomru {{{
-	if s:has_plugin("neomru")
+	if s:has_plugin("neomru") " {{{
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 20
@@ -534,8 +520,7 @@ if s:has_plugin("unite")
 	endif
 	" }}}
 
-	" open-browser {{{
-	if s:has_plugin("open-browser")
+	if s:has_plugin("open-browser") " {{{
 		let s:openbrowser_file = { 'description' : 'OpenBrowser file:/{word}', 'is_selectable' : 1, }
 		function! s:openbrowser_file.func(candidates)"{{{
 			for l:candidate in a:candidates
@@ -546,8 +531,7 @@ if s:has_plugin("unite")
 	endif
 	" }}}
 
-	" unite-todo {{{
-	if s:has_plugin("unite-todo")
+	if s:has_plugin("unite-todo") " {{{
 		let g:unite_todo_note_suffix = 'md'
 		if s:isHomeUnix()
 			let g:unite_todo_data_directory = '/home/oji/Dropbox'
@@ -576,8 +560,7 @@ if s:has_plugin("unite")
 endif
 " }}}
 
-" vimfiler {{{
-if s:has_plugin("vimfiler")
+if s:has_plugin("vimfiler") " {{{
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
@@ -591,16 +574,14 @@ if s:has_plugin("vimfiler")
 endif
 " }}}
 
-" vim-operator-surround {{{
-if s:has_plugin("vim-operator-surround")
+if s:has_plugin("vim-operator-surround") " {{{
 	map <silent>sa <Plug>(operator-surround-append)
 	map <silent>sd <Plug>(operator-surround-delete)
 	map <silent>sr <Plug>(operator-surround-replace)
 endif
 " }}}
 
-" vim-ref {{{
-if s:has_plugin("vim-ref")
+if s:has_plugin("vim-ref") " {{{
 	" webdictサイトの設定.
 	let g:ref_source_webdict_sites = {
 				\   'je': {
@@ -633,8 +614,7 @@ if s:has_plugin("vim-ref")
 endif
 " }}}
 
-" vim-textobj-entire {{{
-if s:has_plugin("vim-textobj-entire")
+if s:has_plugin("vim-textobj-entire") " {{{
 	nmap yae yae<C-o>
 	nmap yie yie<C-o>
 	nmap =ae =ae<C-o>

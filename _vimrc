@@ -285,7 +285,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
-	NeoBundle 'h1mesuke/unite-outline'
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-textobj-user'
@@ -305,8 +304,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		" NeoBundle 'Shougo/neosnippet'
 		" NeoBundle 'Shougo/neosnippet-snippets'
 	endif
-	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/neomru.vim'
+	NeoBundle 'Shougo/unite-outline'
+	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/vimfiler.vim'
 	NeoBundle 'Shougo/vimproc', {
 				\ 'build' : {
@@ -536,13 +536,6 @@ if s:has_plugin("unite")
 			endfor
 		endfunction"}}}
 		call unite#custom_action('openable', 'openbrowser_file', s:openbrowser_file)
-	endif
-	" }}}
-
-	" unite-outline {{{
-	if s:has_plugin("unite-outline")
-		" Work around. http://totem3.hatenablog.jp/entry/2014/07/16/051101
-		let g:unite_abbr_highlight = 'Normal'
 	endif
 	" }}}
 

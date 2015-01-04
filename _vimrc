@@ -290,7 +290,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kannokanno/previm'
-	NeoBundle 'kannokanno/unite-todo'
+	NeoBundle 'assout/unite-todo'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
@@ -324,7 +324,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
-	" NeoBundle 'tpope/vim-surround'
 	NeoBundle 'vim-jp/vimdoc-ja'
 
 	" color schemes.
@@ -574,7 +573,7 @@ if s:has_plugin("vimfiler")
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
-	nmap [space]v [vimfiler]
+	nmap [space]f [vimfiler]
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
 	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>

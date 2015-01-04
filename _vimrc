@@ -168,8 +168,9 @@ let g:mapleader = '[space]d'
 " vimfilerとかと競合防ぐため.
 map <Space> [space]
 
-" [edit] mappings
+" [edit] mappings.
 nmap [space]e [edit]
+" fugitiveで対象とするためpathを解決.
 nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
 nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
 nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
@@ -196,12 +197,10 @@ noremap [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
 noremap [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
 noremap [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
-" [json] mappings
-map [space]j [json]
-nnoremap [json] :%!python -m json.tool<CR>
-xnoremap [space] :!python -m json.tool<CR>
+" [json] mappings.
+xnoremap [space]j :!python -m json.tool<CR>
 
-" vimrc,gvimrcのreload.
+" [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 " }}}2
 
@@ -399,12 +398,7 @@ if s:has_plugin("memolist")
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
 	if s:has_plugin('unite')
-		let g:unite_source_alias_aliases = {
-					\	"memolist" : {
-					\		"source" : "file",
-					\		"args" : g:memolist_path,
-					\	},
-					\}
+		let g:unite_source_alias_aliases = { "memolist" : { "source" : "file", "args" : g:memolist_path } }
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
 		call unite#custom_source('memolist', 'matchers', ["converter_tail_abbr", "matcher_default"])
 		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>

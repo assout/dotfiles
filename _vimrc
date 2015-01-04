@@ -101,6 +101,8 @@ set hlsearch
 set ignorecase
 " インクリメンタルサーチ.
 set incsearch
+" Open Vim internal help by K command.
+set keywordprg=:help
 " 不可視文字表示.
 set list
 " 表示する不可視文字.

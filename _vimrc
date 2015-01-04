@@ -282,15 +282,16 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
+	NeoBundle 'Shougo/neobundle.vim'
+	NeoBundle 'assout/unite-todo'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
-	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire'
+	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kannokanno/previm'
-	NeoBundle 'assout/unite-todo'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'mattn/excitetranslate-vim'
@@ -298,7 +299,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'moznion/hateblo.vim'
 	NeoBundle 'rhysd/vim-operator-surround'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
 		" NeoBundle 'Shougo/neosnippet'

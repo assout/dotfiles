@@ -1,12 +1,12 @@
 " Index {{{1
 " * Begin.
-" * Functions.
+" * Functions and Commands.
 " * Options.
 " * Let defines.
 " * Key-mappings.
 " * Plug-ins.
 " * Auto-commands.
-" * Commands.
+" * Other Commands.
 " }}}1
 
 " Section; Begin {{{1
@@ -18,7 +18,7 @@ if filereadable(expand('~/.vimrc.local'))
 endif
 " }}}1
 
-" Section; Functions {{{1
+" Section; Functions and Commands {{{1
 " command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
 	if has("clipboard")
@@ -172,6 +172,7 @@ map <Space> [space]
 
 " [edit] mappings.
 nmap [space]e [edit]
+nnoremap [edit] <Nop>
 " fugitiveで対象とするためpathを解決.
 nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
 nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
@@ -185,22 +186,25 @@ endif
 
 " [insert] mappings.
 map [space]i [insert]
-noremap [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
-noremap [insert]t :call <SID>insertPrefix("TODO ")<CR>
-noremap [insert]1 :call <SID>insertPrefix("# ")<CR>
-noremap [insert]2 :call <SID>insertPrefix("## ")<CR>
-noremap [insert]3 :call <SID>insertPrefix("### ")<CR>
-noremap [insert]* :call <SID>insertPrefix("* ")<CR>
-noremap [insert]> :call <SID>insertPrefix("> ")<CR>
-noremap [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap [insert]n :call <SID>insertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
-noremap [insert]l :call <SID>insertSuffix("  ")<CR>
-noremap [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
-noremap [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
-noremap [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
+noremap [insert] <Nop>
+noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
+noremap <silent> [insert]t :call <SID>insertPrefix("TODO ")<CR>
+noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
+noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
+noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
+noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
+noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
+noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]l :call <SID>insertSuffix(" ")<CR>
+noremap <silent> [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
+noremap <silent> [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
+noremap <silent> [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
 " [json] mappings.
-xnoremap [space]j :!python -m json.tool<CR>
+if executable('python')
+	xnoremap [space]j :!python -m json.tool<CR>
+endif
 
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -337,9 +341,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
-	for l:path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
-		if l:path !~# '\~$' && isdirectory(l:path)
-			let &runtimepath = &runtimepath.','.l:path
+	for path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
+		if path !~# '\~$' && isdirectory(path)
+			let &runtimepath = &runtimepath.','.path
 		end
 	endfor
 endif
@@ -364,14 +368,15 @@ endif
 if s:has_plugin("hateblo") " {{{
 	" api_keyはvimrc.localから設定.
 	let g:hateblo_vim = {
-				\ 'user':         'assout',
+				\ 'user': 'assout',
 				\ 'api_key': g:hateblo_api_key,
 				\ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
 				\ 'WYSIWYG_mode': 0,
-				\ 'always_yes':   0,
+				\ 'always_yes': 0,
 				\ 'edit_command': 'edit'
 				\ }
 	nmap [space]h [hateblo]
+	nnoremap [hateblo] <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
@@ -391,6 +396,7 @@ if s:has_plugin("memolist") " {{{
 	endif
 
 	nmap [space]m [memolist]
+	nnoremap [memolist] <Nop>
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
@@ -413,23 +419,23 @@ endif
 " }}}
 
 " if s:has_plugin("neosnippet") " {{{
-" 	" Plugin key-mappings.
-" 	imap <C-k> <Pug>(neosnippet_expand_or_jump)
-" 	smap <C-k> <Plug>(neosnippet_expand_or_jump)
-" 	xmap <C-k> <Plug>(neosnippet_expand_target)
-" 	xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
+" " Plugin key-mappings.
+" imap <C-k> <Pug>(neosnippet_expand_or_jump)
+" smap <C-k> <Plug>(neosnippet_expand_or_jump)
+" xmap <C-k> <Plug>(neosnippet_expand_target)
+" xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
 "
-" 	" SuperTab like snippets' behavior.
-" 	imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-" 	smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" " SuperTab like snippets' behavior.
+" imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+" smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 "
-" 	" For snippet_complete marker.
-" 	if has('conceal')
-" 		set conceallevel=2 concealcursor=i
-" 	endif
+" " For snippet_complete marker.
+" if has('conceal')
+" set conceallevel=2 concealcursor=i
+" endif
 "
-" 	" Enable snipMate compatibility feature.
-" 	let g:neosnippet#enable_snipmate_compatibility = 1
+" " Enable snipMate compatibility feature.
+" let g:neosnippet#enable_snipmate_compatibility = 1
 " endif
 " " }}}
 
@@ -453,7 +459,7 @@ endif
 
 if s:has_plugin("restart.vim") " {{{
 	command! -bar RestartWithSession
-	\   let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
+				\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif
 " }}}
 
@@ -479,6 +485,7 @@ if s:has_plugin("unite") " {{{
 	function! s:unite_my_keymappings()
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
+		" TODO いる？directoryのデフォルトがvimfilerだが。
 		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
 	endfunction
 
@@ -489,9 +496,11 @@ if s:has_plugin("unite") " {{{
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
 
+	" TODO autocmd!しなくて大丈夫？
 	autocmd FileType unite call s:unite_my_keymappings()
 
 	nmap [space]u [unite]
+	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
 	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
 	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
@@ -550,6 +559,7 @@ if s:has_plugin("unite") " {{{
 		endfunction
 
 		map [space]t [todo]
+		noremap [todo] <Nop>
 		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
 		noremap [todo]a :UniteTodoAddSimple<CR>
 		noremap [todo]t :UniteTodoAddSimple -tag<CR>
@@ -567,6 +577,7 @@ if s:has_plugin("vimfiler") " {{{
 	let g:vimfiler_as_default_explorer = 1
 
 	nmap [space]f [vimfiler]
+	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
 	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
@@ -586,15 +597,15 @@ endif
 if s:has_plugin("vim-ref") " {{{
 	" webdictサイトの設定.
 	let g:ref_source_webdict_sites = {
-				\   'je': {
-				\     'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
-				\   },
-				\   'ej': {
-				\     'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
-				\   },
-				\   'wiki': {
-				\     'url': 'http://ja.wikipedia.org/wiki/%s',
-				\   },
+				\ 'je': {
+				\ 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
+				\ },
+				\ 'ej': {
+				\ 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
+				\ },
+				\ 'wiki': {
+				\ 'url': 'http://ja.wikipedia.org/wiki/%s',
+				\ },
 				\ }
 	" デフォルトサイト.
 	let g:ref_source_webdict_sites.default = 'ej'
@@ -641,7 +652,7 @@ augroup MyAutoGroup
 augroup END
 " }}}1
 
-" Section; Commands {{{1
+" Section; Other Commands {{{1
 " ファイルタイプ判別.
 filetype on
 " colorscheme

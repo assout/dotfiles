@@ -480,7 +480,7 @@ if s:has_plugin("unite") " {{{
 		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
 		call unite#take_action('move', a:candidates)
-		" 呼ばないと表示更新されない（なぜ？）.
+		" 呼ばないと表示更新されない.
 		call unite#force_redraw()
 	endfunction
 

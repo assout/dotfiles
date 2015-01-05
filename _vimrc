@@ -480,12 +480,14 @@ if s:has_plugin("unite") " {{{
 		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
 		call unite#take_action('move', a:candidates)
+		" 呼ばないと表示更新されない（なぜ？）.
+		call unite#force_redraw()
 	endfunction
 
 	function! s:unite_my_keymappings()
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
-		" TODO いる？directoryのデフォルトがvimfilerだが。
+		" kind:directoryはdefaultでvimfilerだが、kind:fileとかに対して実行するため.
 		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
 	endfunction
 

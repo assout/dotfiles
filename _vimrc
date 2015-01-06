@@ -169,6 +169,7 @@ let g:mapleader = '[space]d'
 " Prefix key mappings {{{2
 " vimfilerとかと競合防ぐため.
 map <Space> [space]
+noremap [space] <Nop>
 
 " [edit] mappings.
 nmap [space]e [edit]
@@ -195,7 +196,7 @@ noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
 noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(" " . strftime("[%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix(" ")<CR>
 noremap <silent> [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
 noremap <silent> [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
@@ -383,7 +384,7 @@ if s:has_plugin("hateblo") " {{{
 	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
 endif
-"}}}
+" }}}
 
 if s:has_plugin("memolist") " {{{
 	let g:memolist_memo_suffix = "md"
@@ -440,11 +441,12 @@ endif
 " " }}}
 
 if s:has_plugin("open-browser") " {{{
-	let g:netrw_nogx = 1 " disable netrw's gx mapping.
-	nmap gx <Plug>(openbrowser-smart-search)
-	vmap gx <Plug>(openbrowser-smart-search)
+	" TODO gxでディレクトリをエクスプローラで開くことができなくなるためコメントアウト(そもそも、この設定を何で入れたか忘れた).
+	" let g:netrw_nogx = 1 " disable netrw's gx mapping.
+	" nmap gx <Plug>(openbrowser-smart-search)
+	" vmap gx <Plug>(openbrowser-smart-search)
 endif
-"}}}
+" }}}
 
 if s:has_plugin("previm") " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
@@ -485,6 +487,7 @@ if s:has_plugin("unite") " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
+		" TODO このアクションどのプラグインか不明(open-browser??).
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
 		" kind:directoryはdefaultでvimfilerだが、kind:fileとかに対して実行するため.
@@ -535,11 +538,11 @@ if s:has_plugin("unite") " {{{
 
 	if s:has_plugin("open-browser") " {{{
 		let s:openbrowser_file = { 'description' : 'OpenBrowser file:/{word}', 'is_selectable' : 1, }
-		function! s:openbrowser_file.func(candidates)"{{{
+		function! s:openbrowser_file.func(candidates) " {{{
 			for l:candidate in a:candidates
 				call openbrowser#open('file:/' . l:candidate.action__path)
 			endfor
-		endfunction"}}}
+		endfunction " }}}
 		call unite#custom_action('openable', 'openbrowser_file', s:openbrowser_file)
 	endif
 	" }}}
@@ -666,4 +669,3 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
-

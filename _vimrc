@@ -1,11 +1,11 @@
 " Index {{{1
 " * Begin.
 " * Functions and Commands.
+" * Auto-commands.
 " * Options.
 " * Let defines.
 " * Key-mappings.
 " * Plug-ins.
-" * Auto-commands.
 " * Other Commands.
 " }}}1
 
@@ -66,6 +66,22 @@ endfunction
 function! s:isOfficeWin()
 	return $USER != 'oji' && has('win32')
 endfunction
+" }}}1
+
+" Section; Auto-commands {{{1
+augroup MyAutoGroup
+	autocmd!
+	" DoubleByteSpace highlight.
+	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+	" markdown.
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
+	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
+	autocmd FileType * set textwidth=0 formatoptions-=o
+	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
+augroup END
 " }}}1
 
 " Section; Options {{{1
@@ -441,10 +457,12 @@ endif
 " " }}}
 
 if s:has_plugin("open-browser") " {{{
-	" TODO gxでディレクトリをエクスプローラで開くことができなくなるためコメントアウト(そもそも、この設定を何で入れたか忘れた).
-	" let g:netrw_nogx = 1 " disable netrw's gx mapping.
-	" nmap gx <Plug>(openbrowser-smart-search)
-	" vmap gx <Plug>(openbrowser-smart-search)
+	" TODO gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
+	if s:isHomeUnix()
+		let g:netrw_nogx = 1 " disable netrw's gx mapping.
+		nmap gx <Plug>(openbrowser-smart-search)
+		vmap gx <Plug>(openbrowser-smart-search)
+	endif
 endif
 " }}}
 
@@ -487,12 +505,16 @@ if s:has_plugin("unite") " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		" TODO このアクションどのプラグインか不明(open-browser??).
+		" TODO linuxでも動くか要確認(動いた気がするが).
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
-		" kind:directoryはdefaultでvimfilerだが、kind:fileとかに対して実行するため.
+		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
 		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
 	endfunction
+	augroup vimrc_loading
+		autocmd!
+		autocmd FileType unite call s:unite_my_keymappings()
+	augroup END
 
 	call unite#custom#default_action('directory', 'vimfiler')
 	call unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
@@ -500,9 +522,6 @@ if s:has_plugin("unite") " {{{
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
-
-	" TODO autocmd!しなくて大丈夫？
-	autocmd FileType unite call s:unite_my_keymappings()
 
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
@@ -522,28 +541,17 @@ if s:has_plugin("unite") " {{{
 	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume-buffer<CR>
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register-buffer<CR>
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
-	nnoremap [unite]o :<C-u>Unite outline<CR>
+	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline-buffer -no-quit -vertical -winwidth=30 -direction=botright<CR>
 
 	if s:has_plugin("neomru") " {{{
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 20
-		let g:neomru#directory_mru_limit = 20
+		let g:neomru#file_mru_limit = 100
+		let g:neomru#directory_mru_limit = 100
 
 		nmap [unite]n [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
-	endif
-	" }}}
-
-	if s:has_plugin("open-browser") " {{{
-		let s:openbrowser_file = { 'description' : 'OpenBrowser file:/{word}', 'is_selectable' : 1, }
-		function! s:openbrowser_file.func(candidates) " {{{
-			for l:candidate in a:candidates
-				call openbrowser#open('file:/' . l:candidate.action__path)
-			endfor
-		endfunction " }}}
-		call unite#custom_action('openable', 'openbrowser_file', s:openbrowser_file)
 	endif
 	" }}}
 
@@ -639,22 +647,6 @@ if s:has_plugin("vim-textobj-entire") " {{{
 	nmap =ie =ie<C-o>
 endif
 " }}}
-" }}}1
-
-" Section; Auto-commands {{{1
-augroup MyAutoGroup
-	autocmd!
-	" DoubleByteSpace highlight.
-	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-	" markdown.
-	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
-	autocmd FileType * set textwidth=0 formatoptions-=o
-	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
-augroup END
 " }}}1
 
 " Section; Other Commands {{{1

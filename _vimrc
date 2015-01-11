@@ -206,19 +206,19 @@ endif
 " [insert] mappings.
 map [space]i [insert]
 noremap [insert] <Nop>
-noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
-noremap <silent> [insert]t :call <SID>insertPrefix("TODO ")<CR>
-noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
-noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
-noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
-noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
-noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
-noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
-noremap <silent> [insert]l :call <SID>insertSuffix(" ")<CR>
-noremap <silent> [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
-noremap <silent> [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
-noremap <silent> [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
+noremap <silent> [insert]p :<C-u>call <SID>insertPrefix(input("input prefix:"))<CR>
+noremap <silent> [insert]t :<C-u>call <SID>insertPrefix("TODO ")<CR>
+noremap <silent> [insert]1 :<C-u>call <SID>insertPrefix("# ")<CR>
+noremap <silent> [insert]2 :<C-u>call <SID>insertPrefix("## ")<CR>
+noremap <silent> [insert]3 :<C-u>call <SID>insertPrefix("### ")<CR>
+noremap <silent> [insert]* :<C-u>call <SID>insertPrefix("* ")<CR>
+noremap <silent> [insert]> :<C-u>call <SID>insertPrefix("> ")<CR>
+noremap <silent> [insert]s :<C-u>call <SID>insertSuffix(input("input suffix:"))<CR>
+noremap <silent> [insert]n :<C-u>call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]l :<C-u>call <SID>insertSuffix(" ")<CR>
+noremap <silent> [insert]at :<C-u>call <SID>insertSuffix("[asin::title]")<CR>0f:
+noremap <silent> [insert]ad :<C-u>call <SID>insertSuffix("[asin::detail]")<CR>0f:
+noremap <silent> [insert]ai :<C-u>call <SID>insertSuffix("[asin::image]")<CR>0f:
 
 " [json] mappings.
 if executable('python')
@@ -575,13 +575,13 @@ if s:has_plugin("unite") " {{{
 
 		map [space]t [todo]
 		noremap [todo] <Nop>
-		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap [todo]a :UniteTodoAddSimple<CR>
-		noremap [todo]t :UniteTodoAddSimple -tag<CR>
-		noremap [todo]m :UniteTodoAddSimple -memo<CR>
+		noremap [todo]<CR> :<C-u>UniteTodoAddSimple -tag -memo<CR>
+		noremap [todo]a :<C-u>UniteTodoAddSimple<CR>
+		noremap [todo]t :<C-u>UniteTodoAddSimple -tag<CR>
+		noremap [todo]m :<C-u>UniteTodoAddSimple -memo<CR>
 		noremap [todo]l :<C-u>Unite todo:undone -buffer-name=todo<CR>
 		noremap [todo]L :<C-u>Unite todo -buffer-name=todo<CR>
-		noremap [todo]g :call Todo_grep()<CR>
+		noremap [todo]g :<C-u>call Todo_grep()<CR>
 	endif
 	" }}}
 endif

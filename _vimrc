@@ -361,9 +361,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
-	for path in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
-		if path !~# '\~$' && isdirectory(path)
-			let &runtimepath = &runtimepath.','.path
+	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
+		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
+			let &runtimepath = &runtimepath . ',' . s:addingPath
 		end
 	endfor
 endif

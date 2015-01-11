@@ -319,6 +319,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
+	NeoBundle 'mattn/emmet-vim' " <C-y>aでのmarkdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'moznion/hateblo.vim'

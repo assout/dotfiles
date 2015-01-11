@@ -31,10 +31,6 @@ function! s:capture_cmd_output(cmd)
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
-if has('unix')
-	command! -nargs=0 CdCurrent cd %:p:h
-endif
-"
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
 	return !empty(matchstr(&runtimepath, a:plugin))
@@ -70,6 +66,10 @@ endfunction
 function! s:isOfficeWin()
 	return $USER != 'oji' && has('win32')
 endfunction
+
+if has('unix')
+	command! -nargs=0 CdCurrent cd %:p:h
+endif
 " }}}1
 
 " Section; Auto-commands {{{1

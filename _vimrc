@@ -99,10 +99,12 @@ endif
 set noexpandtab
 " ファイルエンコーディング.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
-" 折りたたみレベル.
-set foldlevelstart=99
-" 折りたたみ方法
-set foldmethod=marker
+if has('folding')
+	" 折りたたみレベル.
+	set foldlevelstart=99
+	" 折りたたみ方法
+	set foldmethod=marker
+endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
 set formatoptions-=o
 if has('win32') && executable('grep')
@@ -421,7 +423,7 @@ if s:has_plugin("memolist") " {{{
 		let g:unite_source_alias_aliases = { "memolist" : { "source" : "file", "args" : g:memolist_path } }
 		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
 		call unite#custom_source('memolist', 'matchers', ["converter_tail_abbr", "matcher_default"])
-		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist-buffer<CR>
+		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>
 	endif
@@ -526,22 +528,22 @@ if s:has_plugin("unite") " {{{
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
-	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer-buffer<CR>
-	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark-buffer<CR>
-	nnoremap [unite]f :<C-u>Unite file -buffer-name=file-buffer<CR>
-	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory-buffer<CR>
+	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer<CR>
+	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+	nnoremap [unite]f :<C-u>Unite file -buffer-name=file<CR>
+	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory<CR>
 	if has('win32')
-		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec-buffer<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec-buffer<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
 	else
-		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async-buffer<CR>
-		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async-buffer<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
+		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
 	endif
-	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep-buffer<CR>
-	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume-buffer<CR>
-	nnoremap [unite]R :<C-u>Unite register -buffer-name=register-buffer<CR>
-	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank-buffer<CR>
-	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline-buffer -no-quit -vertical -winwidth=30 -direction=botright<CR>
+	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep<CR>
+	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume<CR>
+	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
+	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank<CR>
+	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
 
 	if s:has_plugin("neomru") " {{{
 		let g:neomru#filename_format = ''
@@ -550,8 +552,8 @@ if s:has_plugin("unite") " {{{
 		let g:neomru#directory_mru_limit = 100
 
 		nmap [unite]n [neomru]
-		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file-buffer<CR>
-		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory-buffer<CR>
+		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
+		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
 	endif
 	" }}}
 
@@ -577,8 +579,8 @@ if s:has_plugin("unite") " {{{
 		noremap [todo]a :UniteTodoAddSimple<CR>
 		noremap [todo]t :UniteTodoAddSimple -tag<CR>
 		noremap [todo]m :UniteTodoAddSimple -memo<CR>
-		noremap [todo]l :<C-u>Unite todo:undone<CR>
-		noremap [todo]L :<C-u>Unite todo<CR>
+		noremap [todo]l :<C-u>Unite todo:undone -buffer-name=todo<CR>
+		noremap [todo]L :<C-u>Unite todo -buffer-name=todo<CR>
 		noremap [todo]g :call Todo_grep()<CR>
 	endif
 	" }}}
@@ -589,7 +591,7 @@ if s:has_plugin("vimfiler") " {{{
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
-	nmap [space]f [vimfiler]
+	nmap [space]v [vimfiler]
 	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
@@ -661,3 +663,4 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
+

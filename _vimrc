@@ -565,7 +565,7 @@ if s:has_plugin("unite") " {{{
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
 
-		function! Todo_grep()
+		function! s:todo_grep()
 			let word = input("TodoGrep word: ")
 			if word == ''
 				return
@@ -581,7 +581,7 @@ if s:has_plugin("unite") " {{{
 		noremap [todo]m :<C-u>UniteTodoAddSimple -memo<CR>
 		noremap [todo]l :<C-u>Unite todo:undone -buffer-name=todo<CR>
 		noremap [todo]L :<C-u>Unite todo -buffer-name=todo<CR>
-		noremap [todo]g :<C-u>call Todo_grep()<CR>
+		noremap [todo]g :<C-u>call <SID>todo_grep()<CR>
 	endif
 	" }}}
 endif

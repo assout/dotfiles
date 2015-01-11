@@ -570,7 +570,7 @@ if s:has_plugin("unite") " {{{
 			if word == ''
 				return
 			endif
-			execute ":grep -i " . l:word . " " . g:unite_todo_data_directory . "/todo/note/*"
+			execute ":vimgrep /" . l:word . "/ " . g:unite_todo_data_directory . "/todo/note/*"
 		endfunction
 
 		map [space]t [todo]

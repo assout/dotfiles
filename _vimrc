@@ -100,7 +100,8 @@ if has('gui_running')
 	set encoding=utf-8
 endif
 " ソフトタブ.
-set noexpandtab
+" set noexpandtab
+set expandtab
 " ファイルエンコーディング.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
@@ -140,7 +141,8 @@ set nrformats=
 " カーソル行の上下に表示する行数.
 set scrolloff=5
 " フォーマット時などの幅.
-set shiftwidth=4
+set shiftwidth=2
+" set shiftwidth=4
 " 常にタブラベルを表示する.
 set showtabline=2
 " カーソル行の水平に表示する行数.
@@ -565,7 +567,7 @@ if s:has_plugin("unite") " {{{
 	if s:has_plugin("unite-todo") " {{{
 		let g:unite_todo_note_suffix = 'md'
 		if s:isHomeUnix()
-			let g:unite_todo_data_directory = '/home/oji/Dropbox'
+			let g:unite_todo_data_directory = '~/Dropbox'
 		elseif s:isOfficeWin()
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif

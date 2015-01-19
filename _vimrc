@@ -67,10 +67,17 @@ function! s:isOfficeWin()
 	return $USER != 'oji' && has('win32')
 endfunction
 
-if has('unix')
+if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif
 " }}}1
+
+if ! s:isOfficeUnix() " TODO 原因不明だがvimrc読み込み時にエラーとなるため.
+	function! s:formatXml()
+		:%s/></>\r</g | filetype indent on | setfiletype xml | normal gg=G
+	endfunction
+	command! -complete=command FormatXml call <SID>formatXml()
+endif
 
 " Section; Auto-commands {{{1
 augroup MyAutoGroup
@@ -100,13 +107,13 @@ if has('gui_running')
 	set encoding=utf-8
 endif
 " ソフトタブ.
-" set noexpandtab
-set expandtab
+set noexpandtab
+" set expandtab
 " ファイルエンコーディング.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
 	" 折りたたみレベル.
-	set foldlevelstart=99
+	set foldlevelstart=0
 	" 折りたたみ方法
 	set foldmethod=marker
 endif
@@ -141,8 +148,8 @@ set nrformats=
 " カーソル行の上下に表示する行数.
 set scrolloff=5
 " フォーマット時などの幅.
-set shiftwidth=2
-" set shiftwidth=4
+" set shiftwidth=2
+set shiftwidth=4
 " 常にタブラベルを表示する.
 set showtabline=2
 " カーソル行の水平に表示する行数.
@@ -210,21 +217,24 @@ if s:isOfficeWin()
 endif
 
 " [insert] mappings.
+" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+" TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
 map [space]i [insert]
 noremap [insert] <Nop>
-noremap <silent> [insert]p :<C-u>call <SID>insertPrefix(input("input prefix:"))<CR>
-noremap <silent> [insert]t :<C-u>call <SID>insertPrefix("TODO ")<CR>
-noremap <silent> [insert]1 :<C-u>call <SID>insertPrefix("# ")<CR>
-noremap <silent> [insert]2 :<C-u>call <SID>insertPrefix("## ")<CR>
-noremap <silent> [insert]3 :<C-u>call <SID>insertPrefix("### ")<CR>
-noremap <silent> [insert]* :<C-u>call <SID>insertPrefix("* ")<CR>
-noremap <silent> [insert]> :<C-u>call <SID>insertPrefix("> ")<CR>
-noremap <silent> [insert]s :<C-u>call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]n :<C-u>call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
-noremap <silent> [insert]l :<C-u>call <SID>insertSuffix(" ")<CR>
-noremap <silent> [insert]at :<C-u>call <SID>insertSuffix("[asin::title]")<CR>0f:
-noremap <silent> [insert]ad :<C-u>call <SID>insertSuffix("[asin::detail]")<CR>0f:
-noremap <silent> [insert]ai :<C-u>call <SID>insertSuffix("[asin::image]")<CR>0f:
+noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
+noremap <silent> [insert]t :call <SID>insertPrefix("TODO ")<CR>
+noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
+noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
+noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
+noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
+noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
+noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%H:%M:%S]"))<CR>
+noremap <silent> [insert]N :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
+noremap <silent> [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
+noremap <silent> [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
+noremap <silent> [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
 " [json] mappings.
 if executable('python')
@@ -466,7 +476,7 @@ endif
 " " }}}
 
 if s:has_plugin("open-browser") " {{{
-	" TODO gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
+	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
 	if s:isHomeUnix()
 		let g:netrw_nogx = 1 " disable netrw's gx mapping.
 		nmap gx <Plug>(openbrowser-smart-search)
@@ -504,7 +514,7 @@ if s:has_plugin("unite") " {{{
 	let g:unite_source_history_yank_enable = 1
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-	function! s:my_relative_move.func(candidates)
+	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction.
 		let candidate = a:candidates[0]
 		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
@@ -514,7 +524,6 @@ if s:has_plugin("unite") " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		" TODO linuxでも動くか要確認(動いた気がするが).
 		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
 		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
@@ -555,8 +564,8 @@ if s:has_plugin("unite") " {{{
 	if s:has_plugin("neomru") " {{{
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 100
-		let g:neomru#directory_mru_limit = 100
+		let g:neomru#file_mru_limit = 50
+		let g:neomru#directory_mru_limit = 50
 
 		nmap [unite]n [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
@@ -580,15 +589,16 @@ if s:has_plugin("unite") " {{{
 			execute ":vimgrep /" . l:word . "/ " . g:unite_todo_data_directory . "/todo/note/*"
 		endfunction
 
+		" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 		map [space]t [todo]
 		noremap [todo] <Nop>
-		noremap [todo]<CR> :<C-u>UniteTodoAddSimple -tag -memo<CR>
-		noremap [todo]a :<C-u>UniteTodoAddSimple<CR>
-		noremap [todo]t :<C-u>UniteTodoAddSimple -tag<CR>
-		noremap [todo]m :<C-u>UniteTodoAddSimple -memo<CR>
-		noremap [todo]l :<C-u>Unite todo:undone -buffer-name=todo<CR>
-		noremap [todo]L :<C-u>Unite todo -buffer-name=todo<CR>
-		noremap [todo]g :<C-u>call <SID>todo_grep()<CR>
+		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap [todo]a :UniteTodoAddSimple<CR>
+		noremap [todo]t :UniteTodoAddSimple -tag<CR>
+		noremap [todo]m :UniteTodoAddSimple -memo<CR>
+		noremap [todo]l :Unite todo:undone -buffer-name=todo<CR>
+		noremap [todo]L :Unite todo -buffer-name=todo<CR>
+		noremap [todo]g :call <SID>todo_grep()<CR>
 	endif
 	" }}}
 endif
@@ -671,3 +681,4 @@ endif
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 
+" vim:nofoldenable:

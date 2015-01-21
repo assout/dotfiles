@@ -338,7 +338,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/emmet-vim' " <C-y>aでのmarkdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
-	NeoBundle 'moznion/hateblo.vim'
+	" NeoBundle 'moznion/hateblo.vim'
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるため。本家へもpull reqでてるので、取り込まれたら見先を変える。
 	NeoBundle 'rhysd/vim-operator-surround'
 	NeoBundle 'schickling/vim-bufonly'
 	if has('lua')
@@ -411,6 +412,8 @@ if s:has_plugin("hateblo") " {{{
 				\ 'always_yes': 0,
 				\ 'edit_command': 'edit'
 				\ }
+	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
+
 	nmap [space]h [hateblo]
 	nnoremap [hateblo] <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>

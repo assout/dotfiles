@@ -222,19 +222,17 @@ endif
 map [space]i [insert]
 noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
-noremap <silent> [insert]t :call <SID>insertPrefix("TODO ")<CR>
+noremap <silent> [insert]T :call <SID>insertPrefix("TODO ")<CR>
 noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
 noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
 noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
 noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%H:%M:%S]"))<CR>
-noremap <silent> [insert]N :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]D :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" [%Y-%m-%d]"))<CR>
+noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" [%H:%M:%S]"))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
-noremap <silent> [insert]at :call <SID>insertSuffix("[asin::title]")<CR>0f:
-noremap <silent> [insert]ad :call <SID>insertSuffix("[asin::detail]")<CR>0f:
-noremap <silent> [insert]ai :call <SID>insertSuffix("[asin::image]")<CR>0f:
 
 " [json] mappings.
 if executable('python')

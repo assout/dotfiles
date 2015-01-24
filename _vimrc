@@ -229,9 +229,9 @@ noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
 noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]D :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
 noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" [%Y-%m-%d]"))<CR>
 noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" [%H:%M:%S]"))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
 
 " [json] mappings.

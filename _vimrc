@@ -414,6 +414,8 @@ endif
 " }}}
 
 if s:has_plugin("emmet") " {{{
+	nmap [space]e [emmet]
+	nnoremap [emmet] <Nop>
 	let g:user_emmet_leader_key = '[space]e'
 endif
 " }}}

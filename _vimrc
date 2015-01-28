@@ -44,11 +44,11 @@ function! s:openModifiableQF()
 endfunction
 
 function! s:insertPrefix(str) range
-	execute a:firstline . "," . a:lastline . "s/^/" . a:str
+	execute a:firstline . "," . a:lastline . "substitute/^/" . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
 function! s:insertSuffix(str) range
-	execute a:firstline . "," . a:lastline . "s/$/" . a:str
+	execute a:firstline . "," . a:lastline . "substitute/$/" . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
 function! s:isHomeUnix()
@@ -162,6 +162,10 @@ if s:isOfficeWin()
 elseif s:isHomeUnix()
 	set spellfile=~/Dropbox/spell/en.utf-8.add
 endif
+" 新しいウィンドウは下に.
+set splitbelow
+" 新しいウィンドウは右に.
+set splitright
 " スペルチェックで日本語は除外する.
 set spelllang+=cjk
 " tab幅.
@@ -202,18 +206,18 @@ let g:mapleader = '[space]d'
 map <Space> [space]
 noremap [space] <Nop>
 
-" [edit] mappings.
-nmap [space]e [edit]
-nnoremap [edit] <Nop>
+" [open] mappings.
+nmap [space]o [open]
+nnoremap [open] <Nop>
 " fugitiveで対象とするためpathを解決.
-nnoremap [edit]v :execute "tabedit " . resolve(expand($MYVIMRC))<CR>
-nnoremap [edit]g :execute "tabedit " . resolve(expand($MYGVIMRC))<CR>
-nnoremap [edit]r :tabedit ~/development/dotfiles/_vrapperrc<CR>
-nnoremap [edit]b :tabedit ~/development/dotfiles/_my_bashrc<CR>
+nnoremap [open]v :execute "vnew " . resolve(expand($MYVIMRC))<CR>
+nnoremap [open]g :execute "vnew " . resolve(expand($MYGVIMRC))<CR>
+nnoremap [open]r :vnew ~/development/dotfiles/_vrapperrc<CR>
+nnoremap [open]b :vnew ~/development/dotfiles/_my_bashrc<CR>
 if s:isOfficeWin()
-	nnoremap [edit]r :tabedit D:\admin\_vrapperrc<CR>
-	nnoremap [edit]b :tabedit C:\Users\admin\_my_bashrc<CR>
-	nnoremap [edit]i :tabedit D:\admin\Documents\ipmsg.log<CR>
+	nnoremap [open]r :vnew D:\admin\_vrapperrc<CR>
+	nnoremap [open]b :vnew C:\Users\admin\_my_bashrc<CR>
+	nnoremap [open]i :vnew D:\admin\Documents\ipmsg.log<CR>
 endif
 
 " [insert] mappings.
@@ -222,10 +226,12 @@ endif
 map [space]i [insert]
 noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
+noremap <silent> [insert]f :call <SID>insertPrefix("file://")<CR>
 noremap <silent> [insert]T :call <SID>insertPrefix("TODO ")<CR>
 noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
 noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
 noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
+noremap <silent> [insert]4 :call <SID>insertPrefix("#### ")<CR>
 noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
@@ -243,11 +249,23 @@ endif
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 " }}}2
 
-noremap <C-j> 10j
-noremap <C-k> 10k
-noremap <C-h> gT
-noremap <C-l> gt
+" window操作. TODO もうチョイ何とかしたい,<C-o>,<C-v>を潰すわけにはいかないので.
+" refereces [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
+nnoremap <C-h> <C-W>h
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-l> <C-W>l
+nnoremap <C-c> <C-W>c
+nnoremap <C-n> <C-W>n
+nnoremap <C-s> <C-W>s
+nnoremap <C-Up> 5<C-W>+
+nnoremap <C-Down> 5<C-W>-
+nnoremap <C-Left> 5<C-W><
+nnoremap <C-Right> 5<C-W>>
 
+" tab操作.
+nnoremap <TAB> gt
+nnoremap <S-TAB> gT
 " 横スクロール.
 nnoremap [space]h zH
 nnoremap [space]l zL
@@ -333,7 +351,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
-	NeoBundle 'mattn/emmet-vim' " <C-y>aでのmarkdownのurl形式取得にしか使ってない.
+	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
@@ -395,8 +413,13 @@ if s:has_plugin("codic") " {{{
 endif
 " }}}
 
+if s:has_plugin("emmet") " {{{
+	let g:user_emmet_leader_key = '[space]e'
+endif
+" }}}
+
 if s:has_plugin("excitetranslate") " {{{
-	nnoremap [space]E :<C-u>ExciteTranslate<CR>
+	noremap [space]E :<C-u>ExciteTranslate<CR>
 endif
 " }}}
 
@@ -508,6 +531,13 @@ if s:has_plugin("singleton") && has("clientserver") " {{{
 endif
 " }}}
 
+if s:has_plugin("tcomment") " {{{
+	let g:tcommentMaps = 0
+	nnoremap <silent>gcc :TComment<CR>
+	vnoremap <silent>gc :TComment<CR>
+endif
+" }}}
+
 if s:has_plugin("unite") " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
@@ -547,20 +577,22 @@ if s:has_plugin("unite") " {{{
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
 	nnoremap [unite]b :<C-u>Unite buffer -buffer-name=buffer<CR>
 	nnoremap [unite]B :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-	nnoremap [unite]f :<C-u>Unite file -buffer-name=file<CR>
 	nnoremap [unite]d :<C-u>Unite directory -buffer-name=directory<CR>
+	nnoremap [unite]f :<C-u>Unite file -buffer-name=file<CR>
 	if has('win32')
-		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 	else
-		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
 		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
 	endif
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep<CR>
+	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
 	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume<CR>
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
+	nnoremap [unite]t :<C-u>Unite tab -buffer-name=tab<CR>
+	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank<CR>
-	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
 
 	if s:has_plugin("neomru") " {{{
 		let g:neomru#filename_format = ''
@@ -591,15 +623,15 @@ if s:has_plugin("unite") " {{{
 		endfunction
 
 		" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
-		map [space]t [todo]
-		noremap [todo] <Nop>
-		noremap [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap [todo]a :UniteTodoAddSimple<CR>
-		noremap [todo]t :UniteTodoAddSimple -tag<CR>
-		noremap [todo]m :UniteTodoAddSimple -memo<CR>
-		noremap [todo]l :Unite todo:undone -buffer-name=todo<CR>
-		noremap [todo]L :Unite todo -buffer-name=todo<CR>
-		noremap [todo]g :call <SID>todo_grep()<CR>
+		map [space]t [unite-todo]
+		noremap [unite-todo] <Nop>
+		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap [unite-todo]a :UniteTodoAddSimple<CR>
+		noremap [unite-todo]t :UniteTodoAddSimple -tag<CR>
+		noremap [unite-todo]m :UniteTodoAddSimple -memo<CR>
+		noremap [unite-todo]l :Unite todo:undone -buffer-name=todo<CR>
+		noremap [unite-todo]L :Unite todo -buffer-name=todo<CR>
+		noremap [unite-todo]g :call <SID>todo_grep()<CR>
 	endif
 	" }}}
 endif

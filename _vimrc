@@ -235,9 +235,9 @@ noremap <silent> [insert]4 :call <SID>insertPrefix("#### ")<CR>
 noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" [%Y-%m-%d]"))<CR>
-noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" [%H:%M:%S]"))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" [%Y-%m-%d %H:%M:%S]"))<CR>
+noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" @%Y-%m-%d"))<CR>
+noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" @%H:%M:%S"))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" @%Y-%m-%d %H:%M:%S"))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
 
 " [json] mappings.
@@ -533,10 +533,11 @@ if s:has_plugin("singleton") && has("clientserver") " {{{
 endif
 " }}}
 
+	" TODO .でのtoggleができなくなるのでコメントアウト.
 if s:has_plugin("tcomment") " {{{
-	let g:tcommentMaps = 0
-	nnoremap <silent>gcc :TComment<CR>
-	vnoremap <silent>gc :TComment<CR>
+	" let g:tcommentMaps = 0
+	" nnoremap <silent>gcc :TComment<CR>
+	" vnoremap <silent>gc :TComment<CR>
 endif
 " }}}
 
@@ -557,10 +558,10 @@ if s:has_plugin("unite") " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
+		nnoremap <buffer><expr> x unite#do_action('start')
+		nnoremap <buffer><expr> m unite#do_action('relative_move')
 		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
-		nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vimfiler'))
+		nnoremap <buffer><expr> v unite#do_action('vimfiler')
 	endfunction
 	augroup vimrc_loading
 		autocmd!

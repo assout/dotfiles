@@ -210,14 +210,14 @@ noremap [space] <Nop>
 nmap [space]o [open]
 nnoremap [open] <Nop>
 " fugitiveで対象とするためpathを解決.
-nnoremap [open]v :execute "vnew " . resolve(expand($MYVIMRC))<CR>
-nnoremap [open]g :execute "vnew " . resolve(expand($MYGVIMRC))<CR>
-nnoremap [open]r :vnew ~/development/dotfiles/_vrapperrc<CR>
-nnoremap [open]b :vnew ~/development/dotfiles/_my_bashrc<CR>
+nnoremap [open]v :execute "edit " . resolve(expand($MYVIMRC))<CR>
+nnoremap [open]g :execute "edit " . resolve(expand($MYGVIMRC))<CR>
+nnoremap [open]r :edit ~/development/dotfiles/_vrapperrc<CR>
+nnoremap [open]b :edit ~/development/dotfiles/_my_bashrc<CR>
 if s:isOfficeWin()
-	nnoremap [open]r :vnew D:\admin\_vrapperrc<CR>
-	nnoremap [open]b :vnew C:\Users\admin\_my_bashrc<CR>
-	nnoremap [open]i :vnew D:\admin\Documents\ipmsg.log<CR>
+	nnoremap [open]r :edit D:\admin\_vrapperrc<CR>
+	nnoremap [open]b :edit C:\Users\admin\_my_bashrc<CR>
+	nnoremap [open]i :edit D:\admin\Documents\ipmsg.log<CR>
 endif
 
 " [insert] mappings.
@@ -249,20 +249,25 @@ endif
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 " }}}2
 
-" window操作. TODO もうチョイ何とかしたい,<C-o>,<C-v>を潰すわけにはいかないので.
+" window操作. TODO もうチョイ何とかしたい, <C-o>,<C-v>を潰すわけにはいかないのでこうしてるんだけどど.
 " refereces [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
+" カーソル移動.
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-nnoremap <C-c> <C-W>c
+" オープンクローズ.
 nnoremap <C-n> <C-W>n
+nnoremap g<C-n> :vnew<CR>
 nnoremap <C-s> <C-W>s
+nnoremap g<C-s> <C-W>v
+nnoremap <C-c> <C-W>c
+nnoremap g<C-o> <C-W>o
+" サイズ変更.
 nnoremap <C-Up> 5<C-W>+
 nnoremap <C-Down> 5<C-W>-
 nnoremap <C-Left> 5<C-W><
 nnoremap <C-Right> 5<C-W>>
-
 " tab操作.
 nnoremap <TAB> gt
 nnoremap <S-TAB> gT
@@ -414,8 +419,6 @@ endif
 " }}}
 
 if s:has_plugin("emmet") " {{{
-	nmap [space]e [emmet]
-	nnoremap [emmet] <Nop>
 	let g:user_emmet_leader_key = '[space]e'
 endif
 " }}}
@@ -533,7 +536,7 @@ if s:has_plugin("singleton") && has("clientserver") " {{{
 endif
 " }}}
 
-	" TODO .でのtoggleができなくなるのでコメントアウト.
+" TODO 「.」でのtoggleができなくなるので一旦無効化を無効化.
 if s:has_plugin("tcomment") " {{{
 	" let g:tcommentMaps = 0
 	" nnoremap <silent>gcc :TComment<CR>
@@ -558,10 +561,20 @@ if s:has_plugin("unite") " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		nnoremap <buffer><expr> x unite#do_action('start')
-		nnoremap <buffer><expr> m unite#do_action('relative_move')
+		" surroundのmappingと被るのでnowait.
+		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
+		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
-		nnoremap <buffer><expr> v unite#do_action('vimfiler')
+		nnoremap <buffer><expr>         V unite#smart_map('V', unite#do_action('vimfiler'))
+		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
+		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
+		nunmap <buffer> <C-h>
+		nunmap <buffer> <C-l>
+		nunmap <buffer> <C-k>
+		nmap   <buffer>   g<C-h>   <Plug>(unite_delete_backward_path)
+		nmap   <buffer>   <C-w>    <Plug>(unite_delete_backward_path)
+		nmap   <buffer>   g<C-l>   <Plug>(unite_redraw)
+		nmap   <buffer>   g<C-k>   <Plug>(unite_print_candidate)
 	endfunction
 	augroup vimrc_loading
 		autocmd!

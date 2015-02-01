@@ -730,4 +730,3 @@ endif
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 " vim:nofoldenable:
-

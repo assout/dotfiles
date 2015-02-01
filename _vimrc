@@ -729,6 +729,5 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
-" test
 " vim:nofoldenable:
 

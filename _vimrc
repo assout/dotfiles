@@ -337,10 +337,10 @@ vnoremap y y'>
 
 " Section; Plug-ins {{{1
 " Setup plug-in runtime path {{{
-if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
+if isdirectory($HOME . '/.vim/bundle/neobundle') " At home
 	filetype plugin indent off
 	if has('vim_starting')
-		set runtimepath+=~/.vim/bundle/neobundle.vim/
+		set runtimepath+=~/.vim/bundle/neobundle/
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
@@ -729,5 +729,6 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
-
+" test
 " vim:nofoldenable:
+

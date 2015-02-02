@@ -16,6 +16,10 @@ set nocompatible
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
+" augroup unbind.
+augroup vimrc
+	autocmd!
+augroup END
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -70,7 +74,6 @@ endfunction
 if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif
-" }}}1
 
 if ! s:isOfficeUnix() " TODO 原因不明だがvimrc読み込み時にエラーとなるため.
 	function! s:formatXml()
@@ -78,10 +81,10 @@ if ! s:isOfficeUnix() " TODO 原因不明だがvimrc読み込み時にエラー�
 	endfunction
 	command! -complete=command FormatXml call <SID>formatXml()
 endif
+" }}}1
 
 " Section; Auto-commands {{{1
-augroup MyAutoGroup
-	autocmd!
+augroup vimrc
 	" DoubleByteSpace highlight.
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
@@ -92,6 +95,11 @@ augroup MyAutoGroup
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
+	" format json.
+	if executable('python')
+		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>
+		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
+	endif
 augroup END
 " }}}1
 
@@ -239,11 +247,6 @@ noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" @%Y-%m-%d"))<CR>
 noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" @%H:%M:%S"))<CR>
 noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" @%Y-%m-%d %H:%M:%S"))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
-
-" [json] mappings.
-if executable('python')
-	xnoremap [space]j :!python -m json.tool<CR>
-endif
 
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -576,8 +579,7 @@ if s:has_plugin("unite") " {{{
 		nmap   <buffer>   g<C-l>   <Plug>(unite_redraw)
 		nmap   <buffer>   g<C-k>   <Plug>(unite_print_candidate)
 	endfunction
-	augroup vimrc_loading
-		autocmd!
+	augroup vimrc
 		autocmd FileType unite call s:unite_my_keymappings()
 	augroup END
 

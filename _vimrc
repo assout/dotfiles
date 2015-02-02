@@ -10,8 +10,12 @@
 " }}}1
 
 " Section; Begin {{{1
-" vi互換性.
-set nocompatible
+" inner encoding(before the scriptencoding)
+if has('gui_running')
+	set encoding=utf-8
+endif
+" before multi byte.
+scriptencoding utf-8
 " load local vimrc.
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
@@ -25,7 +29,7 @@ augroup END
 " Section; Functions and Commands {{{1
 " command実行結果をキャプチャ.
 function! s:capture_cmd_output(cmd)
-	if has("clipboard")
+	if has('clipboard')
 		redir @+>
 	else
 		redir @">
@@ -48,36 +52,37 @@ function! s:openModifiableQF()
 endfunction
 
 function! s:insertPrefix(str) range
-	execute a:firstline . "," . a:lastline . "substitute/^/" . substitute(a:str, '/', '\\/', 'g')
+	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
 function! s:insertSuffix(str) range
-	execute a:firstline . "," . a:lastline . "substitute/$/" . substitute(a:str, '/', '\\/', 'g')
+	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
 function! s:isHomeUnix()
-	return $USER == 'oji' && has('unix')
+	return $USER ==# 'oji' && has('unix')
 endfunction
 
 function! s:isHomeWin()
-	return $USER == 'oji' && has('win32')
+	return $USER ==# 'oji' && has('win32')
 endfunction
 
 function! s:isOfficeUnix()
-	return $USER != 'oji' && has('unix')
+	return $USER !=# 'oji' && has('unix')
 endfunction
 
 function! s:isOfficeWin()
-	return $USER != 'oji' && has('win32')
+	return $USER !=# 'oji' && has('win32')
 endfunction
 
 if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif
 
-if ! s:isOfficeUnix() " TODO 原因不明だがvimrc読み込み時にエラーとなるため.
+if ! s:isOfficeUnix() " TODO 原因不明だがwindowsだとvimrc読み込み時にエラーとなるため.
 	function! s:formatXml()
-		:%s/></>\r</g | filetype indent on | setfiletype xml | normal gg=G
+		" TODO vintで引っかかる.
+		:%substitute/></>\r</g | filetype indent on | setfiletype xml | normal! gg=G
 	endfunction
 	command! -complete=command FormatXml call <SID>formatXml()
 endif
@@ -110,10 +115,6 @@ set nobackup
 set clipboard=unnamed,unnamedplus
 " 差分モードの表示.
 set diffopt+=vertical
-" 内部encoding.
-if has('gui_running')
-	set encoding=utf-8
-endif
 " ソフトタブ.
 set noexpandtab
 " set expandtab
@@ -233,20 +234,20 @@ endif
 " TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
 map [space]i [insert]
 noremap [insert] <Nop>
-noremap <silent> [insert]p :call <SID>insertPrefix(input("input prefix:"))<CR>
-noremap <silent> [insert]f :call <SID>insertPrefix("file://")<CR>
-noremap <silent> [insert]T :call <SID>insertPrefix("TODO ")<CR>
-noremap <silent> [insert]1 :call <SID>insertPrefix("# ")<CR>
-noremap <silent> [insert]2 :call <SID>insertPrefix("## ")<CR>
-noremap <silent> [insert]3 :call <SID>insertPrefix("### ")<CR>
-noremap <silent> [insert]4 :call <SID>insertPrefix("#### ")<CR>
-noremap <silent> [insert]* :call <SID>insertPrefix("* ")<CR>
-noremap <silent> [insert]> :call <SID>insertPrefix("> ")<CR>
-noremap <silent> [insert]s :call <SID>insertSuffix(input("input suffix:"))<CR>
-noremap <silent> [insert]d :call <SID>insertSuffix(strftime(" @%Y-%m-%d"))<CR>
-noremap <silent> [insert]t :call <SID>insertSuffix(strftime(" @%H:%M:%S"))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(" @%Y-%m-%d %H:%M:%S"))<CR>
-noremap <silent> [insert]l :call <SID>insertSuffix("  ")<CR>
+noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
+noremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
+noremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
+noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
+noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
+noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
+noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
+noremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
+noremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
+noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
+noremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
+noremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
+noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -410,28 +411,28 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-if s:has_plugin("alignta") " {{{
+if s:has_plugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
 endif
 " }}}
 
-if s:has_plugin("codic") " {{{
+if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic<CR>
 	nnoremap [space]C :<C-u>Codic<Space>
 endif
 " }}}
 
-if s:has_plugin("emmet") " {{{
+if s:has_plugin('emmet') " {{{
 	let g:user_emmet_leader_key = '[space]e'
 endif
 " }}}
 
-if s:has_plugin("excitetranslate") " {{{
+if s:has_plugin('excitetranslate') " {{{
 	noremap [space]E :<C-u>ExciteTranslate<CR>
 endif
 " }}}
 
-if s:has_plugin("hateblo") " {{{
+if s:has_plugin('hateblo') " {{{
 	" api_keyはvimrc.localから設定.
 	let g:hateblo_vim = {
 				\ 'user': 'assout',
@@ -453,8 +454,8 @@ if s:has_plugin("hateblo") " {{{
 endif
 " }}}
 
-if s:has_plugin("memolist") " {{{
-	let g:memolist_memo_suffix = "md"
+if s:has_plugin('memolist') " {{{
+	let g:memolist_memo_suffix = 'md'
 	if s:isHomeUnix()
 		let g:memolist_path = '~/Dropbox/memolist'
 		let g:memolist_template_dir_path = '~/Dropbox/memolist'
@@ -469,9 +470,9 @@ if s:has_plugin("memolist") " {{{
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
 	if s:has_plugin('unite')
-		let g:unite_source_alias_aliases = { "memolist" : { "source" : "file", "args" : g:memolist_path } }
-		call unite#custom_source('memolist', 'sorters', ["sorter_ftime", "sorter_reverse"])
-		call unite#custom_source('memolist', 'matchers', ["converter_tail_abbr", "matcher_default"])
+		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
+		call unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+		call unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default'])
 		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>
@@ -479,7 +480,7 @@ if s:has_plugin("memolist") " {{{
 endif
 " }}}
 
-if s:has_plugin("neocomplete") " {{{
+if s:has_plugin('neocomplete') " {{{
 	let g:neocomplete#enable_at_startup = 1
 	let g:neocomplete#enable_ignore_case = 1
 	let g:neocomplete#enable_smart_case = 1
@@ -507,7 +508,7 @@ endif
 " endif
 " " }}}
 
-if s:has_plugin("open-browser") " {{{
+if s:has_plugin('open-browser') " {{{
 	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
 	if s:isHomeUnix()
 		let g:netrw_nogx = 1 " disable netrw's gx mapping.
@@ -517,37 +518,37 @@ if s:has_plugin("open-browser") " {{{
 endif
 " }}}
 
-if s:has_plugin("previm") " {{{
+if s:has_plugin('previm') " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
 endif
 " }}}
 
-if s:has_plugin("quickrun") " {{{
+if s:has_plugin('quickrun') " {{{
 	nnoremap [space]q :<C-u>QuickRun<CR>
 	nnoremap [space]Q :<C-u>QuickRun<Space>
 endif
 " }}}
 
-if s:has_plugin("restart.vim") " {{{
+if s:has_plugin('restart.vim') " {{{
 	command! -bar RestartWithSession
 				\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif
 " }}}
 
-if s:has_plugin("singleton") && has("clientserver") " {{{
+if s:has_plugin('singleton') && has('clientserver') " {{{
 	call singleton#enable()
 endif
 " }}}
 
 " TODO 「.」でのtoggleができなくなるので一旦無効化を無効化.
-if s:has_plugin("tcomment") " {{{
+if s:has_plugin('tcomment') " {{{
 	" let g:tcommentMaps = 0
 	" nnoremap <silent>gcc :TComment<CR>
 	" vnoremap <silent>gc :TComment<CR>
 endif
 " }}}
 
-if s:has_plugin("unite") " {{{
+if s:has_plugin('unite') " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
@@ -588,7 +589,7 @@ if s:has_plugin("unite") " {{{
 	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call unite#custom#source('bookmark', 'sorters', ["sorter_ftime", "sorter_reverse"])
+	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 
 	nmap [space]u [unite]
 	nnoremap [unite] <Nop>
@@ -612,7 +613,7 @@ if s:has_plugin("unite") " {{{
 	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
 	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank<CR>
 
-	if s:has_plugin("neomru") " {{{
+	if s:has_plugin('neomru') " {{{
 		let g:neomru#filename_format = ''
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 50
@@ -624,7 +625,7 @@ if s:has_plugin("unite") " {{{
 	endif
 	" }}}
 
-	if s:has_plugin("unite-todo") " {{{
+	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		if s:isHomeUnix()
 			let g:unite_todo_data_directory = '~/Dropbox'
@@ -633,11 +634,11 @@ if s:has_plugin("unite") " {{{
 		endif
 
 		function! s:todo_grep()
-			let word = input("TodoGrep word: ")
-			if word == ''
+			let word = input('TodoGrep word: ')
+			if empty(word)
 				return
 			endif
-			execute ":vimgrep /" . l:word . "/ " . g:unite_todo_data_directory . "/todo/note/*"
+			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
 		" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
@@ -655,7 +656,7 @@ if s:has_plugin("unite") " {{{
 endif
 " }}}
 
-if s:has_plugin("vimfiler") " {{{
+if s:has_plugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
@@ -670,14 +671,14 @@ if s:has_plugin("vimfiler") " {{{
 endif
 " }}}
 
-if s:has_plugin("vim-operator-surround") " {{{
+if s:has_plugin('vim-operator-surround') " {{{
 	map <silent>sa <Plug>(operator-surround-append)
 	map <silent>sd <Plug>(operator-surround-delete)
 	map <silent>sr <Plug>(operator-surround-replace)
 endif
 " }}}
 
-if s:has_plugin("vim-ref") " {{{
+if s:has_plugin('vim-ref') " {{{
 	" webdictサイトの設定.
 	let g:ref_source_webdict_sites = {
 				\ 'je': {
@@ -695,13 +696,13 @@ if s:has_plugin("vim-ref") " {{{
 
 	" 出力に対するフィルタ。最初の数行を削除.
 	function! g:ref_source_webdict_sites.je.filter(output)
-		return join(split(a:output, "\n")[15 :], "\n")
+		return join(split(a:output, '\n')[15 :], '\n')
 	endfunction
 	function! g:ref_source_webdict_sites.ej.filter(output)
-		return join(split(a:output, "\n")[15 :], "\n")
+		return join(split(a:output, '\n')[15 :], '\n')
 	endfunction
 	function! g:ref_source_webdict_sites.wiki.filter(output)
-		return join(split(a:output, "\n")[17 :], "\n")
+		return join(split(a:output, '\n')[17 :], '\n')
 	endfunction
 
 	nmap [space]R [vim-ref]
@@ -710,7 +711,7 @@ if s:has_plugin("vim-ref") " {{{
 endif
 " }}}
 
-if s:has_plugin("vim-textobj-entire") " {{{
+if s:has_plugin('vim-textobj-entire') " {{{
 	nmap yae yae<C-o>
 	nmap yie yie<C-o>
 	nmap =ae =ae<C-o>

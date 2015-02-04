@@ -211,27 +211,31 @@ let g:mapleader = '[space]d'
 
 " Section; Key-mappings {{{1
 " Prefix key mappings {{{2
-" vimfilerとかと競合防ぐため.
+" vimfilerとかと競合防ぐため(詳細忘れた).
 map <Space> [space]
 noremap [space] <Nop>
 
-" [open] mappings.
-nmap [space]o [open]
-nnoremap [open] <Nop>
-" fugitiveで対象とするためpathを解決.
-nnoremap [open]v :execute "edit " . resolve(expand($MYVIMRC))<CR>
-nnoremap [open]g :execute "edit " . resolve(expand($MYGVIMRC))<CR>
-nnoremap [open]r :edit ~/development/dotfiles/_vrapperrc<CR>
-nnoremap [open]b :edit ~/development/dotfiles/_my_bashrc<CR>
+" [edit] mappings.
+" 解決しなくても開けるが、fugitiveで対象とするため.
+" スコープがスクリプトローカルだとmap <expr>のとき参照できなかった。
+let g:path_vimrc = resolve(expand($MYVIMRC))
+
+nmap [space]e [edit]
+nnoremap [edit] <Nop>
+" TODO 変数展開したいだけなのにまどろっこしい.
+nnoremap <expr> [edit]v ':edit '   . g:path_vimrc . '<CR>'
+nnoremap <expr> [edit]V ':vsplit ' . g:path_vimrc . '<CR>'
 if s:isOfficeWin()
-	nnoremap [open]r :edit D:\admin\_vrapperrc<CR>
-	nnoremap [open]b :edit C:\Users\admin\_my_bashrc<CR>
-	nnoremap [open]i :edit D:\admin\Documents\ipmsg.log<CR>
+	" TODO $HOMEからの相対にする.
+	let g:path_imsglog = 'D:\admin\Documents\ipmsg.log'
+	nnoremap <expr> [edit]i ':edit '  . g:path_imsglog . '<CR>'
+	nnoremap <expr> [edit]I ':vsplit' . g:path_imsglog . '<CR>'
 endif
 
 " [insert] mappings.
 " caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 " TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
+" TODO prefix入力後挿入モードにしたい？
 map [space]i [insert]
 noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
@@ -341,10 +345,10 @@ vnoremap y y'>
 
 " Section; Plug-ins {{{1
 " Setup plug-in runtime path {{{
-if isdirectory($HOME . '/.vim/bundle/neobundle') " At home
+if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	filetype plugin indent off
 	if has('vim_starting')
-		set runtimepath+=~/.vim/bundle/neobundle/
+		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
@@ -364,7 +368,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle') " At home
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるため。本家へもpull reqでてるので、取り込まれたら見先を変える。
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもpull reqでてるので、取り込まれたら見先を変える。
 	NeoBundle 'rhysd/vim-operator-surround'
 	NeoBundle 'schickling/vim-bufonly'
 	if has('lua')
@@ -423,12 +427,12 @@ endif
 " }}}
 
 if s:has_plugin('emmet') " {{{
-	let g:user_emmet_leader_key = '[space]e'
+	let g:user_emmet_leader_key = '[space]E'
 endif
 " }}}
 
 if s:has_plugin('excitetranslate') " {{{
-	noremap [space]E :<C-u>ExciteTranslate<CR>
+	noremap [space]T :<C-u>ExciteTranslate<CR>
 endif
 " }}}
 
@@ -733,3 +737,4 @@ endif
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 " vim:nofoldenable:
+

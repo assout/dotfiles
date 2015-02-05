@@ -376,6 +376,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
+	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/webapi-vim'
@@ -447,6 +448,10 @@ if s:has_plugin('excitetranslate') " {{{
 	noremap [space]T :<C-u>ExciteTranslate<CR>
 endif
 " }}}
+
+if s:has_plugin('gista') " {{{
+	let g:gista#github_user = 'assout'
+endif " }}}
 
 if s:has_plugin('hateblo') " {{{
 	" api_keyはvimrc.localから設定.

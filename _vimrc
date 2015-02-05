@@ -1,3 +1,12 @@
+" Principles {{{1
+" TODO ちゃんと書く。
+" * デフォルトに影響ないようにする(e.g. デフォルト環境での操作時に混乱しないように;と:の入れ替えとかはしない。)
+" * portableにする(office,home,vrapper)
+"
+" 以下全体TODO
+" * [がキーマップしてしまってるので、insertモードで入力時に違和感. -> [hoge]マップをスクリプトローカルにできればよい?
+" }}}1
+
 " Index {{{1
 " * Begin.
 " * Functions and Commands.
@@ -115,8 +124,9 @@ set nobackup
 set clipboard=unnamed,unnamedplus
 " 差分モードの表示.
 set diffopt+=vertical
-" ソフトタブ.
+" タブ方式.
 set noexpandtab
+" ソフトタブに切り替えられるようにコメントアウトしとく.
 " set expandtab
 " ファイルエンコーディング.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
@@ -156,7 +166,7 @@ set number
 set nrformats=
 " カーソル行の上下に表示する行数.
 set scrolloff=5
-" フォーマット時などの幅.
+" フォーマット時などのインデント幅.
 " set shiftwidth=2
 set shiftwidth=4
 " 常にタブラベルを表示する.
@@ -215,21 +225,20 @@ let g:mapleader = '[space]d'
 map <Space> [space]
 noremap [space] <Nop>
 
-" [edit] mappings.
+" [open] mappings.
 " 解決しなくても開けるが、fugitiveで対象とするため.
 " スコープがスクリプトローカルだとmap <expr>のとき参照できなかった。
 let g:path_vimrc = resolve(expand($MYVIMRC))
 
-nmap [space]e [edit]
-nnoremap [edit] <Nop>
+" TODO prefix key検討.
+nmap [space]o [open]
+nnoremap [open] <Nop>
 " TODO 変数展開したいだけなのにまどろっこしい.
-nnoremap <expr> [edit]v ':edit '   . g:path_vimrc . '<CR>'
-nnoremap <expr> [edit]V ':vsplit ' . g:path_vimrc . '<CR>'
+" TODO executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
+nnoremap [open]v       :<C-u>execute ':edit '   . g:path_vimrc<CR>
 if s:isOfficeWin()
-	" TODO $HOMEからの相対にする.
 	let g:path_imsglog = 'D:\admin\Documents\ipmsg.log'
-	nnoremap <expr> [edit]i ':edit '  . g:path_imsglog . '<CR>'
-	nnoremap <expr> [edit]I ':vsplit' . g:path_imsglog . '<CR>'
+	nnoremap [open]i       :<C-u>execute ':edit '   . g:path_imsglog<CR>
 endif
 
 " [insert] mappings.
@@ -266,12 +275,14 @@ nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 " オープンクローズ.
 nnoremap <C-n> <C-W>n
+" TODO ほんとはC-S-Nとかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
 nnoremap g<C-n> :vnew<CR>
 nnoremap <C-s> <C-W>s
 nnoremap g<C-s> <C-W>v
 nnoremap <C-c> <C-W>c
 nnoremap g<C-o> <C-W>o
 " サイズ変更.
+" TODO できればC-+,C--,C-<,C->を当てたいがなんかめんどいっぽい.
 nnoremap <C-Up> 5<C-W>+
 nnoremap <C-Down> 5<C-W>-
 nnoremap <C-Left> 5<C-W><
@@ -357,6 +368,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
+	" TODO windowsでmigemoれない.
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-textobj-entire'
@@ -573,7 +585,7 @@ if s:has_plugin('unite') " {{{
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
-		nnoremap <buffer><expr>         V unite#smart_map('V', unite#do_action('vimfiler'))
+		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
 		nunmap <buffer> <C-h>
@@ -664,7 +676,7 @@ if s:has_plugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0
 	let g:vimfiler_as_default_explorer = 1
 
-	nmap [space]v [vimfiler]
+	nmap [space]f [vimfiler]
 	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
@@ -676,9 +688,9 @@ endif
 " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{
-	map <silent>sa <Plug>(operator-surround-append)
-	map <silent>sd <Plug>(operator-surround-delete)
-	map <silent>sr <Plug>(operator-surround-replace)
+	map <silent> sa <Plug>(operator-surround-append)
+	map <silent> sd <Plug>(operator-surround-delete)
+	map <silent> sr <Plug>(operator-surround-replace)
 endif
 " }}}
 

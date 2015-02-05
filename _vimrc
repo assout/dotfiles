@@ -276,20 +276,20 @@ nnoremap <C-l> <C-W>l
 " オープンクローズ.
 nnoremap <C-n> <C-W>n
 " TODO ほんとはC-S-Nとかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
-nnoremap g<C-n> :vnew<CR>
-nnoremap <C-s> <C-W>s
-nnoremap g<C-s> <C-W>v
-nnoremap <C-c> <C-W>c
-nnoremap g<C-o> <C-W>o
+nnoremap   g<C-n>   :vnew<CR>
+nnoremap   <C-s>    <C-W>s
+nnoremap   g<C-s>   <C-W>v
+nnoremap   <C-c>    <C-W>c
+nnoremap   g<C-o>   <C-W>o
 " サイズ変更.
-" TODO できればC-+,C--,C-<,C->を当てたいがなんかめんどいっぽい.
-nnoremap <C-Up> 5<C-W>+
-nnoremap <C-Down> 5<C-W>-
-nnoremap <C-Left> 5<C-W><
-nnoremap <C-Right> 5<C-W>>
+" TODO できれば<C-+>,<C-->,<C-<>,<C->>を当てたいがなんかめんどいっぽい.
+nnoremap   <C-Up>      5<C-W>+
+nnoremap   <C-Down>    5<C-W>-
+nnoremap   <C-Left>    5<C-W><
+nnoremap   <C-Right>   5<C-W>>
 " tab操作.
-nnoremap <TAB> gt
-nnoremap <S-TAB> gT
+nnoremap   <TAB>     gt
+nnoremap   <S-TAB>   gT
 " 横スクロール.
 nnoremap [space]h zH
 nnoremap [space]l zL
@@ -447,6 +447,11 @@ endif " }}}
 
 if s:has_plugin('gista') " {{{
 	let g:gista#github_user = 'assout'
+	nmap [space]g [gista]
+	nnoremap [gista] <Nop>
+	nnoremap [gista]l    :<C-u>Gista --list<CR>
+	nnoremap [gista]c    :<C-u>Gista<CR>
+	nnoremap [gista]<CR> :<C-u>Gista<CR>
 endif " }}}
 
 if s:has_plugin('hateblo') " {{{
@@ -652,12 +657,12 @@ if s:has_plugin('unite') " {{{
 		map [space]t [unite-todo]
 		noremap [unite-todo] <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap [unite-todo]a :UniteTodoAddSimple<CR>
-		noremap [unite-todo]t :UniteTodoAddSimple -tag<CR>
-		noremap [unite-todo]m :UniteTodoAddSimple -memo<CR>
-		noremap [unite-todo]l :Unite todo:undone -buffer-name=todo<CR>
-		noremap [unite-todo]L :Unite todo -buffer-name=todo<CR>
-		noremap [unite-todo]g :call <SID>todo_grep()<CR>
+		noremap [unite-todo]a    :UniteTodoAddSimple<CR>
+		noremap [unite-todo]t    :UniteTodoAddSimple -tag<CR>
+		noremap [unite-todo]m    :UniteTodoAddSimple -memo<CR>
+		noremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
+		noremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
+		noremap [unite-todo]g    :call <SID>todo_grep()<CR>
 	endif " }}}
 endif " }}}
 
@@ -668,11 +673,11 @@ if s:has_plugin('vimfiler') " {{{
 	nmap [space]f [vimfiler]
 	nnoremap [vimfiler] <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
-	nnoremap [vimfiler]b :<C-u>VimFilerBufferDir<CR>
-	nnoremap [vimfiler]c :<C-u>VimFilerCurrentDir<CR>
-	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
-	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
-	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
+	nnoremap [vimfiler]b    :<C-u>VimFilerBufferDir<CR>
+	nnoremap [vimfiler]c    :<C-u>VimFilerCurrentDir<CR>
+	nnoremap [vimfiler]d    :<C-u>VimFilerDouble<CR>
+	nnoremap [vimfiler]s    :<C-u>VimFilerSplit<CR>
+	nnoremap [vimfiler]t    :<C-u>VimFilerTab<CR>
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{

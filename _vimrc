@@ -430,24 +430,20 @@ endif
 
 if s:has_plugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic<CR>
 	nnoremap [space]C :<C-u>Codic<Space>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('emmet') " {{{
 	let g:user_emmet_leader_key = '[space]E'
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
 	noremap [space]T :<C-u>ExciteTranslate<CR>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('gista') " {{{
 	let g:gista#github_user = 'assout'
@@ -472,8 +468,7 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
 	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
@@ -498,15 +493,13 @@ if s:has_plugin('memolist') " {{{
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>
 	endif
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('neocomplete') " {{{
 	let g:neocomplete#enable_at_startup = 1
 	let g:neocomplete#enable_ignore_case = 1
 	let g:neocomplete#enable_smart_case = 1
-endif
-" }}}
+endif " }}}
 
 " if s:has_plugin("neosnippet") " {{{
 " " Plugin key-mappings.
@@ -536,38 +529,32 @@ if s:has_plugin('open-browser') " {{{
 		nmap gx <Plug>(openbrowser-smart-search)
 		vmap gx <Plug>(openbrowser-smart-search)
 	endif
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('previm') " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('quickrun') " {{{
 	nnoremap [space]q :<C-u>QuickRun<CR>
 	nnoremap [space]Q :<C-u>QuickRun<Space>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('restart.vim') " {{{
 	command! -bar RestartWithSession
 				\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('singleton') && has('clientserver') " {{{
 	call singleton#enable()
-endif
-" }}}
+endif " }}}
 
 " TODO 「.」でのtoggleができなくなるので一旦無効化を無効化.
 if s:has_plugin('tcomment') " {{{
 	" let g:tcommentMaps = 0
 	" nnoremap <silent>gcc :TComment<CR>
 	" vnoremap <silent>gc :TComment<CR>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('unite') " {{{
 	let g:unite_enable_ignore_case = 1
@@ -643,8 +630,7 @@ if s:has_plugin('unite') " {{{
 		nmap [unite]n [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
-	endif
-	" }}}
+	endif " }}}
 
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
@@ -672,10 +658,8 @@ if s:has_plugin('unite') " {{{
 		noremap [unite-todo]l :Unite todo:undone -buffer-name=todo<CR>
 		noremap [unite-todo]L :Unite todo -buffer-name=todo<CR>
 		noremap [unite-todo]g :call <SID>todo_grep()<CR>
-	endif
-	" }}}
-endif
-" }}}
+	endif " }}}
+endif " }}}
 
 if s:has_plugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0
@@ -689,15 +673,13 @@ if s:has_plugin('vimfiler') " {{{
 	nnoremap [vimfiler]d :<C-u>VimFilerDouble<CR>
 	nnoremap [vimfiler]s :<C-u>VimFilerSplit<CR>
 	nnoremap [vimfiler]t :<C-u>VimFilerTab<CR>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sa <Plug>(operator-surround-append)
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('vim-ref') " {{{
 	" webdictサイトの設定.
@@ -729,16 +711,14 @@ if s:has_plugin('vim-ref') " {{{
 	nmap [space]R [vim-ref]
 	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
-endif
-" }}}
+endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{
 	nmap yae yae<C-o>
 	nmap yie yie<C-o>
 	nmap =ae =ae<C-o>
 	nmap =ie =ie<C-o>
-endif
-" }}}
+endif " }}}
 " }}}1
 
 " Section; Other Commands {{{1

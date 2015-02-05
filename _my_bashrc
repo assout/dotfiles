@@ -24,3 +24,6 @@ fi
 # User specific aliases and functions.
 stty stop undef
 
+if [ ${USER} = "oji" ] ; then
+	mkdir -p /tmp/$(date +%Y%m%d)
+fi

@@ -25,5 +25,5 @@ fi
 stty stop undef
 
 if [ ${USER} = "oji" ] ; then
-	mkdir -p /tmp/$(date +%Y%m%d)
+	mkdir -p /backup/$(date +%Y%m%d)
 fi

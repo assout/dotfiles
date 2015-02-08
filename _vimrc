@@ -362,6 +362,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
+	" TODO surround pluginの推奨プラグイン入れる.
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'Shougo/neobundle.vim'
 	NeoBundle 'assout/unite-todo'
@@ -473,6 +474,29 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
 	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
+endif " }}}
+
+if s:has_plugin('im_control') " {{{
+	if s:isHomeUnix()
+		" 「日本語入力固定モード」の動作モード
+		let IM_CtrlMode = 1
+		" 「日本語入力固定モード」切替キー
+		inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
+
+		" IBus 1.5以降
+		function! IMCtrl(cmd)
+			let cmd = a:cmd
+			if cmd == 'On'
+				let res = system('ibus engine "mozc-jp"')
+				let rez = system('xmodmap ~/.Xmodmap')
+			elseif cmd == 'Off'
+				let res = system('ibus engine "xkb:jp::jpn"')
+				let rez = system('xmodmap ~/.Xmodmap')
+				" let res = system('ibus engine "xkb:us::eng"')
+			endif
+			return ''
+		endfunction
+	endif
 endif " }}}
 
 if s:has_plugin('memolist') " {{{

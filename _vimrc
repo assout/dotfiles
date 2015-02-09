@@ -478,21 +478,19 @@ endif " }}}
 
 if s:has_plugin('im_control') " {{{
 	if s:isHomeUnix()
-		" 「日本語入力固定モード」の動作モード
-		let IM_CtrlMode = 1
-		" 「日本語入力固定モード」切替キー
-		inoremap <silent> <C-j> <C-r>=IMState('FixMode')<CR>
-
-		" IBus 1.5以降
+		""""""""""""""""""""""""""""""
+		" 日本語入力固定モードの制御関数(デフォルト)
+		""""""""""""""""""""""""""""""
 		function! IMCtrl(cmd)
 			let cmd = a:cmd
 			if cmd == 'On'
-				let res = system('ibus engine "mozc-jp"')
-				let rez = system('xmodmap ~/.Xmodmap')
+				" let res = system('xvkbd -text "\[Control]\[Shift]\[Insert]" > /dev/null 2>&1')
+				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			elseif cmd == 'Off'
-				let res = system('ibus engine "xkb:jp::jpn"')
-				let rez = system('xmodmap ~/.Xmodmap')
-				" let res = system('ibus engine "xkb:us::eng"')
+				" let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
+				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
+			elseif cmd == 'Toggle'
+				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			endif
 			return ''
 		endfunction

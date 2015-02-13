@@ -362,10 +362,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
-	" TODO surround pluginの推奨プラグイン入れる.
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'Shougo/neobundle.vim'
 	NeoBundle 'assout/unite-todo'
+	NeoBundle 'emonkak/vim-operator-comment'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
@@ -373,6 +373,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-textobj-entire'
+	NeoBundle 'kana/vim-textobj-function'
+	NeoBundle 'kana/vim-textobj-indent'
+	NeoBundle 'kana/vim-textobj-line'
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
@@ -383,7 +386,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
 	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもpull reqでてるので、取り込まれたら見先を変える。
-	NeoBundle 'rhysd/vim-operator-surround'
+	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
+	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'schickling/vim-bufonly'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
@@ -406,10 +410,11 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-singleton'
-	NeoBundle 'tomtom/tcomment_vim'
+	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'tyru/open-browser.vim'
+	NeoBundle 'tyru/operator-camelize.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
 
@@ -481,14 +486,13 @@ if s:has_plugin('im_control') " {{{
 		""""""""""""""""""""""""""""""
 		" 日本語入力固定モードの制御関数(デフォルト)
 		""""""""""""""""""""""""""""""
+		let IM_CtrlMode = 1
 		function! IMCtrl(cmd)
 			let cmd = a:cmd
 			if cmd == 'On'
-				" let res = system('xvkbd -text "\[Control]\[Shift]\[Insert]" > /dev/null 2>&1')
-				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
+				let res = system('xvkbd -text "\[Control]\[Shift]\[Insert]" > /dev/null 2>&1')
 			elseif cmd == 'Off'
-				" let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
-				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
+				let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
 			elseif cmd == 'Toggle'
 				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			endif
@@ -558,6 +562,11 @@ if s:has_plugin('open-browser') " {{{
 	endif
 endif " }}}
 
+if s:has_plugin('open-browser') " {{{
+	" TODO
+	" omap [space]c <Plug>(operator-camelize-toggle)
+endif " }}}
+
 if s:has_plugin('previm') " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
 endif " }}}
@@ -576,11 +585,13 @@ if s:has_plugin('singleton') && has('clientserver') " {{{
 	call singleton#enable()
 endif " }}}
 
-" TODO 「.」でのtoggleができなくなるので一旦無効化を無効化.
-if s:has_plugin('tcomment') " {{{
-	" let g:tcommentMaps = 0
-	" nnoremap <silent>gcc :TComment<CR>
-	" vnoremap <silent>gc :TComment<CR>
+if s:has_plugin('textobj-function') " {{{
+	" text-obj-between用にfを退避.
+	let g:textobj_function_no_default_key_mappings = 1
+	omap iF <Plug>(textobj-function-i)
+	omap aF <Plug>(textobj-function-a)
+	vmap iF <Plug>(textobj-function-i)
+	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
 if s:has_plugin('unite') " {{{
@@ -706,6 +717,19 @@ if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sa <Plug>(operator-surround-append)
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)
+
+	" if you use vim-textobj-anyblock
+	nmap <silent>sdb <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+	nmap <silent>srb <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+
+	" if you use vim-textobj-between
+	nmap <silent>sdf <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+	nmap <silent>srf <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
+
+	" if you use vim-textobj-line"
+	nmap <silent>sal <Plug>(operator-surround-append)<Plug>(textobj-line-a)
+	nmap <silent>sdl <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
+	nmap <silent>srl <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 endif " }}}
 
 if s:has_plugin('vim-ref') " {{{

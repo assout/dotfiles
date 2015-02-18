@@ -490,11 +490,11 @@ if s:has_plugin('im_control') " {{{
 		let IM_CtrlMode = 1
 		function! IMCtrl(cmd)
 			let cmd = a:cmd
-			if cmd == 'On'
+			if cmd ==? 'On'
 				let res = system('xvkbd -text "\[Control]\[Shift]\[Insert]" > /dev/null 2>&1')
-			elseif cmd == 'Off'
+			elseif cmd ==? 'Off'
 				let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
-			elseif cmd == 'Toggle'
+			elseif cmd ==? 'Toggle'
 				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			endif
 			return ''

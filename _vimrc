@@ -568,17 +568,6 @@ if s:has_plugin('singleton') && has('clientserver') " {{{
 	call singleton#enable()
 endif " }}}
 
-if s:has_plugin('textobj-function') " {{{
-	" text-obj-between用にf -> Fに退避.
-	" TODO vrapperとあわせたいけど(fがfunctionなので).
-	" TODO windowsで効かない(mappingはされてるっぽい)
-	let g:textobj_function_no_default_key_mappings = 1
-	omap iF <Plug>(textobj-function-i)
-	omap aF <Plug>(textobj-function-a)
-	vmap iF <Plug>(textobj-function-i)
-	vmap aF <Plug>(textobj-function-a)
-endif " }}}
-
 if s:has_plugin('unite') " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
@@ -760,6 +749,17 @@ if s:has_plugin('vim-textobj-entire') " {{{
 	nmap yie yie<C-o>
 	nmap =ae =ae<C-o>
 	nmap =ie =ie<C-o>
+endif " }}}
+
+if s:has_plugin('vim-textobj-function') " {{{
+	" text-obj-between用にf -> Fに退避.
+	" TODO vrapperとあわせたいけど(fがfunctionなので).
+	" TODO windowsで効かない(mappingはされてるっぽい)
+	let g:textobj_function_no_default_key_mappings = 1
+	omap iF <Plug>(textobj-function-i)
+	omap aF <Plug>(textobj-function-a)
+	vmap iF <Plug>(textobj-function-i)
+	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 " }}}1
 

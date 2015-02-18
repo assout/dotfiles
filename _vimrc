@@ -2,9 +2,6 @@
 " TODO ちゃんと書く。
 " * デフォルトに影響ないようにする(e.g. デフォルト環境での操作時に混乱しないように;と:の入れ替えとかはしない。)
 " * portableにする(office,home,vrapper)
-"
-" 以下全体TODO
-" * [がキーマップしてしまってるので、insertモードで入力時に違和感. -> [hoge]マップをスクリプトローカルにできればよい?
 " }}}1
 
 " Index {{{1
@@ -46,7 +43,8 @@ function! s:capture_cmd_output(cmd)
 	execute a:cmd
 	redir END
 endfunction
-command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
+" silent で画面描画なし
+command! -nargs=1 -complete=command Capture silent call <SID>capture_cmd_output(<q-args>)
 
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
@@ -234,7 +232,7 @@ let g:path_vimrc = resolve(expand($MYVIMRC))
 nmap [space]o [open]
 nnoremap [open] <Nop>
 " TODO 変数展開したいだけなのにまどろっこしい.
-" TODO executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
+" caution! executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
 nnoremap [open]v       :<C-u>execute ':edit '   . g:path_vimrc<CR>
 if s:isOfficeWin()
 	let g:path_imsglog = 'D:\admin\Documents\ipmsg.log'
@@ -260,6 +258,7 @@ noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
 noremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
 noremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
 noremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
+noremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
 noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 
 " [reload] mappings.
@@ -363,15 +362,16 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
-	NeoBundle 'Shougo/neobundle.vim'
 	NeoBundle 'assout/unite-todo'
-	NeoBundle 'emonkak/vim-operator-comment'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
+	" TODO windowsで,wでのfowardが効かない(mappingはされてるっぽい)
+	NeoBundle 'h1mesuke/textobj-wiw'
 	NeoBundle 'h1mesuke/vim-alignta'
 	" TODO windowsでmigemoれない.
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
+	NeoBundle 'kana/vim-operator-replace'
 	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kana/vim-textobj-function'
 	NeoBundle 'kana/vim-textobj-indent'
@@ -389,10 +389,9 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
-		" NeoBundle 'Shougo/neosnippet'
-		" NeoBundle 'Shougo/neosnippet-snippets'
 	endif
 	NeoBundle 'Shougo/neomru.vim'
 	NeoBundle 'Shougo/unite-outline'
@@ -411,6 +410,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
+	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'tyru/open-browser.vim'
@@ -441,10 +441,6 @@ endif " }}}
 if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic<CR>
 	nnoremap [space]C :<C-u>Codic<Space>
-endif " }}}
-
-if s:has_plugin('emmet') " {{{
-	let g:user_emmet_leader_key = '[space]E'
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
@@ -532,27 +528,6 @@ if s:has_plugin('neocomplete') " {{{
 	let g:neocomplete#enable_smart_case = 1
 endif " }}}
 
-" if s:has_plugin("neosnippet") " {{{
-" " Plugin key-mappings.
-" imap <C-k> <Pug>(neosnippet_expand_or_jump)
-" smap <C-k> <Plug>(neosnippet_expand_or_jump)
-" xmap <C-k> <Plug>(neosnippet_expand_target)
-" xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
-"
-" " SuperTab like snippets' behavior.
-" imap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-" smap <expr><TAB> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"
-" " For snippet_complete marker.
-" if has('conceal')
-" set conceallevel=2 concealcursor=i
-" endif
-"
-" " Enable snipMate compatibility feature.
-" let g:neosnippet#enable_snipmate_compatibility = 1
-" endif
-" " }}}
-
 if s:has_plugin('open-browser') " {{{
 	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
 	if s:isHomeUnix()
@@ -562,9 +537,12 @@ if s:has_plugin('open-browser') " {{{
 	endif
 endif " }}}
 
-if s:has_plugin('open-browser') " {{{
-	" TODO
-	" omap [space]c <Plug>(operator-camelize-toggle)
+if s:has_plugin('operator-camelize') " {{{
+	map [space]ca <Plug>(operator-camelize)
+endif " }}}
+
+if s:has_plugin('operator-replace') " {{{
+	map R <Plug>(operator-replace)
 endif " }}}
 
 if s:has_plugin('previm') " {{{
@@ -577,16 +555,18 @@ if s:has_plugin('quickrun') " {{{
 endif " }}}
 
 if s:has_plugin('restart.vim') " {{{
-	command! -bar RestartWithSession
-				\ let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
+	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
 
 if s:has_plugin('singleton') && has('clientserver') " {{{
+	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
 endif " }}}
 
 if s:has_plugin('textobj-function') " {{{
-	" text-obj-between用にfを退避.
+	" text-obj-between用にf -> Fに退避.
+	" TODO vrapperとあわせたいけど(fがfunctionなので).
+	" TODO windowsで効かない(mappingはされてるっぽい)
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)
 	omap aF <Plug>(textobj-function-a)
@@ -719,10 +699,12 @@ if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sr <Plug>(operator-surround-replace)
 
 	" if you use vim-textobj-anyblock
+	nmap <silent>sab <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
 	nmap <silent>sdb <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
 	nmap <silent>srb <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 
 	" if you use vim-textobj-between
+	nmap <silent>saf <Plug>(operator-surround-append)<Plug>(textobj-between-a)
 	nmap <silent>sdf <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
 	nmap <silent>srf <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 

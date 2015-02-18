@@ -112,6 +112,10 @@ augroup vimrc
 		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>
 		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
 	endif
+	" Yaml(caution!pluginの設定だけだとたまにハードタブのままになっちゃうので)
+	" TODO FileTypeごとにわけなくてよい？
+	autocmd FileType yaml setlocal sw=2 sts=2 ts=2 et
+	autocmd FileType ansible setlocal sw=2 sts=2 ts=2 et
 augroup END
 " }}}1
 
@@ -363,9 +367,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'assout/unite-todo'
+	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim'
-	" TODO windowsで,wでのfowardが効かない(mappingはされてるっぽい)
+	" TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
 	NeoBundle 'h1mesuke/textobj-wiw'
 	NeoBundle 'h1mesuke/vim-alignta'
 	" TODO windowsでmigemoれない.
@@ -691,6 +696,10 @@ if s:has_plugin('vimfiler') " {{{
 	nnoremap [vimfiler]d    :<C-u>VimFilerDouble<CR>
 	nnoremap [vimfiler]s    :<C-u>VimFilerSplit<CR>
 	nnoremap [vimfiler]t    :<C-u>VimFilerTab<CR>
+endif " }}}
+
+if s:has_plugin('vim-ansible-yaml') " {{{
+	let g:ansible_options = {'ignore_blank_lines': 0}
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{

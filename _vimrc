@@ -113,7 +113,7 @@ augroup vimrc
 		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
 	endif
 	" Yaml(caution!pluginの設定だけだとたまにハードタブのままになっちゃうので)
-	" TODO FileTypeごとにわけなくてよい？
+	" TODO FileTypeごとにわけないかきかた
 	autocmd FileType yaml setlocal sw=2 sts=2 ts=2 et
 	autocmd FileType ansible setlocal sw=2 sts=2 ts=2 et
 augroup END

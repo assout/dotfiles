@@ -290,6 +290,11 @@ nnoremap   <C-Up>      5<C-W>+
 nnoremap   <C-Down>    5<C-W>-
 nnoremap   <C-Left>    5<C-W><
 nnoremap   <C-Right>   5<C-W>>
+nnoremap   <S-C-Up>      100<C-W>+
+nnoremap   <S-C-Down>    100<C-W>-
+nnoremap   <S-C-Left>    100<C-W><
+nnoremap   <S-C-Right>   100<C-W>>
+
 " tab操作.
 nnoremap   <TAB>     gt
 nnoremap   <S-TAB>   gT
@@ -529,8 +534,8 @@ endif " }}}
 
 if s:has_plugin('neocomplete') " {{{
 	let g:neocomplete#enable_at_startup = 1
-	let g:neocomplete#enable_ignore_case = 1
-	let g:neocomplete#enable_smart_case = 1
+	" let g:neocomplete#enable_ignore_case = 1
+	" let g:neocomplete#enable_smart_case = 1
 endif " }}}
 
 if s:has_plugin('open-browser') " {{{

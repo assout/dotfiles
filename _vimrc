@@ -450,7 +450,6 @@ endif " }}}
 
 if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic<CR>
-	nnoremap [space]C :<C-u>Codic<Space>
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
@@ -546,7 +545,7 @@ if s:has_plugin('open-browser') " {{{
 endif " }}}
 
 if s:has_plugin('operator-camelize') " {{{
-	map [space]ca <Plug>(operator-camelize)
+	map [space]C <Plug>(operator-camelize)
 endif " }}}
 
 if s:has_plugin('operator-replace') " {{{

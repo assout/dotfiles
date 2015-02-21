@@ -295,9 +295,9 @@ nnoremap   <S-C-Down>    100<C-W>-
 nnoremap   <S-C-Left>    100<C-W><
 nnoremap   <S-C-Right>   100<C-W>>
 
-" tab操作.
-nnoremap   <TAB>     gt
-nnoremap   <S-TAB>   gT
+" tab操作. <TAB> = <C-i>であることに注意.
+nnoremap   <C-TAB>     gt
+nnoremap   <C-S-TAB>   gT
 " 横スクロール.
 nnoremap [space]h zH
 nnoremap [space]l zL

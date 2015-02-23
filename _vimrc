@@ -231,12 +231,12 @@ nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 " オープンクローズ.
-nnoremap <C-n> <C-W>n
-" TODO ほんとはC-S-Nとかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
+" TODO ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
+nnoremap    <C-n>   <C-W>n
 nnoremap   g<C-n>   :vnew<CR>
-nnoremap    <C-s>    <C-W>s
+nnoremap    <C-s>   <C-W>s
 nnoremap   g<C-s>   <C-W>v
-nnoremap    <C-c>    <C-W>c
+nnoremap    <C-c>   <C-W>c
 nnoremap   g<C-o>   <C-W>o
 " サイズ変更.
 " TODO できれば<C-+>,<C-->,<C-<>,<C->>を当てたいがなんかめんどいっぽい.
@@ -271,10 +271,10 @@ nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
 nnoremap [B :bfirst<CR>
 nnoremap ]B :blast<CR>
-nnoremap [w <C-W>W
-nnoremap ]w <C-W>w
-nnoremap [W <C-W><C-T>
-nnoremap ]W <C-W><C-B>
+nnoremap [w :wincmd W<CR>
+nnoremap ]w :wincmd w<CR>
+nnoremap [W :wincmd t<CR>
+nnoremap ]W :wincmd b<CR>
 nnoremap [t :tabprevious<CR>
 nnoremap ]t :tabnext<CR>
 nnoremap [T :tabfirst<CR>

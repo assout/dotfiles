@@ -427,7 +427,7 @@ if s:has_plugin('hateblo') " {{{
 				\ }
 	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
 
-	nmap [space]h [hateblo]
+	nmap [space]H [hateblo]
 	nnoremap [hateblo] <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>

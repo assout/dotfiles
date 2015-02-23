@@ -234,9 +234,9 @@ nnoremap <C-l> <C-W>l
 nnoremap <C-n> <C-W>n
 " TODO ほんとはC-S-Nとかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
 nnoremap   g<C-n>   :vnew<CR>
-nnoremap   <C-s>    <C-W>s
+nnoremap    <C-s>    <C-W>s
 nnoremap   g<C-s>   <C-W>v
-nnoremap   <C-c>    <C-W>c
+nnoremap    <C-c>    <C-W>c
 nnoremap   g<C-o>   <C-W>o
 " サイズ変更.
 " TODO できれば<C-+>,<C-->,<C-<>,<C->>を当てたいがなんかめんどいっぽい.

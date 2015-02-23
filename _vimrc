@@ -1,10 +1,5 @@
-" Principles {{{1
-" TODO ちゃんと書く。
-" * デフォルトに影響ないようにする(e.g. デフォルト環境での操作時に混乱しないように;と:の入れ替えとかはしない。)
-" * portableにする(office,home,vrapper)
-" }}}1
-
 " Index {{{1
+" * Principles.
 " * Begin.
 " * Functions and Commands.
 " * Auto-commands.
@@ -13,6 +8,12 @@
 " * Key-mappings.
 " * Plug-ins.
 " * Other Commands.
+" }}}1
+
+" Section; Principles {{{1
+" * Keep it short and simple, stupid! (500step以下に留めたい)
+" * to portable! (e.g. office/home, vim/gvim/vrapper, development/server)
+" * デフォルト環境(サーバ)での操作時に混乱するようなカスタマイズはしない(e.g. ;と:の入れ替え)
 " }}}1
 
 " Section; Begin {{{1
@@ -40,11 +41,11 @@ function! s:capture_cmd_output(cmd)
 	else
 		redir @">
 	endif
-	execute a:cmd
+	" silent で画面描画なし.
+	silent execute a:cmd
 	redir END
 endfunction
-" silent で画面描画なし
-command! -nargs=1 -complete=command Capture silent call <SID>capture_cmd_output(<q-args>)
+command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
 " pluginが存在するか調べる.
 function! s:has_plugin(plugin)
@@ -53,7 +54,6 @@ endfunction
 
 " quickfix: 編集許可と折り返し表示無効.
 function! s:openModifiableQF()
-	cw
 	set modifiable
 	set nowrap
 endfunction
@@ -100,10 +100,9 @@ augroup vimrc
 	" DoubleByteSpace highlight.
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-	" markdown.
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ).
+	" 改行時の自動コメント継続をやめる.(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
@@ -112,70 +111,41 @@ augroup vimrc
 		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>
 		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
 	endif
-	" Yaml(caution!pluginの設定だけだとたまにハードタブのままになっちゃうので)
-	" TODO FileTypeごとにわけないかきかた
-	autocmd FileType yaml setlocal sw=2 sts=2 ts=2 et
-	autocmd FileType ansible setlocal sw=2 sts=2 ts=2 et
+	" pluginでの設定だけだとたまにハードタブのままになっちゃうのでここで指定.
+	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 augroup END
 " }}}1
 
 " Section; Options {{{1
-" バックアップファイル作成有無.
 set nobackup
-" ヤンク、ペーストのクリップボード共有.
 set clipboard=unnamed,unnamedplus
-" 差分モードの表示.
 set diffopt+=vertical
-" タブ方式.
 set noexpandtab
-" ソフトタブに切り替えられるようにコメントアウトしとく.
-" set expandtab
-" ファイルエンコーディング.
+" set expandtab " ソフトタブに切り替えられるようにコメントアウトしとく.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
-	" 折りたたみレベル.
 	set foldlevelstart=0
-	" 折りたたみ方法
 	set foldmethod=marker
 endif
-" フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす).
-set formatoptions-=o
+set formatoptions-=o " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 if has('win32') && executable('grep')
-	" grep.
 	set grepprg=grep\ -nH
 endif
-" バッファ破棄設定.
 set hidden
-" 検索結果ハイライト.
 set hlsearch
-" 検索での大文字小文字区別.
 set ignorecase
-" インクリメンタルサーチ.
 set incsearch
-" Open Vim internal help by K command.
-set keywordprg=:help
-" 不可視文字表示.
+set keywordprg=:help " Open Vim internal help by K command.
 set list
-" 表示する不可視文字.
 set listchars=tab:>.,trail:_,extends:\
-" ステータスラインの表示設定.
 set laststatus=2
-" マクロなどを実行中は描画を中断.
-set lazyredraw
-" 行番号.
+set lazyredraw " マクロなどを実行中は描画を中断.
 set number
-" インクリメンタル/デクリメンタルを常に10進数として扱う.
-set nrformats=
-" カーソル行の上下に表示する行数.
+set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う.
 set scrolloff=5
-" フォーマット時などのインデント幅.
-" set shiftwidth=2
 set shiftwidth=4
-" 常にタブラベルを表示する.
-set showtabline=2
-" カーソル行の水平に表示する行数.
+set showtabline=1
 set sidescrolloff=5
-" 検索で大文字を含むときは大小を区別するか.
 set smartcase
 " スペルチェック用辞書ファイル.
 if s:isOfficeWin()
@@ -183,31 +153,20 @@ if s:isOfficeWin()
 elseif s:isHomeUnix()
 	set spellfile=~/Dropbox/spell/en.utf-8.add
 endif
-" 新しいウィンドウは下に.
 set splitbelow
-" 新しいウィンドウは右に.
 set splitright
-" スペルチェックで日本語は除外する.
-set spelllang+=cjk
-" tab幅.
+set spelllang+=cjk " スペルチェックで日本語は除外する.
 set tabstop=4
-" 自動改行をなくす.
-set textwidth=0
-" タイトルを表示するか.
+set textwidth=0 " 自動改行をなくす.
 set title
-" Undoファイルの有効無効.
 if has('win32')
-	set noundofile
+	set noundofile " Undoファイルの有効無効.
 endif
-" コマンドラインモードの補完を使いやすくする.
 set wildmenu
-" 行折り返し.
 set nowrap
-" 検索循環.
 set nowrapscan
 if has('win32')
-	" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明)).
-	set noswapfile
+	set noswapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明)).
 endif
 " }}}1
 
@@ -222,54 +181,49 @@ let g:mapleader = '[space]d'
 " }}}1
 
 " Section; Key-mappings {{{1
-" Prefix key mappings {{{2
 " vimfilerとかと競合防ぐため(詳細忘れた).
 map <Space> [space]
 noremap [space] <Nop>
 
-" [open] mappings.
-" 解決しなくても開けるが、fugitiveで対象とするため.
-" スコープがスクリプトローカルだとmap <expr>のとき参照できなかった。
-let g:path_vimrc = resolve(expand($MYVIMRC))
+noremap [space]h 0
+noremap [space]l $
 
-" TODO prefix key検討.
+" [open] mappings.
 nmap [space]o [open]
 nnoremap [open] <Nop>
-" TODO 変数展開したいだけなのにまどろっこしい.
+" resolveしなくても開けるが、fugitiveで対象とするため.
 " caution! executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
-nnoremap [open]v       :<C-u>execute ':edit '   . g:path_vimrc<CR>
+nnoremap [open]v :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
 if s:isOfficeWin()
-	let g:path_imsglog = 'D:\admin\Documents\ipmsg.log'
-	nnoremap [open]i       :<C-u>execute ':edit '   . g:path_imsglog<CR>
+	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 
 " [insert] mappings.
 " caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 " TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
 " TODO prefix入力後挿入モードにしたい？
-map [space]i [insert]
-noremap [insert] <Nop>
-noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
-noremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
-noremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
-noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
-noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
-noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
-noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
-noremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
-noremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
-noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
-noremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
-noremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
-noremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
-noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
+nmap [space]i [insert]
+nnoremap [insert] <Nop>
+nnoremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
+nnoremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
+nnoremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
+nnoremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
+nnoremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
+nnoremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
+nnoremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
+nnoremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
+nnoremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
+nnoremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
+nnoremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
+nnoremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
+nnoremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
+nnoremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
+nnoremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-" }}}2
 
-" window操作. TODO もうチョイ何とかしたい, <C-o>,<C-v>を潰すわけにはいかないのでこうしてるんだけどど.
+" window操作. TODO もうチョイ何とかしたい, <C-o>,<C-v>を潰すわけにはいかないのでこうしてるんだけど.
 " refereces [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 " カーソル移動.
 nnoremap <C-h> <C-W>h
@@ -298,9 +252,7 @@ nnoremap   <S-C-Right>   100<C-W>>
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt
 nnoremap   <C-S-TAB>   gT
-" 横スクロール.
-nnoremap [space]h zH
-nnoremap [space]l zL
+
 " 表示位置でカーソル移動.
 nnoremap j gj
 nnoremap k gk
@@ -427,10 +379,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/operator-camelize.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
-
 	" color schemes.
 	NeoBundle 'w0ng/vim-hybrid'
-
 	call neobundle#end()
 	filetype plugin indent on
 
@@ -489,7 +439,7 @@ endif " }}}
 if s:has_plugin('im_control') " {{{
 	if s:isHomeUnix()
 		""""""""""""""""""""""""""""""
-		" 日本語入力固定モードの制御関数(デフォルト)
+		" 日本語入力固定モードの制御関数
 		""""""""""""""""""""""""""""""
 		let IM_CtrlMode = 1
 		function! IMCtrl(cmd)
@@ -676,8 +626,8 @@ if s:has_plugin('unite') " {{{
 endif " }}}
 
 if s:has_plugin('vimfiler') " {{{
-	let g:vimfiler_safe_mode_by_default = 0
-	let g:vimfiler_as_default_explorer = 1
+	let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
+	let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 
 	nmap [space]f [vimfiler]
 	nnoremap [vimfiler] <Nop>
@@ -755,7 +705,7 @@ endif " }}}
 
 if s:has_plugin('vim-textobj-function') " {{{
 	" text-obj-between用にf -> Fに退避.
-	" TODO vrapperとあわせたいけど(fがfunctionなので).
+	" TODO vrapperとあわせたいど(向こうはfがfunctionなので).
 	" TODO windowsで効かない(mappingはされてるっぽい)
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)
@@ -766,9 +716,7 @@ endif " }}}
 " }}}1
 
 " Section; Other Commands {{{1
-" ファイルタイプ判別.
 filetype on
-" colorscheme
 if s:isHomeUnix() || s:isOfficeWin()
 	colorscheme hybrid-light
 else
@@ -777,5 +725,6 @@ endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
+
 " vim:nofoldenable:
 

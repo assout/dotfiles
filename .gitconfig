@@ -1,3 +1,5 @@
 [user]
 	name=assout
 	email=porinsan@gmail.com
+[push]
+	default = simple

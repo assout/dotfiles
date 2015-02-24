@@ -347,14 +347,16 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
-	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
+	NeoBundle 'mattn/gist-vim'
+	NeoBundle 'mattn/unite-gist'
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
 	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもpull reqでてるので、取り込まれたら見先を変える。
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
+	NeoBundle 'pangloss/vim-javascript' " for indent.
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -408,16 +410,17 @@ if s:has_plugin('codic') " {{{
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
-	noremap [space]T :<C-u>ExciteTranslate<CR>
+	noremap [space]e :<C-u>ExciteTranslate<CR>
 endif " }}}
 
-if s:has_plugin('gista') " {{{
-	let g:gista#github_user = 'assout'
-	nmap [space]g [gista]
-	nnoremap [gista] <Nop>
-	nnoremap [gista]l    :<C-u>Gista --list<CR>
-	nnoremap [gista]c    :<C-u>Gista<CR>
-	nnoremap [gista]<CR> :<C-u>Gista<CR>
+if s:has_plugin('gist-vim') " {{{
+	let g:gist_detect_filetype = 1
+	let g:gist_get_multiplefile = 1
+	nmap [space]g [Gist]
+	nnoremap [Gist]     <Nop>
+	nnoremap [Gist]l    :<C-u>Unite gist<CR>
+	nnoremap [Gist]c    :<C-u>Gist<CR>
+	nnoremap [Gist]<CR> :<C-u>Gist<CR>
 endif " }}}
 
 if s:has_plugin('hateblo') " {{{

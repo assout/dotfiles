@@ -189,7 +189,7 @@ noremap [space]h 0
 noremap [space]l $
 
 " [insert] mappings.
-" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 " TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
 " TODO prefix入力後挿入モードにしたい？
 map [space]i [insert]
@@ -214,7 +214,7 @@ noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 nmap [space]o [open]
 nnoremap [open] <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため.
-" caution! executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
+" Caution! executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
 nnoremap [open]v :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
 if s:isOfficeWin()
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
@@ -350,6 +350,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/gist-vim'
+	NeoBundle 'mattn/qiita-vim'
 	NeoBundle 'mattn/unite-gist'
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
@@ -449,7 +450,7 @@ if s:has_plugin('im_control') " {{{
 		""""""""""""""""""""""""""""""
 		" 日本語入力固定モードの制御関数
 		""""""""""""""""""""""""""""""
-		let IM_CtrlMode = 1
+		let IM_CtrlMode = has('gui_running') ? 1 : 0 " Caution! Vim(非GUIのときに変な挙動（ESC時に1文字削除)
 		function! IMCtrl(cmd)
 			let cmd = a:cmd
 			if cmd ==? 'On'
@@ -514,9 +515,16 @@ if s:has_plugin('previm') " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
 endif " }}}
 
+if s:has_plugin('qiita-vim') " {{{
+	nmap [space]q [Qiita]
+	nnoremap [Qiita]     <Nop>
+	nnoremap [Qiita]l    :<C-u>Unite qiita<CR>
+	nnoremap [Qiita]c    :<C-u>Qiita<CR>
+	nnoremap [Qiita]<CR> :<C-u>Qiita<CR>
+endif " }}}
+
 if s:has_plugin('quickrun') " {{{
-	nnoremap [space]q :<C-u>QuickRun<CR>
-	nnoremap [space]Q :<C-u>QuickRun<Space>
+	nnoremap [space]Q :<C-u>QuickRun<CR>
 endif " }}}
 
 if s:has_plugin('restart.vim') " {{{
@@ -620,7 +628,7 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+		" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 		map [space]t [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>

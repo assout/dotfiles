@@ -182,11 +182,33 @@ let g:mapleader = '[space]d'
 
 " Section; Key-mappings {{{1
 " vimfilerとかと競合防ぐため(詳細忘れた).
+" TODO Vrapperで[space]prefix系が全般効かない.
 map <Space> [space]
 noremap [space] <Nop>
-
 noremap [space]h 0
 noremap [space]l $
+
+" [insert] mappings.
+" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+" TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
+" TODO prefix入力後挿入モードにしたい？
+map [space]i [insert]
+noremap [insert] <Nop>
+noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
+noremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
+noremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
+noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
+noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
+noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
+noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
+noremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
+noremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
+noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
+noremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
+noremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
+noremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
+noremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
+noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 
 " [open] mappings.
 nmap [space]o [open]
@@ -198,28 +220,6 @@ if s:isOfficeWin()
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 
-" [insert] mappings.
-" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
-" TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
-" TODO prefix入力後挿入モードにしたい？
-nmap [space]i [insert]
-nnoremap [insert] <Nop>
-nnoremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
-nnoremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
-nnoremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
-nnoremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
-nnoremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
-nnoremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
-nnoremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
-nnoremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
-nnoremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
-nnoremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
-nnoremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
-nnoremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
-nnoremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
-nnoremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
-nnoremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
-
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
@@ -230,6 +230,11 @@ nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
+" ウィンドウ移動. TODO <C-S-hoge>がめんどいっぽい.
+" nnoremap <S-C-H> <C-W>H
+" nnoremap <S-C-J> <C-W>J
+" nnoremap <S-C-K> <C-W>K
+" nnoremap <S-C-L> <C-W>L
 " オープンクローズ.
 " TODO ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
 nnoremap    <C-n>   <C-W>n
@@ -244,10 +249,10 @@ nnoremap   <C-Up>      5<C-W>+
 nnoremap   <C-Down>    5<C-W>-
 nnoremap   <C-Left>    5<C-W><
 nnoremap   <C-Right>   5<C-W>>
-nnoremap   <S-C-Up>      100<C-W>+
-nnoremap   <S-C-Down>    100<C-W>-
-nnoremap   <S-C-Left>    100<C-W><
-nnoremap   <S-C-Right>   100<C-W>>
+nnoremap   <S-C-Up>    100<C-W>+
+nnoremap   <S-C-Down>  100<C-W>-
+nnoremap   <S-C-Left>  100<C-W><
+nnoremap   <S-C-Right> 100<C-W>>
 
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt
@@ -614,7 +619,7 @@ if s:has_plugin('unite') " {{{
 
 		" caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 		map [space]t [unite-todo]
-		noremap [unite-todo] <Nop>
+		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
 		noremap [unite-todo]a    :UniteTodoAddSimple<CR>
 		noremap [unite-todo]t    :UniteTodoAddSimple -tag<CR>

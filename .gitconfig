@@ -3,3 +3,6 @@
 	email=porinsan@gmail.com
 [push]
 	default = simple
+# for gist.vim
+[github]
+	user = assout

@@ -6,3 +6,5 @@
 # for gist.vim
 [github]
 	user = assout
+[core]
+    excludesfile = ~/.gitignore

@@ -388,6 +388,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/operator-camelize.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
+	NeoBundle 'vim-scripts/DirDiff.vim' " 文字化けするけど.
 	" color schemes.
 	NeoBundle 'w0ng/vim-hybrid'
 	call neobundle#end()

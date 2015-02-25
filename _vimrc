@@ -523,6 +523,8 @@ if s:has_plugin('qiita-vim') " {{{
 	nnoremap [Qiita]l    :<C-u>Unite qiita<CR>
 	nnoremap [Qiita]c    :<C-u>Qiita<CR>
 	nnoremap [Qiita]<CR> :<C-u>Qiita<CR>
+	nnoremap [Qiita]e    :<C-u>Qiita -e<CR>
+	nnoremap [Qiita]d    :<C-u>Qiita -d<CR>
 endif " }}}
 
 if s:has_plugin('quickrun') " {{{

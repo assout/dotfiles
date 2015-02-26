@@ -371,7 +371,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
-	" TODO tcommentとmappingかぶってる.
 	NeoBundle 'thinca/vim-textobj-comment'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
@@ -530,6 +529,10 @@ endif " }}}
 if s:has_plugin('singleton') && has('clientserver') " {{{
 	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
+endif " }}}
+
+if s:has_plugin('tcomment_vim') " {{{
+	let g:tcommentTextObjectInlineComment = 'iC'
 endif " }}}
 
 if s:has_plugin('unite') " {{{

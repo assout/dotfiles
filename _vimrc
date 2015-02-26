@@ -225,16 +225,17 @@ endif
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
-" window操作.
+" windowのカーソル移動.
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
+" windowのオープンとクローズ.
 " Caution! ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいが<C-n>と区別されない.めんどいっぽい.
 nnoremap  <C-s> <C-W>s
 nnoremap g<C-s> <C-W>v
 nnoremap  <C-c> <C-W>c
-
+" windowの移動
 nnoremap <C-Left>  <C-W>H
 nnoremap <C-Down>  <C-W>J
 nnoremap <C-Up>    <C-W>K

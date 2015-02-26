@@ -735,7 +735,6 @@ endif " }}}
 
 if s:has_plugin('vim-textobj-function') " {{{
 	" text-obj-between用にf -> Fに退避.
-	" TODO vrapperとあわせたいど(向こうはfがfunctionなので).
 	" TODO windowsで効かない(mappingはされてるっぽい)
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)

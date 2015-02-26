@@ -233,9 +233,12 @@ nnoremap <C-l> <C-W>l
 " Caution! ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいが<C-n>と区別されない.めんどいっぽい.
 nnoremap  <C-s> <C-W>s
 nnoremap g<C-s> <C-W>v
-nnoremap  <C-n> <C-W>n
-nnoremap g<C-n> :vnew<CR>
 nnoremap  <C-c> <C-W>c
+
+nnoremap <C-Left>  <C-W>H
+nnoremap <C-Down>  <C-W>J
+nnoremap <C-Up>    <C-W>K
+nnoremap <C-Right> <C-W>L
 
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt

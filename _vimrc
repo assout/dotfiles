@@ -14,6 +14,8 @@
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * to portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバ)での操作時に混乱するようなカスタマイズはしない(e.g. ;と:の入れ替え)
+" # refereces
+" * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 " }}}1
 
 " Section; Begin {{{1
@@ -223,36 +225,17 @@ endif
 " [reload] mappings.
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
-" window操作. TODO もうチョイ何とかしたい, <C-o>,<C-v>を潰すわけにはいかないのでこうしてるんだけど.
-" refereces [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
-" カーソル移動.
+" window操作.
 nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-" ウィンドウ移動. TODO <C-S-hoge>がめんどいっぽい.
-" nnoremap <S-C-H> <C-W>H
-" nnoremap <S-C-J> <C-W>J
-" nnoremap <S-C-K> <C-W>K
-" nnoremap <S-C-L> <C-W>L
-" オープンクローズ.
 " TODO ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
-nnoremap    <C-n>   <C-W>n
-nnoremap   g<C-n>   :vnew<CR>
-nnoremap    <C-s>   <C-W>s
-nnoremap   g<C-s>   <C-W>v
-nnoremap    <C-c>   <C-W>c
-nnoremap   g<C-o>   <C-W>o
-" サイズ変更.
-" TODO できれば<C-+>,<C-->,<C-<>,<C->>を当てたいがなんかめんどいっぽい.
-nnoremap   <C-Up>      5<C-W>+
-nnoremap   <C-Down>    5<C-W>-
-nnoremap   <C-Left>    5<C-W><
-nnoremap   <C-Right>   5<C-W>>
-nnoremap   <S-C-Up>    100<C-W>+
-nnoremap   <S-C-Down>  100<C-W>-
-nnoremap   <S-C-Left>  100<C-W><
-nnoremap   <S-C-Right> 100<C-W>>
+nnoremap  <C-s> <C-W>s
+nnoremap  <C-n> <C-W>n
+nnoremap  <C-c> <C-W>c
+nnoremap g<C-n> :vnew<CR>
+nnoremap g<C-s> <C-W>v
 
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt
@@ -339,6 +322,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace'
+	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kana/vim-textobj-entire'
 	NeoBundle 'kana/vim-textobj-function'
 	NeoBundle 'kana/vim-textobj-indent'
@@ -360,6 +344,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'pangloss/vim-javascript' " for indent.
 	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
@@ -381,6 +366,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
+	" TODO tcommentとmappingかぶってる.
+	NeoBundle 'thinca/vim-textobj-comment'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
@@ -663,6 +650,10 @@ if s:has_plugin('vim-ansible-yaml') " {{{
 	let g:ansible_options = {'ignore_blank_lines': 0}
 endif " }}}
 
+if s:has_plugin('vim-maximizer') " {{{
+	let g:maximizer_default_mapping_key = '<C-M>'
+endif " }}}
+
 if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sa <Plug>(operator-surround-append)
 	map <silent> sd <Plug>(operator-surround-delete)
@@ -716,6 +707,17 @@ if s:has_plugin('vim-ref') " {{{
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif " }}}
 
+if s:has_plugin('vim-submode') " {{{
+	call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+	call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
+	call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
+	call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
+	call submode#map('winsize', 'n', '', '>', '<C-w>>')
+	call submode#map('winsize', 'n', '', '<', '<C-w><')
+	call submode#map('winsize', 'n', '', '+', '<C-w>-')
+	call submode#map('winsize', 'n', '', '-', '<C-w>+')
+endif " }}}
+
 if s:has_plugin('vim-textobj-entire') " {{{
 	nmap yae yae<C-o>
 	nmap yie yie<C-o>
@@ -733,6 +735,7 @@ if s:has_plugin('vim-textobj-function') " {{{
 	vmap iF <Plug>(textobj-function-i)
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
+
 " }}}1
 
 " Section; Other Commands {{{1

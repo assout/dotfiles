@@ -331,6 +331,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
+	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/gist-vim'
@@ -734,6 +735,13 @@ if s:has_plugin('vim-textobj-function') " {{{
 	omap aF <Plug>(textobj-function-a)
 	vmap iF <Plug>(textobj-function-i)
 	vmap aF <Plug>(textobj-function-a)
+endif " }}}
+
+if s:has_plugin('yankround.vim') " {{{
+	nmap p <Plug>(yankround-p)
+	nmap P <Plug>(yankround-P)
+	nmap <C-p> <Plug>(yankround-prev)
+	nmap <C-n> <Plug>(yankround-next)
 endif " }}}
 
 " }}}1

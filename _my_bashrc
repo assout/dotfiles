@@ -27,5 +27,5 @@ stty stop undef
 if [ ${USER} = "oji" ] ; then
 	todayBackupPath=~/backup/$(date +%Y%m%d)
 	mkdir -p ${todayBackupPath}
-	ln -sf ${todayBackupPath} ~/today
+	ln -sfn ${todayBackupPath} ~/today
 fi

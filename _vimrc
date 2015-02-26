@@ -231,8 +231,8 @@ nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
 " windowのオープンとクローズ.
-" Caution! ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいが<C-n>と区別されない.めんどいっぽい.
 nnoremap  <C-s> <C-W>s
+" Caution! ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.めんどいっぽい.
 nnoremap g<C-s> <C-W>v
 nnoremap  <C-c> <C-W>c
 " windowの移動
@@ -655,7 +655,7 @@ if s:has_plugin('vimfiler') " {{{
 endif " }}}
 
 if s:has_plugin('vim-ansible-yaml') " {{{
-	let g:ansible_options = {'ignore_blank_lines': 0}
+	let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
 if s:has_plugin('vim-maximizer') " {{{

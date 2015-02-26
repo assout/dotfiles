@@ -230,12 +230,12 @@ nnoremap <C-h> <C-W>h
 nnoremap <C-j> <C-W>j
 nnoremap <C-k> <C-W>k
 nnoremap <C-l> <C-W>l
-" TODO ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいがめんどいっぽい(<C-n>と区別されない).
+" Caution! ほんとはg<C-n>じゃなく<C-S-N>とかに割り当てたいが<C-n>と区別されない.めんどいっぽい.
 nnoremap  <C-s> <C-W>s
-nnoremap  <C-n> <C-W>n
-nnoremap  <C-c> <C-W>c
-nnoremap g<C-n> :vnew<CR>
 nnoremap g<C-s> <C-W>v
+nnoremap  <C-n> <C-W>n
+nnoremap g<C-n> :vnew<CR>
+nnoremap  <C-c> <C-W>c
 
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt

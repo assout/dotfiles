@@ -661,7 +661,7 @@ if s:has_plugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:has_plugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>'
+	let g:maximizer_default_mapping_key = '<C-t>' " C-t潰してもいいの?.
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{

@@ -119,6 +119,7 @@ augroup END
 " }}}1
 
 " Section; Options {{{1
+set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
 set diffopt+=vertical
@@ -149,6 +150,7 @@ set shiftwidth=4
 set showtabline=1
 set sidescrolloff=5
 set smartcase
+set smartindent
 " スペルチェック用辞書ファイル.
 if s:isOfficeWin()
 	set spellfile=D:/admin/Documents/spell/en.utf-8.add

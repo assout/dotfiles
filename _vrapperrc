@@ -57,8 +57,18 @@ nunmap k
 nunmap /
 nunmap ?
 
+" TODO vimrc でも設定してるが[space]prefixが効かないので暫定で多重定義.
+noremap <Space>h 0
+noremap <Space>l $
+
+" Caution! vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT
 noremap <C-l> gt
+" Caution! <C-S-TAB>だと効かない.
+" nnoremap <TAB>     gt
+" nnoremap <S-TAB>   gT
+
+nnoremap <C-c> :bdelete<CR>
 
 nnoremap <C-k> :GotoPreviousMember<CR>
 nnoremap <C-j> :GotoNextMember<CR>

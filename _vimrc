@@ -192,6 +192,9 @@ noremap [space] <Nop>
 noremap [space]h 0
 noremap [space]l $
 
+" 検索結果ハイライトを解除. TODO [space][space]だとうごかない。なぜ。
+nnoremap <Space><Space> :nohlsearch<CR>
+
 " [insert] mappings.
 " Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 " TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
@@ -258,8 +261,7 @@ nnoremap Y y$
 " very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
-" 検索結果ハイライトを解除.
-nnoremap <Esc><Esc> :nohlsearch<CR>
+
 " バッファ、ウィンドウ、タブ移動関連.
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
@@ -292,6 +294,8 @@ inoremap <C-a> <Home>
 inoremap <C-d> <Del>
 inoremap <C-u> <C-k>d0
 inoremap <C-k> <C-o>D
+
+inoremap <C-j> <Esc>
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
 cnoremap <C-a> <Home>

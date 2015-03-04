@@ -192,6 +192,11 @@ noremap [space] <Nop>
 noremap [space]h 0
 noremap [space]l $
 
+inoremap <C-j> <Esc>
+vnoremap <C-j> <Esc>
+" FIXME 効かない
+cnoremap <C-j> <Esc>
+
 " 検索結果ハイライトを解除. TODO [space][space]だとうごかない。なぜ。
 nnoremap <Space><Space> :nohlsearch<CR>
 
@@ -294,8 +299,6 @@ inoremap <C-a> <Home>
 inoremap <C-d> <Del>
 inoremap <C-u> <C-k>d0
 inoremap <C-k> <C-o>D
-
-inoremap <C-j> <Esc>
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
 cnoremap <C-a> <Home>

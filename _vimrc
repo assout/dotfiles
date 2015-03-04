@@ -185,7 +185,7 @@ let g:mapleader = '[space]d'
 " }}}1
 
 " Section; Key-mappings {{{1
-" vimfilerとかと競合防ぐため(詳細忘れた).
+" vimfilerとかと競合防ぐため[space]にわりあてている(詳細忘れた).
 " TODO Vrapperで[space]prefix系が全般効かない.
 map <Space> [space]
 noremap [space] <Nop>

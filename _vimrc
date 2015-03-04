@@ -192,6 +192,7 @@ noremap [space] <Nop>
 noremap [space]h 0
 noremap [space]l $
 
+" Caution! jk も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
 " Caution! cnoremapではできないよ。(<C-c>でできるよ) -> :h c_Esc

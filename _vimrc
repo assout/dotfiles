@@ -448,6 +448,7 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
 endif " }}}
 
+" FIXME linux でinsertmodeから<C-j>で抜けるときにIMオフでなくカタカナになる.
 if s:has_plugin('im_control') " {{{
 	if s:isHomeUnix()
 		""""""""""""""""""""""""""""""

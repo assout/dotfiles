@@ -32,6 +32,7 @@ fi
 
 # settings for peco
 if [ $(which peco) ] ; then
+	# C-r,C-i
 	_replace_by_history() {
 		local l=$(HISTTIMEFORMAT= history | tac | sed -e 's/^\s*[0-9]*    \+\s\+//' | peco --query "$READLINE_LINE")
 		READLINE_LINE="$l"
@@ -39,6 +40,15 @@ if [ $(which peco) ] ; then
 	}
 	bind -x '"\C-r": _replace_by_history'
 	bind    '"\C-xr": reverse-search-history'
+
+	# lscd
+	function peco-lscd {
+		local dir="$( find . -maxdepth 1 -type d | sed -e 's;\./;;' | peco )"
+		if [ ! -z "$dir" ] ; then
+			cd "$dir"
+		fi
+	}
+	alias ld=peco-lscd
 fi
 
 # LANG=ja_JP.UTF-8

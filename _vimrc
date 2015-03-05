@@ -134,6 +134,7 @@ set formatoptions-=o " フォーマットオプション(-oでo,Oコマンドで
 if has('win32') && executable('grep')
 	set grepprg=grep\ -nH
 endif
+set helplang& helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set hidden
 set hlsearch
 set ignorecase

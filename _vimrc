@@ -551,7 +551,6 @@ if s:has_plugin('unite') " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
-	let g:unite_source_history_yank_enable = 1
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
 	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction.
@@ -564,7 +563,7 @@ if s:has_plugin('unite') " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		" surroundのmappingと被るのでnowait.
+		" vim-operator-surround の mapping と被るので nowait.
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
@@ -610,7 +609,9 @@ if s:has_plugin('unite') " {{{
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
 	nnoremap [unite]t :<C-u>Unite tab -buffer-name=tab<CR>
 	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
-	nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=hitory/yank<CR>
+	if s:has_plugin('yankround') " {{{
+		nnoremap [unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
+	endif " }}}
 
 	if s:has_plugin('neomru') " {{{
 		let g:neomru#filename_format = ''

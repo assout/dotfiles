@@ -30,8 +30,7 @@ if [ ${USER} = "oji" ] ; then
 	ln -sfn ${todayBackupPath} ~/today
 fi
 
-# settings for peco
-# FIXME 決定時に番号まで入っちゃう
+# settings for peco # FIXME 決定時に番号まで入っちゃう
 if [ $(which peco) ] ; then
 	# C-r,C-i
 	_replace_by_history() {
@@ -39,8 +38,7 @@ if [ $(which peco) ] ; then
 		READLINE_LINE="$l"
 		READLINE_POINT=${#l}
 	}
-	bind -x '"\C-r": _replace_by_history'
-	bind    '"\C-xr": reverse-search-history'
+	alias ph=_replace_by_history
 
 	# lscd
 	function peco-lscd {
@@ -49,9 +47,12 @@ if [ $(which peco) ] ; then
 			cd "$dir"
 		fi
 	}
-	alias ld=peco-lscd
+	alias ld=pl
 fi
 
 # LANG=ja_JP.UTF-8
 LANG=en_US.UTF-8
 export LANG
+
+# MANPATH=/usr/local/man/ja:/usr/local/share/man/ja:/usr/share/man/ja:/usr/X11R6/man/ja
+# export MANPATH

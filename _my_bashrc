@@ -31,6 +31,7 @@ if [ ${USER} = "oji" ] ; then
 fi
 
 # settings for peco
+# FIXME 決定時に番号まで入っちゃう
 if [ $(which peco) ] ; then
 	# C-r,C-i
 	_replace_by_history() {

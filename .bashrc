@@ -8,20 +8,7 @@ fi
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
-# User specific aliases and functions
-function cdls() {
-	# cdがaliasでループするので\をつける
-	\cd $1;
-	ls;
-}
-alias cd=cdls
-if [ -e ~/.vimrc ] ; then
-	alias v="vi"
-else
-	alias v="vi -S /tmp/.myvimrc"
-fi
-
-# User specific aliases and functions.
+# User specific process
 stty stop undef
 
 if [ ${USER} = "oji" ] ; then
@@ -30,26 +17,52 @@ if [ ${USER} = "oji" ] ; then
 	ln -sfn ${todayBackupPath} ~/today
 fi
 
-# settings for peco # FIXME 決定時に番号まで入っちゃう
-if [ $(which peco) ] ; then
-	# C-r,C-i
-	_replace_by_history() {
-		local l=$(HISTTIMEFORMAT= history | tac | sed -e 's/^\s*[0-9]*    \+\s\+//' | peco --query "$READLINE_LINE")
-		READLINE_LINE="$l"
-		READLINE_POINT=${#l}
-	}
-	alias ph=_replace_by_history
+# LANG=ja_JP.UTF-8
+LANG=en_US.UTF-8
+export LANG
 
-	# lscd
+# User specific aliases and functions
+if [ -e ~/.vimrc ] ; then
+	alias v="vi"
+else
+	alias v="vi -S /tmp/.myvimrc"
+fi
+
+function cdls() {
+	# cdがaliasでループするので\をつける.
+	\cd $1;
+	ls;
+}
+alias cd=cdls
+
+# settings for peco
+if [ $(which peco) ] ; then
+	# ls & cd
 	function peco-lscd {
-		local dir="$( find . -maxdepth 1 -type d | sed -e 's;\./;;' | peco )"
+		local dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
 		if [ ! -z "$dir" ] ; then
 			cd "$dir"
 		fi
 	}
-	alias ld=pl
+	alias pcd=peco-lscd
+
+	# history
+	function peco-hist() {
+		time_column=`echo $HISTTIMEFORMAT | awk '{printf("%s",NF)}'`
+		column=`expr $time_column + 3`
+		cmd=`history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-`
+		history -s "$cmd"
+		eval $cmd
+	}
+	# TODO なんかC-pとかが遅くなるので一旦無効
+	# bind '"\C-p\C-r":"peco-hist\n"'
 fi
 
-# LANG=ja_JP.UTF-8
-LANG=en_US.UTF-8
-export LANG
+function man-japanese() {
+	LANG_ESCAPE=$LANG
+	LANG=ja_JP.UTF-8
+	man $*
+	LANG=$LANG_ESCAPE
+}
+alias jan=man-japanese
+

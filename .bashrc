@@ -53,6 +53,3 @@ fi
 # LANG=ja_JP.UTF-8
 LANG=en_US.UTF-8
 export LANG
-
-# MANPATH=/usr/local/man/ja:/usr/local/share/man/ja:/usr/share/man/ja:/usr/X11R6/man/ja
-# export MANPATH

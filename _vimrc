@@ -450,28 +450,6 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
 endif " }}}
 
-" FIXME linux でinsertmodeから<C-j>で抜けるときにIMオフでなくカタカナになる.
-if s:has_plugin('im_control') " {{{
-	if s:isHomeUnix()
-		""""""""""""""""""""""""""""""
-		" 日本語入力固定モードの制御関数
-		" xev でキーコード確認すること
-		""""""""""""""""""""""""""""""
-		let IM_CtrlMode = has('gui_running') ? 1 : 0 " Caution! Vim(非GUIのときに変な挙動（ESC時に1文字削除)
-		function! IMCtrl(cmd)
-			let cmd = a:cmd
-			if cmd ==? 'On'
-				let res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
-			elseif cmd ==? 'Off'
-				let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
-			elseif cmd ==? 'Toggle'
-				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
-			endif
-			return ''
-		endfunction
-	endif
-endif " }}}
-
 if s:has_plugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
 	if s:isHomeUnix()

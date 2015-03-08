@@ -196,6 +196,8 @@ noremap [space]l $
 " Caution! jk も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
+" TODO onormapなぜか効かない(omapでもダメ)
+" onoremap <C-j> <Esc>
 " Caution! cnoremapではできないよ。(<C-c>でできるよ) -> :h c_Esc
 
 " 検索結果ハイライトを解除. TODO [space][space]だとうごかない。なぜ。
@@ -461,7 +463,7 @@ if s:has_plugin('im_control') " {{{
 			if cmd ==? 'On'
 				let res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
 			elseif cmd ==? 'Off'
-				let res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1')
+				let res = system('xvkbd -text "\[Control]\[Shift]\[Delete]" > /dev/null 2>&1')
 			elseif cmd ==? 'Toggle'
 				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			endif

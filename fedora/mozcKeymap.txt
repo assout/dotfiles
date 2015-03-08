@@ -95,6 +95,7 @@ Composition	Hankaku/Zenkaku	IMEOff
 Conversion	Hankaku/Zenkaku	IMEOff
 DirectInput	Hankaku/Zenkaku	IMEOn
 Precomposition	Hankaku/Zenkaku	IMEOff
+DirectInput	Henkan	IMEOn
 Composition	Hiragana	InputModeHiragana
 Conversion	Hiragana	InputModeHiragana
 DirectInput	Hiragana	IMEOn
@@ -107,6 +108,11 @@ DirectInput	Katakana	IMEOn
 Precomposition	Katakana	InputModeFullKatakana
 Composition	Left	MoveCursorLeft
 Conversion	Left	SegmentFocusLeft
+Precomposition	Muhenkan	CancelAndIMEOff
+Composition	Muhenkan	CancelAndIMEOff
+Conversion	Muhenkan	CancelAndIMEOff
+Suggestion	Muhenkan	CancelAndIMEOff
+Prediction	Muhenkan	CancelAndIMEOff
 Conversion	PageDown	ConvertNextPage
 Conversion	PageUp	ConvertPrevPage
 Composition	Right	MoveCursorRight
@@ -136,12 +142,11 @@ Precomposition	Space	InsertSpace
 Composition	Tab	PredictAndConvert
 Conversion	Tab	PredictAndConvert
 Conversion	Up	ConvertPrev
-DirectInput	Henkan	IMEOn
-Precomposition	Muhenkan	CancelAndIMEOff
-Composition	Muhenkan	CancelAndIMEOff
-Conversion	Muhenkan	CancelAndIMEOff
-Suggestion	Muhenkan	CancelAndIMEOff
-Prediction	Muhenkan	CancelAndIMEOff
+Composition	Ctrl Shift Delete	IMEOff
+Precomposition	Ctrl Shift Delete	IMEOff
+Conversion	Ctrl Shift Delete	IMEOff
+Suggestion	Ctrl Shift Delete	IMEOff
+Prediction	Ctrl Shift Delete	IMEOff
 Composition	ASCII	InsertCharacter
 Composition	Kanji	IMEOff
 Composition	OFF	IMEOff

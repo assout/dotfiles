@@ -33,7 +33,6 @@ Composition	Ctrl j	Cancel
 Conversion	Ctrl j	Cancel
 Prediction	Ctrl j	Cancel
 Suggestion	Ctrl j	Cancel
-Precomposition	Ctrl j	IMEOff
 Composition	Ctrl k	MoveCursorLeft
 Conversion	Ctrl k	SegmentWidthShrink
 Composition	Ctrl Left	MoveCursorToBeginning
@@ -120,7 +119,11 @@ Conversion	Katakana	InputModeFullKatakana
 Precomposition	Katakana	InputModeFullKatakana
 Composition	Left	MoveCursorLeft
 Conversion	Left	SegmentFocusLeft
+Composition	Muhenkan	IMEOff
+Conversion	Muhenkan	IMEOff
 Precomposition	Muhenkan	IMEOff
+Prediction	Muhenkan	IMEOff
+Suggestion	Muhenkan	IMEOff
 Composition	OFF	IMEOff
 Conversion	OFF	IMEOff
 Precomposition	OFF	IMEOff

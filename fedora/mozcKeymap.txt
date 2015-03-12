@@ -119,11 +119,11 @@ Conversion	Katakana	InputModeFullKatakana
 Precomposition	Katakana	InputModeFullKatakana
 Composition	Left	MoveCursorLeft
 Conversion	Left	SegmentFocusLeft
-Composition	Muhenkan	IMEOff
-Conversion	Muhenkan	IMEOff
+Composition	Muhenkan	Cancel
+Conversion	Muhenkan	Cancel
+Prediction	Muhenkan	Cancel
+Suggestion	Muhenkan	Cancel
 Precomposition	Muhenkan	IMEOff
-Prediction	Muhenkan	IMEOff
-Suggestion	Muhenkan	IMEOff
 Composition	OFF	IMEOff
 Conversion	OFF	IMEOff
 Precomposition	OFF	IMEOff

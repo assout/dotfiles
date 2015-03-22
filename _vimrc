@@ -463,7 +463,10 @@ if s:has_plugin('im_control') " {{{
 	  let IM_CtrlMode = 4
 	  " 「日本語入力固定モード」切替キー
 	  " inoremap <silent> <C-j> <C-^><C-r>=IMState('FixMode')<CR>
-  endif
+	endif
+	if !has('gui_running')
+		let IM_CtrlMode = 0
+	endif
 endif " }}}
 
 if s:has_plugin('memolist') " {{{

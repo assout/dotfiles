@@ -134,6 +134,9 @@ set formatoptions-=o " フォーマットオプション(-oでo,Oコマンドで
 if has('win32') && executable('grep')
 	set grepprg=grep\ -nH
 endif
+" if executable('pt')
+" 	set grepprg=pt\ --nogroup\ -iS
+" endif
 set helplang& helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set hidden
 set hlsearch
@@ -200,8 +203,8 @@ vnoremap <C-j> <Esc>
 " onoremap <C-j> <Esc>
 " Caution! cnoremapではできないよ。(<C-c>でできるよ) -> :h c_Esc
 
-" 検索結果ハイライトを解除. TODO [space][space]だとうごかない。なぜ。
-nnoremap <Space><Space> :nohlsearch<CR>
+" 検索結果ハイライトを解除. TODO [space][space]だとうごかない。<Space><Space>とするとvimfilerと競合。
+nnoremap [space]<Space> :nohlsearch<CR>
 
 " [insert] mappings.
 " Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
@@ -401,10 +404,14 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
 	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
-			let &runtimepath = &runtimepath . ',' . s:addingPath
+			" work around. msysgitでvim起動時にエラーが出てしまうため.
+			if has('lua') || s:addingPath !~ "neocomplete"
+				let &runtimepath = &runtimepath . ',' . s:addingPath
+			endif
 		end
 	endfor
 endif
+
 " }}}
 
 if s:has_plugin('alignta') " {{{
@@ -450,6 +457,15 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
 endif " }}}
 
+if s:has_plugin('im_control') " {{{
+	if has('win32')
+	  " 「日本語入力固定モード」の動作モード
+	  let IM_CtrlMode = 4
+	  " 「日本語入力固定モード」切替キー
+	  " inoremap <silent> <C-j> <C-^><C-r>=IMState('FixMode')<CR>
+  endif
+endif " }}}
+
 if s:has_plugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
 	if s:isHomeUnix()
@@ -476,7 +492,9 @@ if s:has_plugin('memolist') " {{{
 endif " }}}
 
 if s:has_plugin('neocomplete') " {{{
-	let g:neocomplete#enable_at_startup = 1
+	if has('lua')
+		let g:neocomplete#enable_at_startup = 1
+	endif
 endif " }}}
 
 if s:has_plugin('open-browser') " {{{
@@ -661,7 +679,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sr <Plug>(operator-surround-replace)
 
 	" if you use vim-textobj-anyblock
-	nmap <silent>sab <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+	nmap <silent>sab <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
 	nmap <silent>sdb <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
 	nmap <silent>srb <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 
@@ -757,4 +775,3 @@ cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 
 " vim:nofoldenable:
-

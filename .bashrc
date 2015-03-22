@@ -9,9 +9,11 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific process
-stty stop undef
+if [ "$SSH_TTY" != "" ]; then
+	stty stop undef
+fi
 
-if [ ${USER} = "oji" ] ; then
+if [ "${USER}" = "oji" ] ; then
 	todayBackupPath=~/backup/$(date +%Y%m%d)
 	mkdir -p ${todayBackupPath}
 	ln -sfn ${todayBackupPath} ~/today
@@ -21,11 +23,26 @@ fi
 LANG=en_US.UTF-8
 export LANG
 
+# for msysgit
+if [ "${OSTYPE}" = "msys" ] ; then
+	alias l.='ls -d .* --color=auto --show-control-chars'
+	alias ll='ls -l --color=auto --show-control-chars'
+	alias ls='ls --color=auto --show-control-chars'
+
+	LANG=ja_JP.UTF-8
+	export LANG
+fi
+
 # User specific aliases and functions
-if [ -e ~/.vimrc ] ; then
+if [ -e ~/.vimrc -o -e ~/_vimrc ] ; then
 	alias v="vi"
 else
-	alias v="vi -S /tmp/.myvimrc"
+	here=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
+	if [ -e ${here}/_vimrc ] ; then
+		alias v="vi -S ${here}/_vimrc"
+	else
+		alias v="vi"
+	fi
 fi
 
 function cdls() {
@@ -36,7 +53,7 @@ function cdls() {
 alias cd=cdls
 
 # settings for peco
-if [ $(which peco) ] ; then
+if [ $(which peco 2> /dev/null) ] ; then
 	# ls & cd
 	function peco-lscd {
 		local dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"

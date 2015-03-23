@@ -43,8 +43,7 @@ function! s:capture_cmd_output(cmd)
 	else
 		redir @">
 	endif
-	" silent で画面描画なし.
-	silent execute a:cmd
+	execute a:cmd
 	redir END
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)

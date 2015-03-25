@@ -14,9 +14,9 @@ if [ "$SSH_TTY" != "" ]; then
 fi
 
 if [ "${USER}" = "oji" ] ; then
-	todayBackupPath=~/backup/$(date +%Y%m%d)
+	todayBackupPath=~/Backup/$(date +%Y%m%d)
 	mkdir -p ${todayBackupPath}
-	ln -sfn ${todayBackupPath} ~/today
+	ln -sfn ${todayBackupPath} ~/Today
 fi
 
 # LANG=ja_JP.UTF-8
@@ -47,7 +47,7 @@ fi
 
 function cdls() {
 	# cdがaliasでループするので\をつける.
-	\cd $1;
+	\cd $@;
 	ls;
 }
 alias cd=cdls

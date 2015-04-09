@@ -458,10 +458,10 @@ endif " }}}
 
 if s:has_plugin('im_control') " {{{
 	if has('win32')
-	  " 「日本語入力固定モード」の動作モード
-	  let IM_CtrlMode = 4
-	  " 「日本語入力固定モード」切替キー
-	  " inoremap <silent> <C-j> <C-^><C-r>=IMState('FixMode')<CR>
+		" 「日本語入力固定モード」の動作モード
+		let IM_CtrlMode = 4
+		" 「日本語入力固定モード」切替キー
+		" inoremap <silent> <C-j> <C-^><C-r>=IMState('FixMode')<CR>
 	endif
 	if !has('gui_running')
 		let IM_CtrlMode = 0
@@ -737,6 +737,15 @@ if s:has_plugin('vim-submode') " {{{
 	call submode#map('winsize', 'n', '', '<', '<C-w><')
 	call submode#map('winsize', 'n', '', '+', '<C-w>-')
 	call submode#map('winsize', 'n', '', '-', '<C-w>+')
+
+	call submode#enter_with('wrap-scroll', 'n', '', 'zl', 'zl')
+	call submode#enter_with('wrap-scroll', 'n', '', 'zh', 'zh')
+	call submode#enter_with('wrap-scroll', 'n', '', 'zL', 'zL')
+	call submode#enter_with('wrap-scroll', 'n', '', 'zH', 'zH')
+	call submode#map('wrap-scroll', 'n', '', 'l', 'zl')
+	call submode#map('wrap-scroll', 'n', '', 'h', 'zh')
+	call submode#map('wrap-scroll', 'n', '', 'L', 'zL')
+	call submode#map('wrap-scroll', 'n', '', 'H', 'zH')
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{

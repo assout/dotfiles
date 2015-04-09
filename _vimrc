@@ -746,6 +746,21 @@ if s:has_plugin('vim-submode') " {{{
 	call submode#map('wrap-scroll', 'n', '', 'h', 'zh')
 	call submode#map('wrap-scroll', 'n', '', 'L', 'zL')
 	call submode#map('wrap-scroll', 'n', '', 'H', 'zH')
+
+	call submode#enter_with('bprevious', 'n', '', '[b', ':bprevious<CR>')
+	call submode#enter_with('bnext', 'n', '', ']b', ':bnext<CR>')
+	call submode#map('bprevious', 'n', '', 'b', ':bprevious<CR>')
+	call submode#map('bnext', 'n', '', 'b', ':bnext<CR>')
+
+	call submode#enter_with('previous', 'n', '', '[a', ':previous<CR>')
+	call submode#enter_with('next', 'n', '', ']a', ':next<CR>')
+	call submode#map('previous', 'n', '', 'a', ':previous<CR>')
+	call submode#map('next', 'n', '', 'a', ':next<CR>')
+
+	call submode#enter_with('cprevious', 'n', '', '[q', ':cprevious<CR>')
+	call submode#enter_with('cnext', 'n', '', ']q', ':cnext<CR>')
+	call submode#map('cprevious', 'n', '', 'q', ':cprevious<CR>')
+	call submode#map('cnext', 'n', '', 'q', ':next<CR>')
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{

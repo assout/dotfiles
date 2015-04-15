@@ -749,18 +749,30 @@ if s:has_plugin('vim-submode') " {{{
 
 	call submode#enter_with('buffer-move', 'n', '', '[b', ':bprevious<CR>')
 	call submode#enter_with('buffer-move', 'n', '', ']b', ':bnext<CR>')
-	call submode#map('buffer-move', 'n', '', 'h', ':bprevious<CR>')
-	call submode#map('buffer-move', 'n', '', 'l', ':bnext<CR>')
+	call submode#enter_with('buffer-move', 'n', '', '[B', ':bfirst<CR>')
+	call submode#enter_with('buffer-move', 'n', '', ']B', ':blast<CR>')
+	call submode#map('buffer-move', 'n', '', 'k', ':bprevious<CR>')
+	call submode#map('buffer-move', 'n', '', 'j', ':bnext<CR>')
+	call submode#map('buffer-move', 'n', '', 'K', ':bfirst<CR>')
+	call submode#map('buffer-move', 'n', '', 'J', ':blast<CR>')
 
 	call submode#enter_with('args-move', 'n', '', '[a', ':previous<CR>')
 	call submode#enter_with('args-move', 'n', '', ']a', ':next<CR>')
-	call submode#map('args-move', 'n', '', 'h', ':previous<CR>')
-	call submode#map('args-move', 'n', '', 'l', ':next<CR>')
+	call submode#enter_with('args-move', 'n', '', '[A', ':first<CR>')
+	call submode#enter_with('args-move', 'n', '', ']A', ':last<CR>')
+	call submode#map('args-move', 'n', '', 'k', ':previous<CR>')
+	call submode#map('args-move', 'n', '', 'j', ':next<CR>')
+	call submode#map('args-move', 'n', '', 'K', ':first<CR>')
+	call submode#map('args-move', 'n', '', 'J', ':last<CR>')
 
 	call submode#enter_with('quickfix-move', 'n', '', '[q', ':cprevious<CR>')
 	call submode#enter_with('quickfix-move', 'n', '', ']q', ':cnext<CR>')
-	call submode#map('quickfix-move', 'n', '', 'h', ':cprevious<CR>')
-	call submode#map('quickfix-move', 'n', '', 'l', ':cnext<CR>')
+	call submode#enter_with('quickfix-move', 'n', '', '[Q', ':cfirst<CR>')
+	call submode#enter_with('quickfix-move', 'n', '', ']Q', ':clast<CR>')
+	call submode#map('quickfix-move', 'n', '', 'k', ':cprevious<CR>')
+	call submode#map('quickfix-move', 'n', '', 'j', ':cnext<CR>')
+	call submode#map('quickfix-move', 'n', '', 'K', ':cfirst<CR>')
+	call submode#map('quickfix-move', 'n', '', 'J', ':clast<CR>')
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{

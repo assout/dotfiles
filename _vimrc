@@ -12,9 +12,8 @@
 
 " Section; Principles {{{1
 " * Keep it short and simple, stupid! (500step以下に留めたい)
-" * to portable! (e.g. office/home, vim/gvim/vrapper, development/server)
-" * デフォルト環境(サーバ)での操作時に混乱するようなカスタマイズはしない(e.g. ;と:の入れ替え)
-" # refereces
+" * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
+" * デフォルト環境(サーバなど)での操作時に混乱するようなカスタマイズはしない(e.g. ;と:の入れ替え)
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 " }}}1
 
@@ -102,7 +101,9 @@ augroup vimrc
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
+	if &encoding ==# 'utf-8' " windows の 非gvim 環境で spell ファイル関連のエラーとなってしまうため.
+		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
+	endif
 	" 改行時の自動コメント継続をやめる.(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
@@ -140,6 +141,10 @@ set helplang& helplang=en,ja " If true Vim master, use English help file. NeoBun
 set hidden
 set hlsearch
 set ignorecase
+set incsearch
+if has('win32')
+	set isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)。<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
+endif
 set incsearch
 set keywordprg=:help " Open Vim internal help by K command.
 set list
@@ -188,12 +193,13 @@ let g:mapleader = '[space]d'
 " }}}1
 
 " Section; Key-mappings {{{1
-" vimfilerとかと競合防ぐため[space]にわりあてている(詳細忘れた).
-" TODO Vrapperで[space]prefix系が全般効かない.
+" vimfilerと競合防ぐため[space]にわりあてている.
 map <Space> [space]
 noremap [space] <Nop>
 noremap [space]h 0
 noremap [space]l $
+noremap [space]k {
+noremap [space]j }
 
 " Caution! jk も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
 inoremap <C-j> <Esc>
@@ -207,7 +213,7 @@ nnoremap [space]<Space> :nohlsearch<CR>
 
 " [insert] mappings.
 " Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
-" TODO プラグイン化.  kana/vim-operator-userの追加operatorとするのが良さそう？
+" TODO プラグイン化.  kana/vim-operator-userの追加 operator とするのが良さそう？
 " TODO prefix入力後挿入モードにしたい？
 map [space]i [insert]
 noremap [insert] <Nop>
@@ -241,20 +247,20 @@ endif
 nnoremap [space]r :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 " windowのカーソル移動.
-nnoremap <C-h> <C-W>h
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-l> <C-W>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 " windowのオープンとクローズ.
-nnoremap  <C-s> <C-W>s
-" Caution! ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.めんどいっぽい.
-nnoremap g<C-s> <C-W>v
-nnoremap  <C-c> <C-W>c
+nnoremap  <C-s> <C-w>s
+" Caution! ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.やろうとするとめんどいっぽい.
+nnoremap g<C-s> <C-w>v
+nnoremap  <C-c> <C-w>c
 " windowの移動
-nnoremap <C-Left>  <C-W>H
-nnoremap <C-Down>  <C-W>J
-nnoremap <C-Up>    <C-W>K
-nnoremap <C-Right> <C-W>L
+nnoremap <C-Left>  <C-w>H
+nnoremap <C-Down>  <C-w>J
+nnoremap <C-Up>    <C-w>K
+nnoremap <C-Right> <C-w>L
 
 " tab操作. <TAB> = <C-i>であることに注意.
 nnoremap   <C-TAB>     gt
@@ -299,17 +305,17 @@ nnoremap ]f :cnfile<CR>
 " インサートモードでのキーマッピングをEmacs風にする.
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
-inoremap <C-e> <End>
 inoremap <C-a> <Home>
+inoremap <C-e> <End>
 inoremap <C-d> <Del>
 inoremap <C-u> <C-k>d0
 inoremap <C-k> <C-o>D
 
 " コマンドラインモードでのキーマッピングをEmacs風にする.
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
 cnoremap <C-d> <Del>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
@@ -538,7 +544,7 @@ if s:has_plugin('restart.vim') " {{{
 	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
 
-if s:has_plugin('singleton') && has('clientserver') " {{{
+if s:has_plugin('singleton') && has('clientserver') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
 endif " }}}
@@ -574,7 +580,7 @@ if s:has_plugin('unite') " {{{
 		nunmap <buffer> <C-l>
 		nunmap <buffer> <C-k>
 		nmap   <buffer>   g<C-h>   <Plug>(unite_delete_backward_path)
-		nmap   <buffer>   <C-w>    <Plug>(unite_delete_backward_path)
+		nmap   <buffer>    <C-w>   <Plug>(unite_delete_backward_path)
 		nmap   <buffer>   g<C-l>   <Plug>(unite_redraw)
 		nmap   <buffer>   g<C-k>   <Plug>(unite_print_candidate)
 	endfunction
@@ -744,8 +750,8 @@ if s:has_plugin('vim-submode') " {{{
 	call submode#enter_with('wrap-scroll', 'n', '', 'zL', 'zL')
 	call submode#map('wrap-scroll', 'n', '', 'h', 'zh')
 	call submode#map('wrap-scroll', 'n', '', 'l', 'zl')
-	call submode#map('wrap-scroll', 'n', '', 'H', 'zH')
-	call submode#map('wrap-scroll', 'n', '', 'L', 'zL')
+	call submode#map('wrap-scroll', 'n', '', 'H', '10zh')
+	call submode#map('wrap-scroll', 'n', '', 'L', '10zl')
 
 	call submode#enter_with('buffer-move', 'n', '', '[b', ':bprevious<CR>')
 	call submode#enter_with('buffer-move', 'n', '', ']b', ':bnext<CR>')
@@ -773,6 +779,11 @@ if s:has_plugin('vim-submode') " {{{
 	call submode#map('quickfix-move', 'n', '', 'j', ':cnext<CR>')
 	call submode#map('quickfix-move', 'n', '', 'K', ':cfirst<CR>')
 	call submode#map('quickfix-move', 'n', '', 'J', ':clast<CR>')
+
+	call submode#enter_with('diff-move', 'n', '', '[c', '[c')
+	call submode#enter_with('diff-move', 'n', '', ']c', ']c')
+	call submode#map('diff-move', 'n', '', 'k', '[c')
+	call submode#map('diff-move', 'n', '', 'j', ']c')
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{
@@ -798,7 +809,6 @@ if s:has_plugin('yankround.vim') " {{{
 	nmap <C-p> <Plug>(yankround-prev)
 	nmap <C-n> <Plug>(yankround-next)
 endif " }}}
-
 " }}}1
 
 " Section; Other Commands {{{1

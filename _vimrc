@@ -682,6 +682,9 @@ if s:has_plugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{
+	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
+	let g:operator#surround#blocks = { "-" : [ { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c'] }, ] }
+
 	map <silent> sa <Plug>(operator-surround-append)
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)

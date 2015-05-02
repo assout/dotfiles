@@ -171,9 +171,7 @@ set spelllang+=cjk " スペルチェックで日本語は除外する.
 set tabstop=4
 set textwidth=0 " 自動改行をなくす.
 set title
-if has('win32')
-	set noundofile " Undoファイルの有効無効.
-endif
+set noundofile " Undoファイルの有効無効.
 set wildmenu
 set nowrap
 set nowrapscan

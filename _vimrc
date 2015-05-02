@@ -89,7 +89,7 @@ endif
 if ! s:isOfficeUnix() " TODO 原因不明だがwindowsだとvimrc読み込み時にエラーとなるため.
 	function! s:formatXml()
 		" TODO vintで引っかかる.
-		:%substitute/></>\r</g | filetype indent on | setfiletype xml | normal! gg=G
+		:%substitute/></>\r</ge | filetype indent on | setfiletype xml | normal! gg=G
 	endfunction
 	command! -complete=command FormatXml call <SID>formatXml()
 endif
@@ -410,7 +410,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
 			" work around. msysgitでvim起動時にエラーが出てしまうため.
-			if has('lua') || s:addingPath !~ "neocomplete"
+			if has('lua') || s:addingPath !~# "neocomplete"
 				let &runtimepath = &runtimepath . ',' . s:addingPath
 			endif
 		end

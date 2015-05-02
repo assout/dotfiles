@@ -199,18 +199,18 @@ noremap [space]l $
 noremap [space]k {
 noremap [space]j }
 
-" Caution! jk も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
+" Caution: jk も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
 inoremap <C-j> <Esc>
 vnoremap <C-j> <Esc>
 " TODO onormapなぜか効かない(omapでもダメ)
 " onoremap <C-j> <Esc>
-" Caution! cnoremapではできないよ。(<C-c>でできるよ) -> :h c_Esc
+" Caution: cnoremapではできないよ。(<C-c>でできるよ) -> :h c_Esc
 
-" 検索結果ハイライトを解除. TODO [space][space]だとうごかない。<Space><Space>とするとvimfilerと競合。
+" 検索結果ハイライトを解除. Caution: [space][space]だとうごかない。<Space><Space>とするとvimfilerと競合。
 nnoremap [space]<Space> :nohlsearch<CR>
 
 " [insert] mappings.
-" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+" Caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
 " TODO プラグイン化.  kana/vim-operator-userの追加 operator とするのが良さそう？
 " TODO prefix入力後挿入モードにしたい？
 map [space]i [insert]
@@ -235,7 +235,7 @@ noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 nmap [space]o [open]
 nnoremap [open] <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため.
-" Caution! executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
+" Caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
 nnoremap [open]v :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
 if s:isOfficeWin()
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
@@ -251,7 +251,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 " windowのオープンとクローズ.
 nnoremap  <C-s> <C-w>s
-" Caution! ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.やろうとするとめんどいっぽい.
+" Caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.やろうとするとめんどいっぽい.
 nnoremap g<C-s> <C-w>v
 nnoremap  <C-c> <C-w>c
 " windowの移動
@@ -644,7 +644,7 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁。
+		" Caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁。
 		map [space]t [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>

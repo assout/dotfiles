@@ -365,7 +365,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもpull reqでてるので、取り込まれたら見先を変える。
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
-	NeoBundle 'pangloss/vim-javascript' " for indent.
+	NeoBundle 'pangloss/vim-javascript' " for indent only.
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'Shougo/neobundle.vim'
@@ -644,7 +644,7 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
+		" Caution! 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁。
 		map [space]t [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
@@ -676,7 +676,7 @@ if s:has_plugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:has_plugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " C-t潰してもいいの?.
+	let g:maximizer_default_mapping_key = '<C-t>' " C-t潰してもいいの?
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{

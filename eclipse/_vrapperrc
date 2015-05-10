@@ -1,29 +1,30 @@
 " # Note {{{
-" vrapperのキーバインドを有効にするにはeclipseのデフォルトキーバインドを変更する必要がある。
+" vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある。
 " 詳細は http://vrapper.sourceforge.net/documentation
 "
-" eclipseのデフォルトキーバインドをCtrl+Shift+Alt+hogeのバインドに退避することとする。
-" 例えば,Ctrl+o(QuickOutline)は、Ctrl+Shift+Alt+oに退避する。
+" eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする。
+" 例えば, Ctrl + c (copy)は、Alt + c に退避する。
 " 以下に退避するキーバインドの一覧を示す。
 "
-" Ctrl+a - Select All
-" Ctrl+b - Build All
-" Ctrl+d - Delete Line
-" Ctrl+e - Quick Switch Editor
-" Ctrl+f - Find and Replace
-" Ctrl+h - Open Search Dialog
-" Ctrl+i - Correct Indentation,Format Active Elements
-" Ctrl+j - Incremental Find
-" Ctrl+k - Find Next
-" Ctrl+l - Go to Line
-" Ctrl+n - New
-" Ctrl+o - Quick Outline
-" Ctrl+p - Print
-" Ctrl+u - Execute
-" Ctrl+v - Paste
-" Ctrl+w - Close,Close Rendering
-" Ctrl+x - Cut
-" Ctrl+y - Redo
+" Ctrl + a - Select All
+" Ctrl + b - Build All
+" Ctrl + d - Delete Line
+" Ctrl + e - Quick Switch Editor
+" Ctrl + f - Find and Replace
+" Ctrl + h - Open Search Dialog
+" Ctrl + i - Correct Indentation,Format Active Elements
+" Ctrl + j - Incremental Find
+" Ctrl + k - Find Next
+" Ctrl + l - Go to Line
+" Ctrl + n - New
+" Ctrl + o - Quick Outline
+" Ctrl + p - Print
+" Ctrl + r - Next Word
+" Ctrl + u - Execute
+" Ctrl + v - Paste
+" Ctrl + w - Close,Close Rendering
+" Ctrl + x - Cut
+" Ctrl + y - Redo
 " }}}
 
 " # Section; Vim Settings {{{
@@ -60,6 +61,9 @@ nunmap ?
 " TODO vimrc でも設定してるが[space]prefixが効かないので暫定で多重定義.
 noremap <Space>h 0
 noremap <Space>l $
+noremap <Space>k {
+noremap <Space>j }
+noremap <Space><Space> :nohlsearch<CR>
 
 " Caution! vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT

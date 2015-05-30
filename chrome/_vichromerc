@@ -28,7 +28,6 @@ cmap <C-p> :FocusPrevCandidate
 cmap <C-u> :FocusNextCandidate
 
 cmap <C-c> <Esc>
-cmap <C-j> <Esc>
 
 # F for continuous f-Mode
 # this is recomended setting but commented out by default.

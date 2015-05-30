@@ -13,9 +13,6 @@ nmap <Space>tw :TabOpenNew http://www.twitter.com
 nmap <Space>gr :TabOpenNew http://www.google.com/reader
 nmap <Space>m  :TabOpenNew https://mail.google.com/mail/#inbox
 
-nmap <C-j> :PageHalfDown
-nmap <C-k> :PageHalfUp
-
 nmap <C-h> :TabFocusPrev
 nmap <C-l> :TabFocusNext
 
@@ -29,6 +26,9 @@ nmap t <NOP>
 
 cmap <C-p> :FocusPrevCandidate
 cmap <C-u> :FocusNextCandidate
+
+cmap <C-c> <Esc>
+cmap <C-j> <Esc>
 
 # F for continuous f-Mode
 # this is recomended setting but commented out by default.

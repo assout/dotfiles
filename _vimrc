@@ -309,7 +309,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'assout/unite-todo'
 	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'fuenor/im_control.vim' " TODO C-oが効かなくなるっぽい
+	NeoBundle 'fuenor/im_control.vim' " TODO <C-o> の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'
 	" TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
 	NeoBundle 'h1mesuke/textobj-wiw'
@@ -476,8 +476,7 @@ if s:has_plugin('neocomplete') " {{{
 endif " }}}
 
 if s:has_plugin('open-browser') " {{{
-	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
-	if s:isHome() && has('unix')
+	if s:isHome() && has('unix') " gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
 		let g:netrw_nogx = 1 " disable netrw's gx mapping
 		nmap gx <Plug>(openbrowser-smart-search)
 		vmap gx <Plug>(openbrowser-smart-search)
@@ -529,13 +528,12 @@ if s:has_plugin('unite') " {{{
 	let g:unite_source_grep_max_candidates = 200
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction
+	function! s:my_relative_move.func(candidates) " move 先を相対パスで指定する action
 		let candidate = a:candidates[0]
 		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
 		call unite#take_action('move', a:candidates)
-		" 呼ばないと表示更新されない(なぜ?).
-		call unite#force_redraw()
+		call unite#force_redraw() " 呼ばないと表示更新されない(なぜ?)
 	endfunction
 
 	function! s:unite_my_keymappings()
@@ -616,7 +614,7 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁
+		" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
 		map     [space]t         [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
@@ -683,13 +681,12 @@ if s:has_plugin('vim-operator-surround') " {{{
 		nmap <silent>sau <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 		" TODO no block matches to the region となる
 		nmap <silent>sdu <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
-		" TODO append の動きになってしまう
+		" TODO apped の動きになってしまう
 		nmap <silent>sru <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
 	endif
 endif " }}}
 
 if s:has_plugin('vim-ref') " {{{
-	" webdictサイトの設定
 	let g:ref_source_webdict_sites = {
 				\ 'je': {
 				\ 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
@@ -701,10 +698,8 @@ if s:has_plugin('vim-ref') " {{{
 				\ 'url': 'http://ja.wikipedia.org/wiki/%s',
 				\ },
 				\ }
-	" デフォルトサイト.
-	let g:ref_source_webdict_sites.default = 'ej'
+	let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト.
 
-	" 出力に対するフィルタ最初の数行を削除
 	function! g:ref_source_webdict_sites.je.filter(output)
 		return join(split(a:output, '\n')[15 :], '\n')
 	endfunction
@@ -780,9 +775,8 @@ if s:has_plugin('vim-textobj-entire') " {{{
 	nmap =ie =ie<C-o>
 endif " }}}
 
-if s:has_plugin('vim-textobj-function') " {{{
-	" text-obj-between用にf -> Fに退避.
-	" TODO windowsで効かない(mappingはされてるっぽい)
+if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい)
+	" text-obj-between用に f -> F に退避
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)
 	omap aF <Plug>(textobj-function-a)

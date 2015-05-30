@@ -1,5 +1,6 @@
 ### Sample Settings
-
+# caution
+# テキストボックスフォーカス時など無効になり、chromeデフォルトの挙動になっちゃうので、できるだけ、別拡張の「Shortcut Manager」で設定する
 # aliases
 # in this example you can open extensions page by the command ':ext'
 # and Chrome's option page by the command ':option'
@@ -13,9 +14,6 @@ nmap <Space>tw :TabOpenNew http://www.twitter.com
 nmap <Space>gr :TabOpenNew http://www.google.com/reader
 nmap <Space>m  :TabOpenNew https://mail.google.com/mail/#inbox
 
-nmap <C-h> :TabFocusPrev
-nmap <C-l> :TabFocusNext
-
 nmap <C-o> :BackHist
 nmap <C-i> :ForwardHist
 
@@ -27,7 +25,7 @@ nmap t <NOP>
 cmap <C-p> :FocusPrevCandidate
 cmap <C-u> :FocusNextCandidate
 
-cmap <C-c> <Esc>
+cmap <C-c> <ESC>
 
 # F for continuous f-Mode
 # this is recomended setting but commented out by default.

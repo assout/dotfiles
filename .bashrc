@@ -9,6 +9,8 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific process
+
+# Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 if [ "$SSH_TTY" != "" ]; then
 	stty stop undef
 fi
@@ -34,6 +36,7 @@ if [ "${OSTYPE}" = "msys" ] ; then
 fi
 
 # User specific aliases and functions
+
 if [ -e ~/.vimrc -o -e ~/_vimrc ] ; then
 	alias v="vi"
 else
@@ -47,7 +50,7 @@ fi
 
 function cdls() {
 	# cdがaliasでループするので\をつける.
-	\cd $@;
+	\cd $1;
 	ls;
 }
 alias cd=cdls

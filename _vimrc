@@ -278,6 +278,7 @@ inoremap <C-f> <Right>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
+" TODO im_control が有効だと効かない
 inoremap <C-k> <C-o>D
 " caution: 設定しないと im_control で日本語入力モードON の動きをしてしまう
 inoremap <C-c> <Esc>

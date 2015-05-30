@@ -1,45 +1,42 @@
 " Index {{{1
-" * Principles.
-" * Begin.
-" * Functions and Commands.
-" * Auto-commands.
-" * Options.
-" * Let defines.
-" * Key-mappings.
-" * Plug-ins.
-" * Other Commands.
-"
-" TODO 。. を統一。
-" TODO 不要コメント削除。
+" * Introduction
+" * Begin
+" * Functions and Commands
+" * Auto-commands
+" * Options
+" * Let defines
+" * Key-mappings
+" * Plug-ins
+" * Other Commands
 " }}}1
 
-" Section; Principles {{{1
+" Section; Introduction {{{1
+" # Principles
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
-" * デフォルト環境(サーバなど)での操作時に混乱するようなカスタマイズはしない(e.g. ;と:の入れ替え)
+" * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
+
+" # References
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 " }}}1
 
 " Section; Begin {{{1
-" inner encoding(before the scriptencoding)
 if has('gui_running')
-	set encoding=utf-8
+	set encoding=utf-8 " inner encoding(before the scriptencoding)
 endif
-" before multi byte.
-scriptencoding utf-8
-" load local vimrc.
+scriptencoding utf-8 " before multi byte
+
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
-" augroup unbind.
+
 augroup vimrc
 	autocmd!
 augroup END
 " }}}1
 
 " Section; Functions and Commands {{{1
-" command実行結果をキャプチャ.
-function! s:capture_cmd_output(cmd)
+function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ
 	if has('clipboard')
 		redir @+>
 	else
@@ -50,13 +47,17 @@ function! s:capture_cmd_output(cmd)
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
-" pluginが存在するか調べる.
-function! s:has_plugin(plugin)
+function! s:formatXml()
+	" TODO vintで引っかかる
+	:%substitute/></>\r</ge | filetype indent on | setfiletype xml | normal! gg=G
+endfunction
+command! -complete=command FormatXml call <SID>formatXml()
+
+function! s:has_plugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
-" quickfix: 編集許可と折り返し表示無効.
-function! s:openModifiableQF()
+function! s:openModifiableQF() " quickfix の編集許可と折り返し表示無効
 	set modifiable
 	set nowrap
 endfunction
@@ -76,33 +77,27 @@ endfunction
 if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif
-
-function! s:formatXml()
-	" TODO vintで引っかかる.
-	:%substitute/></>\r</ge | filetype indent on | setfiletype xml | normal! gg=G
-endfunction
-command! -complete=command FormatXml call <SID>formatXml()
 " }}}1
 
 " Section; Auto-commands {{{1
 augroup vimrc
-	" DoubleByteSpace highlight.
+	" DoubleByteSpace highlight
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
-	if &encoding ==# 'utf-8' " windows の 非gvim 環境で spell ファイル関連のエラーとなってしまうため.
+	if &encoding ==# 'utf-8' " windows の 非gvim 環境で spell ファイル関連のエラーとなってしまうため
 		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
 	endif
-	" 改行時の自動コメント継続をやめる.(o,Oコマンドでの改行時のみ)
+	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
-	" QuickFixを自動で開く,QuickFix内<CR>で選択できるようにする.
+	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
-	" format json.
+	" format json
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>
 		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
 	endif
-	" pluginでの設定だけだとたまにハードタブのままになっちゃうのでここで指定.
+	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 augroup END
 " }}}1
@@ -113,7 +108,6 @@ set nobackup
 set clipboard=unnamed,unnamedplus
 set diffopt+=vertical
 set noexpandtab
-" set expandtab " ソフトタブに切り替えられるようにコメントアウトしとく.
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
 	set foldlevelstart=0
@@ -132,15 +126,15 @@ set hlsearch
 set ignorecase
 set incsearch
 if has('win32')
-	set isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)。<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
+	set isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
 endif
-set keywordprg=:help " Open Vim internal help by K command.
+set keywordprg=:help " Open Vim internal help by K command
 set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
-set lazyredraw " マクロなどを実行中は描画を中断.
+set lazyredraw " マクロなどを実行中は描画を中断
 set number
-set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う.
+set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set scrolloff=5
 set shiftwidth=4
 set showtabline=1
@@ -154,47 +148,44 @@ elseif has('win32')
 endif
 set splitbelow
 set splitright
-set spelllang+=cjk " スペルチェックで日本語は除外する.
+set spelllang+=cjk " スペルチェックで日本語は除外する
 set tabstop=4
-set textwidth=0 " 自動改行をなくす.
+set textwidth=0 " 自動改行をなくす
 set title
 if has('persistent_undo')
-	set noundofile " Undoファイルの有効無効.
+	set noundofile
 endif
 set wildmenu
 set nowrap
 set nowrapscan
 if has('win32')
-	set noswapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明)).
+	set noswapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
 endif
 " }}}1
 
 " Section; Let defines {{{1
-" netrwのデフォルト表示スタイル変更.
-let g:netrw_liststyle = 3
-" shellのハイライトをbash基準にする.
-let b:is_bash = 1
-" for dicwin.vim.
-let g:mapleader = '[space]d'
-" let g:dicwin_mapleader = '[space]d'
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+let b:is_bash = 1 " shellのハイライトをbash基準にする
+let g:mapleader = '[space]d' " for dicwin.vim (g:dicwin_mapleader は効かなかった)
 " }}}1
 
 " Section; Key-mappings {{{1
-" TODO <C-;> に <Esc> を割り当てたい(めんどいっぽい)
-" 今はデフォルトの <C-]> か <C-c> を使ってるけど押しづらい。
-" 前は <C-j> を 割り当ててたけど bash とかだと Enter 扱いでややこしいからやめた。
-" あとなにかの plugin で jk 同時押しで <Esc> も試したけど合わなかったよ(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
 
-" vimfilerと競合防ぐため[space]にわりあてている.
+" caution: <C-;> に <Esc> を割り当てたいがめんどいっぽい
+" 今はデフォルトの <C-]> か <C-c> を使ってるけど押しづらい
+" 前は <C-j> を 割り当ててたけど bash とかだと Enter 扱いでややこしいからやめた
+" あとなにかの plugin で jk 同時押しで <Esc> も試したけど合わなかった(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
+
+" vimfilerと競合防ぐため[space]にわりあてている
 map     <Space>  [space]
 noremap [space]  <Nop>
 noremap [space]h ^
 noremap [space]l g_
 
-" [insert] mappings.
-" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと。
-" TODO プラグイン化.  kana/vim-operator-userの追加 operator とするのが良さそう？
-" TODO prefix入力後挿入モードにしたい？
+" [insert] mappings
+" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
+" TODO プラグイン化。kana/vim-operator-user の追加 operator とするのが良さそう？
+" TODO prefix 入力後挿入モードにしたいかも
 map     [space]i [insert]
 noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
@@ -215,14 +206,14 @@ noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
 
 nmap     [space]o [open]
 nnoremap [open]   <Nop>
-" resolveしなくても開けるが、fugitiveで対象とするため.
-" caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
+" caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる
+" resolveしなくても開けるが、fugitiveで対象とするため
 nnoremap [open]v  :<C-u>execute ':vsplit ' . resolve(expand($MYVIMRC))<CR>
 if !s:isHome() && has('win32')
 	nnoremap [open]i :<C-u>vsplit D:\admin\Documents\ipmsg.log<CR>
 endif
 
-" 検索結果ハイライトを解除. caution: [space][space]だとうごかない。<Space><Space>とするとvimfilerと競合。
+" 検索結果ハイライトを解除。caution: [space][space]だとうごかない<Space><Space>とするとvimfilerと競合
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]r       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -233,7 +224,7 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 nnoremap  <C-s> <C-w>s
-" caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない.やろうとするとめんどいっぽい.
+" caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい
 nnoremap g<C-s> <C-w>v
 nnoremap  <C-c> <C-w>c
 
@@ -242,7 +233,7 @@ nnoremap <C-Down>  <C-w>J
 nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
-" tab操作. caution: <TAB> = <C-i>
+" tab操作 caution: <TAB> = <C-i>
 nnoremap <C-TAB>   gt
 nnoremap <C-S-TAB> gT
 
@@ -252,13 +243,12 @@ nnoremap gj j
 nnoremap gk k
 
 nnoremap <CR> i<CR><Esc>
-" D,Cと一貫性のある挙動に変更.
+" D,Cと一貫性のある挙動に変更
 nnoremap Y y$
-" very magicをデフォルトにする.
 nnoremap / /\v
 nnoremap ? ?\v
 
-" バッファ、ウィンドウ、タブ移動関連.
+" バッファ、ウィンドウ、タブ移動関連
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
 nnoremap [B :bfirst<CR>
@@ -282,33 +272,29 @@ nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
 
-" インサートモードでのキーマッピングをEmacs風にする.
+" インサートモードでのキーマッピングをEmacs風にする
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
-" TODO 補完候補表示中は使えない.
-inoremap <C-u> <C-o>d0
 inoremap <C-k> <C-o>D
-
 " caution: 設定しないと im_control で日本語入力モードON の動きをしてしまう
 inoremap <C-c> <Esc>
 
-" コマンドラインモードでのキーマッピングをEmacs風にする.
+" コマンドラインモードでのキーマッピングをEmacs風にする
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 cnoremap <C-d> <Del>
+cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-" TODO C-k で末尾まで削除入れれる？
-" cnoremap <C-k> <C-o>D
 
-" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など).
+" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
 vnoremap y y'>
 " }}}1
 
@@ -323,13 +309,13 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'assout/unite-todo'
 	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'fuenor/im_control.vim'
+	NeoBundle 'fuenor/im_control.vim' " TODO C-oが効かなくなるっぽい
 	NeoBundle 'glidenote/memolist.vim'
 	" TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
 	NeoBundle 'h1mesuke/textobj-wiw'
 	NeoBundle 'h1mesuke/vim-alignta'
-	" TODO windowsでmigemoれない.
-	" NeoBundle 'haya14busa/vim-migemo'
+	" TODO windowsでmigemoれない
+	NeoBundle 'haya14busa/vim-migemo'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace'
 	NeoBundle 'kana/vim-submode'
@@ -342,7 +328,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'LeafCage/yankround.vim'
-	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない.
+	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/gist-vim'
 	NeoBundle 'mattn/qiita-vim'
@@ -350,10 +336,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/vim-textobj-url'
 	NeoBundle 'mattn/webapi-vim'
 	" NeoBundle 'moznion/hateblo.vim'
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもpull reqでてるので、取り込まれたら見先を変える。
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用本家へもpull reqでてるので、取り込まれたら見先を変える
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
-	NeoBundle 'pangloss/vim-javascript' " for indent only.
+	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'Shougo/neobundle.vim'
@@ -373,7 +359,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ },
 				\ }
 	NeoBundle 'thinca/vim-ref'
-	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
+	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
@@ -386,7 +372,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " 文字化けするけど.
-	" color schemes.
+	" color schemes
 	NeoBundle 'w0ng/vim-hybrid'
 	call neobundle#end()
 	filetype plugin indent on
@@ -395,7 +381,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath.',/vimfiles/plugins'
 	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
-			" work around. msysgitでvim起動時にエラーが出てしまうため.
+			" work around. msysgitでvim起動時にエラーが出てしまうため
 			if has('lua') || s:addingPath !~# "neocomplete"
 				let &runtimepath = &runtimepath . ',' . s:addingPath
 			endif
@@ -427,7 +413,7 @@ if s:has_plugin('gist-vim') " {{{
 endif " }}}
 
 if s:has_plugin('hateblo') " {{{
-	" api_keyはvimrc.localから設定.
+	" api_keyはvimrc.localから設定
 	let g:hateblo_vim = {
 				\ 'user': 'assout',
 				\ 'api_key': g:hateblo_api_key,
@@ -450,6 +436,8 @@ endif " }}}
 if s:has_plugin('im_control') " {{{
 	if has('win32')
 		let IM_CtrlMode = 4
+	else
+		let IM_CtrlMode = 1 " caution: 設定しなくても期待した挙動になるが
 	endif
 	if !has('gui_running')
 		let IM_CtrlMode = 0
@@ -488,9 +476,9 @@ if s:has_plugin('neocomplete') " {{{
 endif " }}}
 
 if s:has_plugin('open-browser') " {{{
-	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
+	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
 	if s:isHome() && has('unix')
-		let g:netrw_nogx = 1 " disable netrw's gx mapping.
+		let g:netrw_nogx = 1 " disable netrw's gx mapping
 		nmap gx <Plug>(openbrowser-smart-search)
 		vmap gx <Plug>(openbrowser-smart-search)
 	endif
@@ -512,8 +500,8 @@ if s:has_plugin('qiita-vim') " {{{
 	nmap     [space]q    [Qiita]
 	nnoremap [Qiita]     <Nop>
 	nnoremap [Qiita]l    :<C-u>Unite qiita<CR>
-	nnoremap [Qiita]c    :<C-u>Qiita<CR>
 	nnoremap [Qiita]<CR> :<C-u>Qiita<CR>
+	nnoremap [Qiita]c    :<C-u>Qiita<CR>
 	nnoremap [Qiita]e    :<C-u>Qiita -e<CR>
 	nnoremap [Qiita]d    :<C-u>Qiita -d<CR>
 endif " }}}
@@ -541,7 +529,7 @@ if s:has_plugin('unite') " {{{
 	let g:unite_source_grep_max_candidates = 200
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction.
+	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction
 		let candidate = a:candidates[0]
 		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
@@ -551,10 +539,10 @@ if s:has_plugin('unite') " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
-		" vim-operator-surround の mapping と被るので nowait.
+		" vim-operator-surround の mapping と被るので nowait
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
-		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため.
+		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため
 		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
@@ -628,7 +616,7 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁。
+		" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうので厳禁
 		map     [space]t         [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
@@ -701,7 +689,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:has_plugin('vim-ref') " {{{
-	" webdictサイトの設定.
+	" webdictサイトの設定
 	let g:ref_source_webdict_sites = {
 				\ 'je': {
 				\ 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
@@ -716,7 +704,7 @@ if s:has_plugin('vim-ref') " {{{
 	" デフォルトサイト.
 	let g:ref_source_webdict_sites.default = 'ej'
 
-	" 出力に対するフィルタ。最初の数行を削除.
+	" 出力に対するフィルタ最初の数行を削除
 	function! g:ref_source_webdict_sites.je.filter(output)
 		return join(split(a:output, '\n')[15 :], '\n')
 	endfunction
@@ -802,7 +790,7 @@ if s:has_plugin('vim-textobj-function') " {{{
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
-if s:has_plugin('yankround.vim') " {{{
+if s:has_plugin('yankroundvim') " {{{
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)
@@ -817,7 +805,7 @@ if (s:isHome() && has('unix')) || has('win32')
 else
 	colorscheme peachpuff
 endif
-" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう.
+" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 

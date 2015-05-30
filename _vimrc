@@ -69,21 +69,8 @@ function! s:insertSuffix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
-" TODO isHome, isUnix という単位で関数分ける(というかunixかどうかの関数はいらないので、isHome だけでもよいかも)
-function! s:isHomeUnix()
-	return $USER ==# 'oji' && has('unix')
-endfunction
-
-function! s:isHomeWin()
-	return $USER ==# 'oji' && has('win32')
-endfunction
-
-function! s:isOfficeUnix()
-	return $USER !=# 'oji' && has('unix')
-endfunction
-
-function! s:isOfficeWin()
-	return $USER !=# 'oji' && has('win32')
+function! s:isHome()
+	return $USER ==# 'oji'
 endfunction
 
 if ! has('kaoriya')
@@ -160,11 +147,10 @@ set showtabline=1
 set sidescrolloff=5
 set smartcase
 set smartindent
-" スペルチェック用辞書ファイル.
-if s:isOfficeWin()
-	set spellfile=D:/admin/Documents/spell/en.utf-8.add
-elseif s:isHomeUnix()
+if s:isHome() && has('unix')
 	set spellfile=~/Dropbox/spell/en.utf-8.add
+elseif has('win32')
+	set spellfile=D:/admin/Documents/spell/en.utf-8.add
 endif
 set splitbelow
 set splitright
@@ -232,7 +218,7 @@ nnoremap [open]   <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため.
 " caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる.
 nnoremap [open]v  :<C-u>execute ':vsplit ' . resolve(expand($MYVIMRC))<CR>
-if s:isOfficeWin()
+if !s:isHome() && has('win32')
 	nnoremap [open]i :<C-u>vsplit D:\admin\Documents\ipmsg.log<CR>
 endif
 
@@ -472,10 +458,10 @@ endif " }}}
 
 if s:has_plugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
-	if s:isHomeUnix()
+	if s:isHome() && has('unix')
 		let g:memolist_path = '~/Dropbox/memolist'
 		let g:memolist_template_dir_path = '~/Dropbox/memolist'
-	elseif s:isOfficeWin()
+	else
 		let g:memolist_path = 'D:/admin/Documents/memolist'
 		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
@@ -503,7 +489,7 @@ endif " }}}
 
 if s:has_plugin('open-browser') " {{{
 	" gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効.
-	if s:isHomeUnix()
+	if s:isHome() && has('unix')
 		let g:netrw_nogx = 1 " disable netrw's gx mapping.
 		nmap gx <Plug>(openbrowser-smart-search)
 		vmap gx <Plug>(openbrowser-smart-search)
@@ -628,9 +614,9 @@ if s:has_plugin('unite') " {{{
 
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
-		if s:isHomeUnix()
+		if s:isHome() && has('unix')
 			let g:unite_todo_data_directory = '~/Dropbox'
-		elseif s:isOfficeWin()
+		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
 
@@ -826,7 +812,7 @@ endif " }}}
 
 " Section; Other Commands {{{1
 filetype on
-if s:isHomeUnix() || s:isOfficeWin()
+if (s:isHome() && has('unix')) || has('win32')
 	colorscheme hybrid-light
 else
 	colorscheme peachpuff

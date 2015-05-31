@@ -335,8 +335,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/unite-gist'
 	NeoBundle 'mattn/vim-textobj-url'
 	NeoBundle 'mattn/webapi-vim'
-	" NeoBundle 'moznion/hateblo.vim'
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用本家へもpull reqでてるので、取り込まれたら見先を変える
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用本家へもpull reqでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'pangloss/vim-javascript' " for indent only

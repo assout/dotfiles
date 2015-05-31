@@ -328,7 +328,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'LeafCage/yankround.vim'
-	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない
+	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/gist-vim'
 	NeoBundle 'mattn/qiita-vim'

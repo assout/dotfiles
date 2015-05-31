@@ -48,8 +48,8 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
 function! s:formatXml()
-	" TODO vintで引っかかる
-	:%substitute/></>\r</ge | filetype indent on | setfiletype xml | normal! gg=G
+	" caution: execute にする必要ないと思うが vint で警告になってしまうためこうしている
+	execute '%substitute/></>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
@@ -382,7 +382,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
 		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
 			" work around. msysgitでvim起動時にエラーが出てしまうため
-			if has('lua') || s:addingPath !~# "neocomplete"
+			if has('lua') || s:addingPath !~# 'neocomplete'
 				let &runtimepath = &runtimepath . ',' . s:addingPath
 			endif
 		end

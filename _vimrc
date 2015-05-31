@@ -398,7 +398,7 @@ if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic 
 endif " }}}
 
-if s:has_plugin('dicwin') " {{{
+if s:has_plugin('dicwin') || has('kaoriya') " {{{
 	let g:dicwin_mapleader = '[space]d'
 endif " }}}
 
@@ -409,7 +409,7 @@ endif " }}}
 if s:has_plugin('gist-vim') " {{{
 	let g:gist_detect_filetype = 1
 	let g:gist_get_multiplefile = 1
-	nmap [space]g [Gist]
+	nmap     [space]g   [Gist]
 	nnoremap [Gist]     <Nop>
 	nnoremap [Gist]l    :<C-u>Unite gist<CR>
 	nnoremap [Gist]c    :<C-u>Gist<CR>
@@ -428,7 +428,7 @@ if s:has_plugin('hateblo') " {{{
 				\ }
 	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
 
-	nmap [space]H       [hateblo]
+	nmap     [space]H   [hateblo]
 	nnoremap [hateblo]  <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
@@ -458,7 +458,7 @@ if s:has_plugin('memolist') " {{{
 		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
 	endif
 
-	nmap [space]m [memolist]
+	nmap     [space]m    [memolist]
 	nnoremap [memolist]  <Nop>
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
@@ -587,9 +587,9 @@ if s:has_plugin('unite') " {{{
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
 	nnoremap [unite]t :<C-u>Unite tab -buffer-name=tab<CR>
 	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
-	if s:has_plugin('yankround') " {{{
+	if s:has_plugin('yankround')
 		nnoremap [unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
-	endif " }}}
+	endif
 
 	if s:has_plugin('neomru') " {{{
 		let g:neomru#filename_format = ''
@@ -692,17 +692,10 @@ endif " }}}
 
 if s:has_plugin('vim-ref') " {{{
 	let g:ref_source_webdict_sites = {
-				\ 'je': {
-				\ 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s',
-				\ },
-				\ 'ej': {
-				\ 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s',
-				\ },
-				\ 'wiki': {
-				\ 'url': 'http://ja.wikipedia.org/wiki/%s',
-				\ },
-				\ }
-	let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト.
+				\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', },
+				\ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', },
+				\ 'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', }, }
+	let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト
 
 	function! g:ref_source_webdict_sites.je.filter(output)
 		return join(split(a:output, '\n')[15 :], '\n')

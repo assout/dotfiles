@@ -1,11 +1,11 @@
 // ==UserScript==
 // @ShortcutManager
-// @name disable
+// @name submit
 // @namespace fVnhlldvzfzZ
 // @key CTRL+J
 // @include *
 // ==/UserScript==
-// 何も書かないと、[CTRL+J] は無効化されます
+document.forms[0].submit()
 
 // ==UserScript==
 // @ShortcutManager

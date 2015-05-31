@@ -166,7 +166,6 @@ endif
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let b:is_bash = 1 " shellのハイライトをbash基準にする
-let g:mapleader = '[space]d' " for dicwin.vim (g:dicwin_mapleader は効かなかった)
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -397,6 +396,10 @@ endif " }}}
 
 if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic 
+endif " }}}
+
+if s:has_plugin('dicwin') " {{{
+	let g:dicwin_mapleader = '[space]d'
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{

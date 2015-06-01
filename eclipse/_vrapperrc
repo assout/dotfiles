@@ -59,8 +59,8 @@ nunmap /
 nunmap ?
 
 " TODO vimrc でも設定してるが[space]prefixが効かないので暫定で多重定義.
-noremap <Space>h 0
-noremap <Space>l $
+noremap <Space>h ^
+noremap <Space>l g_
 noremap <Space><Space> :nohlsearch<CR>
 
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.

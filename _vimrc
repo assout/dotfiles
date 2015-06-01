@@ -18,6 +18,9 @@
 
 " # References
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
+
+" # TODOs
+" * TODO windows だと <C-k> が dicwin にとられているっぽい
 " }}}1
 
 " Section; Begin {{{1
@@ -47,6 +50,8 @@ function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
+" TODO 選択範囲のみ整形できるようにする
+" TODO <hoge></hoge> <fuga></fuga> のように間に空白があるとフォーマットされない
 function! s:formatXml()
 	" caution: execute にする必要ないと思うが vint で警告になってしまうためこうしている
 	execute '%substitute/></>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
@@ -62,10 +67,12 @@ function! s:openModifiableQF() " quickfix の編集許可と折り返し表示�
 	set nowrap
 endfunction
 
+" TODO 独自 command 化したほうがよい
 function! s:insertPrefix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
+" TODO 独自 command 化したほうがよい
 function! s:insertSuffix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
@@ -377,8 +384,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	filetype plugin indent on
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	let &runtimepath = &runtimepath.',/vimfiles/plugins'
-	for s:addingPath in split(glob($HOME.'/vimfiles/plugins/*'), '\n')
+	let &runtimepath = &runtimepath . ',/vimfiles/plugins'
+	for s:addingPath in split(glob($HOME . '/vimfiles/plugins/*'), '\n')
 		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
 			" work around. msysgitでvim起動時にエラーが出てしまうため
 			if has('lua') || s:addingPath !~# 'neocomplete'
@@ -389,7 +396,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-if s:has_plugin('alignta') " {{{
+if s:has_plugin('alignta') " {{{ caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
 	xnoremap [space]a :Alignta<Space>
 endif " }}}
 
@@ -397,8 +404,11 @@ if s:has_plugin('codic') " {{{
 	nnoremap [space]c :<C-u>Codic 
 endif " }}}
 
-if s:has_plugin('dicwin') || has('kaoriya') " {{{
+if s:has_plugin('dicwin') " {{{
 	let g:dicwin_mapleader = '[space]d'
+	if has('win32') " ウィンドウ幅が広くなる問題対応 <http://saihoooooooo.hatenablog.com/entry/20120726/1343274932>
+		let g:dicwin_dictpath = substitute($HOME, '\', '/', 'g') . '/vimfiles/dict/gene.txt'
+	endif
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
@@ -780,7 +790,7 @@ if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappin
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
-if s:has_plugin('yankroundvim') " {{{
+if s:has_plugin('yankround') " {{{
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)

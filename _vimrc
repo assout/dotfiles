@@ -16,6 +16,11 @@
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
 
+" # Points
+" * キーマッピングのとき <C-u> をすること(e.g. nnoremap hoge :<C-u>fuga)
+" (誤って範囲指定をしないようにする設定なので、範囲指定して実行してほしいキーマッピングではしないこと)
+" [vimrcでのキーマッピングの際の <C-u> の意味 - ひとり綾取り](http://d.hatena.ne.jp/e_v_e/20150101/1420067539)
+
 " # References
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
@@ -189,7 +194,6 @@ noremap [space]h ^
 noremap [space]l g_
 
 " [insert] mappings
-" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
 " TODO プラグイン化。kana/vim-operator-user の追加 operator とするのが良さそう？
 " TODO prefix 入力後挿入モードにしたいかも
 map     [space]i [insert]
@@ -396,7 +400,7 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-if s:has_plugin('alignta') " {{{ caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
+if s:has_plugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
 endif " }}}
 
@@ -627,7 +631,6 @@ if s:has_plugin('unite') " {{{
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
-		" caution: 「:<C-u>hogehoge」と定義すると複数行選択が無効になってしまうのでしないこと
 		map     [space]t         [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>

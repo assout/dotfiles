@@ -44,7 +44,7 @@ augroup END
 " }}}1
 
 " Section; Functions and Commands {{{1
-function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TODO 実行が遅い(描画しないようにしても遅い)
+function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
 	if has('clipboard')
 		redir @+>
 	else

@@ -312,8 +312,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
-		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
+	call neobundle#begin(expand('~/.vim/bundle'))
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'Shougo/neobundle.vim'

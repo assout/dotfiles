@@ -620,8 +620,7 @@ if s:has_plugin('unite') " {{{
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		if s:isHome() && has('unix')
-			let g:unite_todo_data_directory = '~/Dro
-			pbox'
+			let g:unite_todo_data_directory = '~/Dropbox'
 		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif

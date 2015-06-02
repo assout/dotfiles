@@ -309,7 +309,6 @@ vnoremap y y'>
 " Section; Plug-ins {{{1
 " Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
-	filetype plugin indent off
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 	endif
@@ -379,7 +378,8 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 	call neobundle#end()
-	filetype plugin indent on
+	filetype plugin indent on " Required!
+	NeoBundleCheck " Installation check.
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath . ',/vimfiles/plugins'

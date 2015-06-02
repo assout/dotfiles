@@ -25,7 +25,7 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * TODO windows だと <C-k> が dicwin にとられているっぽい
+" * TODO windows だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
 " }}}1
 
 " Section; Begin {{{1
@@ -44,7 +44,7 @@ augroup END
 " }}}1
 
 " Section; Functions and Commands {{{1
-function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ
+function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TODO 実行が遅い(描画しないようにしても遅い)
 	if has('clipboard')
 		redir @+>
 	else
@@ -193,6 +193,9 @@ noremap [space]  <Nop>
 noremap [space]h ^
 noremap [space]l g_
 
+noremap / /\v
+noremap ? ?\v
+
 " [insert] mappings
 " TODO プラグイン化。kana/vim-operator-user の追加 operator とするのが良さそう？
 " TODO prefix 入力後挿入モードにしたいかも
@@ -223,7 +226,7 @@ if !s:isHome() && has('win32')
 	nnoremap [open]i :<C-u>vsplit D:\admin\Documents\ipmsg.log<CR>
 endif
 
-" 検索結果ハイライトを解除。caution: [space][space]だとうごかない<Space><Space>とするとvimfilerと競合
+" 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だと vimfiler と競合
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]r       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -243,7 +246,7 @@ nnoremap <C-Down>  <C-w>J
 nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
-" tab操作 caution: <TAB> = <C-i>
+" tab操作 caution: <TAB> == <C-i>
 nnoremap <C-TAB>   gt
 nnoremap <C-S-TAB> gT
 
@@ -255,8 +258,6 @@ nnoremap gk k
 nnoremap <CR> i<CR><Esc>
 " D,Cと一貫性のある挙動に変更
 nnoremap Y y$
-nnoremap / /\v
-nnoremap ? ?\v
 
 " バッファ、ウィンドウ、タブ移動関連
 nnoremap [b :bprevious<CR>
@@ -282,13 +283,13 @@ nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
 
-" インサートモードでのキーマッピングをEmacs風にする
+" インサートモードでのキーマッピングを Emacs 風にする
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
-" TODO im_control が有効だと効かない
+" TODO im_control が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
 " caution: 設定しないと im_control で日本語入力モードON の動きをしてしまう
 inoremap <C-c> <Esc>
@@ -318,40 +319,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		call neobundle#begin(expand('~/.vim/bundle'))
 	endif
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
-	NeoBundle 'assout/unite-todo'
-	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'fuenor/im_control.vim' " TODO <C-o> の動きが変になる
-	NeoBundle 'glidenote/memolist.vim'
-	" TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
-	NeoBundle 'h1mesuke/textobj-wiw'
-	NeoBundle 'h1mesuke/vim-alignta'
-	" TODO windowsでmigemoれない
-	NeoBundle 'haya14busa/vim-migemo'
-	NeoBundle 'kana/vim-operator-user'
-	NeoBundle 'kana/vim-operator-replace'
-	NeoBundle 'kana/vim-submode'
-	NeoBundle 'kana/vim-textobj-entire'
-	NeoBundle 'kana/vim-textobj-function'
-	NeoBundle 'kana/vim-textobj-indent'
-	NeoBundle 'kana/vim-textobj-line'
-	NeoBundle 'kana/vim-textobj-user'
-	NeoBundle 'kannokanno/previm'
-	NeoBundle 'koron/codic-vim'
-	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'LeafCage/yankround.vim'
-	NeoBundle 'mattn/emmet-vim' " markdownのurl形式取得にしか使ってない(<C-y>a)
-	NeoBundle 'mattn/excitetranslate-vim'
-	NeoBundle 'mattn/gist-vim'
-	NeoBundle 'mattn/qiita-vim'
-	NeoBundle 'mattn/unite-gist'
-	NeoBundle 'mattn/vim-textobj-url'
-	NeoBundle 'mattn/webapi-vim'
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用本家へもpull reqでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
-	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
-	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
-	NeoBundle 'pangloss/vim-javascript' " for indent only
-	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
@@ -368,9 +336,40 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ 'unix' : 'make -f make_unix.mak',
 				\ },
 				\ }
-	NeoBundle 'thinca/vim-ref'
-	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へも PR でてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+	NeoBundle 'assout/unite-todo'
+	NeoBundle 'chase/vim-ansible-yaml'
+	NeoBundle 'fuenor/im_control.vim' " TODO linux だと <C-o> の動きが変になる
+	NeoBundle 'glidenote/memolist.vim'
+	NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
+	NeoBundle 'h1mesuke/vim-alignta'
+	NeoBundle 'haya14busa/vim-migemo' " TODO windowsでmigemoれない
+	NeoBundle 'kana/vim-operator-replace'
+	NeoBundle 'kana/vim-operator-user'
+	NeoBundle 'kana/vim-submode'
+	NeoBundle 'kana/vim-textobj-entire'
+	NeoBundle 'kana/vim-textobj-function'
+	NeoBundle 'kana/vim-textobj-indent'
+	NeoBundle 'kana/vim-textobj-line'
+	NeoBundle 'kana/vim-textobj-user'
+	NeoBundle 'kannokanno/previm'
+	NeoBundle 'koron/codic-vim'
+	NeoBundle 'koron/dicwin-vim'
+	NeoBundle 'mattn/emmet-vim' " markdown の url 形式取得にしか使ってない(<C-y>a)
+	NeoBundle 'mattn/excitetranslate-vim'
+	NeoBundle 'mattn/gist-vim'
+	NeoBundle 'mattn/qiita-vim'
+	NeoBundle 'mattn/unite-gist'
+	NeoBundle 'mattn/vim-textobj-url'
+	NeoBundle 'mattn/webapi-vim'
+	NeoBundle 'pangloss/vim-javascript' " for indent only
+	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
+	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
+	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'szw/vim-maximizer' " window の最大化・復元
+	NeoBundle 'thinca/vim-qfreplace' " grep した結果を置換
 	NeoBundle 'thinca/vim-quickrun'
+	NeoBundle 'thinca/vim-ref'
 	NeoBundle 'thinca/vim-singleton'
 	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
 	NeoBundle 'thinca/vim-textobj-comment'
@@ -381,21 +380,21 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'tyru/operator-camelize.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
-	NeoBundle 'vim-scripts/DirDiff.vim' " 文字化けするけど.
-	" color schemes
-	NeoBundle 'w0ng/vim-hybrid'
+	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
+	NeoBundle 'w0ng/vim-hybrid' " color scheme
 	call neobundle#end()
 	filetype plugin indent on
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath . ',/vimfiles/plugins'
 	for s:addingPath in split(glob($HOME . '/vimfiles/plugins/*'), '\n')
-		if s:addingPath !~# '\~$' && isdirectory(s:addingPath)
-			" work around. msysgitでvim起動時にエラーが出てしまうため
-			if has('lua') || s:addingPath !~# 'neocomplete'
-				let &runtimepath = &runtimepath . ',' . s:addingPath
-			endif
-		end
+		if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
+			continue
+		endif
+		if s:addingPath =~# 'neocomplete' && ! has('lua') " work around. msysgitでvim起動時にエラーが出てしまうため
+			continue
+		endif
+		let &runtimepath = &runtimepath . ',' . s:addingPath
 	endfor
 endif
 " }}}
@@ -405,7 +404,7 @@ if s:has_plugin('alignta') " {{{
 endif " }}}
 
 if s:has_plugin('codic') " {{{
-	nnoremap [space]c :<C-u>Codic 
+	nnoremap [space]c :<C-u>Codic<Space>
 endif " }}}
 
 if s:has_plugin('dicwin') " {{{
@@ -554,31 +553,32 @@ if s:has_plugin('unite') " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
+		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
+		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
+		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
+		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため
+		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
 		" vim-operator-surround の mapping と被るので nowait
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
-		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
-		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため
-		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
-		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
-		nunmap   <buffer> <C-h>
-		nunmap   <buffer> <C-l>
-		nunmap   <buffer> <C-k>
-		nmap     <buffer> g<C-h> <Plug>(unite_delete_backward_path)
-		nmap     <buffer>  <C-w> <Plug>(unite_delete_backward_path)
-		nmap     <buffer> g<C-l> <Plug>(unite_redraw)
-		nmap     <buffer> g<C-k> <Plug>(unite_print_candidate)
+		nunmap   <buffer>          <C-h>
+		nunmap   <buffer>          <C-l>
+		nunmap   <buffer>          <C-k>
+		nmap     <buffer>         g<C-h> <Plug>(unite_delete_backward_path)
+		nmap     <buffer>         g<C-l> <Plug>(unite_redraw)
+		nmap     <buffer>         g<C-k> <Plug>(unite_print_candidate)
+		" vim-submode の mapping と被るので nowait
+		nmap     <buffer><nowait>  <C-w> <Plug>(unite_delete_backward_path)
 	endfunction
 	augroup vimrc
 		autocmd FileType unite call s:unite_my_keymappings()
 	augroup END
 
-	call unite#custom#default_action('directory', 'vimfiler')
 	call unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
 	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
+	call unite#custom#default_action('directory', 'vimfiler')
+	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 
 	nmap     [space]u    [unite]
 	nnoremap [unite]     <Nop>
@@ -602,13 +602,15 @@ if s:has_plugin('unite') " {{{
 	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
 	if s:has_plugin('yankround')
 		nnoremap [unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
+	else
+		nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
 	endif
 
 	if s:has_plugin('neomru') " {{{
-		let g:neomru#filename_format = ''
+		let g:neomru#directory_mru_limit = 50
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 50
-		let g:neomru#directory_mru_limit = 50
+		let g:neomru#filename_format = ''
 
 		nmap     [unite]n  [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
@@ -618,7 +620,8 @@ if s:has_plugin('unite') " {{{
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		if s:isHome() && has('unix')
-			let g:unite_todo_data_directory = '~/Dropbox'
+			let g:unite_todo_data_directory = '~/Dro
+			pbox'
 		else
 			let g:unite_todo_data_directory = 'D:/admin/Documents'
 		endif
@@ -662,13 +665,14 @@ if s:has_plugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:has_plugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " C-t潰してもいいの?
+	let g:maximizer_default_mapping_key = '<C-t>' " TODO eclipse のデフォルトショートカットにあわせ、<C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
+	" TODO saawc などで<!-- -->の追加はできるが、削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
 	map <silent> sa <Plug>(operator-surround-append)
@@ -726,14 +730,14 @@ if s:has_plugin('vim-ref') " {{{
 endif " }}}
 
 if s:has_plugin('vim-submode') " {{{
-	call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
 	call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-	call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>-')
-	call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>+')
-	call submode#map('winsize', 'n', '', '>', '<C-w>>')
-	call submode#map('winsize', 'n', '', '<', '<C-w><')
-	call submode#map('winsize', 'n', '', '+', '<C-w>-')
-	call submode#map('winsize', 'n', '', '-', '<C-w>+')
+	call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
+	call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
+	call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
+	call submode#map('winsize', 'n', '', 'h', '<C-w><')
+	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
+	call submode#map('winsize', 'n', '', 'k', '<C-w>-')
+	call submode#map('winsize', 'n', '', 'j', '<C-w>+')
 
 	call submode#enter_with('wrap-scroll', 'n', '', 'zh', 'zh')
 	call submode#enter_with('wrap-scroll', 'n', '', 'zl', 'zl')

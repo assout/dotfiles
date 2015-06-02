@@ -1,11 +1,11 @@
-" # Note {{{
+" Section; Introduction {{{1
 " vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある。
 " 詳細は http://vrapper.sourceforge.net/documentation
-"
+
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする。
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する。
 " 以下に退避するキーバインドの一覧を示す。
-"
+
 " Ctrl + a - Select All
 " Ctrl + b - Build All
 " Ctrl + d - Delete Line
@@ -25,17 +25,16 @@
 " Ctrl + w - Close,Close Rendering
 " Ctrl + x - Cut
 " Ctrl + y - Redo
-" }}}
+" }}}1
 
-" # Section; Vim Settings {{{
-" load vimrc.
+" Section; Vim Settings {{{1
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
-" }}}
+" }}}1
 
-" # Section; Vrapper Settings {{{
+" Section; Vrapper Settings {{{1
 " インサートモードを抜けたらIMEオフ.
 set imdisable
 " コンテンツアシストで<C-p>,<C-n>を有効にする.
@@ -48,9 +47,9 @@ set visualmouse
 set gvimpath=D:/admin/tool/vim74-kaoriya-win32/gvim.exe
 " Search Regex
 set regexsearch
-" }}}
+" }}}1
 
-" Section; Key-mappings {{{
+" Section; Key-mappings {{{1
 " vimrcでのマッピングを解除.
 nunmap j
 nunmap k
@@ -66,20 +65,17 @@ noremap <Space><Space> :nohlsearch<CR>
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT
 noremap <C-l> gt
-" caution: <C-S-TAB>だと効かない.
-" nnoremap <TAB>     gt
-" nnoremap <S-TAB>   gT
 
 nnoremap <C-c> :bdelete<CR>
 nnoremap <C-k> :GotoPreviousMember<CR>
 nnoremap <C-j> :GotoNextMember<CR>
-" }}}
+" }}}1
 
-" Section; Define commands {{{
+" Section; Define commands {{{1
 " definition ID of the edit -> go to next member action 
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
 " definition ID of the edit -> go to previous member action 
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
-" }}}
+" }}}1
 
-" vim: set filetype=vim :
+" vim: filetype=vim nofoldenable:

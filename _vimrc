@@ -70,12 +70,10 @@ function! s:openModifiableQF() " quickfix の編集許可と折り返し表示�
 	set nowrap
 endfunction
 
-" TODO 独自 command 化したほうがよい
 function! s:insertPrefix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
-" TODO 独自 command 化したほうがよい
 function! s:insertSuffix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
@@ -197,8 +195,6 @@ noremap g/ /
 noremap g? ?
 
 " [insert] mappings
-" TODO プラグイン化。kana/vim-operator-user の追加 operator とするのが良さそう？
-" TODO prefix 入力後挿入モードにしたいかも
 map     [space]i [insert]
 noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
@@ -671,10 +667,10 @@ if s:has_plugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-	" TODO saawc などで<!-- -->の追加はできるが、削除もできるようにしたい(コメントのトグルがしたい)
+	" TODO <!-- -->の追加はできるが、削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
-	map <silent> sa <Plug>(operator-surround-append)
+	<!-- map <silent> sa <Plug>(operator-surround-append) -->
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)
 

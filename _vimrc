@@ -200,10 +200,10 @@ noremap [insert] <Nop>
 noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
 noremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
 noremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
-noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>
-noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>
-noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>
-noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>
+noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>A
+noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>A
+noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>A
+noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>A
 noremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
 noremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
 noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>

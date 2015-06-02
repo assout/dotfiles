@@ -55,11 +55,9 @@ function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TOD
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
-" TODO 選択範囲のみ整形できるようにする
-" TODO <hoge></hoge> <fuga></fuga> のように間に空白があるとフォーマットされない
 function! s:formatXml()
 	" caution: execute にする必要ないと思うが vint で警告になってしまうためこうしている
-	execute '%substitute/></>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
+	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
@@ -195,6 +193,8 @@ noremap [space]l g_
 
 noremap / /\v
 noremap ? ?\v
+noremap g/ /
+noremap g? ?
 
 " [insert] mappings
 " TODO プラグイン化。kana/vim-operator-user の追加 operator とするのが良さそう？

@@ -670,7 +670,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 	" TODO <!-- -->の追加はできるが、削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
-	<!-- map <silent> sa <Plug>(operator-surround-append) -->
+	map <silent> sa <Plug>(operator-surround-append)
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)
 

@@ -25,7 +25,8 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * TODO windows だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
+" * TODO windows(kaoriya) だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
+" * TODO ハードタブ、ソフトタブを切り替えれるようにしたい(バッファの内容置換と設定変更の2つがある)
 " }}}1
 
 " Section; Begin {{{1
@@ -604,9 +605,9 @@ if s:has_plugin('unite') " {{{
 	endif
 
 	if s:has_plugin('neomru') " {{{
-		let g:neomru#directory_mru_limit = 50
+		let g:neomru#directory_mru_limit = 100
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 50
+		let g:neomru#file_mru_limit = 100
 		let g:neomru#filename_format = ''
 
 		nmap     [unite]n  [neomru]
@@ -809,6 +810,7 @@ else
 	colorscheme peachpuff
 endif
 " :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう
+" TODO Vrapper でエラーになる(if 文などで対応できないか)
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 

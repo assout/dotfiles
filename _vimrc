@@ -26,7 +26,6 @@
 
 " # TODOs
 " * TODO windows(kaoriya) だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
-" * TODO ハードタブ、ソフトタブを切り替えれるようにしたい(バッファの内容置換と設定変更の2つがある)
 " }}}1
 
 " Section; Begin {{{1
@@ -61,6 +60,15 @@ function! s:formatXml()
 	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
+
+function! s:my_retab()
+	setlocal expandtab!
+	retab " caution: retab! は使わない(意図しない空白が置換されてしまうため)
+	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
+		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
+	endif
+endfunction
+command! -complete=command Retab call <SID>my_retab()
 
 function! s:has_plugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
@@ -352,11 +360,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'koron/dicwin-vim'
+	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdown の url 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
-	NeoBundle 'mattn/gist-vim'
 	NeoBundle 'mattn/qiita-vim'
-	NeoBundle 'mattn/unite-gist'
 	NeoBundle 'mattn/vim-textobj-url'
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'pangloss/vim-javascript' " for indent only
@@ -414,16 +421,6 @@ endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
 	noremap [space]e :<C-u>ExciteTranslate<CR>
-endif " }}}
-
-if s:has_plugin('gist-vim') " {{{
-	let g:gist_detect_filetype = 1
-	let g:gist_get_multiplefile = 1
-	nmap     [space]g   [Gist]
-	nnoremap [Gist]     <Nop>
-	nnoremap [Gist]l    :<C-u>Unite gist<CR>
-	nnoremap [Gist]c    :<C-u>Gist<CR>
-	nnoremap [Gist]<CR> :<C-u>Gist<CR>
 endif " }}}
 
 if s:has_plugin('hateblo') " {{{
@@ -661,8 +658,17 @@ if s:has_plugin('vim-ansible-yaml') " {{{
 	let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
+if s:has_plugin('vim-gista') " {{{
+	let g:gista#update_on_write = 1
+	nmap     [space]g    [gista]
+	nnoremap [gista]     <Nop>
+	nnoremap [gista]l    :<C-u>Unite gista<CR>
+	nnoremap [gista]c    :<C-u>Gista<CR>
+	nnoremap [gista]<CR> :<C-u>Gista<CR>
+endif " }}}
+
 if s:has_plugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " TODO eclipse のデフォルトショートカットにあわせ、<C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
+	let g:maximizer_default_mapping_key = '<C-t>' " caution: eclipse のデフォルトショートカットにあわせ <C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
 endif " }}}
 
 if s:has_plugin('vim-operator-surround') " {{{
@@ -779,10 +785,10 @@ if s:has_plugin('vim-submode') " {{{
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{
-	nmap yae yae<C-o>
-	nmap yie yie<C-o>
-	nmap =ae =ae<C-o>
-	nmap =ie =ie<C-o>
+	nmap yae yae``
+	nmap yie yie``
+	nmap =ae =ae``
+	nmap =ie =ie``
 endif " }}}
 
 if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい)
@@ -809,9 +815,10 @@ if (s:isHome() && has('unix')) || has('win32')
 else
 	colorscheme peachpuff
 endif
-" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう
-" TODO Vrapper でエラーになる(if 文などで対応できないか)
-cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+if 1 " Vrapper でエラーにならないようにするため
+	" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう
+	cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+endif
 " }}}1
 
 " vim:nofoldenable:

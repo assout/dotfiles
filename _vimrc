@@ -62,8 +62,7 @@ endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
 function! s:my_retab()
-	setlocal expandtab!
-	retab " caution: retab! は使わない(意図しない空白が置換されてしまうため)
+	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白が置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
@@ -75,8 +74,7 @@ function! s:has_plugin(plugin) " plugin が存在するか調べる
 endfunction
 
 function! s:openModifiableQF() " quickfix の編集許可と折り返し表示無効
-	set modifiable
-	set nowrap
+	set modifiable nowrap
 endfunction
 
 function! s:insertPrefix(str) range

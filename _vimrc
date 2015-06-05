@@ -233,7 +233,7 @@ endif
 " 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だと vimfiler と競合
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
-nnoremap [space]r       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -497,7 +497,7 @@ if s:has_plugin('operator-camelize') " {{{
 endif " }}}
 
 if s:has_plugin('operator-replace') " {{{
-	map R <Plug>(operator-replace)
+	map [space]r <Plug>(operator-replace)
 endif " }}}
 
 if s:has_plugin('previm') " {{{

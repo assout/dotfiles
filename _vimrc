@@ -56,13 +56,13 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
 function! s:formatXml()
-	" caution: execute にする必要ないと思うが vint で警告になってしまうためこうしている
+	" caution: execute にする必要ないが vint で警告になってしまうためこうしている
 	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
 function! s:my_retab()
-	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白が置換されてしまうため)
+	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
@@ -813,8 +813,7 @@ if (s:isHome() && has('unix')) || has('win32')
 else
 	colorscheme peachpuff
 endif
-if 1 " Vrapper でエラーにならないようにするため
-	" :qで誤って終了してしまうのを防ぐためcloseに置き換えちゃう
+if 1 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。なお Vrapper でエラーになるのでif文入れてる
 	cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 endif
 " }}}1

@@ -136,7 +136,7 @@ if has('win32') && executable('grep')
 	set grepprg=grep\ -nH
 endif
 " if executable('pt')
-" 	set grepprg=pt\ --nogroup\ -iS
+"   set grepprg=pt\ --nogroup\ -iS
 " endif
 set helplang& helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set hidden
@@ -784,7 +784,7 @@ if s:has_plugin('vim-submode') " {{{
 	call submode#map('diff-move', 'n', '', 'j', ']c')
 endif " }}}
 
-if s:has_plugin('vim-textobj-entire') " {{{
+if s:has_plugin('vim-textobj-entire') " {{{ TODO カーソル位置が戻らない(カーソル行は戻る)
 	nmap yae yae``
 	nmap yie yie``
 	nmap =ae =ae``

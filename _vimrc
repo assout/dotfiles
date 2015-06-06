@@ -11,15 +11,12 @@
 " }}}1
 
 " Section; Introduction {{{1
-" # Principles
+" # Principles/Points
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
-
-" # Points
-" * キーマッピングのとき <C-u> をすること(e.g. nnoremap hoge :<C-u>fuga)
-" (誤って範囲指定をしないようにする設定なので、範囲指定して実行してほしいキーマッピングではしないこと)
-" [vimrcでのキーマッピングの際の <C-u> の意味 - ひとり綾取り](http://d.hatena.ne.jp/e_v_e/20150101/1420067539)
+" * execute コマンドをキーマッピングするとき <C-u> をつけること(e.g. nnoremap hoge :<C-u>fuga)
+"   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 
 " # References
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
@@ -55,26 +52,21 @@ function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TOD
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
 
-function! s:formatXml()
-	" caution: execute にする必要ないが vint で警告になってしまうためこうしている
+function! s:formatXml() " caution: execute にする必要ないが vint で警告になってしまうため
 	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
-function! s:my_retab()
+function! s:toggleTab()
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
 endfunction
-command! -complete=command Retab call <SID>my_retab()
+command! -complete=command ToggleTab call <SID>toggleTab()
 
 function! s:has_plugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
-endfunction
-
-function! s:openModifiableQF() " quickfix の編集許可と折り返し表示無効
-	set modifiable nowrap
 endfunction
 
 function! s:insertPrefix(str) range
@@ -106,7 +98,7 @@ augroup vimrc
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | call s:openModifiableQF()
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
 	" format json
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>

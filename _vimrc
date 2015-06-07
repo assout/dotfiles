@@ -59,7 +59,7 @@ function! s:formatXml() " caution: execute にする必要ないが vint で警�
 endfunction
 command! -complete=command FormatXml call <SID>formatXml()
 
-function! s:toggleTab()
+function! s:toggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
@@ -148,7 +148,7 @@ set lazyredraw " マクロなどを実行中は描画を中断
 set number
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set scrolloff=5
-set shiftwidth=4
+set shiftwidth=0 " 0 だと tabstop の値が使われる
 set showtabline=1
 set sidescrolloff=5
 set smartcase

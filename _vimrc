@@ -724,40 +724,40 @@ if s:has_plugin('vim-ref') " {{{
 endif " }}}
 
 if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode nameが長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
-	nmap     [space]s [smode]
-	nnoremap [smode]  <Nop>
+	nmap     [space]s [sub]
+	nnoremap [sub]    <Nop>
 	
-	call submode#enter_with('winsize', 'n', '', '[smode]w', '<Nop>')
+	call submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
 	call submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
 	call submode#map('winsize', 'n', '', 'k', '<C-w>-')
 	call submode#map('winsize', 'n', '', 'j', '<C-w>+')
 
-	call submode#enter_with('scroll', 'n', '', '[smode]s', '<Nop>')
+	call submode#enter_with('scroll', 'n', '', '[sub]s', '<Nop>')
 	call submode#map('scroll', 'n', '', 'h', 'zh')
 	call submode#map('scroll', 'n', '', 'l', 'zl')
 	call submode#map('scroll', 'n', '', 'H', '10zh')
 	call submode#map('scroll', 'n', '', 'L', '10zl')
 
-	call submode#enter_with('buffer', 'n', '', '[smode]b', '<Nop>')
+	call submode#enter_with('buffer', 'n', '', '[sub]b', '<Nop>')
 	call submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
 	call submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
 	call submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
 	call submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
-	call submode#enter_with('args', 'n', '', '[smode]a', '<Nop>')
+	call submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
 	call submode#map('args', 'n', '', 'k', ':previous!<CR>')
 	call submode#map('args', 'n', '', 'j', ':next<CR>')
 	call submode#map('args', 'n', '', 'K', ':first<CR>')
 	call submode#map('args', 'n', '', 'J', ':last<CR>')
 
-	call submode#enter_with('qfix', 'n', '', '[smode]q', '<Nop>')
-	call submode#map('qfix', 'n', '', 'k', ':cprevious<CR>')
-	call submode#map('qfix', 'n', '', 'j', ':cnext<CR>')
-	call submode#map('qfix', 'n', '', 'K', ':cfirst<CR>')
-	call submode#map('qfix', 'n', '', 'J', ':clast<CR>')
+	call submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
+	call submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
+	call submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
+	call submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
+	call submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
-	call submode#enter_with('diff', 'n', '', '[smode]d', '<Nop>')
+	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
 	call submode#map('diff', 'n', '', 'k', '[c')
 	call submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}

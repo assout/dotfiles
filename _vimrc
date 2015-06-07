@@ -666,7 +666,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-	" TODO <!-- -->の追加はできるが、削除もできるようにしたい(コメントのトグルがしたい)
+	" TODO <!-- -->の削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
 	map <silent> sa <Plug>(operator-surround-append)

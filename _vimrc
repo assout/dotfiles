@@ -442,7 +442,7 @@ if s:has_plugin('im_control') " {{{
 	if has('win32')
 		let IM_CtrlMode = 4
 	else
-		let IM_CtrlMode = 1 " caution: 設定しなくても期待した挙動になるが
+		let IM_CtrlMode = 1 " caution: 設定しなくても期待した挙動になるけど一応
 	endif
 	if !has('gui_running')
 		let IM_CtrlMode = 0

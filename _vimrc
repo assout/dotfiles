@@ -208,7 +208,7 @@ noremap <silent>       [insert]3  :InsertPrefix ###<Space><CR>A
 noremap <silent>       [insert]4  :InsertPrefix ####<Space><CR>A
 noremap <silent>       [insert]>  :InsertPrefix ><Space><CR>
 noremap <silent>       [insert]T  :InsertPrefix TODO<Space><CR>
-noremap <silent>       [insert]f  :InsertPrefix file://<Space><CR>
+noremap <silent>       [insert]f  :InsertPrefix file://<CR>
 noremap <silent><expr> [insert]s ':InsertSuffix<Space>' . input('suffix:') . '<CR>'
 noremap <silent><expr> [insert]d ':InsertSuffix<Space>' . strftime('\<Space>@%Y-%m-%d') . '<CR>'
 noremap <silent><expr> [insert]t ':InsertSuffix<Space>' . strftime('\<Space>@%H:%M:%S') . '<CR>'
@@ -230,20 +230,19 @@ nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-nnoremap  <C-s> <C-w>s
-" caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい
-nnoremap g<C-s> <C-w>v
-nnoremap  <C-c> <C-w>c
-
+nnoremap <C-h>     <C-w>h
+nnoremap <C-j>     <C-w>j
+nnoremap <C-k>     <C-w>k
+nnoremap <C-l>     <C-w>l
 nnoremap <C-Left>  <C-w>H
 nnoremap <C-Down>  <C-w>J
 nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
+
+nnoremap  <C-s> <C-w>s
+" caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい。
+nnoremap g<C-s> <C-w>v
+nnoremap  <C-c> <C-w>c
 
 " tab操作 caution: <TAB> == <C-i>
 nnoremap <C-TAB>   gt
@@ -288,7 +287,7 @@ inoremap <C-f> <Right>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
-" TODO im_control が有効だと効かない(linux のみ)
+" TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
 " caution: 設定しないと im_control で日本語入力モードON の動きをしてしまう
 inoremap <C-c> <Esc>
@@ -316,6 +315,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 	endif
 	call neobundle#begin(expand('~/.vim/bundle'))
+
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
 	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'Shougo/neobundle.vim'
@@ -379,6 +379,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
+
 	call neobundle#end()
 	filetype plugin indent on " Required!
 	NeoBundleCheck " Installation check.

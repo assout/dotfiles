@@ -762,7 +762,7 @@ if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode nameが長�
 	call submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
-if s:has_plugin('vim-textobj-entire') " {{{ TODO カーソル位置が戻らない(カーソル行は戻る)
+if s:has_plugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)
 	nmap yae yae``
 	nmap yie yie``
 	nmap =ae =ae``

@@ -220,7 +220,7 @@ nmap     [space]o [open]
 nnoremap [open]   <Nop>
 " caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる
 " resolveしなくても開けるが、fugitiveで対象とするため
-nnoremap [open]v  :<C-u>execute ':vsplit ' . resolve(expand($MYVIMRC))<CR>
+nnoremap [open]v  :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
 if !s:isHome() && has('win32')
 	nnoremap [open]i :<C-u>vsplit D:\admin\Documents\ipmsg.log<CR>
 endif
@@ -549,14 +549,13 @@ if s:has_plugin('unite') " {{{
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
 		" vim-operator-surround の mapping と被るので nowait
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
-		nunmap   <buffer>          <C-h>
-		nunmap   <buffer>          <C-l>
-		nunmap   <buffer>          <C-k>
-		nmap     <buffer>         g<C-h> <Plug>(unite_delete_backward_path)
-		nmap     <buffer>         g<C-l> <Plug>(unite_redraw)
-		nmap     <buffer>         g<C-k> <Plug>(unite_print_candidate)
-		" vim-submode の mapping と被るので nowait
-		nmap     <buffer><nowait>  <C-w> <Plug>(unite_delete_backward_path)
+		nunmap   <buffer>  <C-h>
+		nunmap   <buffer>  <C-l>
+		nunmap   <buffer>  <C-k>
+		nmap     <buffer> g<C-h> <Plug>(unite_delete_backward_path)
+		nmap     <buffer> g<C-l> <Plug>(unite_redraw)
+		nmap     <buffer> g<C-k> <Plug>(unite_print_candidate)
+		nmap     <buffer>  <C-w> <Plug>(unite_delete_backward_path)
 	endfunction
 	augroup vimrc
 		autocmd FileType unite call s:unite_my_keymappings()
@@ -724,56 +723,43 @@ if s:has_plugin('vim-ref') " {{{
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif " }}}
 
-if s:has_plugin('vim-submode') " {{{
-	call submode#enter_with('winsize', 'n', '', '<C-w><', '<C-w><')
-	call submode#enter_with('winsize', 'n', '', '<C-w>>', '<C-w>>')
-	call submode#enter_with('winsize', 'n', '', '<C-w>-', '<C-w>-')
-	call submode#enter_with('winsize', 'n', '', '<C-w>+', '<C-w>+')
+if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode nameが長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
+	nmap     [space]s [smode]
+	nnoremap [smode]  <Nop>
+	
+	call submode#enter_with('winsize', 'n', '', '[smode]w', '<Nop>')
 	call submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
 	call submode#map('winsize', 'n', '', 'k', '<C-w>-')
 	call submode#map('winsize', 'n', '', 'j', '<C-w>+')
 
-	call submode#enter_with('wrap-scroll', 'n', '', 'zh', 'zh')
-	call submode#enter_with('wrap-scroll', 'n', '', 'zl', 'zl')
-	call submode#enter_with('wrap-scroll', 'n', '', 'zH', 'zH')
-	call submode#enter_with('wrap-scroll', 'n', '', 'zL', 'zL')
-	call submode#map('wrap-scroll', 'n', '', 'h', 'zh')
-	call submode#map('wrap-scroll', 'n', '', 'l', 'zl')
-	call submode#map('wrap-scroll', 'n', '', 'H', '10zh')
-	call submode#map('wrap-scroll', 'n', '', 'L', '10zl')
+	call submode#enter_with('scroll', 'n', '', '[smode]s', '<Nop>')
+	call submode#map('scroll', 'n', '', 'h', 'zh')
+	call submode#map('scroll', 'n', '', 'l', 'zl')
+	call submode#map('scroll', 'n', '', 'H', '10zh')
+	call submode#map('scroll', 'n', '', 'L', '10zl')
 
-	call submode#enter_with('buffer-move', 'n', '', '[b', ':bprevious<CR>')
-	call submode#enter_with('buffer-move', 'n', '', ']b', ':bnext<CR>')
-	call submode#enter_with('buffer-move', 'n', '', '[B', ':bfirst<CR>')
-	call submode#enter_with('buffer-move', 'n', '', ']B', ':blast<CR>')
-	call submode#map('buffer-move', 'n', '', 'k', ':bprevious<CR>')
-	call submode#map('buffer-move', 'n', '', 'j', ':bnext<CR>')
-	call submode#map('buffer-move', 'n', '', 'K', ':bfirst<CR>')
-	call submode#map('buffer-move', 'n', '', 'J', ':blast<CR>')
+	call submode#enter_with('buffer', 'n', '', '[smode]b', '<Nop>')
+	call submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
+	call submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
+	call submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
+	call submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
-	call submode#enter_with('args-move', 'n', '', '[a', ':previous<CR>')
-	call submode#enter_with('args-move', 'n', '', ']a', ':next<CR>')
-	call submode#enter_with('args-move', 'n', '', '[A', ':first<CR>')
-	call submode#enter_with('args-move', 'n', '', ']A', ':last<CR>')
-	call submode#map('args-move', 'n', '', 'k', ':previous<CR>')
-	call submode#map('args-move', 'n', '', 'j', ':next<CR>')
-	call submode#map('args-move', 'n', '', 'K', ':first<CR>')
-	call submode#map('args-move', 'n', '', 'J', ':last<CR>')
+	call submode#enter_with('args', 'n', '', '[smode]a', '<Nop>')
+	call submode#map('args', 'n', '', 'k', ':previous!<CR>')
+	call submode#map('args', 'n', '', 'j', ':next<CR>')
+	call submode#map('args', 'n', '', 'K', ':first<CR>')
+	call submode#map('args', 'n', '', 'J', ':last<CR>')
 
-	call submode#enter_with('quickfix-move', 'n', '', '[q', ':cprevious<CR>')
-	call submode#enter_with('quickfix-move', 'n', '', ']q', ':cnext<CR>')
-	call submode#enter_with('quickfix-move', 'n', '', '[Q', ':cfirst<CR>')
-	call submode#enter_with('quickfix-move', 'n', '', ']Q', ':clast<CR>')
-	call submode#map('quickfix-move', 'n', '', 'k', ':cprevious<CR>')
-	call submode#map('quickfix-move', 'n', '', 'j', ':cnext<CR>')
-	call submode#map('quickfix-move', 'n', '', 'K', ':cfirst<CR>')
-	call submode#map('quickfix-move', 'n', '', 'J', ':clast<CR>')
+	call submode#enter_with('qfix', 'n', '', '[smode]q', '<Nop>')
+	call submode#map('qfix', 'n', '', 'k', ':cprevious<CR>')
+	call submode#map('qfix', 'n', '', 'j', ':cnext<CR>')
+	call submode#map('qfix', 'n', '', 'K', ':cfirst<CR>')
+	call submode#map('qfix', 'n', '', 'J', ':clast<CR>')
 
-	call submode#enter_with('diff-move', 'n', '', '[c', '[c')
-	call submode#enter_with('diff-move', 'n', '', ']c', ']c')
-	call submode#map('diff-move', 'n', '', 'k', '[c')
-	call submode#map('diff-move', 'n', '', 'j', ']c')
+	call submode#enter_with('diff', 'n', '', '[smode]d', '<Nop>')
+	call submode#map('diff', 'n', '', 'k', '[c')
+	call submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
 if s:has_plugin('vim-textobj-entire') " {{{ TODO カーソル位置が戻らない(カーソル行は戻る)

@@ -20,6 +20,8 @@
 
 " # References
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
+" * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
+" * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
 
 " # TODOs
 " * TODO windows(kaoriya) だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
@@ -72,10 +74,12 @@ endfunction
 function! s:insertPrefix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
+command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>insertPrefix(<f-args>)
 
 function! s:insertSuffix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
+command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>insertSuffix(<f-args>)
 
 function! s:isHome()
 	return $USER ==# 'oji'
@@ -189,29 +193,28 @@ noremap [space]  <Nop>
 noremap [space]h ^
 noremap [space]l g_
 
-noremap / /\v
-noremap ? ?\v
+noremap /  /\v
+noremap ?  ?\v
 noremap g/ /
 noremap g? ?
 
-" [insert] mappings
-map     [space]i [insert]
-noremap [insert] <Nop>
-noremap <silent> [insert]p :call <SID>insertPrefix(input('input prefix:'))<CR>
-noremap <silent> [insert]f :call <SID>insertPrefix('file://')<CR>
-noremap <silent> [insert]T :call <SID>insertPrefix('TODO ')<CR>
-noremap <silent> [insert]1 :call <SID>insertPrefix('# ')<CR>A
-noremap <silent> [insert]2 :call <SID>insertPrefix('## ')<CR>A
-noremap <silent> [insert]3 :call <SID>insertPrefix('### ')<CR>A
-noremap <silent> [insert]4 :call <SID>insertPrefix('#### ')<CR>A
-noremap <silent> [insert]* :call <SID>insertPrefix('* ')<CR>
-noremap <silent> [insert]> :call <SID>insertPrefix('> ')<CR>
-noremap <silent> [insert]s :call <SID>insertSuffix(input('input suffix:'))<CR>
-noremap <silent> [insert]d :call <SID>insertSuffix(strftime(' @%Y-%m-%d'))<CR>
-noremap <silent> [insert]t :call <SID>insertSuffix(strftime(' @%H:%M:%S'))<CR>
-noremap <silent> [insert]n :call <SID>insertSuffix(strftime(' @%Y-%m-%d %H:%M:%S'))<CR>
-noremap <silent> [insert]a :call <SID>insertSuffix(' @' . input('input author:'))<CR>
-noremap <silent> [insert]l :call <SID>insertSuffix('  ')<CR>
+map     [space]i       [insert]
+noremap [insert]       <Nop>
+noremap <silent><expr> [insert]p ':InsertPrefix<Space>' . input('prefix:') . '<CR>'
+noremap <silent>       [insert]*  :InsertPrefix *<Space><CR>
+noremap <silent>       [insert]1  :InsertPrefix #<Space><CR>A
+noremap <silent>       [insert]2  :InsertPrefix ##<Space><CR>A
+noremap <silent>       [insert]3  :InsertPrefix ###<Space><CR>A
+noremap <silent>       [insert]4  :InsertPrefix ####<Space><CR>A
+noremap <silent>       [insert]>  :InsertPrefix ><Space><CR>
+noremap <silent>       [insert]T  :InsertPrefix TODO<Space><CR>
+noremap <silent>       [insert]f  :InsertPrefix file://<Space><CR>
+noremap <silent><expr> [insert]s ':InsertSuffix<Space>' . input('suffix:') . '<CR>'
+noremap <silent><expr> [insert]d ':InsertSuffix<Space>' . strftime('\<Space>@%Y-%m-%d') . '<CR>'
+noremap <silent><expr> [insert]t ':InsertSuffix<Space>' . strftime('\<Space>@%H:%M:%S') . '<CR>'
+noremap <silent><expr> [insert]n ':InsertSuffix<Space>' . strftime('\<Space>@%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr> [insert]a ':InsertSuffix<Space>\<Space>@' . input('author:') . '<CR>'
+noremap <silent>       [insert]l  :InsertSuffix \<Space>\<Space><CR>
 
 nmap     [space]o [open]
 nnoremap [open]   <Nop>
@@ -612,9 +615,7 @@ if s:has_plugin('unite') " {{{
 
 		function! s:todo_grep()
 			let word = input('TodoGrep word: ')
-			if empty(word)
-				return
-			endif
+			if empty(word) | return | endif
 			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 

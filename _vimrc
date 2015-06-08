@@ -747,7 +747,7 @@ if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode name が長�
 	call submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
-	" TODO いまいち効いてないっぽい([Submode]表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
+	" TODO いまいち効いてないっぽい(Submode 表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
 	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
 	call submode#map('diff', 'n', '', 'k', '[c')
 	call submode#map('diff', 'n', '', 'j', ']c')

@@ -604,9 +604,7 @@ if s:has_plugin('unite') " {{{
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
 		function! s:todo_grep()
-			let word = input('TodoGrep word: ')
-			if empty(word) | return | endif
-			execute ':vimgrep /' . l:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
+			execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
 		endfunction
 
 		map     [space]t         [unite-todo]

@@ -82,10 +82,6 @@ function! s:has_plugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
-function! s:isHome()
-	return $USER ==# 'oji'
-endfunction
-
 if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif

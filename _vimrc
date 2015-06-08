@@ -44,6 +44,7 @@ augroup END
 
 " Section; Functions and Commands {{{1
 function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
+	" TODO オプションなどで buffer に出力もしたい
 	if has('clipboard')
 		redir @+>
 	else
@@ -67,10 +68,6 @@ function! s:toggleTab() " TODO タブサイズも変更できるように(意外
 endfunction
 command! -complete=command ToggleTab call <SID>toggleTab()
 
-function! s:has_plugin(plugin) " plugin が存在するか調べる
-	return !empty(matchstr(&runtimepath, a:plugin))
-endfunction
-
 function! s:insertPrefix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
@@ -81,6 +78,10 @@ function! s:insertSuffix(str) range
 endfunction
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>insertSuffix(<f-args>)
 
+function! s:has_plugin(plugin) " plugin が存在するか調べる
+	return !empty(matchstr(&runtimepath, a:plugin))
+endfunction
+
 function! s:isHome()
 	return $USER ==# 'oji'
 endfunction
@@ -88,6 +89,9 @@ endfunction
 if ! has('kaoriya')
 	command! -nargs=0 CdCurrent cd %:p:h
 endif
+
+command! -bang BufClear %bdelete<bang>
+command! -bang BClear BufClear<bang>
 " }}}1
 
 " Section; Auto-commands {{{1
@@ -126,7 +130,7 @@ if has('folding')
 	set foldmethod=marker
 endif
 set formatoptions-=o " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
-if has('win32') && executable('grep')
+if executable('grep')
 	set grepprg=grep\ -nH
 endif
 " if executable('pt')
@@ -148,16 +152,12 @@ set lazyredraw " マクロなどを実行中は描画を中断
 set number
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set scrolloff=5
-set shiftwidth=0 " 0 だと tabstop の値が使われる
+set shiftwidth=4 " caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
 set showtabline=1
 set sidescrolloff=5
 set smartcase
 set smartindent
-if s:isHome() && has('unix')
-	set spellfile=~/Dropbox/spell/en.utf-8.add
-elseif has('win32')
-	set spellfile=D:/admin/Documents/spell/en.utf-8.add
-endif
+let &spellfile = has('unix') ? '~/Dropbox/spell/en.utf-8.add' : 'D:/admin/Documents/spell/en.utf-8.add'
 set splitbelow
 set splitright
 set spelllang+=cjk " スペルチェックで日本語は除外する
@@ -221,8 +221,8 @@ nnoremap [open]   <Nop>
 " caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる
 " resolveしなくても開けるが、fugitiveで対象とするため
 nnoremap [open]v  :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
-if !s:isHome() && has('win32')
-	nnoremap [open]i :<C-u>vsplit D:\admin\Documents\ipmsg.log<CR>
+if has('win32')
+	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 
 " 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だと vimfiler と競合
@@ -284,8 +284,11 @@ nnoremap ]f :cnfile<CR>
 " インサートモードでのキーマッピングを Emacs 風にする
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
+" TODO Vrapper でも効かせたい
 inoremap <C-a> <Home>
+" TODO Vrapper でも効かせたい
 inoremap <C-e> <End>
+" TODO Vrapper でも効かせたい
 inoremap <C-d> <Del>
 " TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
@@ -439,11 +442,7 @@ if s:has_plugin('hateblo') " {{{
 endif " }}}
 
 if s:has_plugin('im_control') " {{{
-	if has('win32')
-		let IM_CtrlMode = 4
-	else
-		let IM_CtrlMode = 1 " caution: 設定しなくても期待した挙動になるけど一応
-	endif
+	let IM_CtrlMode = has('unix') ? 1 : 4 " caution: linux のときは設定しなくても期待した挙動になるけど一応
 	if !has('gui_running')
 		let IM_CtrlMode = 0
 	endif
@@ -451,13 +450,8 @@ endif " }}}
 
 if s:has_plugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
-	if s:isHome() && has('unix')
-		let g:memolist_path = '~/Dropbox/memolist'
-		let g:memolist_template_dir_path = '~/Dropbox/memolist'
-	else
-		let g:memolist_path = 'D:/admin/Documents/memolist'
-		let g:memolist_template_dir_path = 'D:/admin/Documents/memolist'
-	endif
+	let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
+	let g:memolist_template_dir_path = g:memolist_path
 
 	nmap     [space]m    [memolist]
 	nnoremap [memolist]  <Nop>
@@ -481,7 +475,7 @@ if s:has_plugin('neocomplete') " {{{
 endif " }}}
 
 if s:has_plugin('open-browser') " {{{
-	if s:isHome() && has('unix') " gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
+	if has('unix') " gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
 		let g:netrw_nogx = 1 " disable netrw's gx mapping
 		nmap gx <Plug>(openbrowser-smart-search)
 		vmap gx <Plug>(openbrowser-smart-search)
@@ -575,12 +569,12 @@ if s:has_plugin('unite') " {{{
 	nnoremap [unite]B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 	nnoremap [unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
 	nnoremap [unite]f    :<C-u>Unite file -buffer-name=file<CR>
-	if has('win32')
-		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
-		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
-	else
+	if has('unix')
 		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
 		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
+	else
+		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
+		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 	endif
 	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep<CR>
 	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
@@ -607,11 +601,7 @@ if s:has_plugin('unite') " {{{
 
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
-		if s:isHome() && has('unix')
-			let g:unite_todo_data_directory = '~/Dropbox'
-		else
-			let g:unite_todo_data_directory = 'D:/admin/Documents'
-		endif
+		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
 		function! s:todo_grep()
 			let word = input('TodoGrep word: ')
@@ -723,10 +713,10 @@ if s:has_plugin('vim-ref') " {{{
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif " }}}
 
-if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode nameが長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
+if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode name が長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
 	nmap     [space]s [sub]
 	nnoremap [sub]    <Nop>
-	
+
 	call submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
 	call submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
@@ -745,18 +735,21 @@ if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode nameが長�
 	call submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
 	call submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
+	" TODO 先頭と末尾に行き過ぎたときエラーで submode 抜けたくない
 	call submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
-	call submode#map('args', 'n', '', 'k', ':previous!<CR>')
+	call submode#map('args', 'n', '', 'k', ':previous<CR>')
 	call submode#map('args', 'n', '', 'j', ':next<CR>')
 	call submode#map('args', 'n', '', 'K', ':first<CR>')
 	call submode#map('args', 'n', '', 'J', ':last<CR>')
 
+	" TODO 先頭と末尾に行き過ぎたときエラーで submode 抜けたくない
 	call submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
 	call submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
 	call submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
 	call submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
+	" TODO いまいち効いてないっぽい([Submode]表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
 	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
 	call submode#map('diff', 'n', '', 'k', '[c')
 	call submode#map('diff', 'n', '', 'j', ']c')
@@ -788,7 +781,7 @@ endif " }}}
 
 " Section; Other Commands {{{1
 filetype on
-if (s:isHome() && has('unix')) || has('win32')
+if s:has_plugin('hybrid') " {{{
 	colorscheme hybrid-light
 else
 	colorscheme peachpuff

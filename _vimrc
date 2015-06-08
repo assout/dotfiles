@@ -765,7 +765,7 @@ if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappin
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
-if s:has_plugin('yankround') " {{{
+if s:has_plugin('yankround') " {{{ TODO gist を開き未保存のバッファで p すると エラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)

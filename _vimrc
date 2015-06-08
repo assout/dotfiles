@@ -599,10 +599,6 @@ if s:has_plugin('unite') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		function! s:todo_grep()
-			execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
-		endfunction
-
 		map     [space]t         [unite-todo]
 		noremap [unite-todo]     <Nop>
 		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
@@ -611,7 +607,7 @@ if s:has_plugin('unite') " {{{
 		noremap [unite-todo]m    :UniteTodoAddSimple -memo<CR>
 		noremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
 		noremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
-		noremap [unite-todo]g    :call <SID>todo_grep()<CR>
+		noremap [unite-todo]g    :execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
 	endif " }}}
 endif " }}}
 

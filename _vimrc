@@ -656,7 +656,7 @@ if s:HasPlugin('vim-gista') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " caution: eclipse のデフォルトショートカットにあわせ <C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
+	let g:maximizer_default_mapping_key = '<C-t>' " caution: 't' is toggle window maximize. ホントは eclipse のデフォルトショートカットにあわせ <C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{

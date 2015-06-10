@@ -46,44 +46,44 @@ augroup END
 " }}}1
 
 " Section; Functions and Commands {{{1
-function! s:capture_cmd_output(cmd) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
+function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
 	" TODO オプションなどで buffer に出力もしたい
 	if has('clipboard')
 		redir @+>
 	else
 		redir @">
 	endif
-	execute a:cmd
+	execute a:command
 	redir END
 endfunction
-command! -nargs=1 -complete=command Capture call <SID>capture_cmd_output(<q-args>)
+command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
-function! s:formatXml() " caution: execute にする必要ないが vint で警告になってしまうため
+function! s:FormatSGML() " caution: execute にする必要ないが vint で警告になってしまうため
 	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
-command! -complete=command FormatXml call <SID>formatXml()
+command! -complete=command FormatSGML call <SID>FormatSGML()
 
-function! s:toggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
+function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
 endfunction
-command! -complete=command ToggleTab call <SID>toggleTab()
+command! -complete=command ToggleTab call <SID>ToggleTab()
 
-function! s:insertPrefix(str) range
+function! s:InsertPrefix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>insertPrefix(<f-args>)
+command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertPrefix(<f-args>)
 
-function! s:insertSuffix(str) range
+function! s:InsertSuffix(str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>insertSuffix(<f-args>)
+command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertSuffix(<f-args>)
 
 " TODO たまにバグる(カレントバッファが Preview になってしまう)
 " TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)
-function! s:dictionarySearch(...) " required gene.txt
+function! s:DictionaryTranslate(...) " required gene.txt
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene.txt'
 	let l:output_option = l:word =~? '^[a-z_]\+$' ? '-A 1' : '-B 1' " 和英 or 英和
@@ -96,9 +96,9 @@ function! s:dictionarySearch(...) " required gene.txt
 	silent 1delete
 	silent wincmd p
 endfunction
-command! -nargs=? -complete=command DicSearch call <SID>dicSearch(<f-args>)
+command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTranslate(<f-args>)
 
-function! s:has_plugin(plugin) " plugin が存在するか調べる
+function! s:HasPlugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
@@ -194,8 +194,8 @@ endif
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let b:is_bash = 1 " shellのハイライトをbash基準にする
-let plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効
-let plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
+let g:plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効
+let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -247,7 +247,7 @@ endif
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-nnoremap [space]d       :DicSearch<Space>
+nnoremap [space]d       :DictionaryTranslate<Space>
 
 nnoremap <C-h>     <C-w>h
 nnoremap <C-j>     <C-w>j
@@ -420,15 +420,15 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 " }}}
 
-if s:has_plugin('alignta') " {{{
+if s:HasPlugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
 endif " }}}
 
-if s:has_plugin('excitetranslate') " {{{
+if s:HasPlugin('excitetranslate') " {{{
 	noremap [space]e :<C-u>ExciteTranslate<CR>
 endif " }}}
 
-if s:has_plugin('hateblo') " {{{
+if s:HasPlugin('hateblo') " {{{
 	" api_keyはvimrc.localから設定
 	let g:hateblo_vim = {
 				\ 'user': 'assout',
@@ -449,14 +449,14 @@ if s:has_plugin('hateblo') " {{{
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
 endif " }}}
 
-if s:has_plugin('im_control') " {{{
-	let IM_CtrlMode = has('unix') ? 1 : 4 " caution: linux のときは設定しなくても期待した挙動になるけど一応
+if s:HasPlugin('im_control') " {{{
+	let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linux のときは設定しなくても期待した挙動になるけど一応
 	if !has('gui_running')
-		let IM_CtrlMode = 0
+		let g:IM_CtrlMode = 0
 	endif
 endif " }}}
 
-if s:has_plugin('memolist') " {{{
+if s:HasPlugin('memolist') " {{{
 	let g:memolist_memo_suffix = 'md'
 	let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
 	let g:memolist_template_dir_path = g:memolist_path
@@ -466,7 +466,7 @@ if s:has_plugin('memolist') " {{{
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
 
-	if s:has_plugin('unite')
+	if s:HasPlugin('unite')
 		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
 		call unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 		call unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default'])
@@ -476,13 +476,13 @@ if s:has_plugin('memolist') " {{{
 	endif
 endif " }}}
 
-if s:has_plugin('neocomplete') " {{{
+if s:HasPlugin('neocomplete') " {{{
 	if has('lua')
 		let g:neocomplete#enable_at_startup = 1
 	endif
 endif " }}}
 
-if s:has_plugin('open-browser') " {{{
+if s:HasPlugin('open-browser') " {{{
 	if has('unix') " gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
 		let g:netrw_nogx = 1 " disable netrw's gx mapping
 		nmap gx <Plug>(openbrowser-smart-search)
@@ -490,19 +490,19 @@ if s:has_plugin('open-browser') " {{{
 	endif
 endif " }}}
 
-if s:has_plugin('operator-camelize') " {{{
+if s:HasPlugin('operator-camelize') " {{{
 	map [space]c <Plug>(operator-camelize)
 endif " }}}
 
-if s:has_plugin('operator-replace') " {{{
+if s:HasPlugin('operator-replace') " {{{
 	map [space]r <Plug>(operator-replace)
 endif " }}}
 
-if s:has_plugin('previm') " {{{
+if s:HasPlugin('previm') " {{{
 	nnoremap [space]p :<C-u>PrevimOpen<CR>
 endif " }}}
 
-if s:has_plugin('qiita-vim') " {{{
+if s:HasPlugin('qiita-vim') " {{{
 	nmap     [space]q    [Qiita]
 	nnoremap [Qiita]     <Nop>
 	nnoremap [Qiita]l    :<C-u>Unite qiita<CR>
@@ -512,32 +512,32 @@ if s:has_plugin('qiita-vim') " {{{
 	nnoremap [Qiita]d    :<C-u>Qiita -d<CR>
 endif " }}}
 
-if s:has_plugin('quickrun') " {{{
+if s:HasPlugin('quickrun') " {{{
 	nnoremap [space]Q :<C-u>QuickRun<CR>
 endif " }}}
 
-if s:has_plugin('restart.vim') " {{{
+if s:HasPlugin('restart.vim') " {{{
 	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
 
-if s:has_plugin('singleton') && has('clientserver') && has('gui_running') " {{{
+if s:HasPlugin('singleton') && has('clientserver') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
 endif " }}}
 
-if s:has_plugin('tcomment_vim') " {{{
+if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
 endif " }}}
 
-if s:has_plugin('unite') " {{{
+if s:HasPlugin('unite') " {{{
 	let g:unite_enable_ignore_case = 1
 	let g:unite_enable_smart_case = 1
 	let g:unite_source_grep_max_candidates = 200
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
 	function! s:my_relative_move.func(candidates) " move 先を相対パスで指定する action
-		let candidate = a:candidates[0]
-		let l:dir = isdirectory(candidate.word) ? candidate.word : fnamemodify(candidate.word, ':p:h')
+		let l:candidate = a:candidates[0]
+		let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
 		call unite#take_action('move', a:candidates)
 		call unite#force_redraw() " 呼ばないと表示更新されない(なぜ?)
@@ -590,13 +590,13 @@ if s:has_plugin('unite') " {{{
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
 	nnoremap [unite]t :<C-u>Unite tab -buffer-name=tab<CR>
 	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
-	if s:has_plugin('yankround')
+	if s:HasPlugin('yankround')
 		nnoremap [unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
 	else
 		nnoremap [unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
 	endif
 
-	if s:has_plugin('neomru') " {{{
+	if s:HasPlugin('neomru') " {{{
 		let g:neomru#directory_mru_limit = 200
 		let g:neomru#do_validate = 0
 		let g:neomru#file_mru_limit = 200
@@ -607,12 +607,12 @@ if s:has_plugin('unite') " {{{
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
 	endif " }}}
 
-	if s:has_plugin('unite-codic') " {{{
+	if s:HasPlugin('unite-codic') " {{{
 		nnoremap <expr> [unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
 		nnoremap        [unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
 	endif
 
-	if s:has_plugin('unite-todo') " {{{
+	if s:HasPlugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
@@ -628,7 +628,7 @@ if s:has_plugin('unite') " {{{
 	endif " }}}
 endif " }}}
 
-if s:has_plugin('vimfiler') " {{{
+if s:HasPlugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
 	let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 
@@ -642,11 +642,11 @@ if s:has_plugin('vimfiler') " {{{
 	nnoremap [vimfiler]t    :<C-u>VimFilerTab<CR>
 endif " }}}
 
-if s:has_plugin('vim-ansible-yaml') " {{{
+if s:HasPlugin('vim-ansible-yaml') " {{{
 	let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
-if s:has_plugin('vim-gista') " {{{
+if s:HasPlugin('vim-gista') " {{{
 	let g:gista#update_on_write = 1
 	nmap     [space]g    [gista]
 	nnoremap [gista]     <Nop>
@@ -655,11 +655,11 @@ if s:has_plugin('vim-gista') " {{{
 	nnoremap [gista]<CR> :<C-u>Gista<CR>
 endif " }}}
 
-if s:has_plugin('vim-maximizer') " {{{
+if s:HasPlugin('vim-maximizer') " {{{
 	let g:maximizer_default_mapping_key = '<C-t>' " caution: eclipse のデフォルトショートカットにあわせ <C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
 endif " }}}
 
-if s:has_plugin('vim-operator-surround') " {{{
+if s:HasPlugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
@@ -670,25 +670,25 @@ if s:has_plugin('vim-operator-surround') " {{{
 	map <silent> sd <Plug>(operator-surround-delete)
 	map <silent> sr <Plug>(operator-surround-replace)
 
-	if s:has_plugin('vim-textobj-anyblock')
+	if s:HasPlugin('vim-textobj-anyblock')
 		nmap <silent>sab <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
 		nmap <silent>sdb <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
 		nmap <silent>srb <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 	endif
 
-	if s:has_plugin('vim-textobj-between')
+	if s:HasPlugin('vim-textobj-between')
 		nmap <silent>saf <Plug>(operator-surround-append)<Plug>(textobj-between-a)
 		nmap <silent>sdf <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
 		nmap <silent>srf <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 	endif
 
-	if s:has_plugin('vim-textobj-line')
+	if s:HasPlugin('vim-textobj-line')
 		nmap <silent>sal <Plug>(operator-surround-append)<Plug>(textobj-line-a)
 		nmap <silent>sdl <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
 		nmap <silent>srl <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 	endif
 
-	if s:has_plugin('vim-textobj-url')
+	if s:HasPlugin('vim-textobj-url')
 		nmap <silent>sau <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 		" TODO no block matches to the region となる
 		nmap <silent>sdu <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
@@ -697,7 +697,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 	endif
 endif " }}}
 
-if s:has_plugin('vim-ref') " {{{
+if s:HasPlugin('vim-ref') " {{{
 	let g:ref_source_webdict_sites = {
 				\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', },
 				\ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', },
@@ -720,7 +720,7 @@ if s:has_plugin('vim-ref') " {{{
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif " }}}
 
-if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode name が長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
+if s:HasPlugin('vim-submode') " {{{ caution: prefix 含め submode name が長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
 	nmap     [space]s [sub]
 	nnoremap [sub]    <Nop>
 
@@ -762,14 +762,14 @@ if s:has_plugin('vim-submode') " {{{ caution: prefix 含め submode name が長�
 	call submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
-if s:has_plugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)
+if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)
 	nmap yae yae``
 	nmap yie yie``
 	nmap =ae =ae``
 	nmap =ie =ie``
 endif " }}}
 
-if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい)
+if s:HasPlugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい)
 	" text-obj-between用に f -> F に退避
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)
@@ -778,7 +778,7 @@ if s:has_plugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappin
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
-if s:has_plugin('yankround') " {{{ TODO gist を開き未保存のバッファで p するとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
+if s:HasPlugin('yankround') " {{{ TODO gist を開き未保存のバッファで p するとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)
@@ -788,7 +788,7 @@ endif " }}}
 
 " Section; Other Commands {{{1
 filetype on
-if s:has_plugin('hybrid') " {{{
+if s:HasPlugin('hybrid') " {{{
 	colorscheme hybrid-light
 else
 	colorscheme peachpuff

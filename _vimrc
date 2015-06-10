@@ -86,6 +86,7 @@ command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID
 " TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)
 function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim でも良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
+	if l:word ==# '' | return | endif
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene.txt'
 	let l:output_option = l:word =~? '^[a-z_]\+$' ? '-A 1' : '-B 1' " 和英 or 英和
 

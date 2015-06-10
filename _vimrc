@@ -86,6 +86,7 @@ command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID
 " TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)
 function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim でも良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
+	call histadd("cmd", "DictionaryTranslate " . l:word)
 	if l:word ==# '' | return | endif
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene.txt'
 	let l:output_option = l:word =~? '^[a-z_]\+$' ? '-A 1' : '-B 1' " 和英 or 英和
@@ -94,7 +95,10 @@ function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim �
 	silent wincmd P
 	setlocal buftype=nofile noswapfile modifiable
 	silent %delete " TODO workaround 前の結果が残っていることがあるため
-	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
+	silent execute 'read !grep -ihx' l:output_option l:word l:gene_path
+	silent call append(line('$'), '==')
+	" TODO 完全一致と重複。二回やるのは無駄。
+	silent execute line('$') . 'read !grep -ihw' l:output_option l:word l:gene_path
 	silent 1delete
 	silent wincmd p
 endfunction
@@ -408,6 +412,17 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	filetype plugin indent on " Required!
 	NeoBundleCheck " Installation check.
 
+	" plugin debug 用
+	" let &runtimepath = &runtimepath . ',/.vim/plugins'
+	" for s:addingPath in split(glob($HOME . '/.vim/bundle/*'), '\n')
+	" 	if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
+	" 		continue
+	" 	endif
+	" 	if s:addingPath =~# 'neocomplete' && ! has('lua') " work around. msysgitでvim起動時にエラーが出てしまうため
+	" 		continue
+	" 	endif
+	" 	let &runtimepath = &runtimepath . ',' . s:addingPath
+	" endfor
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath . ',/vimfiles/plugins'
 	for s:addingPath in split(glob($HOME . '/vimfiles/plugins/*'), '\n')

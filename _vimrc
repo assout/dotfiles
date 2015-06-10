@@ -22,9 +22,12 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 " * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
 " * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
+" * [Vimの極め方](http://whileimautomaton.net/2008/08/vimworkshop3-kana-presentation)
+" * [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
+" * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
 
 " # TODOs
-" * TODO windows(kaoriya) だと <C-k> が dicwin にとられているっぽい -> 暫定対応として dicwin を単独で導入し、kaoriya ビルトインのほうを削除する
+" * nothing
 " }}}1
 
 " Section; Begin {{{1
@@ -78,6 +81,23 @@ function! s:insertSuffix(str) range
 endfunction
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>insertSuffix(<f-args>)
 
+" TODO たまにバグる(カレントバッファが Preview になってしまう)
+" TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)
+function! s:dictionarySearch(...) " required gene.txt
+	let l:word = a:0 == 0 ? expand('<cword>') : a:1
+	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene.txt'
+	let l:output_option = l:word =~? '^[a-z_]\+$' ? '-A 1' : '-B 1' " 和英 or 英和
+
+	silent execute 'pedit Translate\ Result\ [' . l:word . ']'
+	silent wincmd P
+	setlocal buftype=nofile noswapfile modifiable
+	silent %delete " TODO workaround 前の結果が残っていることがあるため
+	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
+	silent 1delete
+	silent wincmd p
+endfunction
+command! -nargs=? -complete=command DicSearch call <SID>dicSearch(<f-args>)
+
 function! s:has_plugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
@@ -118,14 +138,14 @@ set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
-set diffopt+=vertical
+set diffopt& diffopt+=vertical
 set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
 	set foldlevelstart=0
 	set foldmethod=marker
 endif
-set formatoptions-=o " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
+set formatoptions& formatoptions-=o " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 if executable('grep')
 	set grepprg=grep\ -nH
 endif
@@ -138,7 +158,7 @@ set hlsearch
 set ignorecase
 set incsearch
 if has('win32')
-	set isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
+	set isfname& isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
 endif
 set keywordprg=:help " Open Vim internal help by K command
 set list
@@ -156,7 +176,7 @@ set smartindent
 let &spellfile = has('unix') ? '~/Dropbox/spell/en.utf-8.add' : 'D:/admin/Documents/spell/en.utf-8.add'
 set splitbelow
 set splitright
-set spelllang+=cjk " スペルチェックで日本語は除外する
+set spelllang& spelllang+=cjk " スペルチェックで日本語は除外する
 set tabstop=4
 set textwidth=0 " 自動改行をなくす
 set title
@@ -174,6 +194,8 @@ endif
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let b:is_bash = 1 " shellのハイライトをbash基準にする
+let plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効
+let plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -225,6 +247,7 @@ endif
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+nnoremap [space]d       :DicSearch<Space>
 
 nnoremap <C-h>     <C-w>h
 nnoremap <C-j>     <C-w>j
@@ -351,7 +374,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
-	NeoBundle 'koron/dicwin-vim'
 	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdown の url 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
@@ -361,6 +383,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
+	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " window の最大化・復元
 	NeoBundle 'thinca/vim-qfreplace' " grep した結果を置換
@@ -399,17 +422,6 @@ endif
 
 if s:has_plugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
-endif " }}}
-
-if s:has_plugin('codic') " {{{
-	nnoremap [space]c :<C-u>Codic<Space>
-endif " }}}
-
-if s:has_plugin('dicwin') " {{{
-	let g:dicwin_mapleader = '[space]d'
-	if has('win32') " ウィンドウ幅が広くなる問題対応 <http://saihoooooooo.hatenablog.com/entry/20120726/1343274932>
-		let g:dicwin_dictpath = substitute($HOME, '\', '/', 'g') . '/vimfiles/dict/gene.txt'
-	endif
 endif " }}}
 
 if s:has_plugin('excitetranslate') " {{{
@@ -479,7 +491,7 @@ if s:has_plugin('open-browser') " {{{
 endif " }}}
 
 if s:has_plugin('operator-camelize') " {{{
-	map [space]C <Plug>(operator-camelize)
+	map [space]c <Plug>(operator-camelize)
 endif " }}}
 
 if s:has_plugin('operator-replace') " {{{
@@ -572,7 +584,7 @@ if s:has_plugin('unite') " {{{
 		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
 		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 	endif
-	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep<CR>
+	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
 	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
 	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume<CR>
 	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
@@ -585,15 +597,20 @@ if s:has_plugin('unite') " {{{
 	endif
 
 	if s:has_plugin('neomru') " {{{
-		let g:neomru#directory_mru_limit = 100
+		let g:neomru#directory_mru_limit = 200
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 100
+		let g:neomru#file_mru_limit = 200
 		let g:neomru#filename_format = ''
 
 		nmap     [unite]n  [neomru]
 		nnoremap [neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
 		nnoremap [neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
 	endif " }}}
+
+	if s:has_plugin('unite-codic') " {{{
+		nnoremap <expr> [unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
+		nnoremap        [unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
+	endif
 
 	if s:has_plugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
@@ -646,7 +663,7 @@ if s:has_plugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-	" TODO <!-- -->の削除もできるようにしたい(コメントのトグルがしたい)
+	" TODO <!-- --> の削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
 	map <silent> sa <Plug>(operator-surround-append)

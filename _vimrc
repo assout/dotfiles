@@ -78,23 +78,28 @@ endfunction
 command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO たまにバグる(カレントバッファが Preview になってしまう)
-" TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)
+" TODO 超汚い。あとたまにバグる(カレントバッファが Preview になってしまう)
 function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim でも良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
-	call histadd("cmd", "DictionaryTranslate " . l:word)
+	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
-	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene.txt'
-	let l:output_option = l:word =~? '^[a-z_]\+$' ? '-A 1' : '-B 1' " 和英 or 英和
+	" TODO relative path from home
+	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : 'C:/Users/admin/vimfiles/dict/gene.txt'
+	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
+	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
 
-	silent execute 'pedit Translate\ Result\ [' . l:word . ']'
-	silent wincmd P
+	silent pedit Translate\ Result | wincmd P | %delete " 前の結果が残っていることがあるため
 	setlocal buftype=nofile noswapfile modifiable
-	silent %delete " TODO workaround 前の結果が残っていることがあるため
-	silent execute 'read !grep -ihx' l:output_option l:word l:gene_path
-	silent call append(line('$'), '==')
-	" TODO 完全一致と重複。二回やるのは無駄。
-	silent execute line('$') . 'read !grep -ihw' l:output_option l:word l:gene_path
+	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
+	silent 0delete
+	let l:esc = @z
+	let @z = ''
+	while search("^" . l:word . "$", "Wc") > 0 " 完全一致したものを上部に移動
+		silent execute line('.') - l:jpn_to_eng . "delete Z 2"
+	endwhile
+	silent 0put z
+	let @z = l:esc
+	silent call append(line('.'), '==')
 	silent 1delete
 	silent wincmd p
 endfunction

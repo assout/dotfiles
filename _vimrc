@@ -72,15 +72,11 @@ function! s:ToggleTab() " TODO タブサイズも変更できるように(意外
 endfunction
 command! -complete=command ToggleTab call <SID>ToggleTab()
 
-function! s:InsertPrefix(str) range
-	execute a:firstline . ',' . a:lastline . 'substitute/^/' . substitute(a:str, '/', '\\/', 'g')
+function! s:InsertString(pos, str) range
+	execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertPrefix(<f-args>)
-
-function! s:InsertSuffix(str) range
-	execute a:firstline . ',' . a:lastline . 'substitute/$/' . substitute(a:str, '/', '\\/', 'g')
-endfunction
-command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertSuffix(<f-args>)
+command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO たまにバグる(カレントバッファが Preview になってしまう)
 " TODO grep オプションをコマンドオプションで指定可能にする(-x or -w)

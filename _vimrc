@@ -154,7 +154,7 @@ endif
 " if executable('pt')
 "   set grepprg=pt\ --nogroup\ -iS
 " endif
-set helplang& helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
+set helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set hidden
 set hlsearch
 set ignorecase
@@ -629,15 +629,17 @@ if s:HasPlugin('unite') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		map     [space]t         [unite-todo]
-		noremap [unite-todo]     <Nop>
-		noremap [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap [unite-todo]a    :UniteTodoAddSimple<CR>
-		noremap [unite-todo]t    :UniteTodoAddSimple -tag<CR>
-		noremap [unite-todo]m    :UniteTodoAddSimple -memo<CR>
-		noremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
-		noremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
-		noremap [unite-todo]g    :execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
+		map      [space]t         [unite-todo]
+		noremap  [unite-todo]     <Nop>
+		noremap  [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap  [unite-todo]a    :UniteTodoAddSimple<CR>
+		noremap  [unite-todo]t    :UniteTodoAddSimple -tag<CR>
+		noremap  [unite-todo]m    :UniteTodoAddSimple -memo<CR>
+		nnoremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
+		nnoremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
+		nnoremap [unite-todo]g    :execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
+		" TODO 脱vimgrep
+		" nnoremap [unite-todo]g    :execute ':grep ' . input('TodoGrep word: ') . ' ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
 	endif " }}}
 endif " }}}
 

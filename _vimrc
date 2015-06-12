@@ -90,6 +90,7 @@ function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim �
 
 	silent pedit Translate\ Result | wincmd P | %delete " 前の結果が残っていることがあるため
 	setlocal buftype=nofile noswapfile modifiable
+	" TODO 日本語が-wオプションだとあまり取得できない
 	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
 	silent 0delete
 	let l:esc = @z
@@ -145,6 +146,7 @@ set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
+set cryptmethod=blowfish2
 set diffopt& diffopt+=vertical
 set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
@@ -265,10 +267,10 @@ nnoremap <C-Down>  <C-w>J
 nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
+" caution: ほんとは <C-w>v を <C-S-s>とかに割り当てたいが <C-s> と区別されない。やろうとするとめんどいっぽい。
 nnoremap  <C-s> <C-w>s
-" caution: ほんとはg<C-s>じゃなく<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい。
-nnoremap g<C-s> <C-w>v
 nnoremap  <C-c> <C-w>c
+nnoremap  <C-z> <C-w>z
 
 " tab操作 caution: <TAB> == <C-i>
 nnoremap <C-TAB>   gt
@@ -310,11 +312,8 @@ nnoremap ]f :cnfile<CR>
 " インサートモードでのキーマッピングを Emacs 風にする
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
-" TODO Vrapper でも効かせたい
 inoremap <C-a> <Home>
-" TODO Vrapper でも効かせたい
 inoremap <C-e> <End>
-" TODO Vrapper でも効かせたい
 inoremap <C-d> <Del>
 " TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
@@ -807,15 +806,15 @@ endif " }}}
 " }}}1
 
 " Section; Other Commands {{{1
-filetype on
 if s:HasPlugin('hybrid') " {{{
 	colorscheme hybrid-light
 else
 	colorscheme peachpuff
 endif
-if 1 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。なお Vrapper でエラーになるのでif文入れてる
-	cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
-endif
+
+filetype on
+" :qで誤って終了してしまうのを防ぐためcloseに置き換える。なお Vrapper でエラーになるのでif文入れてる
+cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 
 " vim:nofoldenable:

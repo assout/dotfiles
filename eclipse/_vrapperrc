@@ -1,13 +1,16 @@
 " Section; Introduction {{{1
-" vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある。
+" vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
 " 詳細は http://vrapper.sourceforge.net/documentation
 
-" eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする。
-" 例えば, Ctrl + c (copy)は、Alt + c に退避する。
-" 以下に退避するキーバインドの一覧を示す。
+" caution: コメント分のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
+
+" eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
+" 例えば, Ctrl + c (copy)は、Alt + c に退避する.
+" 以下に退避するキーバインドの一覧を示す.
 
 " Ctrl + a - Select All
 " Ctrl + b - Build All
+" Ctrl + c - Copy
 " Ctrl + d - Delete Line
 " Ctrl + e - Quick Switch Editor
 " Ctrl + f - Find and Replace
@@ -32,17 +35,23 @@
 " Section; Vim Settings {{{1
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
-
-set clipboard=unnamed " ヤンク、ペーストをクリップボードに.
+" ヤンク、ペーストをクリップボードに.
+set clipboard=unnamed
 " }}}1
 
 " Section; Vrapper Settings {{{1
-set imdisable " インサートモードを抜けたらIMEオフ.
-set contentassistmode " コンテンツアシストで<C-p>,<C-n>を有効にする.
-set startnormalmode " タブ移動したらNORMAL MODEに変更する.
-set visualmouse " マウス選択時にビジュアルモードにする.
-set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe " GVimパス指定.
-set regexsearch " Search Regex
+" インサートモードを抜けたらIMEオフ.
+set imdisable
+" コンテンツアシストで<C-p>,<C-n>を有効にする.
+set contentassistmode
+" タブ移動したらNORMAL MODEに変更する.
+set startnormalmode
+" マウス選択時にビジュアルモードにする.
+set visualmouse
+" GVimパス指定.
+set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe
+" Search Regex
+set regexsearch
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -66,18 +75,26 @@ noremap <C-l> gt
 nnoremap <C-t> :maximize<CR>
 inoremap <C-t> <C-o>:maximize<CR>i
 
-nnoremap  <C-c> :bdelete<CR>
-nnoremap  <C-m> i<CR><Esc>
-nnoremap g<C-o> :only<CR>
-nnoremap  <C-k> :GotoPreviousMember<CR>
-nnoremap  <C-j> :GotoNextMember<CR>
+nnoremap <C-c>  :bdelete<CR>
+nnoremap <C-m>  i<CR><Esc>
+nnoremap <C-w>o :only<CR>
+nnoremap <C-k>  :GotoPreviousMember<CR>
+nnoremap <C-j>  :GotoNextMember<CR>
+
+" TODO vimrc で指定しているが効かない(vrapperrc でinoramap,imapを指定してもだめ).
+inoremap <C-a> <Home>
+" TODO vimrc で指定しているが効かない(vrapperrc でinoramap,imapを指定してもだめ).
+inoremap <C-e> <End>
+" TODO vimrc で指定しているが効かない(vrapperrc でinoramap,imapを指定してもだめ).
+inoremap <C-d> <Del>
 " }}}1
 
 " Section; Define commands {{{1
-" definition ID of the edit -> go to next member action 
+" definition ID of the edit -> go to next member action.
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
-" definition ID of the edit -> go to previous member action 
+" definition ID of the edit -> go to previous member action.
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
 " }}}1
 
 " vim: filetype=vim nofoldenable:
+

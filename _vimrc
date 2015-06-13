@@ -61,7 +61,7 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
-function! s:FormatSGML() " caution: execute にする必要ないが vint で警告になってしまうため
+function! s:FormatSGML() " caution: executeにする必要ないがvintで警告になってしまうため
 	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 endfunction
 command! -complete=command FormatSGML call <SID>FormatSGML()
@@ -81,11 +81,11 @@ command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
-function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim でも良いが和英したいため
+function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vim でも良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
-	" TODO relative path from home
+	" TODO relative path from home directory
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : 'C:/Users/admin/vimfiles/dict/gene.txt'
 	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
 	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和

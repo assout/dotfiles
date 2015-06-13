@@ -7,7 +7,7 @@
 " * Let defines
 " * Key-mappings
 " * Plug-ins
-" * Other Commands
+" * After
 " }}}1
 
 " Section; Introduction {{{1
@@ -44,6 +44,8 @@ endif
 augroup vimrc
 	autocmd!
 augroup END
+
+colorscheme peachpuff
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -213,9 +215,7 @@ let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
 
 " Section; Key-mappings {{{1
 
-" caution: <C-;>に<Esc>を割り当てたいがめんどいっぽい
-" 今はデフォルトの<C-]>か<C-c>を使ってるけど押しづらい
-" 前は<C-j>を割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
+" caution: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
 " vimfilerなどpluginと競合防ぐため[space]にわりあてている
@@ -250,7 +250,7 @@ noremap <silent>       [insert]l  :InsertSuffix \ \ <CR>
 nmap     [space]o [open]
 nnoremap [open]   <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため。caution:<expr>がvrapperでエラーになる
-nnoremap <expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap <silent><expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 if has('win32')
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
@@ -270,7 +270,7 @@ nnoremap <C-Down>  <C-w>J
 nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
-" caution: ほんとは <C-w>v を <C-S-s>とかに割り当てたいが <C-s> と区別されない。やろうとするとめんどいっぽい。
+" caution: ほんとは<C-w>vを<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい。
 nnoremap <C-s> <C-w>s
 nnoremap <C-c> <C-w>c
 nnoremap <C-z> <C-w>z
@@ -469,6 +469,10 @@ if s:HasPlugin('hateblo') " {{{
 	nnoremap [hateblo]C :<C-u>HatebloCreateDraft<CR>
 	nnoremap [hateblo]d :<C-u>HatebloDelete<CR>
 	nnoremap [hateblo]u :<C-u>HatebloUpdate<CR>
+endif " }}}
+
+if s:HasPlugin('hybrid') " {{{
+	colorscheme hybrid-light
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
@@ -806,9 +810,9 @@ if s:HasPlugin('yankround') " {{{ TODO gistを開き未保存のバッファでp
 endif " }}}
 " }}}1
 
-" section; other commands {{{1
-if s:HasPlugin('hybrid') | colorscheme hybrid-light | else | colorscheme peachpuff | endif
+" Section; After {{{1
 filetype on
+
 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1

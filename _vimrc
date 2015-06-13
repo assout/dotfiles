@@ -547,6 +547,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
+	call tcomment#DefineType('java', tcomment#GetLineC('// %s'))
 endif " }}}
 
 if s:HasPlugin('unite') " {{{

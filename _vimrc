@@ -15,7 +15,7 @@
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
-" * execute コマンドをキーマッピングするとき <C-u> をつけること(e.g. nnoremap hoge :<C-u>fuga)
+" * executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 
 " # References
@@ -78,7 +78,7 @@ endfunction
 command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO 超汚い。あとたまにバグる(カレントバッファが Preview になってしまう)
+" TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
 function! s:DictionaryTranslate(...) " required gene.txt , kaoriya/dicwin.vim でも良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
@@ -115,7 +115,7 @@ if ! has('kaoriya')
 endif
 
 command! -bang BufClear %bdelete<bang>
-command! -bang BClear BufClear<bang>
+command! -bang BClear   BufClear<bang>
 " }}}1
 
 " Section; Auto-commands {{{1
@@ -182,7 +182,11 @@ set showtabline=1
 set sidescrolloff=5
 set smartcase
 set smartindent
-let &spellfile = has('unix') ? '~/Dropbox/spell/en.utf-8.add' : 'D:/admin/Documents/spell/en.utf-8.add'
+if has('unix')
+	set spellfile=~/Dropbox/spell/en.utf-8.add
+else
+	set spellfile=D:/admin/Documents/spell/en.utf-8.add
+endif
 set splitbelow
 set splitright
 set spelllang& spelllang+=cjk " スペルチェックで日本語は除外する
@@ -209,12 +213,12 @@ let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
 
 " Section; Key-mappings {{{1
 
-" caution: <C-;> に <Esc> を割り当てたいがめんどいっぽい
-" 今はデフォルトの <C-]> か <C-c> を使ってるけど押しづらい
-" 前は <C-j> を 割り当ててたけど bash とかだと Enter 扱いでややこしいからやめた
-" あとなにかの plugin で jk 同時押しで <Esc> も試したけど合わなかった(visual mode だとできないし、j のあとキー入力待ちになるの気持ちわるい)
+" caution: <C-;>に<Esc>を割り当てたいがめんどいっぽい
+" 今はデフォルトの<C-]>か<C-c>を使ってるけど押しづらい
+" 前は<C-j>を割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
+" あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
-" vimfilerと競合防ぐため[space]にわりあてている
+" vimfilerなどpluginと競合防ぐため[space]にわりあてている
 map     <Space>  [space]
 noremap [space]  <Nop>
 noremap [space]h ^
@@ -227,32 +231,31 @@ noremap g? ?
 
 map     [space]i       [insert]
 noremap [insert]       <Nop>
-noremap <silent><expr> [insert]p ':InsertPrefix<Space>' . input('prefix:') . '<CR>'
-noremap <silent>       [insert]*  :InsertPrefix *<Space><CR>
-noremap <silent>       [insert]1  :InsertPrefix #<Space><CR>A
-noremap <silent>       [insert]2  :InsertPrefix ##<Space><CR>A
-noremap <silent>       [insert]3  :InsertPrefix ###<Space><CR>A
-noremap <silent>       [insert]4  :InsertPrefix ####<Space><CR>A
-noremap <silent>       [insert]>  :InsertPrefix ><Space><CR>
-noremap <silent>       [insert]T  :InsertPrefix TODO<Space><CR>
+noremap <silent><expr> [insert]p ':InsertPrefix ' . input('prefix:') . '<CR>'
+noremap <silent>       [insert]*  :InsertPrefix * <CR>
+noremap <silent>       [insert]1  :InsertPrefix # <CR>A
+noremap <silent>       [insert]2  :InsertPrefix ## <CR>A
+noremap <silent>       [insert]3  :InsertPrefix ### <CR>A
+noremap <silent>       [insert]4  :InsertPrefix #### <CR>A
+noremap <silent>       [insert]>  :InsertPrefix > <CR>
+noremap <silent>       [insert]T  :InsertPrefix TODO <CR>
 noremap <silent>       [insert]f  :InsertPrefix file://<CR>
-noremap <silent><expr> [insert]s ':InsertSuffix<Space>' . input('suffix:') . '<CR>'
-noremap <silent><expr> [insert]d ':InsertSuffix<Space>' . strftime('\<Space>@%Y-%m-%d') . '<CR>'
-noremap <silent><expr> [insert]t ':InsertSuffix<Space>' . strftime('\<Space>@%H:%M:%S') . '<CR>'
-noremap <silent><expr> [insert]n ':InsertSuffix<Space>' . strftime('\<Space>@%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr> [insert]a ':InsertSuffix<Space>\<Space>@' . input('author:') . '<CR>'
-noremap <silent>       [insert]l  :InsertSuffix \<Space>\<Space><CR>
+noremap <silent><expr> [insert]s ':InsertSuffix ' . input('suffix:') . '<CR>'
+noremap <silent><expr> [insert]d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <silent><expr> [insert]t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
+noremap <silent>       [insert]l  :InsertSuffix \ \ <CR>
 
 nmap     [space]o [open]
 nnoremap [open]   <Nop>
-" caution: executeでなく<expr>だとvrapperから読み込んだときにエラーになる
-" resolveしなくても開けるが、fugitiveで対象とするため
-nnoremap [open]v  :<C-u>execute ':edit ' . resolve(expand($MYVIMRC))<CR>
+" resolveしなくても開けるが、fugitiveで対象とするため。caution:<expr>がvrapperでエラーになる
+nnoremap <expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 if has('win32')
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 
-" 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だと vimfiler と競合
+" 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だとvimfilerと競合。
 nnoremap [space]<Space> :nohlsearch<CR>
 nnoremap [space]b       :bdelete<CR>
 nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -268,9 +271,9 @@ nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
 " caution: ほんとは <C-w>v を <C-S-s>とかに割り当てたいが <C-s> と区別されない。やろうとするとめんどいっぽい。
-nnoremap  <C-s> <C-w>s
-nnoremap  <C-c> <C-w>c
-nnoremap  <C-z> <C-w>z
+nnoremap <C-s> <C-w>s
+nnoremap <C-c> <C-w>c
+nnoremap <C-z> <C-w>z
 
 " tab操作 caution: <TAB> == <C-i>
 nnoremap <C-TAB>   gt
@@ -281,9 +284,9 @@ nnoremap k  gk
 nnoremap gj j
 nnoremap gk k
 
-nnoremap <CR> i<CR><Esc>
 " D,Cと一貫性のある挙動に変更
 nnoremap Y y$
+nnoremap <CR> i<CR><Esc>
 
 " バッファ、ウィンドウ、タブ移動関連
 nnoremap [b :bprevious<CR>
@@ -309,7 +312,7 @@ nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
 
-" インサートモードでのキーマッピングを Emacs 風にする
+" インサートモードでのキーマッピングをEmacs風にする
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-a> <Home>
@@ -317,7 +320,7 @@ inoremap <C-e> <End>
 inoremap <C-d> <Del>
 " TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
-" caution: 設定しないと im_control で日本語入力モードON の動きをしてしまう
+" caution: 設定しないとim_controlで日本語入力モードONの動きをしてしまう
 inoremap <C-c> <Esc>
 
 " コマンドラインモードでのキーマッピングをEmacs風にする
@@ -344,7 +347,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	endif
 	call neobundle#begin(expand('~/.vim/bundle'))
 
-	NeoBundle 'Arkham/vim-quickfixdo' " like argdo,bufdo.
+	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
 	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -362,10 +365,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ 'unix' : 'make -f make_unix.mak',
 				\ },
 				\ }
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へも PR でてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'assout/unite-todo'
 	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'fuenor/im_control.vim' " TODO linux だと <C-o> の動きが変になる
+	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
 	NeoBundle 'h1mesuke/vim-alignta'
@@ -381,7 +384,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'lambdalisue/vim-gista'
-	NeoBundle 'mattn/emmet-vim' " markdown の url 形式取得にしか使ってない(<C-y>a)
+	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/qiita-vim'
 	NeoBundle 'mattn/vim-textobj-url'
@@ -391,12 +394,12 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle 'szw/vim-maximizer' " window の最大化・復元
-	NeoBundle 'thinca/vim-qfreplace' " grep した結果を置換
+	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
+	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-ref'
 	NeoBundle 'thinca/vim-singleton'
-	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char} , daf{char}
+	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char}, daf{char}
 	NeoBundle 'thinca/vim-textobj-comment'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
@@ -423,13 +426,14 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	" 	endif
 	" 	let &runtimepath = &runtimepath . ',' . s:addingPath
 	" endfor
+
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	let &runtimepath = &runtimepath . ',/vimfiles/plugins'
 	for s:addingPath in split(glob($HOME . '/vimfiles/plugins/*'), '\n')
 		if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
 			continue
 		endif
-		if s:addingPath =~# 'neocomplete' && ! has('lua') " work around. msysgitでvim起動時にエラーが出てしまうため
+		if s:addingPath =~# 'neocomplete' && ! has('lua') " workaround. msysgitでvim起動時にエラーが出てしまうため
 			continue
 		endif
 		let &runtimepath = &runtimepath . ',' . s:addingPath
@@ -439,6 +443,8 @@ endif
 
 if s:HasPlugin('alignta') " {{{
 	xnoremap [space]a :Alignta<Space>
+	" 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
+	xnoremap [space]A :Alignta<Space>v/^" <<0 \s\S/2
 endif " }}}
 
 if s:HasPlugin('excitetranslate') " {{{
@@ -446,7 +452,6 @@ if s:HasPlugin('excitetranslate') " {{{
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
-	" api_keyはvimrc.localから設定
 	let g:hateblo_vim = {
 				\ 'user': 'assout',
 				\ 'api_key': g:hateblo_api_key,
@@ -454,7 +459,7 @@ if s:HasPlugin('hateblo') " {{{
 				\ 'WYSIWYG_mode': 0,
 				\ 'always_yes': 0,
 				\ 'edit_command': 'edit'
-				\ }
+				\ } " api_keyはvimrc.localから設定
 	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
 
 	nmap     [space]H   [hateblo]
@@ -467,7 +472,7 @@ if s:HasPlugin('hateblo') " {{{
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
-	let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linux のときは設定しなくても期待した挙動になるけど一応
+	let g:IM_CtrlMode = has('unix') ? 0 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
 	if !has('gui_running')
 		let g:IM_CtrlMode = 0
 	endif
@@ -494,9 +499,7 @@ if s:HasPlugin('memolist') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-	if has('lua')
-		let g:neocomplete#enable_at_startup = 1
-	endif
+	let g:neocomplete#enable_at_startup = has('lua') ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
@@ -520,13 +523,13 @@ if s:HasPlugin('previm') " {{{
 endif " }}}
 
 if s:HasPlugin('qiita-vim') " {{{
-	nmap     [space]q    [Qiita]
-	nnoremap [Qiita]     <Nop>
-	nnoremap [Qiita]l    :<C-u>Unite qiita<CR>
-	nnoremap [Qiita]<CR> :<C-u>Qiita<CR>
-	nnoremap [Qiita]c    :<C-u>Qiita<CR>
-	nnoremap [Qiita]e    :<C-u>Qiita -e<CR>
-	nnoremap [Qiita]d    :<C-u>Qiita -d<CR>
+	nmap     [space]q    [qiita]
+	nnoremap [qiita]     <Nop>
+	nnoremap [qiita]l    :<C-u>Unite qiita<CR>
+	nnoremap [qiita]<CR> :<C-u>Qiita<CR>
+	nnoremap [qiita]c    :<C-u>Qiita<CR>
+	nnoremap [qiita]e    :<C-u>Qiita -e<CR>
+	nnoremap [qiita]d    :<C-u>Qiita -d<CR>
 endif " }}}
 
 if s:HasPlugin('quickrun') " {{{
@@ -552,21 +555,20 @@ if s:HasPlugin('unite') " {{{
 	let g:unite_source_grep_max_candidates = 200
 	let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-	function! s:my_relative_move.func(candidates) " move 先を相対パスで指定する action
+	function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction
 		let l:candidate = a:candidates[0]
 		let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
 		call unite#take_action('move', a:candidates)
-		call unite#force_redraw() " 呼ばないと表示更新されない(なぜ?)
+		call unite#force_redraw() " 呼ばないと表示更新されない
 	endfunction
 
 	function! s:unite_my_keymappings()
 		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
-		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
-		" kind:directoryはdefaultでvimfilerにしているので下記設定は不要だが、kind:fileとかに対して実行するため
+		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
-		" vim-operator-surround の mapping と被るので nowait
+		" vim-operator-surroundのmappingと被るのでnowait
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
 		nunmap   <buffer>  <C-h>
 		nunmap   <buffer>  <C-l>
@@ -641,9 +643,8 @@ if s:HasPlugin('unite') " {{{
 		noremap  [unite-todo]m    :UniteTodoAddSimple -memo<CR>
 		nnoremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
 		nnoremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
-		nnoremap [unite-todo]g    :execute ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
-		" TODO 脱vimgrep
-		" nnoremap [unite-todo]g    :execute ':grep ' . input('TodoGrep word: ') . ' ' . g:unite_todo_data_directory . '/todo/note/*'<CR>
+		" TODO change to grep
+		nnoremap <expr> [unite-todo]g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
 	endif " }}}
 endif " }}}
 
@@ -675,14 +676,13 @@ if s:HasPlugin('vim-gista') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " caution: 't' is toggle window maximize. ホントは eclipse のデフォルトショートカットにあわせ <C-m> に割り当てたいが <CR> と等価なので enter キー押下時も発動してしまう
+	let g:maximizer_default_mapping_key = '<C-t>' " caution: 't' is toggle window maximize.
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
 	" refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
 	" refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-	" TODO <!-- --> の削除もできるようにしたい(コメントのトグルがしたい)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
 	map <silent> sa <Plug>(operator-surround-append)
@@ -711,7 +711,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
 		nmap <silent>sau <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 		" TODO no block matches to the region となる
 		nmap <silent>sdu <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
-		" TODO apped の動きになってしまう
+		" TODO appendの動きになってしまう
 		nmap <silent>sru <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
 	endif
 endif " }}}
@@ -739,7 +739,7 @@ if s:HasPlugin('vim-ref') " {{{
 	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
 endif " }}}
 
-if s:HasPlugin('vim-submode') " {{{ caution: prefix 含め submode name が長すぎると Invalid argument となる(e.g. prefix を [submode] とするとエラー)
+if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを[submode]とするとエラー)
 	nmap     [space]s [sub]
 	nnoremap [sub]    <Nop>
 
@@ -761,21 +761,21 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix 含め submode name が長�
 	call submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
 	call submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
-	" TODO 先頭と末尾に行き過ぎたときエラーで submode 抜けたくない
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
 	call submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
 	call submode#map('args', 'n', '', 'k', ':previous<CR>')
 	call submode#map('args', 'n', '', 'j', ':next<CR>')
 	call submode#map('args', 'n', '', 'K', ':first<CR>')
 	call submode#map('args', 'n', '', 'J', ':last<CR>')
 
-	" TODO 先頭と末尾に行き過ぎたときエラーで submode 抜けたくない
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
 	call submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
 	call submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
 	call submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
 	call submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
-	" TODO いまいち効いてないっぽい(Submode 表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
+	" TODO いまいち効かないときがある(Submode表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
 	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
 	call submode#map('diff', 'n', '', 'k', '[c')
 	call submode#map('diff', 'n', '', 'j', ']c')
@@ -788,7 +788,7 @@ if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻る�
 	nmap =ie =ie``
 endif " }}}
 
-if s:HasPlugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい)
+if s:HasPlugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい。ctagsが必要？)
 	" text-obj-between用に f -> F に退避
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)
@@ -797,7 +797,7 @@ if s:HasPlugin('vim-textobj-function') " {{{ TODO windowsで効かない(mapping
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
-if s:HasPlugin('yankround') " {{{ TODO gist を開き未保存のバッファで p するとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
+if s:HasPlugin('yankround') " {{{ TODO gistを開き未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)
@@ -805,15 +805,10 @@ if s:HasPlugin('yankround') " {{{ TODO gist を開き未保存のバッファで
 endif " }}}
 " }}}1
 
-" Section; Other Commands {{{1
-if s:HasPlugin('hybrid') " {{{
-	colorscheme hybrid-light
-else
-	colorscheme peachpuff
-endif
-
+" section; other commands {{{1
+if s:HasPlugin('hybrid') | colorscheme hybrid-light | else | colorscheme peachpuff | endif
 filetype on
-" :qで誤って終了してしまうのを防ぐためcloseに置き換える。なお Vrapper でエラーになるのでif文入れてる
+" :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " }}}1
 

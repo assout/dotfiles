@@ -48,8 +48,6 @@ set contentassistmode
 set startnormalmode
 " マウス選択時にビジュアルモードにする.
 set visualmouse
-" GVimパス指定.
-set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe
 " Search Regex
 set regexsearch
 " }}}1
@@ -62,7 +60,7 @@ nunmap k
 nunmap /
 nunmap ?
 
-" TODO vimrc でも設定してるが[space]prefixが効かないので暫定で多重定義.
+" TODO vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap <Space>h ^
 noremap <Space>l g_
 noremap <Space><Space> :nohlsearch<CR>
@@ -71,7 +69,7 @@ noremap <Space><Space> :nohlsearch<CR>
 noremap <C-h> gT
 noremap <C-l> gt
 
-" cautioin: noremap では inser mode 時効かない(なぜか2タブ挿入される)
+" cautioin: noremapではinser mode時効かない(なぜか2タブ挿入される)
 nnoremap <C-t> :maximize<CR>
 inoremap <C-t> <C-o>:maximize<CR>i
 

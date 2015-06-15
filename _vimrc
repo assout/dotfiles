@@ -192,6 +192,7 @@ endif
 set splitbelow
 set splitright
 set spelllang& spelllang+=cjk " スペルチェックで日本語は除外する
+set tags& tags+=.git/tags
 set tabstop=4
 set textwidth=0 " 自動改行をなくす
 set title
@@ -224,10 +225,10 @@ noremap [space]  <Nop>
 noremap [space]h ^
 noremap [space]l g_
 
-noremap /  /\v
-noremap ?  ?\v
-noremap g/ /
-noremap g? ?
+" noremap /  /\v
+" noremap ?  ?\v
+" noremap g/ /
+" noremap g? ?
 
 map     [space]i       [insert]
 noremap [insert]       <Nop>
@@ -278,6 +279,9 @@ nnoremap <C-z> <C-w>z
 " tab操作 caution: <TAB> == <C-i>
 nnoremap <C-TAB>   gt
 nnoremap <C-S-TAB> gT
+
+" tagsジャンプの時に複数ある時は一覧表示
+nnoremap <C-]> g<C-]>
 
 nnoremap j  gj
 nnoremap k  gk
@@ -372,7 +376,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
 	NeoBundle 'h1mesuke/vim-alignta'
-	NeoBundle 'haya14busa/vim-migemo' " TODO windowsでmigemoれない
+	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
 	NeoBundle 'kana/vim-operator-replace'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-submode'
@@ -395,6 +399,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
+	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-ref'
@@ -551,7 +556,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
-	call tcomment#DefineType('java', tcomment#GetLineC('// %s'))
+	" call tcomment#DefineType('java', tcomment#GetLineC('// %s'))
 endif " }}}
 
 if s:HasPlugin('unite') " {{{
@@ -682,6 +687,14 @@ endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
 	let g:maximizer_default_mapping_key = '<C-t>' " caution: 't' is toggle window maximize.
+endif " }}}
+
+if s:HasPlugin('vim-migemo') " {{{
+	if has('win32')
+		let g:migemodict = "D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict"
+	else
+		nnoremap g/ :<C-u>Migemo<Space>
+	endif
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{

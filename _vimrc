@@ -28,7 +28,7 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * nothing
+" * 関数分割(outline が見やすいよう)
 " }}}1
 
 " Section; Begin {{{1
@@ -224,11 +224,10 @@ map     <Space>  [space]
 noremap [space]  <Nop>
 noremap [space]h ^
 noremap [space]l g_
-
-" noremap /  /\v
-" noremap ?  ?\v
-" noremap g/ /
-" noremap g? ?
+noremap [space]/ /
+noremap [space]? ?
+noremap /        /\v
+noremap ?        ?\v
 
 map     [space]i       [insert]
 noremap [insert]       <Nop>
@@ -556,7 +555,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
-	" call tcomment#DefineType('java', tcomment#GetLineC('// %s'))
+	call tcomment#DefineType('java', tcomment#GetLineC('// %s')) " TODO windows でエラーでる？
 endif " }}}
 
 if s:HasPlugin('unite') " {{{
@@ -690,8 +689,9 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
-	if has('win32')
+	if has('migemo')
 		let g:migemodict = "D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict"
+		call migemo#SearchChar(0) " cautioni: slow
 	else
 		nnoremap g/ :<C-u>Migemo<Space>
 	endif

@@ -59,10 +59,13 @@ nunmap k
 " very magicへのマッピングを解除
 nunmap /
 nunmap ?
+nunmap <C-]>
 
 " TODO vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap <Space>h ^
 noremap <Space>l g_
+noremap <Space><Space> :nohlsearch<CR>
+
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT
 noremap <C-l> gt
@@ -71,12 +74,11 @@ noremap <C-l> gt
 nnoremap <C-t> :maximize<CR>
 inoremap <C-t> <C-o>:maximize<CR>i
 
-nnoremap <Space><Space> :nohlsearch<CR>
-nnoremap <C-c>          :bdelete<CR>
-nnoremap <C-m>          i<CR><Esc>
-nnoremap <C-w>o         :only<CR>
-nnoremap <C-k>          :GotoPreviousMember<CR>
-nnoremap <C-j>          :GotoNextMember<CR>
+nnoremap <C-c>  :bdelete<CR>
+nnoremap <C-m>  i<CR><Esc>
+nnoremap <C-w>o :only<CR>
+nnoremap <C-k>  :GotoPreviousMember<CR>
+nnoremap <C-j>  :GotoNextMember<CR>
 
 " TODO 以下3つ、vimrcで指定しているが効かない(vrapperrc でinoramap,imapを指定してもだめ).
 inoremap <C-a> <Home>

@@ -28,7 +28,6 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * TODO 関数分割(outline が見やすいよう)
 " }}}1
 
 " Section; Begin {{{1
@@ -40,10 +39,6 @@ scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
-
-augroup vimrc
-	autocmd!
-augroup END
 
 colorscheme peachpuff
 " }}}1
@@ -124,6 +119,8 @@ command! -bang BClear   BufClear<bang>
 
 " Section; Auto-commands {{{1
 augroup vimrc
+	autocmd!
+
 	" DoubleByteSpace highlight
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/

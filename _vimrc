@@ -389,6 +389,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle "sgur/vim-textobj-parameter"
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換

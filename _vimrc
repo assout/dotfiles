@@ -76,7 +76,7 @@ command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
-function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vim でも良いが和英したいため
+function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
@@ -108,10 +108,6 @@ command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTran
 function! s:HasPlugin(plugin) " plugin が存在するか調べる
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
-
-if ! has('kaoriya')
-	command! -nargs=0 CdCurrent cd %:p:h
-endif
 
 command! -bang BufClear %bdelete<bang>
 command! -bang BClear   BufClear<bang>
@@ -209,8 +205,6 @@ endif
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let b:is_bash = 1 " shellのハイライトをbash基準にする
-let g:plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効 TODO kaoriya時のみ実行
-let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効 TODO kaoriya時のみ実行
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -482,6 +476,13 @@ if s:HasPlugin('im_control') " {{{
 	if !has('gui_running')
 		let g:IM_CtrlMode = 0
 	endif
+endif " }}}
+
+if has('kaoriya') " {{{
+	let g:plugin_hz_ja_disable = 1 " hz_ja plugin無効
+	let g:plugin_dicwin_disable = 1 " dicwin plugin無効
+else
+	command! -nargs=0 CdCurrent cd %:p:h
 endif " }}}
 
 if s:HasPlugin('memolist') " {{{

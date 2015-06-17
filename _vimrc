@@ -28,7 +28,7 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * 関数分割(outline が見やすいよう)
+" * TODO 関数分割(outline が見やすいよう)
 " }}}1
 
 " Section; Begin {{{1
@@ -95,9 +95,11 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vim で
 	" TODO 日本語が-wオプションだとあまり取得できない
 	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
 	silent 0delete
+
+	" 完全一致したものを上部に移動
 	let l:esc = @z
 	let @z = ''
-	while search("^" . l:word . "$", "Wc") > 0 " 完全一致したものを上部に移動
+	while search("^" . l:word . "$", "Wc") > 0
 		silent execute line('.') - l:jpn_to_eng . "delete Z 2"
 	endwhile
 	silent 0put z
@@ -210,8 +212,8 @@ endif
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let b:is_bash = 1 " shellのハイライトをbash基準にする
-let g:plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効
-let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効
+let g:plugin_hz_ja_disable = 1 " kaoriya hz_ja plugin 無効 TODO kaoriya時のみ実行
+let g:plugin_dicwin_disable = 1 " kaoriya dicwin plugin 無効 TODO kaoriya時のみ実行
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -271,7 +273,6 @@ nnoremap <C-Up>    <C-w>K
 nnoremap <C-Right> <C-w>L
 
 " caution: ほんとは<C-w>vを<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい。
-nnoremap <C-s> <C-w>s
 nnoremap <C-c> <C-w>c
 nnoremap <C-z> <C-w>z
 
@@ -555,7 +556,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
-	call tcomment#DefineType('java', tcomment#GetLineC('// %s')) " TODO windows でエラーでる？
+	call tcomment#DefineType('java', '// %s')
 endif " }}}
 
 if s:HasPlugin('unite') " {{{
@@ -797,6 +798,10 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
 	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
 	call submode#map('diff', 'n', '', 'k', '[c')
 	call submode#map('diff', 'n', '', 'j', ']c')
+endif " }}}
+
+if s:HasPlugin('vim-tags') " {{{
+	let g:vim_tags_auto_generate = has('unix') ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)

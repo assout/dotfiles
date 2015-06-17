@@ -362,6 +362,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ }
 	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'assout/unite-todo'
+	NeoBundle 'anyakichi/vim-textobj-xbrackets'
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'

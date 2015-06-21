@@ -56,10 +56,17 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
-function! s:FormatSGML() " caution: executeにする必要ないがvintで警告になってしまうため
-	execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
+" TODO 未完（改行されなかった時のインデント範囲がおかしくなる）
+function! s:FormatSGML() range " caution: executeにする必要ないがvintで警告になってしまうため
+	" execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
+
+	execute 'normal!' . a:firstline . '=' . a:lastline
+	execute a:firstline . ',' . a:lastline . 'substitute/>\s*</>\r</ge'
+	filetype indent on
+	setfiletype xml
+	normal! `[=`]
 endfunction
-command! -complete=command FormatSGML call <SID>FormatSGML()
+command! -range -complete=command FormatSGML <line1>,<line2>call <SID>FormatSGML()
 
 function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)

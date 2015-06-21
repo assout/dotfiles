@@ -691,7 +691,7 @@ endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
 	if has('migemo')
-		let g:migemodict = 'D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict'
+		let g:migemodict = 'D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict' " TODO デフォルトがある？
 		call migemo#SearchChar(0) " cautioni: slow
 	else
 		nnoremap g/ :<C-u>Migemo<Space>

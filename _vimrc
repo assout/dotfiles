@@ -94,8 +94,8 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	" 完全一致したものを上部に移動
 	let l:esc = @z
 	let @z = ''
-	while search("^" . l:word . "$", "Wc") > 0
-		silent execute line('.') - l:jpn_to_eng . "delete Z 2"
+	while search('^' . l:word . '$', 'Wc') > 0
+		silent execute line('.') - l:jpn_to_eng . 'delete Z 2'
 	endwhile
 	silent 0put z
 	let @z = l:esc
@@ -343,6 +343,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	call neobundle#begin(expand('~/.vim/bundle'))
 
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
+	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'Shougo/neobundle.vim'
 	if has('lua')
@@ -690,7 +691,7 @@ endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
 	if has('migemo')
-		let g:migemodict = "D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict"
+		let g:migemodict = 'D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict'
 		call migemo#SearchChar(0) " cautioni: slow
 	else
 		nnoremap g/ :<C-u>Migemo<Space>

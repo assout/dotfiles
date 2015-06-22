@@ -28,6 +28,9 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
+" * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
+" * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
+" * TODO linuxでRestartコマンドがうまく動かない
 " }}}1
 
 " Section; Begin {{{1
@@ -57,6 +60,8 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
 " TODO 未完（改行されなかった時のインデント範囲がおかしくなる）
+" TODO コメント行はさむと以降のインデントベルが
+" TODO 未指定のときは範囲%扱いにしたい
 function! s:FormatSGML() range " caution: executeにする必要ないがvintで警告になってしまうため
 	" execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
 
@@ -278,9 +283,10 @@ nnoremap <C-z> <C-w>z
 nnoremap <C-TAB>   gt
 nnoremap <C-S-TAB> gT
 
-" tagsジャンプの時に複数ある時は一覧表示
+" Use ':tjump' instead of ':tag'.
 nnoremap <C-]> g<C-]>
 
+" TODO 全般的に右下のステータスバー？にちらちら表示されるのが邪魔 <silent> つけてもでるっぽい
 nnoremap j  gj
 nnoremap k  gk
 nnoremap gj j
@@ -299,6 +305,7 @@ nnoremap [w :wincmd W<CR>
 nnoremap ]w :wincmd w<CR>
 nnoremap [W :wincmd t<CR>
 nnoremap ]W :wincmd b<CR>
+" TODO tag 関係に変更する(tabは基本使わないので)
 nnoremap [t :tabprevious<CR>
 nnoremap ]t :tabnext<CR>
 nnoremap [T :tabfirst<CR>
@@ -373,7 +380,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'
-	NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい)
+	" NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい) TODO textobj-parameterとマッピング被ってるので一旦コメントアウト
 	NeoBundle 'h1mesuke/vim-alignta'
 	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
 	NeoBundle 'kana/vim-operator-replace'
@@ -397,7 +404,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle "sgur/vim-textobj-parameter" " caution: slow
+	NeoBundle "sgur/vim-textobj-parameter" " TODO textobj-wiw とマッピングが被ってる(できればこっちをia(rgs),aa(rgs)に変えたい。(Vrapperのtextobj-argsを見てみること)
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
@@ -420,29 +427,21 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	filetype plugin indent on " Required!
 	NeoBundleCheck " Installation check.
 
-	" plugin debug 用
-	" let &runtimepath = &runtimepath . ',/.vim/plugins'
-	" for s:addingPath in split(glob($HOME . '/.vim/bundle/*'), '\n')
-	" 	if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
-	" 		continue
-	" 	endif
-	" 	if s:addingPath =~# 'neocomplete' && ! has('lua') " work around. msysgitでvim起動時にエラーが出てしまうため
-	" 		continue
-	" 	endif
-	" 	let &runtimepath = &runtimepath . ',' . s:addingPath
-	" endfor
-
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
-	let &runtimepath = &runtimepath . ',/vimfiles/plugins'
-	for s:addingPath in split(glob($HOME . '/vimfiles/plugins/*'), '\n')
-		if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
-			continue
-		endif
-		if s:addingPath =~# 'neocomplete' && ! has('lua') " workaround. msysgitでvim起動時にエラーが出てしまうため
-			continue
-		endif
-		let &runtimepath = &runtimepath . ',' . s:addingPath
-	endfor
+	if has('vim_starting')
+		let &runtimepath = &runtimepath . ',/vimfiles/plugins'
+		let s:addingPaths = split(glob($HOME . '/vimfiles/plugins/*'), '\n')
+		let s:addingPaths += split(glob($HOME . '/vimfiles/plugins/*/after'), '\n')
+		for s:addingPath in s:addingPaths
+			if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
+				continue
+			endif
+			if s:addingPath =~# 'neocomplete' && ! has('lua') " workaround. msysgitでvim起動時にエラーが出てしまうため
+				continue
+			endif
+			let &runtimepath = &runtimepath . ',' . s:addingPath
+		endfor
+	endif
 endif
 " }}}
 
@@ -698,8 +697,9 @@ endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
 	if has('migemo')
-		let g:migemodict = 'D:\admin\Tools\cmigemo-default-win32\dict\utf-8\migemo-dict' " TODO デフォルトがある？
-		call migemo#SearchChar(0) " cautioni: slow
+		if has('vim_starting')
+			call migemo#SearchChar(0) " caution: probably slow
+		endif
 	else
 		nnoremap g/ :<C-u>Migemo<Space>
 	endif
@@ -840,6 +840,8 @@ filetype on
 
 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
+
+nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 " }}}1
 
 " vim:nofoldenable:

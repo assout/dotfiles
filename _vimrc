@@ -527,7 +527,7 @@ if s:HasPlugin('open-browser') " {{{
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{
-	map [space]c <Plug>(operator-camelize)
+	map [space]c <Plug>(operator-camelize-toggle)
 endif " }}}
 
 if s:HasPlugin('operator-replace') " {{{
@@ -822,7 +822,7 @@ if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻る�
 	nmap =ie =ie``
 endif " }}}
 
-if s:HasPlugin('vim-textobj-function') " {{{ TODO windowsで効かない(mappingはされてるっぽい。ctagsが必要？)
+if s:HasPlugin('vim-textobj-function') " {{{ caution: windows(非neobundle)でafter/ftpluginが読み込まれないっぽいので Section; Plug-ins でruntimepath強引に登録している
 	" text-obj-between用に f -> F に退避
 	let g:textobj_function_no_default_key_mappings = 1
 	omap iF <Plug>(textobj-function-i)

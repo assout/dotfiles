@@ -50,6 +50,8 @@ set startnormalmode
 set visualmouse
 " Search Regex
 set regexsearch
+" path to gvim executable. caution: linuxではコメントアウトすること TODO PATH通ってるとこから探してくれないか
+set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -64,26 +66,29 @@ nunmap <C-]>
 " TODO vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap <Space>h ^
 noremap <Space>l g_
-noremap <Space><Space> :nohlsearch<CR>
-
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT
 noremap <C-l> gt
 
-" cautioin: noremapではinser mode時効かない(なぜか2タブ挿入される)
-nnoremap <C-t> :maximize<CR>
-inoremap <C-t> <C-o>:maximize<CR>i
-
+nnoremap <Space><Space> :nohlsearch<CR>
+nnoremap <Space>b       :bdelete<CR>
 nnoremap <C-c>  :bdelete<CR>
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
 nnoremap <C-k>  :GotoPreviousMember<CR>
 nnoremap <C-j>  :GotoNextMember<CR>
 
-" TODO 以下3つ、vimrcで指定しているが効かない(vrapperrc でinoramap,imapを指定してもだめ).
-inoremap <C-a> <Home>
-inoremap <C-e> <End>
-inoremap <C-d> <Del>
+" cautioin: noremapではinser mode時効かない(なぜか2タブ挿入される)
+nnoremap <C-t> :maximize<CR>
+inoremap <C-t> <C-o>:maximize<CR>i
+
+" TODO 以下3つ、vimrcで指定しているが効かないのでworkaround.
+" inoremap <C-a> <Home>
+" inoremap <C-e> <End>
+" inoremap <C-d> <Del>
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$
+inoremap <C-d> <C-o>x
 " }}}1
 
 " Section; Define commands {{{1

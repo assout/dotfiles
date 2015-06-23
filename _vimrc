@@ -382,7 +382,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'glidenote/memolist.vim'
 	" NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい) TODO textobj-parameterとマッピング被ってるので一旦コメントアウト
 	NeoBundle 'h1mesuke/vim-alignta'
-	" NeoBundle 'haya14busa/vim-migemo' " required C/Migemo vigemo試し中
+	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo vigemo試し中
 	NeoBundle 'kana/vim-operator-replace'
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-submode'
@@ -399,7 +399,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/qiita-vim'
 	NeoBundle 'mattn/vim-textobj-url'
 	NeoBundle 'mattn/webapi-vim'
-	NeoBundle 'osyo-manga/vim-vigemo' " required C/Migemo
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
@@ -515,7 +514,7 @@ if s:HasPlugin('memolist') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-	let g:neocomplete#enable_at_startup = has('lua') ? 1 : 0
+	" let g:neocomplete#enable_at_startup = has('lua') ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
@@ -605,9 +604,7 @@ if s:HasPlugin('unite') " {{{
 	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-
 	call unite#filters#matcher_default#use(['matcher_migemo'])
-	" call unite#filters#matcher_default#use(['matcher_vigemo'])
 
 	nmap     [space]u    [unite]
 	nnoremap [unite]     <Nop>

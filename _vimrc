@@ -829,6 +829,14 @@ if s:HasPlugin('vim-textobj-function') " {{{ caution: windows(非neobundle)でaf
 	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
+if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせる
+	let g:textobj_parameter_no_default_key_mappings = 1
+	omap ia <Plug>(textobj-parameter-i)
+	omap aa <Plug>(textobj-parameter-a)
+	vmap ia <Plug>(textobj-parameter-i)
+	vmap aa <Plug>(textobj-parameter-a)
+endif " }}}
+
 if s:HasPlugin('yankround') " {{{ TODO gistを開き未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	nmap p     <Plug>(yankround-p)
 	nmap P     <Plug>(yankround-P)

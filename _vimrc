@@ -604,7 +604,9 @@ if s:HasPlugin('unite') " {{{
 	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call unite#filters#matcher_default#use(['matcher_migemo'])
+	if has('win32') " windowsではよく日本語使うので
+		call unite#filters#matcher_default#use(['matcher_migemo'])
+	endif
 
 	nmap     [space]u    [unite]
 	nnoremap [unite]     <Nop>

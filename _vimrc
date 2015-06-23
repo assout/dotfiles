@@ -177,6 +177,7 @@ set incsearch
 if has('win32')
 	set isfname& isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
 endif
+set iskeyword& iskeyword-=_
 set keywordprg=:help " Open Vim internal help by K command
 set list
 set listchars=tab:>.,trail:_,extends:\
@@ -379,7 +380,6 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'
-	" NeoBundle 'h1mesuke/textobj-wiw' " TODO windows/linuxで,wでのfowardが効かない(mappingはされてるっぽい) TODO textobj-parameterとマッピング被ってるので一旦コメントアウト
 	NeoBundle 'h1mesuke/vim-alignta'
 	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo vigemo試し中
 	NeoBundle 'kana/vim-operator-replace'
@@ -403,7 +403,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle "sgur/vim-textobj-parameter" " TODO textobj-wiw とマッピングが被ってる(できればこっちをia(rgs),aa(rgs)に変えたい。(Vrapperのtextobj-argsを見てみること)
+	NeoBundle "sgur/vim-textobj-parameter" " TODO ia(rgs),aa(rgs)に変えたい。(Vrapperのtextobj-argsを見てみること)
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換

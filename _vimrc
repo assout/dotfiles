@@ -30,7 +30,6 @@
 " # TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
-" * TODO linuxでRestartコマンドがうまく動かない
 " }}}1
 
 " Section; Begin {{{1
@@ -60,7 +59,7 @@ endfunction
 command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
 " TODO 未完（改行されなかった時のインデント範囲がおかしくなる）
-" TODO コメント行はさむと以降のインデントベルが
+" TODO コメント行はさむと以降のインデントベルが0になる
 " TODO 未指定のときは範囲%扱いにしたい
 function! s:FormatSGML() range " caution: executeにする必要ないがvintで警告になってしまうため
 	" execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
@@ -480,7 +479,7 @@ if s:HasPlugin('hybrid') " {{{
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
-	let g:IM_CtrlMode = has('unix') ? 0 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
+	let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
 	if !has('gui_running')
 		let g:IM_CtrlMode = 0
 	endif

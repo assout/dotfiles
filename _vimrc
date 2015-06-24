@@ -358,6 +358,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	call neobundle#begin(expand('~/.vim/bundle'))
 
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
+	NeoBundle 'Jagua/vim-ref-gene'
 	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim'
 	NeoBundle 'Shougo/neobundle.vim'
@@ -530,7 +531,7 @@ if s:HasPlugin('operator-camelize') " {{{
 endif " }}}
 
 if s:HasPlugin('operator-replace') " {{{
-	map [space]r <Plug>(operator-replace)
+	map R <Plug>(operator-replace)
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
@@ -648,7 +649,7 @@ if s:HasPlugin('unite') " {{{
 	if s:HasPlugin('unite-codic') " {{{
 		nnoremap <expr> [unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
 		nnoremap        [unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
-	endif
+	endif " }}}
 
 	if s:HasPlugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
@@ -762,10 +763,15 @@ if s:HasPlugin('vim-ref') " {{{
 		return join(split(a:output, '\n')[17 :], '\n')
 	endfunction
 
-	nmap     [space]R   [vim-ref]
+	nmap     [space]r   [vim-ref]
 	nnoremap [vim-ref]  <Nop>
 	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
-	nnoremap [vim-ref]e :<C-u>Ref webdict ej<Space>
+
+
+	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank
+		nnoremap <expr> [vim-ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
+		nnoremap <expr> [vim-ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+	endif
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを[submode]とするとエラー)

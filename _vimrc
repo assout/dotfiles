@@ -662,7 +662,7 @@ if s:HasPlugin('unite') " {{{
 		noremap  [unite-todo]m    :UniteTodoAddSimple -memo<CR>
 		nnoremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
 		nnoremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
-		" TODO change to grep
+		" TODO change to external grep
 		nnoremap <expr> [unite-todo]g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
 	endif " }}}
 endif " }}}

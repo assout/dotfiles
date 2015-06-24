@@ -403,7 +403,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle "sgur/vim-textobj-parameter" " TODO ia(rgs),aa(rgs)に変えたい。(Vrapperのtextobj-argsを見てみること)
+	NeoBundle "sgur/vim-textobj-parameter"
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
@@ -428,16 +428,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	if has('vim_starting')
-		let &runtimepath = &runtimepath . ',/vimfiles/plugins'
-		let s:addingPaths = split(glob($HOME . '/vimfiles/plugins/*'), '\n')
-		let s:addingPaths += split(glob($HOME . '/vimfiles/plugins/*/after'), '\n')
-		for s:addingPath in s:addingPaths
-			if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$'
-				continue
-			endif
-			if s:addingPath =~# 'neocomplete' && ! has('lua') " workaround. msysgitでvim起動時にエラーが出てしまうため
-				continue
-			endif
+		set runtimepath+=',/vimfiles/plugins'
+		for s:addingPath in split(expand(glob($HOME . '/.vim/bundle/*'), glob($HOME . '/vimfiles/plugins/*/after')), '\n')
+			if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$' | continue | endif
+			if s:addingPath =~# 'neocomplete' && ! has('lua') | continue | endif " workaround. msysgitでvim起動時にエラーが出てしまうため
 			let &runtimepath = &runtimepath . ',' . s:addingPath
 		endfor
 	endif

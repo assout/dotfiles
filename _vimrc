@@ -188,6 +188,7 @@ set number
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set scrolloff=5
 set shiftwidth=4 " caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
+set showcmd
 set showtabline=1
 set sidescrolloff=5
 set smartcase

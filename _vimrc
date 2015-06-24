@@ -381,46 +381,52 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim'
 	NeoBundle 'h1mesuke/vim-alignta'
-	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo vigemo試し中
-	NeoBundle 'kana/vim-operator-replace'
-	NeoBundle 'kana/vim-operator-user'
+	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
 	NeoBundle 'kana/vim-submode'
-	NeoBundle 'kana/vim-textobj-entire'
-	NeoBundle 'kana/vim-textobj-function'
-	NeoBundle 'kana/vim-textobj-indent'
-	NeoBundle 'kana/vim-textobj-line'
-	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kannokanno/previm'
 	NeoBundle 'koron/codic-vim'
 	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
 	NeoBundle 'mattn/qiita-vim'
-	NeoBundle 'mattn/vim-textobj-url'
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'pangloss/vim-javascript' " for indent only
-	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
-	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
 	NeoBundle 'rhysd/unite-codic.vim'
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle "sgur/vim-textobj-parameter"
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-ref'
 	NeoBundle 'thinca/vim-singleton'
-	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char}, daf{char}
-	NeoBundle 'thinca/vim-textobj-comment'
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
 	NeoBundle 'tyru/open-browser.vim'
-	NeoBundle 'tyru/operator-camelize.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
+	
+	" vim-operator-user {{{
+	NeoBundle 'kana/vim-operator-replace'
+	NeoBundle 'kana/vim-operator-user'
+	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
+	NeoBundle 'tyru/operator-camelize.vim'
+	" }}}
+	
+	" vim-textobj-user {{{
+	NeoBundle "sgur/vim-textobj-parameter"
+	NeoBundle 'kana/vim-textobj-entire'
+	NeoBundle 'kana/vim-textobj-function'
+	NeoBundle 'kana/vim-textobj-indent'
+	NeoBundle 'kana/vim-textobj-line'
+	NeoBundle 'kana/vim-textobj-user'
+	NeoBundle 'mattn/vim-textobj-url'
+	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
+	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char}, daf{char}
+	NeoBundle 'thinca/vim-textobj-comment'
+	" }}}
 
 	call neobundle#end()
 	filetype plugin indent on " Required!

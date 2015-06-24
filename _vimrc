@@ -171,6 +171,7 @@ endif
 " endif
 set helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set hidden
+set history=200
 set hlsearch
 set ignorecase
 set incsearch

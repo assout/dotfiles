@@ -30,6 +30,8 @@
 " # TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
+" * TODO space prefix系を一箇所にまとめてみる？
+" * TODO meomlist,todoファイルをutf8にすれば外部grepでの文字化けなくなる？
 " }}}1
 
 " Section; Begin {{{1
@@ -288,7 +290,7 @@ nnoremap <C-S-TAB> gT
 " Use ':tjump' instead of ':tag'.
 nnoremap <C-]> g<C-]>
 
-" TODO 全般的に右下のステータスバー？にちらちら表示されるのが邪魔 <silent> つけてもでるっぽい
+" TODO 全般的に右下のステータスバー？にちらちら表示されるのが邪魔 <silent> つけてもでるっぽい。-> :h showcmd
 nnoremap j  gj
 nnoremap k  gk
 nnoremap gj j
@@ -387,7 +389,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm'
-	NeoBundle 'koron/codic-vim'
+	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
 	NeoBundle 'lambdalisue/vim-gista'
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim'
@@ -438,7 +440,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 	if has('vim_starting')
 		set runtimepath+=',/vimfiles/plugins'
-		for s:addingPath in split(expand(glob($HOME . '/.vim/bundle/*'), glob($HOME . '/vimfiles/plugins/*/after')), '\n')
+		for s:addingPath in split(expand(glob($HOME . '/vimfiles/plugins/*'), glob($HOME . '/vimfiles/plugins/*/after')), '\n')
 			if ! isdirectory(s:addingPath) || s:addingPath =~# '\~$' | continue | endif
 			if s:addingPath =~# 'neocomplete' && ! has('lua') | continue | endif " workaround. msysgitでvim起動時にエラーが出てしまうため
 			let &runtimepath = &runtimepath . ',' . s:addingPath
@@ -656,16 +658,16 @@ if s:HasPlugin('unite') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		map      [space]t         [unite-todo]
-		noremap  [unite-todo]     <Nop>
-		noremap  [unite-todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap  [unite-todo]a    :UniteTodoAddSimple<CR>
-		noremap  [unite-todo]t    :UniteTodoAddSimple -tag<CR>
-		noremap  [unite-todo]m    :UniteTodoAddSimple -memo<CR>
-		nnoremap [unite-todo]l    :Unite todo:undone -buffer-name=todo<CR>
-		nnoremap [unite-todo]L    :Unite todo -buffer-name=todo<CR>
+		map      [space]t   [todo]
+		noremap  [todo]     <Nop>
+		noremap  [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap  [todo]a    :UniteTodoAddSimple<CR>
+		noremap  [todo]t    :UniteTodoAddSimple -tag<CR>
+		noremap  [todo]m    :UniteTodoAddSimple -memo<CR>
+		nnoremap [todo]l    :Unite todo:undone -buffer-name=todo<CR>
+		nnoremap [todo]L    :Unite todo -buffer-name=todo<CR>
 		" TODO change to external grep
-		nnoremap <expr> [unite-todo]g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
+		nnoremap <expr> [todo]g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
 	endif " }}}
 endif " }}}
 
@@ -768,8 +770,8 @@ if s:HasPlugin('vim-ref') " {{{
 	nnoremap [vim-ref]  <Nop>
 	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
 
-
-	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank
+	" TODO まだマッピングが使いにくい
+	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank TODO unite重い TODO コマンド履歴に残したい TODO 和英ができない TODO ちゃんとキャッシュ化されている？
 		nnoremap <expr> [vim-ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
 		nnoremap <expr> [vim-ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
 	endif
@@ -863,3 +865,4 @@ nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 " }}}1
 
 " vim:nofoldenable:
+

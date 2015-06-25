@@ -361,17 +361,17 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	call neobundle#begin(expand('~/.vim/bundle'))
 
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
-	NeoBundle 'Jagua/vim-ref-gene'
+	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
 	NeoBundle 'LeafCage/vimhelpgenerator'
-	NeoBundle 'LeafCage/yankround.vim'
-	NeoBundle 'Shougo/neobundle.vim'
+	NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/vimproc', 'Shougo/unite.vim']}
 	if has('lua')
 		NeoBundle 'Shougo/neocomplete'
 	endif
-	NeoBundle 'Shougo/neomru.vim'
-	NeoBundle 'Shougo/unite-outline'
-	NeoBundle 'Shougo/unite.vim'
-	NeoBundle 'Shougo/vimfiler.vim'
+	NeoBundle 'Shougo/neomru.vim', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'Shougo/unite.vim', {'depends' : ['Shougo/vimproc']}
+	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/vimproc', {
 				\ 'build' : {
 				\ 'windows' : 'make -f make_mingw32.mak',
@@ -380,23 +380,23 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 				\ 'unix' : 'make -f make_unix.mak',
 				\ },
 				\ }
-	NeoBundle 'TKNGUE/hateblo.vim' " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
-	NeoBundle 'assout/unite-todo'
+	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim']} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
-	NeoBundle 'glidenote/memolist.vim'
-	NeoBundle 'h1mesuke/vim-alignta'
+	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
 	NeoBundle 'kana/vim-submode'
-	NeoBundle 'kannokanno/previm'
+	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
-	NeoBundle 'lambdalisue/vim-gista'
+	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim']}
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
-	NeoBundle 'mattn/excitetranslate-vim'
-	NeoBundle 'mattn/qiita-vim'
+	NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
+	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'mattn/webapi-vim'
 	NeoBundle 'pangloss/vim-javascript' " for indent only
-	NeoBundle 'rhysd/unite-codic.vim'
+	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags'
@@ -414,23 +414,23 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 	
 	" vim-operator-user {{{
-	NeoBundle 'kana/vim-operator-replace'
+	NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'kana/vim-operator-user'
-	NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sdf{char}.
-	NeoBundle 'tyru/operator-camelize.vim'
+	NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb, sdf{char}.
+	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
 	
 	" vim-textobj-user {{{
-	NeoBundle "sgur/vim-textobj-parameter"
-	NeoBundle 'kana/vim-textobj-entire'
-	NeoBundle 'kana/vim-textobj-function'
-	NeoBundle 'kana/vim-textobj-indent'
-	NeoBundle 'kana/vim-textobj-line'
+	NeoBundle "sgur/vim-textobj-parameter", {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'kana/vim-textobj-indent', {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'kana/vim-textobj-line', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-user'
-	NeoBundle 'mattn/vim-textobj-url'
-	NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
-	NeoBundle 'thinca/vim-textobj-between' " life changing. dif{char}, daf{char}
-	NeoBundle 'thinca/vim-textobj-comment'
+	NeoBundle 'mattn/vim-textobj-url', {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'rhysd/vim-textobj-anyblock', {'depends': ['kana/vim-textobj-user']} " life changing. dib, dab.
+	NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']} " life changing. dif{char}, daf{char}
+	NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
 	" }}}
 
 	call neobundle#end()

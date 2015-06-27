@@ -784,9 +784,7 @@ if s:HasPlugin('vim-ref') " {{{
 		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
 	endif
 
-	" TODO まだマッピングが使いにくい
 	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank TODO unite重い TODO コマンド履歴に残したい TODO 和英ができない TODO ちゃんとキャッシュ化されている？
-		" nnoremap <expr> [ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
 		nnoremap <expr> [ref]g ':<C-u>Ref gene<Space>'
 		nnoremap <expr> [ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
 	endif

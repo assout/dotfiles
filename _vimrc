@@ -769,24 +769,20 @@ if s:HasPlugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
-	let g:ref_source_webdict_sites = {
-				\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', },
-				\ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', },
-				\ 'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', }, }
-	let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト
-
-	function! g:ref_source_webdict_sites.je.filter(output)
-		return join(split(a:output, '\n')[15 :], '\n')
-	endfunction
-	function! g:ref_source_webdict_sites.ej.filter(output)
-		return join(split(a:output, '\n')[15 :], '\n')
-	endfunction
-	function! g:ref_source_webdict_sites.wiki.filter(output)
-		return join(split(a:output, '\n')[17 :], '\n')
-	endfunction
-
 	nnoremap [ref]  <Nop>
-	nnoremap [ref]j :<C-u>Ref webdict je<Space>
+
+	if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
+		let g:ref_source_webdict_sites = {
+					\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
+					\ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
+					\ 'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23}, }
+		let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト
+		let g:ref_source_webdict_use_cache = 1
+
+		nnoremap [ref]j :<C-u>Ref webdict je<Space>
+		nnoremap [ref]e :<C-u>Ref webdict ej<Space>
+		nnoremap [ref]w :<C-u>Ref webdict<Space>
+	endif
 
 	" TODO まだマッピングが使いにくい
 	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank TODO unite重い TODO コマンド履歴に残したい TODO 和英ができない TODO ちゃんとキャッシュ化されている？

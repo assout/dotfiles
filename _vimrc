@@ -241,7 +241,7 @@ vnoremap y    y'>
 " }}}
 
 " Shortcut key prefix mappings {{{
-"
+
 " [shourtcut]a,d,rはsurround-pluginで使用
 map      s           [shortcut]
 map      [shortcut]  <Nop>

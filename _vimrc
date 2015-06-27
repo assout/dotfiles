@@ -273,7 +273,7 @@ noremap <silent><expr> [insert]d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<
 noremap <silent><expr> [insert]t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
 noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
 noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       [insert]l  :InsertSuffix \<Space>\<Space><CR>
+noremap <silent>       [insert]l  :InsertSuffix \<Space>\ <CR>
 
 nnoremap [open]      <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため
@@ -787,7 +787,8 @@ if s:HasPlugin('vim-ref') " {{{
 
 	" TODO まだマッピングが使いにくい
 	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank TODO unite重い TODO コマンド履歴に残したい TODO 和英ができない TODO ちゃんとキャッシュ化されている？
-		nnoremap <expr> [ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
+		" nnoremap <expr> [ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
+		nnoremap <expr> [ref]g ':<C-u>Ref gene<Space>'
 		nnoremap <expr> [ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
 	endif
 endif " }}}

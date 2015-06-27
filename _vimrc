@@ -613,7 +613,6 @@ if s:HasPlugin('unite') " {{{
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
-		" vim-operator-surroundのmappingと被るのでnowait
 		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
 		nunmap   <buffer>  <C-h>
 		nunmap   <buffer>  <C-l>
@@ -643,6 +642,14 @@ if s:HasPlugin('unite') " {{{
 	nnoremap [unite]B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
 	nnoremap [unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
 	nnoremap [unite]f    :<C-u>Unite file -buffer-name=file<CR>
+	nnoremap [unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+	nnoremap [unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
+	nnoremap [unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
+	nnoremap [unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
+	nnoremap [unite]R    :<C-u>Unite register -buffer-name=register<CR>
+	nnoremap [unite]s    :<C-u>Unite find -buffer-name=find<CR>
+	nnoremap [unite]t    :<C-u>Unite tab -buffer-name=tab<CR>
+	nnoremap [unite]w    :<C-u>Unite window -buffer-name=window<CR>
 	if has('unix')
 		nnoremap [unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
 		nnoremap [unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
@@ -650,12 +657,6 @@ if s:HasPlugin('unite') " {{{
 		nnoremap [unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
 		nnoremap [unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 	endif
-	nnoremap [unite]g :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
-	nnoremap [unite]o :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
-	nnoremap [unite]r :<C-u>Unite resume -buffer-name=resume<CR>
-	nnoremap [unite]R :<C-u>Unite register -buffer-name=register<CR>
-	nnoremap [unite]t :<C-u>Unite tab -buffer-name=tab<CR>
-	nnoremap [unite]w :<C-u>Unite window -buffer-name=window<CR>
 	if s:HasPlugin('yankround')
 		nnoremap [unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
 	else

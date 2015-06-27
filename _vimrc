@@ -414,6 +414,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb, sdf{char}.
+	NeoBundle 'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
 	

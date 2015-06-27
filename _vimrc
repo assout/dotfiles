@@ -465,10 +465,12 @@ map  [plugin]t [todo]
 nmap [plugin]u [unite]
 nmap [plugin]/ [migemo]
 
-map R           [replace]
-map [shortcut]a [surround-a]
-map [shortcut]d [surround-d]
-map [shortcut]r [surround-r]
+map  R           [replace]
+nmap p           [yankround]
+nmap P           [Yankround]
+map  [shortcut]a [surround-a]
+map  [shortcut]d [surround-d]
+map  [shortcut]r [surround-r]
 " }}}
 
 if s:HasPlugin('alignta') " {{{
@@ -863,8 +865,8 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO gistを開き未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
-	nmap p     <Plug>(yankround-p)
-	nmap P     <Plug>(yankround-P)
+	nmap [yankround] <Plug>(yankround-p)
+	nmap [Yankround] <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)
 	nmap <C-n> <Plug>(yankround-next)
 endif " }}}

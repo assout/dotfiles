@@ -31,7 +31,6 @@
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
 " * TODO space prefix系を一箇所にまとめてみる？
-" * TODO meomlist,todoファイルをutf8にすれば外部grepでの文字化けなくなる？
 " }}}1
 
 " Section; Begin {{{1
@@ -143,8 +142,8 @@ augroup vimrc
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
 	" format json
 	if executable('python')
-		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [space]j :%!python -m json.tool<CR>
-		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [space]j :!python -m json.tool<CR>
+		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [json] :%!python -m json.tool<CR>
+		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [json] :!python -m json.tool<CR>
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
@@ -228,17 +227,37 @@ let b:is_bash = 1 " shellのハイライトをbash基準にする
 " caution: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
-" vimfilerなどpluginと競合防ぐため[space]にわりあてている
-map     <Space>  [space]
-noremap [space]  <Nop>
-noremap [space]h ^
-noremap [space]l g_
-noremap [space]/ /
-noremap [space]? ?
-noremap /        /\v
-noremap ?        ?\v
+" Normal,Visual mode basic mappings {{{
+noremap  /    /\v
+noremap  ?    ?\v
+nnoremap j    gj
+nnoremap k    gk
+nnoremap gj   j
+nnoremap gk   k
+nnoremap Y    y$
+nnoremap <CR> i<CR><Esc>
+" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
+vnoremap y    y'>
+" }}}
 
-map     [space]i       [insert]
+" Shortcut key prefix mappings {{{
+"
+" [shourtcut]a,d,rはsurround-pluginで使用
+map      s           [shortcut]
+map      [shortcut]  <Nop>
+map      [shortcut]i [insert]
+nmap     [shortcut]j [json]
+xmap     [shortcut]j [json]
+nmap     [shortcut]o [open]
+noremap  [shortcut]h ^
+noremap  [shortcut]l g_
+noremap  [shortcut]/ /
+noremap  [shortcut]? ?
+nnoremap [shortcut]n :nohlsearch<CR>
+nnoremap [shortcut]b :bdelete<CR>
+nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+
+" TODO to plugin
 noremap [insert]       <Nop>
 noremap <silent><expr> [insert]p ':InsertPrefix ' . input('prefix:') . '<CR>'
 noremap <silent>       [insert]*  :InsertPrefix * <CR>
@@ -256,20 +275,15 @@ noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:
 noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
 noremap <silent>       [insert]l  :InsertSuffix \ \ <CR>
 
-nmap     [space]o [open]
-nnoremap [open]   <Nop>
-" resolveしなくても開けるが、fugitiveで対象とするため。caution:<expr>がvrapperでエラーになる
-nnoremap <silent><expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap [open]      <Nop>
+" resolveしなくても開けるが、fugitiveで対象とするため
+nnoremap <expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 if has('win32')
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
+" }}}
 
-" 検索結果ハイライトを解除。caution: [space][space]だと動かない。<Space><Space>だとvimfilerと競合。
-nnoremap [space]<Space> :nohlsearch<CR>
-nnoremap [space]b       :bdelete<CR>
-nnoremap [space]U       :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-nnoremap [space]d       :DictionaryTranslate<CR>
-
+" Ctrl-key prefix mappings {{{
 nnoremap <C-h>     <C-w>h
 nnoremap <C-j>     <C-w>j
 nnoremap <C-k>     <C-w>k
@@ -289,18 +303,9 @@ nnoremap <C-S-TAB> gT
 
 " Use ':tjump' instead of ':tag'.
 nnoremap <C-]> g<C-]>
+" }}}
 
-" TODO 全般的に右下のステータスバー？にちらちら表示されるのが邪魔 <silent> つけてもでるっぽい。-> :h showcmd
-nnoremap j  gj
-nnoremap k  gk
-nnoremap gj j
-nnoremap gk k
-
-" D,Cと一貫性のある挙動に変更
-nnoremap Y y$
-nnoremap <CR> i<CR><Esc>
-
-" バッファ、ウィンドウ、タブ移動関連
+" []key prefix mappings {{{
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
 nnoremap [B :bfirst<CR>
@@ -324,8 +329,9 @@ nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
+" }}}
 
-" インサートモードでのキーマッピングをEmacs風にする
+" Insert mode mappings {{{
 inoremap <C-b> <Left>
 inoremap <C-f> <Right>
 inoremap <C-a> <Home>
@@ -335,8 +341,9 @@ inoremap <C-d> <Del>
 inoremap <C-k> <C-o>D
 " caution: 設定しないとim_controlで日本語入力モードONの動きをしてしまう
 inoremap <C-c> <Esc>
+" }}}
 
-" コマンドラインモードでのキーマッピングをEmacs風にする
+" Command-line mode mappings {{{
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
 cnoremap <C-a> <Home>
@@ -347,13 +354,9 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-
-" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
-vnoremap y y'>
 " }}}1
 
 " Section; Plug-ins {{{1
-" Setup plug-in runtime path {{{
 if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -447,16 +450,41 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 		endfor
 	endif
 endif
+
+" plugin prefix mappings {{{
+
+" vimfilerなどpluginと競合防ぐため[plugin]にわりあてている
+map  <Space>   [plugin]
+map  [plugin]  <Nop>
+xmap [plugin]a [alignta]
+map  [plugin]c [camelize]
+nmap [plugin]e [excite]
+nmap [plugin]f [vimfiler]
+nmap [plugin]g [gista]
+nmap [plugin]h [hateblo]
+nmap [plugin]m [memolist]
+nmap [plugin]p [previv]
+nmap [plugin]q [qiita]
+nmap [plugin]Q [quickrun]
+nmap [plugin]r [ref]
+nmap [plugin]s [sub]
+map  [plugin]t [todo]
+nmap [plugin]u [unite]
+
+map R           [replace]
+map [shortcut]a [surround-a]
+map [shortcut]d [surround-d]
+map [shortcut]r [surround-r]
 " }}}
 
 if s:HasPlugin('alignta') " {{{
-	xnoremap [space]a :Alignta<Space>
+	xnoremap [alignta]a :Alignta<Space>
 	" 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-	xnoremap [space]A :Alignta<Space>v/^" <<0 \s\S/2
+	xnoremap [alignta]b :Alignta<Space>v/^" <<0 \s\S/2
 endif " }}}
 
 if s:HasPlugin('excitetranslate') " {{{
-	noremap [space]e :<C-u>ExciteTranslate<CR>
+	noremap [excite] :<C-u>ExciteTranslate<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
@@ -470,7 +498,6 @@ if s:HasPlugin('hateblo') " {{{
 				\ } " api_keyはvimrc.localから設定
 	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
 
-	nmap     [space]H   [hateblo]
 	nnoremap [hateblo]  <Nop>
 	nnoremap [hateblo]l :<C-u>HatebloList<CR>
 	nnoremap [hateblo]c :<C-u>HatebloCreate<CR>
@@ -502,7 +529,6 @@ if s:HasPlugin('memolist') " {{{
 	let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
 	let g:memolist_template_dir_path = g:memolist_path
 
-	nmap     [space]m    [memolist]
 	nnoremap [memolist]  <Nop>
 	nnoremap [memolist]a :<C-u>MemoNew<CR>
 	nnoremap [memolist]g :<C-u>MemoGrep<CR>
@@ -530,19 +556,18 @@ if s:HasPlugin('open-browser') " {{{
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{
-	map [space]c <Plug>(operator-camelize-toggle)
+	map [camelize] <Plug>(operator-camelize-toggle)
 endif " }}}
 
 if s:HasPlugin('operator-replace') " {{{
-	map R <Plug>(operator-replace)
+	map [replace] <Plug>(operator-replace)
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-	nnoremap [space]p :<C-u>PrevimOpen<CR>
+	nnoremap [previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
 if s:HasPlugin('qiita-vim') " {{{
-	nmap     [space]q    [qiita]
 	nnoremap [qiita]     <Nop>
 	nnoremap [qiita]l    :<C-u>Unite qiita<CR>
 	nnoremap [qiita]<CR> :<C-u>Qiita<CR>
@@ -552,7 +577,7 @@ if s:HasPlugin('qiita-vim') " {{{
 endif " }}}
 
 if s:HasPlugin('quickrun') " {{{
-	nnoremap [space]Q :<C-u>QuickRun<CR>
+	nnoremap [quickrun] :<C-u>QuickRun<CR>
 endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
@@ -612,7 +637,6 @@ if s:HasPlugin('unite') " {{{
 		call unite#filters#matcher_default#use(['matcher_migemo'])
 	endif
 
-	nmap     [space]u    [unite]
 	nnoremap [unite]     <Nop>
 	nnoremap [unite]<CR> :<C-u>Unite<CR>
 	nnoremap [unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -658,7 +682,6 @@ if s:HasPlugin('unite') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		map      [space]t   [todo]
 		noremap  [todo]     <Nop>
 		noremap  [todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
 		noremap  [todo]a    :UniteTodoAddSimple<CR>
@@ -675,7 +698,6 @@ if s:HasPlugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
 	let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 
-	nmap     [space]f       [vimfiler]
 	nnoremap [vimfiler]     <Nop>
 	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
 	nnoremap [vimfiler]b    :<C-u>VimFilerBufferDir<CR>
@@ -691,7 +713,6 @@ endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
 	let g:gista#update_on_write = 1
-	nmap     [space]g    [gista]
 	nnoremap [gista]     <Nop>
 	nnoremap [gista]l    :<C-u>Unite gista<CR>
 	nnoremap [gista]c    :<C-u>Gista<CR>
@@ -718,34 +739,34 @@ if s:HasPlugin('vim-operator-surround') " {{{
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
-	map <silent> sa <Plug>(operator-surround-append)
-	map <silent> sd <Plug>(operator-surround-delete)
-	map <silent> sr <Plug>(operator-surround-replace)
+	map <silent> [surround-a] <Plug>(operator-surround-append)
+	map <silent> [surround-d] <Plug>(operator-surround-delete)
+	map <silent> [surround-r] <Plug>(operator-surround-replace)
 
 	if s:HasPlugin('vim-textobj-anyblock')
-		nmap <silent>sab <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
-		nmap <silent>sdb <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-		nmap <silent>srb <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+		nmap <silent>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
+		nmap <silent>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+		nmap <silent>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-between')
-		nmap <silent>saf <Plug>(operator-surround-append)<Plug>(textobj-between-a)
-		nmap <silent>sdf <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
-		nmap <silent>srf <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
+		nmap <silent>[surround-a]f <Plug>(operator-surround-append)<Plug>(textobj-between-a)
+		nmap <silent>[surround-d]f <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+		nmap <silent>[surround-r]f <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-line')
-		nmap <silent>sal <Plug>(operator-surround-append)<Plug>(textobj-line-a)
-		nmap <silent>sdl <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
-		nmap <silent>srl <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
+		nmap <silent>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
+		nmap <silent>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
+		nmap <silent>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-url')
-		nmap <silent>sau <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+		nmap <silent>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 		" TODO no block matches to the region となる
-		nmap <silent>sdu <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
+		nmap <silent>[surround-d]u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
 		" TODO appendの動きになってしまう
-		nmap <silent>sru <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
+		nmap <silent>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
 	endif
 endif " }}}
 
@@ -766,19 +787,17 @@ if s:HasPlugin('vim-ref') " {{{
 		return join(split(a:output, '\n')[17 :], '\n')
 	endfunction
 
-	nmap     [space]r   [vim-ref]
-	nnoremap [vim-ref]  <Nop>
-	nnoremap [vim-ref]j :<C-u>Ref webdict je<Space>
+	nnoremap [ref]  <Nop>
+	nnoremap [ref]j :<C-u>Ref webdict je<Space>
 
 	" TODO まだマッピングが使いにくい
 	if s:HasPlugin('vim-ref-gene') " TODO 選択範囲の単語で検索 TODO unite-actioinでyank TODO unite重い TODO コマンド履歴に残したい TODO 和英ができない TODO ちゃんとキャッシュ化されている？
-		nnoremap <expr> [vim-ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
-		nnoremap <expr> [vim-ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+		nnoremap <expr> [ref]g ':<C-u>Unite ref/gene -default-action=split -create -auto-preview -default-action=preview -no-quit -keep-focus -input=' . expand('<cword>') . '<CR>'
+		nnoremap <expr> [ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
 	endif
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを[submode]とするとエラー)
-	nmap     [space]s [sub]
 	nnoremap [sub]    <Nop>
 
 	call submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')

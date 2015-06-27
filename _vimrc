@@ -322,7 +322,7 @@ nnoremap ]T :tlast<CR>
 nnoremap [g :tabprevious<CR>
 nnoremap ]g :tabnext<CR>
 nnoremap [G :tabfirst<CR>
-nnoremap ]T :tablast<CR>
+nnoremap ]G :tablast<CR>
 nnoremap [a :previous<CR>
 nnoremap ]a :next<CR>
 nnoremap [A :first<CR>

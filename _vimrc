@@ -383,7 +383,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
-	NeoBundle 'haya14busa/vim-migemo' " required C/Migemo
+	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
@@ -400,7 +400,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-ref'
-	NeoBundle 'thinca/vim-singleton'
+	NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'tpope/vim-fugitive'
 	NeoBundle 'tpope/vim-repeat'
@@ -464,6 +464,7 @@ nmap [plugin]r [ref]
 nmap [plugin]s [sub]
 map  [plugin]t [todo]
 nmap [plugin]u [unite]
+nmap [plugin]/ [migemo]
 
 map R           [replace]
 map [shortcut]a [surround-a]
@@ -578,7 +579,7 @@ if s:HasPlugin('restart.vim') " {{{
 	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
 
-if s:HasPlugin('singleton') && has('clientserver') && has('gui_running') " {{{
+if s:HasPlugin('singleton') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
 endif " }}}
@@ -719,12 +720,12 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
-	if has('migemo')
+	if has('migemo') " TODO kaoriya版でのキーマッピングをg/を[plugin]/に変更したい
 		if has('vim_starting')
 			call migemo#SearchChar(0) " caution: probably slow
 		endif
 	else
-		nnoremap g/ :<C-u>Migemo<Space>
+		nnoremap [migemo] :<C-u>Migemo<Space>
 	endif
 endif " }}}
 

@@ -396,14 +396,13 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
-	NeoBundle 'szw/vim-tags'
+	NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
 	NeoBundle 'thinca/vim-ref'
 	NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
 	NeoBundle 'tomtom/tcomment_vim'
-	NeoBundle 'tpope/vim-fugitive'
-	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'

@@ -864,7 +864,7 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 	vmap aa <Plug>(textobj-parameter-a)
 endif " }}}
 
-if s:HasPlugin('yankround') " {{{ TODO gistを開き未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
+if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	nmap [yankround] <Plug>(yankround-p)
 	nmap [Yankround] <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)

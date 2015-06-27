@@ -273,7 +273,7 @@ noremap <silent><expr> [insert]d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<
 noremap <silent><expr> [insert]t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
 noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
 noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       [insert]l  :InsertSuffix \ \ <CR>
+noremap <silent>       [insert]l  :InsertSuffix \<Space>\<Space><CR>
 
 nnoremap [open]      <Nop>
 " resolveしなくても開けるが、fugitiveで対象とするため

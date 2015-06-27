@@ -776,12 +776,12 @@ if s:HasPlugin('vim-ref') " {{{
 					\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
 					\ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
 					\ 'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23}, }
-		let g:ref_source_webdict_sites.default = 'ej' " デフォルトサイト
+		let g:ref_source_webdict_sites.default = 'ej'
 		let g:ref_source_webdict_use_cache = 1
 
-		nnoremap [ref]j :<C-u>Ref webdict je<Space>
-		nnoremap [ref]e :<C-u>Ref webdict ej<Space>
 		nnoremap [ref]w :<C-u>Ref webdict<Space>
+		nnoremap [ref]wj :<C-u>Ref webdict je<Space>
+		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
 	endif
 
 	" TODO まだマッピングが使いにくい

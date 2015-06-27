@@ -306,7 +306,7 @@ nnoremap <C-S-TAB> gT
 nnoremap <C-]> g<C-]>
 " }}}
 
-" []key prefix mappings {{{
+" []key prefix mappings {{{ TODO plugin用プレフィックスと被ると待たされる
 nnoremap [b :bprevious<CR>
 nnoremap ]b :bnext<CR>
 nnoremap [B :bfirst<CR>
@@ -315,14 +315,14 @@ nnoremap [w :wincmd W<CR>
 nnoremap ]w :wincmd w<CR>
 nnoremap [W :wincmd t<CR>
 nnoremap ]W :wincmd b<CR>
-nnoremap [t :tbprevious<CR>
-nnoremap ]t :tnext<CR>
-nnoremap [T :tfirst<CR>
-nnoremap ]T :tlast<CR>
-nnoremap [g :tabprevious<CR>
-nnoremap ]g :tabnext<CR>
-nnoremap [G :tabfirst<CR>
-nnoremap ]G :tablast<CR>
+nnoremap [t :tabprevious<CR>
+nnoremap ]t :tabnext<CR>
+nnoremap [T :tabfirst<CR>
+nnoremap ]T :tablast<CR>
+nnoremap [g :tbprevious<CR>
+nnoremap ]g :tnext<CR>
+nnoremap [G :tfirst<CR>
+nnoremap ]G :tlast<CR>
 nnoremap [a :previous<CR>
 nnoremap ]a :next<CR>
 nnoremap [A :first<CR>

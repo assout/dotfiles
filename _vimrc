@@ -314,10 +314,13 @@ nnoremap [w :wincmd W<CR>
 nnoremap ]w :wincmd w<CR>
 nnoremap [W :wincmd t<CR>
 nnoremap ]W :wincmd b<CR>
-" TODO tag 関係に変更する(tabは基本使わないので)
-nnoremap [t :tabprevious<CR>
-nnoremap ]t :tabnext<CR>
-nnoremap [T :tabfirst<CR>
+nnoremap [t :tbprevious<CR>
+nnoremap ]t :tnext<CR>
+nnoremap [T :tfirst<CR>
+nnoremap ]T :tlast<CR>
+nnoremap [g :tabprevious<CR>
+nnoremap ]g :tabnext<CR>
+nnoremap [G :tabfirst<CR>
 nnoremap ]T :tablast<CR>
 nnoremap [a :previous<CR>
 nnoremap ]a :next<CR>

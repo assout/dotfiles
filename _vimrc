@@ -264,6 +264,7 @@ nmap     [shortcut]j [json]
 xmap     [shortcut]j [json]
 noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>
+noremap  [shortcut]o :only<CR>
 map      [shortcut]r <Nop>
 noremap  [shortcut]s :split<CR>
 nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>

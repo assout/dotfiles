@@ -56,22 +56,25 @@ set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe
 
 " Section; Key-mappings {{{1
 " vimrcでのマッピングを解除.
+unmap  /
+unmap  ?
 nunmap j
 nunmap k
-" very magicへのマッピングを解除
-nunmap /
-nunmap ?
 nunmap <C-]>
+unmap  <Space>
+unmap  R
+nunmap p
+nunmap P
 
-" TODO vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
-noremap <Space>h ^
-noremap <Space>l g_
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap <C-h> gT
 noremap <C-l> gt
 
-nnoremap <Space><Space> :nohlsearch<CR>
-nnoremap <Space>b       :bdelete<CR>
+" TODO vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
+noremap  sh     ^
+noremap  sl     g_
+nnoremap sn     :nohlsearch<CR>
+nnoremap sb     :bdelete<CR>
 nnoremap <C-c>  :bdelete<CR>
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>

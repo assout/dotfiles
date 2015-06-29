@@ -246,16 +246,19 @@ vnoremap y    y'>
 " [shourtcut]a,d,rはsurround-pluginで使用
 map      s           [shortcut]
 map      [shortcut]  <Nop>
+noremap  [shortcut]? ?
+noremap  [shortcut]/ /
+map      [shortcut]a <Nop>
+nnoremap [shortcut]b :bdelete<CR>
+map      [shortcut]d <Nop>
+noremap  [shortcut]h ^
 map      [shortcut]i [insert]
 nmap     [shortcut]j [json]
 xmap     [shortcut]j [json]
-nmap     [shortcut]o [open]
-noremap  [shortcut]h ^
 noremap  [shortcut]l g_
-noremap  [shortcut]/ /
-noremap  [shortcut]? ?
 nnoremap [shortcut]n :nohlsearch<CR>
-nnoremap [shortcut]b :bdelete<CR>
+nmap     [shortcut]o [open]
+map      [shortcut]r <Nop>
 nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 

@@ -125,6 +125,17 @@ function! s:HasPlugin(plugin) " pluginが存在するか返す
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
+function! s:RestoreCursorPosition()
+	let ignore_filetypes = ['gitcommit']
+	if index(ignore_filetypes, &l:filetype) >= 0
+		return
+	endif
+
+	if line("'\"") > 1 && line("'\"") <= line("$")
+		execute 'normal! g`"'
+	endif
+endfunction
+
 command! -bang BufClear %bdelete<bang>
 command! -bang BClear   BufClear<bang>
 " }}}1
@@ -151,6 +162,8 @@ augroup vimrc
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
+
+	autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END
 " }}}1
 

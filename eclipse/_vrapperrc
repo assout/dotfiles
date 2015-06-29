@@ -83,7 +83,6 @@ nnoremap <C-j>  :GotoNextMember<CR>
 " cautioin: noremapではinser mode時効かない(なぜか2タブ挿入される)
 nnoremap <C-t>  :maximize<CR>
 inoremap <C-t>  <C-o>:maximize<CR>i
-
 " TODO 以下3つ、vimrcで指定しているが効かないのでworkaround.
 " inoremap <C-a> <Home>
 " inoremap <C-e> <End>
@@ -91,13 +90,36 @@ inoremap <C-t>  <C-o>:maximize<CR>i
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$
 inoremap <C-d> <C-o>x
+
+" navigate {{{
+nnoremap <Space>nt :OpenTypeHierarchy<CR>
+nnoremap <Space>nc :OpenCallHierarchy<CR>
+nnoremap <Space>ns :OpenSuperImplementation<CR>
+nnoremap <Space>nh :OpenHierarchy<CR>
+" nnoremap <Space>ns :OpenStructure<CR>
+" }}}
 " }}}1
 
 " Section; Define commands {{{1
+" edit {{{
 " definition ID of the edit -> go to next member action.
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
-" definition ID of the edit -> go to previous member action.
+" definition id of the edit -> go to previous member action.
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
+" }}}
+
+" navigate {{{ TODO いまいち効かない
+"definition ID of the navigate -> open type hierarchy action 
+eclipseaction OpenTypeHierarchy org.eclipse.jdt.ui.edit.text.java.org.eclipse.jdt.ui.edit.text.java.open.type.hierarchy
+"definition ID of the navigate -> open call hierarchy action 
+eclipseaction OpenCallHierarchy org.eclipse.jdt.ui.edit.text.java.org.eclipse.jdt.ui.edit.text.java.open.call.hierarchy
+"definition ID of the navigate -> open super implementation action 
+eclipseaction OpenSuperImplementation org.eclipse.jdt.ui.edit.text.java.open.super.implementation
+"definition ID of the navigate -> Show Hierarchy action 
+eclipseaction OpenHierarchy org.eclipse.jdt.ui.edit.text.java.open.hierarchy
+"definition ID of the navigate -> Open Structure action 
+eclipseaction OpenStructure org.eclipse.jdt.ui.navigate.java.open.structure
+" }}}
 " }}}1
 
 " vim: filetype=vim nofoldenable:

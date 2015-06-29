@@ -255,6 +255,7 @@ noremap  [shortcut]? ?
 noremap  [shortcut]/ /
 map      [shortcut]a <Nop>
 nnoremap [shortcut]b :bdelete<CR>
+noremap  [shortcut]c :close<CR>
 map      [shortcut]d <Nop>
 noremap  [shortcut]h ^
 map      [shortcut]i [insert]
@@ -264,8 +265,10 @@ noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>
 nmap     [shortcut]o [open]
 map      [shortcut]r <Nop>
+noremap  [shortcut]s :split<CR>
 nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+noremap  [shortcut]v :vsplit<CR>
 
 " TODO to plugin
 noremap [insert]       <Nop>

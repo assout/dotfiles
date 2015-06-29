@@ -35,8 +35,9 @@
 " }}}1
 
 " Section; Begin {{{1
-if has('gui_running')
-	set encoding=utf-8 " inner encoding(before the scriptencoding)
+set encoding=utf-8 " inner encoding(before the scriptencoding)
+if has('win32')
+	set termencoding=cp932
 endif
 scriptencoding utf-8 " before multi byte
 

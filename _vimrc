@@ -30,7 +30,7 @@
 
 " # TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
-" * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
+" * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
 " }}}1
 
 " Section; Begin {{{1

@@ -142,11 +142,12 @@ command! -bang BClear   BufClear<bang>
 " Section; Auto-commands {{{1
 augroup vimrc
 	autocmd!
-
-	" DoubleByteSpace highlight
+	" double byte space highlight
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+	" set markdown filetype
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	" enabe spell on markdown file
 	if &encoding ==# 'utf-8' " windows の 非gvim 環境で spell ファイル関連のエラーとなってしまうため
 		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
 	endif
@@ -161,7 +162,7 @@ augroup vimrc
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
-
+	" restore cursor position
 	autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END
 " }}}1

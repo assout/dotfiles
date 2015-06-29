@@ -64,10 +64,14 @@ nunmap <C-]>
 unmap  <Space>
 
 " caution: vimrcで設定してのもあるがvrapperではマップの再展開がされないっぽいので再定義
+nnoremap sb     :bdelete<CR>
+noremap  sc     :close<CR>
 noremap  sh     ^
 noremap  sl     g_
 nnoremap sn     :nohlsearch<CR>
-nnoremap sb     :bdelete<CR>
+noremap  so     :only<CR>
+noremap  ss     :split<CR>
+noremap  sv     :vsplit<CR>
 nnoremap <C-c>  :bdelete<CR>
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap  <C-h>  gT

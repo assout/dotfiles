@@ -98,7 +98,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 
 	silent pedit Translate\ Result | wincmd P | %delete " 前の結果が残っていることがあるため
 	setlocal buftype=nofile noswapfile modifiable
-	" TODO 日本語が-wオプションだとあまり取得できない
+	" TODO 日本語が-wオプションだとあまり取得できない -> 理想は完全一致->単語一致->部分一致の順にすべて表示する
 	silent execute 'read !grep -ihw' l:output_option l:word l:gene_path
 	silent 0delete
 

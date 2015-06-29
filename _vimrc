@@ -130,7 +130,7 @@ function! s:RestoreCursorPosition()
 		return
 	endif
 
-	if line("'\"") > 1 && line("'\"") <= line("$")
+	if line("'\"") > 1 && line("'\"") <= line('$')
 		execute 'normal! g`"'
 	endif
 endfunction

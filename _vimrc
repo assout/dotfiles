@@ -31,7 +31,7 @@
 " # TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだが)
-" * TODO space prefix系を一箇所にまとめてみる？
+" * TODO ファイル開きなおしたとき前いた行位置に移動
 " }}}1
 
 " Section; Begin {{{1
@@ -43,8 +43,6 @@ scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
-
-colorscheme peachpuff
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -94,7 +92,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
 	" TODO relative path from home directory
-	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : 'C:/Users/admin/vimfiles/dict/gene.txt'
+	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : 'C:/Users/admin/vimfiles/dict/gene95/GENE.TXT'
 	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
 	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
 
@@ -156,7 +154,9 @@ set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
-set cryptmethod=blowfish2
+if has('patch-7.4.399')
+	set cryptmethod=blowfish2
+endif
 set diffopt& diffopt+=vertical
 set noexpandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
@@ -256,6 +256,7 @@ noremap  [shortcut]/ /
 noremap  [shortcut]? ?
 nnoremap [shortcut]n :nohlsearch<CR>
 nnoremap [shortcut]b :bdelete<CR>
+nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 
 " TODO to plugin
@@ -276,9 +277,10 @@ noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:
 noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
 noremap <silent>       [insert]l  :InsertSuffix \<Space>\ <CR>
 
-nnoremap [open]      <Nop>
-" resolveしなくても開けるが、fugitiveで対象とするため
-nnoremap <expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap [open]         <Nop>
+" resolveしなくても開けるがfugitiveで対象とするため
+" caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
+nnoremap <silent><expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 if has('win32')
 	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
@@ -376,7 +378,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/neomru.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite.vim', {'depends' : ['Shougo/vimproc']}
-	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']} " TODO いつのまにか複数ファイルのリネーム時にエラーが出るように@win
 	NeoBundle 'Shougo/vimproc', { 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim']} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
@@ -409,7 +411,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
-	
+
 	" operator {{{
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
@@ -417,7 +419,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
-	
+
 	" textobj {{{
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle "sgur/vim-textobj-parameter", {'depends': ['kana/vim-textobj-user']}
@@ -723,10 +725,9 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
-	if has('migemo') " TODO kaoriya版でのキーマッピングをg/を[plugin]/に変更したい
-		if has('vim_starting')
-			call migemo#SearchChar(0) " caution: probably slow
-		endif
+	if has('migemo')
+		if has('vim_starting') | call migemo#SearchChar(0) | endif " caution: probably slow
+		nnoremap [migemo] g/
 	else
 		nnoremap [migemo] :<C-u>Migemo<Space>
 	endif

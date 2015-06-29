@@ -116,7 +116,11 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 endfunction
 command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTranslate(<f-args>)
 
-function! s:HasPlugin(plugin) " plugin が存在するか調べる
+function! s:IsPluginEnabled() " pluginが有効か返す
+	return has('unix') ? isdirectory($HOME . '/.vim/bundle') : isdirectory($HOME . '/vimfiles/plugins')
+endfunction
+
+function! s:HasPlugin(plugin) " pluginが存在するか返す
 	return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
@@ -452,32 +456,33 @@ elseif isdirectory($HOME . '/vimfiles/plugins') " At office
 endif
 
 " plugin prefix mappings {{{
+if s:IsPluginEnabled()
+	" vimfilerなどpluginと競合防ぐため[plugin]にわりあてている
+	map  <Space>   [plugin]
+	map  [plugin]  <Nop>
+	xmap [plugin]a [alignta]
+	map  [plugin]c [camelize]
+	nmap [plugin]e [excite]
+	nmap [plugin]f [vimfiler]
+	nmap [plugin]g [gista]
+	nmap [plugin]h [hateblo]
+	nmap [plugin]m [memolist]
+	nmap [plugin]p [previv]
+	nmap [plugin]q [qiita]
+	nmap [plugin]Q [quickrun]
+	nmap [plugin]r [ref]
+	nmap [plugin]s [sub]
+	map  [plugin]t [todo]
+	nmap [plugin]u [unite]
+	nmap [plugin]/ [migemo]
 
-" vimfilerなどpluginと競合防ぐため[plugin]にわりあてている
-map  <Space>   [plugin]
-map  [plugin]  <Nop>
-xmap [plugin]a [alignta]
-map  [plugin]c [camelize]
-nmap [plugin]e [excite]
-nmap [plugin]f [vimfiler]
-nmap [plugin]g [gista]
-nmap [plugin]h [hateblo]
-nmap [plugin]m [memolist]
-nmap [plugin]p [previv]
-nmap [plugin]q [qiita]
-nmap [plugin]Q [quickrun]
-nmap [plugin]r [ref]
-nmap [plugin]s [sub]
-map  [plugin]t [todo]
-nmap [plugin]u [unite]
-nmap [plugin]/ [migemo]
-
-map  R           [replace]
-nmap p           [yankround]
-nmap P           [Yankround]
-map  [shortcut]a [surround-a]
-map  [shortcut]d [surround-d]
-map  [shortcut]r [surround-r]
+	map  R           [replace]
+	nmap p           [yankround]
+	nmap P           [Yankround]
+	map  [shortcut]a [surround-a]
+	map  [shortcut]d [surround-d]
+	map  [shortcut]r [surround-r]
+endif
 " }}}
 
 if s:HasPlugin('alignta') " {{{

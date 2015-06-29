@@ -92,7 +92,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
 	" TODO relative path from home directory
-	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : 'C:/Users/admin/vimfiles/dict/gene95/GENE.TXT'
+	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
 	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
 	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
 

@@ -268,18 +268,15 @@ noremap  [shortcut]? ?
 noremap  [shortcut]/ /
 map      [shortcut]a <Nop>
 nnoremap [shortcut]b :bdelete<CR>
-noremap  [shortcut]c :close<CR>
 map      [shortcut]d <Nop>
-nmap     [shortcut]e [edit]
 noremap  [shortcut]h ^
 map      [shortcut]i [insert]
 nmap     [shortcut]j [json]
 xmap     [shortcut]j [json]
 noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>
-noremap  [shortcut]o :only<CR>
+nmap     [shortcut]o [open]
 map      [shortcut]r <Nop>
-noremap  [shortcut]s :split<CR>
 nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 noremap  [shortcut]v :vsplit<CR>
@@ -302,12 +299,12 @@ noremap <silent><expr> [insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:
 noremap <silent><expr> [insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
 noremap <silent>       [insert]l  :InsertSuffix \<Space>\ <CR>
 
-nnoremap [edit]         <Nop>
+nnoremap [open]         <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
-nnoremap <silent><expr> [edit]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap <silent><expr> [open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 if has('win32')
-	nnoremap [edit]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
+	nnoremap [open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 " }}}
 

@@ -446,7 +446,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle "sgur/vim-textobj-parameter", {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
-	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
+	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']} " caution: windows(非neobundle)でafter/ftpluginが読み込まれないっぽいので Section; Plug-ins でruntimepath強引に登録している
 	NeoBundle 'kana/vim-textobj-indent', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-line', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'mattn/vim-textobj-url', {'depends': ['kana/vim-textobj-user']}
@@ -866,20 +866,20 @@ if s:HasPlugin('vim-tags') " {{{
 	let g:vim_tags_auto_generate = has('unix') ? 1 : 0
 endif " }}}
 
+if s:HasPlugin('vim-textobj-between') " {{{
+	" textobj-functionとかぶるので変更(textobj-functionのマッピングはvrapperと合わせたいのでこちらを変える)
+	let g:textobj_between_no_default_key_mappings = 1 " d(istance)に変える。。
+	omap id <Plug>(textobj-between-i)
+	omap ad <Plug>(textobj-between-a)
+	vmap id <Plug>(textobj-between-i)
+	vmap ad <Plug>(textobj-between-a)
+endif " }}}
+
 if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)
 	nmap yae yae``
 	nmap yie yie``
 	nmap =ae =ae``
 	nmap =ie =ie``
-endif " }}}
-
-if s:HasPlugin('vim-textobj-function') " {{{ caution: windows(非neobundle)でafter/ftpluginが読み込まれないっぽいので Section; Plug-ins でruntimepath強引に登録している
-	" text-obj-between用に f -> F に退避
-	let g:textobj_function_no_default_key_mappings = 1
-	omap iF <Plug>(textobj-function-i)
-	omap aF <Plug>(textobj-function-a)
-	vmap iF <Plug>(textobj-function-i)
-	vmap aF <Plug>(textobj-function-a)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせる

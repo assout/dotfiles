@@ -71,12 +71,12 @@ nnoremap sn     :nohlsearch<CR>
 noremap  sv     :vsplit<CR>
 " TODO linuxでコマンドラインモードでも有効になってしまうので一旦コメントアウト
 " nnoremap <C-c>  :bdelete<CR>
+" nnoremap <C-c>  <Nop>
 " caution: vimrcではwindow間のカーソル移動だがeclipseだと微妙に不便なので暫定的にこうしてる.
 noremap  <C-h>  gT
 noremap  <C-l>  gt
 " TODO linuxでコマンドラインモードでも有効になってしまうので一旦コメントアウト
 " nnoremap <C-m>  i<CR><Esc>
-" TODO linuxでコマンドラインモードでC-mしたとき1行カーソル移動してしまうので
 nnoremap <C-m>  <Nop>
 nnoremap <C-w>o :only<CR>
 nnoremap <C-k>  :GotoPreviousMember<CR>

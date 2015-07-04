@@ -736,6 +736,7 @@ if s:HasPlugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
+	let g:gista#github_user = 'assout'
 	let g:gista#update_on_write = 1
 	nnoremap [gista]     <Nop>
 	nnoremap [gista]l    :<C-u>Unite gista<CR>

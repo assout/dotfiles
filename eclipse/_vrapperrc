@@ -60,15 +60,16 @@ unmap  /
 unmap  ?
 nunmap j
 nunmap k
+unmap  s
 nunmap <C-]>
 unmap  <Space>
 
 " caution: vimrcで設定してのもあるがvrapperではマップの再展開がされないっぽいので再定義
-nnoremap sb     :bdelete<CR>
-noremap  sh     ^
-noremap  sl     g_
-nnoremap sn     :nohlsearch<CR>
-noremap  sv     :vsplit<CR>
+nnoremap sb :bdelete<CR>
+noremap  sh ^
+noremap  sl g_
+nnoremap sn :nohlsearch<CR>
+noremap  sv :vsplit<CR>
 " TODO linuxでコマンドラインモードでも有効になってしまうので一旦コメントアウト
 " nnoremap <C-c>  :bdelete<CR>
 nnoremap <C-c>  <Nop>

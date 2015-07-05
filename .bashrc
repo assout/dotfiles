@@ -24,6 +24,7 @@ fi
 # LANG=ja_JP.UTF-8
 LANG=en_US.UTF-8
 export LANG
+export GOPATH=$HOME/.go
 
 # for msysgit
 if [ "${OSTYPE}" = "msys" ] ; then
@@ -86,3 +87,6 @@ function man-japanese() {
 }
 alias jan=man-japanese
 
+
+#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
+[[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"

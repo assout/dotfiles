@@ -745,7 +745,7 @@ if s:HasPlugin('vim-gista') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " caution: 't' is toggle window maximize.
+	let g:maximizer_default_mapping_key = '<C-t>' " 't' is toggle window maximize.
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{

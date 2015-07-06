@@ -483,7 +483,7 @@ if s:IsPluginEnabled()
 	nmap [plugin]g [gista]
 	nmap [plugin]h [hateblo]
 	nmap [plugin]m [memolist]
-	nmap [plugin]p [previv]
+	nmap [plugin]p [previm]
 	nmap [plugin]q [qiita]
 	nmap [plugin]Q [quickrun]
 	nmap [plugin]r [ref]

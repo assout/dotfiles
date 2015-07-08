@@ -196,10 +196,6 @@ set history=200
 set hlsearch
 set ignorecase
 set incsearch
-if has('win32')
-	" gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
-	set isfname& isfname-=:
-endif
 set iskeyword& iskeyword-=_
 " Open Vim internal help by K command
 set keywordprg=:help
@@ -418,6 +414,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
+	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？

@@ -155,7 +155,7 @@ augroup vimrc
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
-	" format json
+	" format json TODO command化する(format SGMLと同じ考え)
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [json] :%!python -m json.tool<CR>
 		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [json] :!python -m json.tool<CR>
@@ -168,6 +168,7 @@ augroup END
 " }}}1
 
 " Section; Options {{{1
+" TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
@@ -182,32 +183,39 @@ if has('folding')
 	set foldlevelstart=0
 	set foldmethod=marker
 endif
-set formatoptions& formatoptions-=o " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
+" フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
+set formatoptions& formatoptions-=o
 if executable('grep')
 	set grepprg=grep\ -nH
 endif
 " if executable('pt')
 "   set grepprg=pt\ --nogroup\ -iS
 " endif
-set helplang=en,ja " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
+" If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
+set helplang=en,ja
 set hidden
 set history=200
 set hlsearch
 set ignorecase
 set incsearch
 if has('win32')
-	set isfname& isfname-=: " gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
+	" gF 実行時に grep 結果を開きたい(ドライブレター含むファイルが開けなくなるかも)<http://saihoooooooo.hatenablog.com/entry/20111206/1323185728>
+	set isfname& isfname-=:
 endif
 set iskeyword& iskeyword-=_
-set keywordprg=:help " Open Vim internal help by K command
+" Open Vim internal help by K command
+set keywordprg=:help
 set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
-set lazyredraw " マクロなどを実行中は描画を中断
+" マクロなどを実行中は描画を中断
+set lazyredraw
 set number
-set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
+" インクリメンタル/デクリメンタルを常に10進数として扱う
+set nrformats=""
 set scrolloff=5
-set shiftwidth=4 " caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
+" caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
+set shiftwidth=4
 set showcmd
 set showtabline=1
 set sidescrolloff=5
@@ -220,10 +228,12 @@ else
 endif
 set splitbelow
 set splitright
-set spelllang& spelllang+=cjk " スペルチェックで日本語は除外する
+" スペルチェックで日本語は除外する
+set spelllang& spelllang+=cjk
 set tags& tags+=.git/tags
 set tabstop=4
-set textwidth=0 " 自動改行をなくす
+" 自動改行をなくす
+set textwidth=0
 set title
 if has('persistent_undo')
 	set noundofile
@@ -232,7 +242,8 @@ set wildmenu
 set nowrap
 set nowrapscan
 if has('win32')
-	set noswapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
+	" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
+	set noswapfile
 endif
 " }}}1
 
@@ -271,8 +282,11 @@ nnoremap [shortcut]b :bdelete<CR>
 map      [shortcut]d <Nop>
 noremap  [shortcut]h ^
 map      [shortcut]i [insert]
-nmap     [shortcut]j [json]
-xmap     [shortcut]j [json]
+noremap  [shortcut]j 10j
+" TODO ショートカットは不要。コマンド化したら削除する
+nmap     [shortcut]J [json]
+xmap     [shortcut]J [json]
+noremap  [shortcut]k 10k
 noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>
 nmap     [shortcut]o [open]

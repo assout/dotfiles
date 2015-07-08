@@ -412,8 +412,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'gregsexton/VimCalc', {'disabled' : !executable('python')}
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
+	NeoBundle 'itchyny/calendar.vim'
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
@@ -511,6 +513,11 @@ if s:HasPlugin('alignta') " {{{
 	xnoremap [alignta]a :Alignta<Space>
 	" 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
 	xnoremap [alignta]b :Alignta<Space>v/^" <<0 \s\S/2
+endif " }}}
+
+if s:HasPlugin('calendar.vim') " {{{
+	let g:calendar_google_calendar = 1
+	let g:calendar_google_task = 1
 endif " }}}
 
 if s:HasPlugin('excitetranslate') " {{{

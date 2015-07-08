@@ -155,10 +155,8 @@ augroup vimrc
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
-	" format json TODO command化する(format SGMLと同じ考え)
 	if executable('python')
-		autocmd BufNewFile,BufRead *.json nnoremap <buffer> [json] :%!python -m json.tool<CR>
-		autocmd BufNewFile,BufRead *.json xnoremap <buffer> [json] :!python -m json.tool<CR>
+		autocmd BufNewFile,BufRead *.json command! -range=% -complete=command -buffer FormatJSON <line1>,<line2>!python -m json.tool
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
@@ -283,9 +281,6 @@ map      [shortcut]d <Nop>
 noremap  [shortcut]h ^
 map      [shortcut]i [insert]
 noremap  [shortcut]j 10j
-" TODO ショートカットは不要。コマンド化したら削除する
-nmap     [shortcut]J [json]
-xmap     [shortcut]J [json]
 noremap  [shortcut]k 10k
 noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>

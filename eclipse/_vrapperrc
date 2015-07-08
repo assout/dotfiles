@@ -3,6 +3,7 @@
 " 詳細は http://vrapper.sourceforge.net/documentation
 
 " caution: コメント分のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
+" TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する.
@@ -65,8 +66,11 @@ nunmap <C-]>
 unmap  <Space>
 
 " caution: vimrcで設定してのもあるがvrapperではマップの再展開がされないっぽいので再定義
+noremap  s  <Nop>
 nnoremap sb :bdelete<CR>
 noremap  sh ^
+noremap  sj 10j
+noremap  sk 10k
 noremap  sl g_
 nnoremap sn :nohlsearch<CR>
 noremap  sv :vsplit<CR>

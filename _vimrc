@@ -407,7 +407,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/neomru.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite.vim', {'depends' : ['Shougo/vimproc']}
-	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']} " TODO いつのまにか複数ファイルのリネーム時にエラーが出るように@win
+	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/vimproc', { 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim']} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}

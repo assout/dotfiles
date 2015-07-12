@@ -142,7 +142,7 @@ augroup vimrc
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
 	if executable('python')
-		autocmd BufNewFile,BufRead *.json command! -range=% -complete=command -buffer FormatJSON <line1>,<line2>!python -m json.tool
+		autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
 	endif
 	if executable('xmllint')
 		autocmd FileType xml,html setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null

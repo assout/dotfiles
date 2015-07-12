@@ -387,7 +387,7 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-" caution: <C-]>に慣れるため無効化
+" caution: <C-]>に慣れるため無効化 TODO コマンドの中断ができなくなる?
 cnoremap <C-c> <Nop>
 " }}}1
 
@@ -489,7 +489,7 @@ if s:IsPluginEnabled()
 	xmap [plugin]a [alignta]
 	map  [plugin]c [camelize]
 	nmap [plugin]e [excite]
-	nmap [plugin]f [vimfiler]
+	nmap [plugin]f [fugitive]
 	nmap [plugin]g [gista]
 	nmap [plugin]h [hateblo]
 	nmap [plugin]m [memolist]
@@ -524,6 +524,12 @@ endif " }}}
 
 if s:HasPlugin('excitetranslate') " {{{
 	noremap [excite] :<C-u>ExciteTranslate<CR>
+endif " }}}
+
+if s:HasPlugin('fugitive') " {{{ TODO fugitive が有効なときのみマッピングしたい
+	nnoremap [fugitive]c :Gcommit -m ""<Left>
+	nnoremap [fugitive]d :Gdiff<CR>
+	nnoremap [fugitive]p :Git push<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
@@ -737,14 +743,6 @@ endif " }}}
 if s:HasPlugin('vimfiler') " {{{
 	let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
 	let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
-
-	nnoremap [vimfiler]     <Nop>
-	nnoremap [vimfiler]<CR> :<C-u>VimFiler<CR>
-	nnoremap [vimfiler]b    :<C-u>VimFilerBufferDir<CR>
-	nnoremap [vimfiler]c    :<C-u>VimFilerCurrentDir<CR>
-	nnoremap [vimfiler]d    :<C-u>VimFilerDouble<CR>
-	nnoremap [vimfiler]s    :<C-u>VimFilerSplit<CR>
-	nnoremap [vimfiler]t    :<C-u>VimFilerTab<CR>
 endif " }}}
 
 if s:HasPlugin('vim-ansible-yaml') " {{{

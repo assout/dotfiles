@@ -58,20 +58,6 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
 
-" TODO 未完（改行されなかった時のインデント範囲がおかしくなる）
-" TODO コメント行はさむと以降のインデントベルが0になる
-" TODO 未指定のときは範囲%扱いにしたい
-function! s:FormatSGML() range " caution: executeにする必要ないがvintで警告になってしまうため
-	" execute '%substitute/>\s*</>\r</ge' | filetype indent on | setfiletype xml | normal! gg=G
-
-	execute 'normal!' . a:firstline . '=' . a:lastline
-	execute a:firstline . ',' . a:lastline . 'substitute/>\s*</>\r</ge'
-	filetype indent on
-	setfiletype xml
-	normal! `[=`]
-endfunction
-command! -range -complete=command FormatSGML <line1>,<line2>call <SID>FormatSGML()
-
 function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
@@ -157,6 +143,9 @@ augroup vimrc
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json command! -range=% -complete=command -buffer FormatJSON <line1>,<line2>!python -m json.tool
+	endif
+	if executable('xmllint')
+		autocmd FileType xml,html setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab

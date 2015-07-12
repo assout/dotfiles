@@ -29,7 +29,7 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 
 " # TODOs
-" * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある
+" * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
 " }}}1
 
@@ -148,7 +148,7 @@ augroup vimrc
 	" set markdown filetype
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
 	" enabe spell on markdown file
-	if &encoding ==# 'utf-8' " windows の 非gvim 環境で spell ファイル関連のエラーとなってしまうため
+	if &termencoding ==# 'utf-8' || has('gui_running')
 		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
 	endif
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
@@ -372,8 +372,8 @@ inoremap <C-e> <End>
 inoremap <C-d> <Del>
 " TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
-" caution: 設定しないとim_controlで日本語入力モードONの動きをしてしまう
-inoremap <C-c> <Esc>
+" caution: <C-]>に慣れるため無効化。Escapeとして使用したくなったときはim_controlで日本語入力モードONの動きをしてしまうので<Esc>にmappingすること。
+inoremap <C-c> <Nop>
 " }}}
 
 " Command-line mode mappings {{{
@@ -387,6 +387,8 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
+" caution: <C-]>に慣れるため無効化
+cnoremap <C-c> <Nop>
 " }}}1
 
 " Section; Plug-ins {{{1
@@ -516,8 +518,8 @@ if s:HasPlugin('alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
-	let g:calendar_google_calendar = 1
-	let g:calendar_google_task = 1
+	let g:calendar_google_calendar = has('unix') ? 1 : 0
+	let g:calendar_google_task = has('unix') ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('excitetranslate') " {{{
@@ -749,6 +751,22 @@ if s:HasPlugin('vim-ansible-yaml') " {{{
 	let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
+if s:HasPlugin('vim-gf-user') " {{{
+	function! GfFile() " refs <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+		let path = expand('<cfile>')
+		let line = 0
+		if path =~# ':\d\+:\?$'
+			let line = matchstr(path, '\d\+:\?$')
+			let path = matchstr(path, '.*\ze:\d\+:\?$')
+		endif
+		if !filereadable(path)
+			return 0
+		endif
+		return { 'path': path, 'line': line, 'col': 0, }
+	endfunction
+	call gf#user#extend('GfFile', 1000)
+endif " }}}
+
 if s:HasPlugin('vim-gista') " {{{
 	let g:gista#github_user = 'assout'
 	let g:gista#update_on_write = 1
@@ -759,7 +777,7 @@ if s:HasPlugin('vim-gista') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " 't' is toggle window maximize.
+	let g:maximizer_default_mapping_key = '<C-t>' " 't'oggle window maximize.
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{

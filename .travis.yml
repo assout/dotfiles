@@ -10,5 +10,5 @@ script:
   - vint --version
   - vint _vimrc
   - vint _gvimrc
-  - vint eclipse/_vrapperrc
+  # TODO vlmlparser通らないっぽいからダメ - vint eclipse/_vrapperrc
 

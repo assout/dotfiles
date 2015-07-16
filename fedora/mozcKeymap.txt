@@ -6,11 +6,12 @@ Composition	Ctrl Down	MoveCursorToEnd
 Composition	Ctrl Enter	Commit
 Composition	Ctrl Henkan	Convert
 Composition	Ctrl Left	MoveCursorToBeginning
-Composition	Ctrl Muhenkan	SwitchKanaType
+Composition	Ctrl Muhenkan	IMEOff
 Composition	Ctrl Right	MoveCursorToEnd
 Composition	Ctrl Shift Space	InsertFullSpace
 Composition	Ctrl Space	InsertHalfSpace
 Composition	Ctrl Up	MoveCursorToBeginning
+Composition	Ctrl [	Cancel
 Composition	Ctrl a	MoveCursorToBeginning
 Composition	Ctrl c	Cancel
 Composition	Ctrl d	MoveCursorRight
@@ -33,7 +34,6 @@ Composition	Ctrl x	MoveCursorToEnd
 Composition	Ctrl z	Cancel
 Composition	Delete	Delete
 Composition	Down	MoveCursorToEnd
-Composition	ESC	Cancel
 Composition	Eisu	ToggleAlphanumericMode
 Composition	End	MoveCursorToEnd
 Composition	Enter	Commit
@@ -49,7 +49,7 @@ Composition	Home	MoveCursorToBeginning
 Composition	Kanji	IMEOff
 Composition	Katakana	InputModeFullKatakana
 Composition	Left	MoveCursorLeft
-Composition	Muhenkan	Cancel
+Composition	Muhenkan	CancelAndIMEOff
 Composition	OFF	IMEOff
 Composition	ON	IMEOn
 Composition	Right	MoveCursorRight
@@ -67,11 +67,13 @@ Conversion	Ctrl Down	CommitOnlyFirstSegment
 Conversion	Ctrl Enter	Commit
 Conversion	Ctrl Henkan	ConvertNext
 Conversion	Ctrl Left	SegmentFocusFirst
-Conversion	Ctrl Muhenkan	SwitchKanaType
+Conversion	Ctrl Muhenkan	IMEOff
 Conversion	Ctrl Right	SegmentFocusLast
 Conversion	Ctrl Shift Space	InsertFullSpace
+Conversion	Ctrl Shift i	ConvertPrev
 Conversion	Ctrl Space	InsertHalfSpace
 Conversion	Ctrl Up	ConvertPrev
+Conversion	Ctrl [	Cancel
 Conversion	Ctrl a	SegmentFocusFirst
 Conversion	Ctrl c	Cancel
 Conversion	Ctrl d	SegmentFocusRight
@@ -94,7 +96,6 @@ Conversion	Ctrl x	ConvertNext
 Conversion	Ctrl z	Cancel
 Conversion	Delete	Cancel
 Conversion	Down	ConvertNext
-Conversion	ESC	Cancel
 Conversion	Eisu	ToggleAlphanumericMode
 Conversion	End	SegmentFocusLast
 Conversion	Enter	Commit
@@ -109,7 +110,7 @@ Conversion	Home	SegmentFocusFirst
 Conversion	Kanji	IMEOff
 Conversion	Katakana	InputModeFullKatakana
 Conversion	Left	SegmentFocusLeft
-Conversion	Muhenkan	Cancel
+Conversion	Muhenkan	CancelAndIMEOff
 Conversion	OFF	IMEOff
 Conversion	ON	IMEOn
 Conversion	PageDown	ConvertNextPage
@@ -129,6 +130,7 @@ Conversion	Space	ConvertNext
 Conversion	Tab	PredictAndConvert
 Conversion	Up	ConvertPrev
 DirectInput	Ctrl Henkan	Reconvert
+DirectInput	Ctrl Muhenkan	IMEOff
 DirectInput	Eisu	IMEOn
 DirectInput	F13	IMEOn
 DirectInput	Hankaku/Zenkaku	IMEOn
@@ -140,7 +142,7 @@ DirectInput	ON	IMEOn
 Precomposition	ASCII	InsertCharacter
 Precomposition	Backspace	Revert
 Precomposition	Ctrl Backspace	Undo
-Precomposition	Ctrl Muhenkan	InputModeSwitchKanaType
+Precomposition	Ctrl Muhenkan	IMEOff
 Precomposition	Ctrl Shift Delete	IMEOff
 Precomposition	Ctrl Shift Space	InsertFullSpace
 Precomposition	Ctrl Space	Reconvert
@@ -156,9 +158,11 @@ Precomposition	Shift Muhenkan	ToggleAlphanumericMode
 Precomposition	Shift Space	InsertAlternateSpace
 Precomposition	Space	InsertSpace
 Prediction	Ctrl Delete	DeleteSelectedCandidate
+Prediction	Ctrl [	Cancel
 Prediction	Ctrl c	Cancel
-Prediction	Muhenkan	Cancel
+Prediction	Muhenkan	CancelAndIMEOff
+Suggestion	Ctrl [	Cancel
 Suggestion	Ctrl c	Cancel
 Suggestion	Down	PredictAndConvert
-Suggestion	Muhenkan	Cancel
+Suggestion	Muhenkan	CancelAndIMEOff
 Suggestion	Shift Enter	CommitFirstSuggestion

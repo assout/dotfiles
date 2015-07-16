@@ -359,7 +359,6 @@ inoremap <C-f> <Right>
 inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
-" TODO im_control plug-in が有効だと効かない(linux のみ)
 inoremap <C-k> <C-o>D
 " caution: <C-]>に慣れるため無効化。Escapeとして使用したくなったときはim_controlで日本語入力モードONの動きをしてしまうので<Esc>にmappingすること。
 inoremap <C-c> <Nop>
@@ -401,7 +400,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim']} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'fuenor/im_control.vim' " TODO linuxだと<C-o>の動きが変になる
+	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'gregsexton/VimCalc', {'disabled' : !executable('python')}
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
@@ -547,6 +546,18 @@ endif " }}}
 
 if s:HasPlugin('im_control') " {{{
 	let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
+	if has('unix')
+		function! IMCtrl(cmd)
+			if a:cmd ==? 'On'
+				let res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
+			elseif a:cmd ==? 'Off'
+				let res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
+			elseif a:cmd ==? 'Toggle'
+				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
+			endif
+			return ''
+		endfunction
+	endif
 	if !has('gui_running')
 		let g:IM_CtrlMode = 0
 	endif

@@ -144,8 +144,8 @@ augroup vimrc
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
 	endif
-	if executable('xmllint')
-		autocmd FileType xml,html setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+	if executable('xmllint') " TODO pretty format(xml,html,xhtml)
+		autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 	endif
 	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
 	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
@@ -501,9 +501,10 @@ endif
 " }}}
 
 if s:HasPlugin('alignta') " {{{
-	xnoremap [alignta]a :Alignta<Space>
-	" 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-	xnoremap [alignta]b :Alignta<Space>v/^" <<0 \s\S/2
+	xnoremap [alignta]<CR> :Alignta<Space>
+	xnoremap [alignta]s    :Alignta<Space><-<Space>
+	" alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
+	xnoremap [alignta]m    :Alignta<Space>v/^" <<0 \s\S/2
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{

@@ -8,5 +8,7 @@ script:
   - vim --cmd version --cmd quit
 
   - vint --version
-  - vint _vimrc _gvimrc eclipse/_vrapperrc
+  - vint _vimrc
+  - vint _gvimrc
+  - vint eclipse/_vrapperrc
 

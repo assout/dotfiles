@@ -1,3 +1,4 @@
+scriptencoding utf-8
 " メニューバー非表示の場合この設定で起動が高速化するらしい.
 let g:did_install_default_menus=1
 " フォント設定.

@@ -1,0 +1,12 @@
+language: viml
+
+install:
+  - git clone https://github.com/syngan/vim-vimlint /tmp/vimlint
+  - sudo pip install vim-vint
+
+script:
+  - vim --cmd version --cmd quit
+
+  - vint --version
+  - vint _vimrc _gvimrc
+

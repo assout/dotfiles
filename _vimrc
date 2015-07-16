@@ -558,9 +558,6 @@ if s:HasPlugin('im_control') " {{{
 			return ''
 		endfunction
 	endif
-	if !has('gui_running')
-		let g:IM_CtrlMode = 0
-	endif
 endif " }}}
 
 if has('kaoriya') " {{{

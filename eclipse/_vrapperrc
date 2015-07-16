@@ -34,6 +34,7 @@
 " }}}1
 
 " Section; Vim Settings {{{1
+scriptencoding utf-8
 source /home/oji/.vimrc
 source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.

@@ -38,6 +38,9 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+# manual add
+.eclipse-pmd
+.pmd
 
 ### Vim ###
 [._]*.s[a-w][a-z]

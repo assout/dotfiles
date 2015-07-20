@@ -838,8 +838,9 @@ if s:HasPlugin('vim-ref') " {{{
 		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
 	endif
 	let g:ref_man_lang='ja_JP.UTF-8'
-	nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
-
+	if 1 " workaround for vrapper
+		nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
+	endif
 	" TODO 選択範囲の単語で検索
 	" TODO unite-actioinでyank
 	" TODO unite重い

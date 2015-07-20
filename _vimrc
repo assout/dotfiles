@@ -823,7 +823,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
-	nnoremap [ref]  <Nop>
+	nnoremap [ref] <Nop>
 
 	if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
 		let g:ref_source_webdict_sites = {
@@ -837,6 +837,8 @@ if s:HasPlugin('vim-ref') " {{{
 		nnoremap [ref]wj :<C-u>Ref webdict je<Space>
 		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
 	endif
+	let g:ref_man_lang='ja_JP.UTF-8'
+	nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
 
 	" TODO 選択範囲の単語で検索
 	" TODO unite-actioinでyank

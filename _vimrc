@@ -398,6 +398,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/vimproc', { 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim']} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+	NeoBundle "aklt/plantuml-syntax"
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'fuenor/im_control.vim'

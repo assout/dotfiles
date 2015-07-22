@@ -14,6 +14,8 @@ set lines=40
 set cmdheight=1
 " 横幅 デフォルトは80.
 set columns=120
+" 自動選択(autoselect)をオフにする
+set guioptions-=a
 " 水平スクロールバーを表示.
 set guioptions+=b
 " メニューバーを非表示.

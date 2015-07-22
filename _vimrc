@@ -407,6 +407,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'itchyny/calendar.vim'
+	NeoBundle 'kana/vim-fakeclip'
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}

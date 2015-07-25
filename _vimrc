@@ -610,6 +610,7 @@ if s:HasPlugin('operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
+	let g:previm_custom_css_path = has('unix') ? '/home/oji/Development/dotfiles/previm.css' : 'D:/admin/Documents/previm.css'
 	nnoremap [previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 

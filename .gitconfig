@@ -7,4 +7,12 @@
 [github]
 	user = assout
 [core]
-    excludesfile = ~/.gitignore
+	excludesfile = ~/.gitignore
+[alias]
+	st = status
+	cm = commit -m
+	br = branch
+	co = checkout
+	df = diff
+	lg = log -p
+

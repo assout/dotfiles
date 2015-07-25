@@ -565,6 +565,7 @@ endif " }}}
 if has('kaoriya') " {{{
 	let g:plugin_hz_ja_disable = 1 " hz_ja plugin無効
 	let g:plugin_dicwin_disable = 1 " dicwin plugin無効
+	let g:plugin_scrnmode_disable = 1 " scrnmode plugin無効
 else
 	command! -nargs=0 CdCurrent cd %:p:h
 endif " }}}
@@ -840,7 +841,7 @@ if s:HasPlugin('vim-ref') " {{{
 		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
 	endif
 	let g:ref_man_lang='ja_JP.UTF-8'
-	if 1 " workaround for vrapper
+	if has('unix')
 		nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
 	endif
 	" TODO 選択範囲の単語で検索

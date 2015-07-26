@@ -495,6 +495,7 @@ if s:IsPluginEnabled()
 	nmap [plugin]Q [quickrun]
 	nmap [plugin]r [ref]
 	nmap [plugin]s [sub]
+	nmap [plugin]S [syntastic]
 	map  [plugin]t [todo]
 	nmap [plugin]u [unite]
 	nmap [plugin]/ [migemo]
@@ -644,15 +645,18 @@ if s:HasPlugin('singleton') && has('gui_running') " {{{
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{
-	let g:syntastic_check_on_wq = 0
+	let g:syntastic_check_on_wq = 0 " :wq時にチェックしない
+	let g:syntastic_always_populate_loc_list = 1 " :Errorsを実行しなくてもlocation listに表示する
 	let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+
 	if executable('shellcheck')
 		let g:syntastic_sh_checkers = ['shellcheck']
 	endif
-
 	if s:HasPlugin('vint-syntastic') " {{{
 		let g:syntastic_vim_checkers = ['vint']
 	endif " }}}
+
+	nnoremap [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{

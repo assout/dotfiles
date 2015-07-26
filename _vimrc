@@ -140,7 +140,8 @@ augroup vimrc
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,helpgrep if len(getqflist()) != 0 | copen | endif | set modifiable nowrap
+	autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif | setlocal modifiable nowrap
+	autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif | setlocal modifiable nowrap
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
 	endif
@@ -351,6 +352,10 @@ nnoremap [Q :cfirst<CR>
 nnoremap ]Q :clast<CR>
 nnoremap [f :cpfile<CR>
 nnoremap ]f :cnfile<CR>
+nnoremap [l :lnext<CR>
+nnoremap ]l :lprevious<CR>
+nnoremap [L :lfirst<CR>
+nnoremap ]L :llast<CR>
 " }}}
 
 " Insert mode mappings {{{

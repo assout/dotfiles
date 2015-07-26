@@ -420,6 +420,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
+	NeoBundle 'scrooloose/syntastic'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
 	NeoBundle 'thinca/vim-localrc'
@@ -428,6 +429,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-ref'
 	NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
 	NeoBundle 'tomtom/tcomment_vim'
+	NeoBundle 'todesking/vint-syntastic', {'depends': ['scrooloose/syntastic'], 'disabled' : !executable('vint')}
 	NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tyru/restart.vim'
@@ -634,6 +636,14 @@ endif " }}}
 if s:HasPlugin('singleton') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
 	call singleton#enable()
+endif " }}}
+
+if s:HasPlugin('syntastic') " {{{
+	let g:syntastic_check_on_wq = 0
+	let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
+	if executable('shellcheck')
+		let g:syntastic_sh_checkers = ['shellcheck']
+	endif
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
@@ -924,6 +934,10 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 	omap aa <Plug>(textobj-parameter-a)
 	vmap ia <Plug>(textobj-parameter-i)
 	vmap aa <Plug>(textobj-parameter-a)
+endif " }}}
+
+if s:HasPlugin('vint-syntastic') " {{{
+	let g:syntastic_vim_checkers = ['vint']
 endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>

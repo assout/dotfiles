@@ -649,6 +649,10 @@ if s:HasPlugin('syntastic') " {{{
 	if executable('shellcheck')
 		let g:syntastic_sh_checkers = ['shellcheck']
 	endif
+
+	if s:HasPlugin('vint-syntastic') " {{{
+		let g:syntastic_vim_checkers = ['vint']
+	endif " }}}
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
@@ -939,10 +943,6 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 	omap aa <Plug>(textobj-parameter-a)
 	vmap ia <Plug>(textobj-parameter-i)
 	vmap aa <Plug>(textobj-parameter-a)
-endif " }}}
-
-if s:HasPlugin('vint-syntastic') " {{{
-	let g:syntastic_vim_checkers = ['vint']
 endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>

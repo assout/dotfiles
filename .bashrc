@@ -87,6 +87,7 @@ function man-japanese() {
 }
 alias jan=man-japanese
 
+export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"

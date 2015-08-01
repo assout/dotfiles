@@ -422,7 +422,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
-	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim']}
+	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
@@ -661,6 +661,7 @@ if s:HasPlugin('syntastic') " {{{
 	if s:HasPlugin('vint-syntastic') " {{{
 		let g:syntastic_vim_checkers = ['vint']
 	endif " }}}
+	let g:syntastic_yaml_checkers = ['jsyaml']
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
 	nnoremap [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>

@@ -271,6 +271,7 @@ noremap  [shortcut]k 10k
 noremap  [shortcut]l g_
 nnoremap [shortcut]n :nohlsearch<CR>
 nmap     [shortcut]o [open]
+noremap  [shortcut]p :split<CR>
 map      [shortcut]r <Nop>
 nnoremap [shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap [shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
@@ -325,37 +326,40 @@ nnoremap <C-S-TAB> gT
 nnoremap <C-]> g<C-]>
 " }}}
 
-" []key prefix mappings {{{ TODO plugin用プレフィックスと被ると待たされる
-nnoremap [b :bprevious<CR>
-nnoremap ]b :bnext<CR>
-nnoremap [B :bfirst<CR>
-nnoremap ]B :blast<CR>
-nnoremap [w :wincmd W<CR>
-nnoremap ]w :wincmd w<CR>
-nnoremap [W :wincmd t<CR>
-nnoremap ]W :wincmd b<CR>
-nnoremap [t :tabprevious<CR>
-nnoremap ]t :tabnext<CR>
-nnoremap [T :tabfirst<CR>
-nnoremap ]T :tablast<CR>
-nnoremap [g :tbprevious<CR>
-nnoremap ]g :tnext<CR>
-nnoremap [G :tfirst<CR>
-nnoremap ]G :tlast<CR>
-nnoremap [a :previous<CR>
-nnoremap ]a :next<CR>
-nnoremap [A :first<CR>
-nnoremap ]A :last<CR>
-nnoremap [q :cprevious<CR>
-nnoremap ]q :cnext<CR>
-nnoremap [Q :cfirst<CR>
-nnoremap ]Q :clast<CR>
-nnoremap [f :cpfile<CR>
-nnoremap ]f :cnfile<CR>
-nnoremap [l :lnext<CR>
-nnoremap ]l :lprevious<CR>
-nnoremap [L :lfirst<CR>
-nnoremap ]L :llast<CR>
+" []key prefix mappings(based on unimpaired plugin) {{{ TODO plugin用プレフィックスと被ると待たされる(TODO unimaped plugin?だとどうなるか確認する)
+nnoremap [a     :previous<CR>
+nnoremap ]a     :next<CR>
+nnoremap [A     :first<CR>
+nnoremap ]A     :last<CR>
+nnoremap [b     :bprevious<CR>
+nnoremap ]b     :bnext<CR>
+nnoremap [B     :bfirst<CR>
+nnoremap ]B     :blast<CR>
+nnoremap [l     :lprevious<CR>
+nnoremap ]l     :lnext<CR>
+nnoremap [L     :lfirst<CR>
+nnoremap ]L     :llast<CR>
+nnoremap [<C-L> :lpfile<CR>
+nnoremap ]<C-L> :llast<CR>
+nnoremap [q     :cprevious<CR>
+nnoremap ]q     :cnext<CR>
+nnoremap [Q     :cfirst<CR>
+nnoremap ]Q     :clast<CR>
+nnoremap [<C-Q> :cpfile<CR>
+nnoremap ]<C-Q> :cnfile<CR>
+nnoremap [t     :tbprevious<CR>
+nnoremap ]t     :tnext<CR>
+nnoremap [T     :tfirst<CR>
+nnoremap ]T     :tlast<CR>
+" adding to unimpaired plugin mapping
+nnoremap [g     :tabprevious<CR>
+nnoremap ]g     :tabnext<CR>
+nnoremap [G     :tabfirst<CR>
+nnoremap ]G     :tablast<CR>
+nnoremap [w     :wincmd W<CR>
+nnoremap ]w     :wincmd w<CR>
+nnoremap [W     :wincmd t<CR>
+nnoremap ]W     :wincmd b<CR>
 " }}}
 
 " Insert mode mappings {{{

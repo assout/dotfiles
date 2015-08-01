@@ -1,6 +1,6 @@
 [user]
 	name=assout
-	email=porinsan@gmail.com
+	email = assout@users.noreply.github.com
 [push]
 	default = simple
 # for gist.vim

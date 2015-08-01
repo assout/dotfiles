@@ -75,6 +75,7 @@ noremap  sj 10j
 noremap  sk 10k
 noremap  sl g_
 nnoremap sn :nohlsearch<CR>
+noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl key mappings

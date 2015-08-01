@@ -1,0 +1,7 @@
+mklink %HOME%"\_vimrc" "D:\admin\Development\dotfiles\_vimrc"
+mklink %HOME%"\_gvimrc" "D:\admin\Development\dotfiles\_gvimrc"
+mklink %HOME%"\.bashrc" "D:\admin\Development\dotfiles\.bashrc"
+mklink %HOME%"\.bashrc" "D:\admin\Development\dotfiles\.bashrc"
+mklink %HOME%"\.gitconfig" "D:\admin\Development\dotfiles\.gitconfig"
+mklink %HOME%"\.gitignore" "D:\admin\Development\dotfiles\.gitignore"
+mklink "D:\admin\_vrapperrc" "D:\admin\Development\dotfiles\eclipse\_vrapperrc"

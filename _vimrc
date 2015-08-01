@@ -808,6 +808,10 @@ if s:HasPlugin('vim-gista') " {{{
 	nnoremap [gista]<CR> :<C-u>Gista<CR>
 endif " }}}
 
+if s:HasPlugin('vim-localrc') " {{{
+	let g:localrc_filename = '.vimrc.development'
+endif " }}}
+
 if s:HasPlugin('vim-maximizer') " {{{
 	let g:maximizer_default_mapping_key = '<C-t>' " 't'oggle window maximize.
 endif " }}}

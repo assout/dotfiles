@@ -111,8 +111,8 @@ function! s:HasPlugin(plugin) " pluginが存在するか返す
 endfunction
 
 function! s:RestoreCursorPosition()
-	let ignore_filetypes = ['gitcommit']
-	if index(ignore_filetypes, &l:filetype) >= 0
+	let l:ignore_filetypes = ['gitcommit']
+	if index(l:ignore_filetypes, &l:filetype) >= 0
 		return
 	endif
 
@@ -393,7 +393,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	if has('vim_starting')
 		set runtimepath+=~/.vim/bundle/neobundle.vim/
 	endif
-	call neobundle#begin(expand('~/.vim/bundle'))
+	call g:neobundle#begin(expand('~/.vim/bundle'))
 
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
@@ -470,7 +470,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
 	" }}}
 
-	call neobundle#end()
+	call g:neobundle#end()
 	filetype plugin indent on " Required!
 	NeoBundleCheck " Installation check.
 
@@ -565,13 +565,13 @@ endif " }}}
 if s:HasPlugin('im_control') " {{{
 	let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
 	if has('unix')
-		function! IMCtrl(cmd)
+		function! g:IMCtrl(cmd)
 			if a:cmd ==? 'On'
-				let res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
+				let l:res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
 			elseif a:cmd ==? 'Off'
-				let res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
+				let l:res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
 			elseif a:cmd ==? 'Toggle'
-				let res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
+				let l:res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
 			endif
 			return ''
 		endfunction
@@ -597,8 +597,8 @@ if s:HasPlugin('memolist') " {{{
 
 	if s:HasPlugin('unite')
 		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
-		call unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-		call unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default'])
+		call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default'])
 		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>
@@ -649,7 +649,7 @@ endif " }}}
 
 if s:HasPlugin('singleton') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
-	call singleton#enable()
+	call g:singleton#enable()
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{
@@ -670,7 +670,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
 	let g:tcommentTextObjectInlineComment = 'iC'
-	call tcomment#DefineType('java', '// %s')
+	call g:tcomment#DefineType('java', '// %s')
 endif " }}}
 
 if s:HasPlugin('unite') " {{{
@@ -683,8 +683,8 @@ if s:HasPlugin('unite') " {{{
 		let l:candidate = a:candidates[0]
 		let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
 		execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
-		call unite#take_action('move', a:candidates)
-		call unite#force_redraw() " 呼ばないと表示更新されない
+		call g:unite#take_action('move', a:candidates)
+		call g:unite#force_redraw() " 呼ばないと表示更新されない
 	endfunction
 
 	function! s:unite_my_keymappings()
@@ -705,14 +705,14 @@ if s:HasPlugin('unite') " {{{
 		autocmd FileType unite call s:unite_my_keymappings()
 	augroup END
 
-	call unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
-	call unite#custom#alias('file', 'delete', 'vimfiler__delete')
-	call unite#custom#default_action('directory', 'vimfiler')
-	call unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-	call unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	call g:unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
+	call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
+	call g:unite#custom#default_action('directory', 'vimfiler')
+	call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+	call g:unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	call g:unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 	if has('win32') " windowsではよく日本語使うので
-		call unite#filters#matcher_default#use(['matcher_migemo'])
+		call g:unite#filters#matcher_default#use(['matcher_migemo'])
 	endif
 
 	nnoremap [unite]     <Nop>
@@ -784,19 +784,19 @@ if s:HasPlugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
-	function! GfFile() " refs <http://d.hatena.ne.jp/thinca/20140324/1395590910>
-		let path = expand('<cfile>')
-		let line = 0
-		if path =~# ':\d\+:\?$'
-			let line = matchstr(path, '\d\+:\?$')
-			let path = matchstr(path, '.*\ze:\d\+:\?$')
+	function! g:GfFile() " refs <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+		let l:path = expand('<cfile>')
+		let l:line = 0
+		if l:path =~# ':\d\+:\?$'
+			let l:line = matchstr(l:path, '\d\+:\?$')
+			let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
 		endif
-		if !filereadable(path)
+		if !filereadable(l:path)
 			return 0
 		endif
-		return { 'path': path, 'line': line, 'col': 0, }
+		return { 'path': l:path, 'line': l:line, 'col': 0, }
 	endfunction
-	call gf#user#extend('GfFile', 1000)
+	call g:gf#user#extend('GfFile', 1000)
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
@@ -814,7 +814,7 @@ endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
 	if has('migemo')
-		if has('vim_starting') | call migemo#SearchChar(0) | endif " caution: probably slow
+		if has('vim_starting') | call g:migemo#SearchChar(0) | endif " caution: probably slow
 		nnoremap [migemo] g/
 	else
 		nnoremap [migemo] :<C-u>Migemo<Space>
@@ -893,46 +893,46 @@ endif " }}}
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを[submode]とするとエラー)
 	nnoremap [sub]    <Nop>
 
-	call submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
-	call submode#map('winsize', 'n', '', 'h', '<C-w><')
-	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
-	call submode#map('winsize', 'n', '', 'H', '10<C-w><')
-	call submode#map('winsize', 'n', '', 'L', '10<C-w>>')
-	call submode#map('winsize', 'n', '', 'k', '<C-w>-')
-	call submode#map('winsize', 'n', '', 'j', '<C-w>+')
-	call submode#map('winsize', 'n', '', 'K', '10<C-w>-')
-	call submode#map('winsize', 'n', '', 'J', '10<C-w>+')
+	call g:submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
+	call g:submode#map('winsize', 'n', '', 'h', '<C-w><')
+	call g:submode#map('winsize', 'n', '', 'l', '<C-w>>')
+	call g:submode#map('winsize', 'n', '', 'H', '10<C-w><')
+	call g:submode#map('winsize', 'n', '', 'L', '10<C-w>>')
+	call g:submode#map('winsize', 'n', '', 'k', '<C-w>-')
+	call g:submode#map('winsize', 'n', '', 'j', '<C-w>+')
+	call g:submode#map('winsize', 'n', '', 'K', '10<C-w>-')
+	call g:submode#map('winsize', 'n', '', 'J', '10<C-w>+')
 
-	call submode#enter_with('scroll', 'n', '', '[sub]s', '<Nop>')
-	call submode#map('scroll', 'n', '', 'h', 'zh')
-	call submode#map('scroll', 'n', '', 'l', 'zl')
-	call submode#map('scroll', 'n', '', 'H', '10zh')
-	call submode#map('scroll', 'n', '', 'L', '10zl')
+	call g:submode#enter_with('scroll', 'n', '', '[sub]s', '<Nop>')
+	call g:submode#map('scroll', 'n', '', 'h', 'zh')
+	call g:submode#map('scroll', 'n', '', 'l', 'zl')
+	call g:submode#map('scroll', 'n', '', 'H', '10zh')
+	call g:submode#map('scroll', 'n', '', 'L', '10zl')
 
-	call submode#enter_with('buffer', 'n', '', '[sub]b', '<Nop>')
-	call submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
-	call submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
-	call submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
-	call submode#map('buffer', 'n', '', 'J', ':blast<CR>')
-
-	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
-	call submode#map('args', 'n', '', 'k', ':previous<CR>')
-	call submode#map('args', 'n', '', 'j', ':next<CR>')
-	call submode#map('args', 'n', '', 'K', ':first<CR>')
-	call submode#map('args', 'n', '', 'J', ':last<CR>')
+	call g:submode#enter_with('buffer', 'n', '', '[sub]b', '<Nop>')
+	call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
+	call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
+	call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
+	call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
 	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
-	call submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
-	call submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
-	call submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
-	call submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
+	call g:submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
+	call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
+	call g:submode#map('args', 'n', '', 'j', ':next<CR>')
+	call g:submode#map('args', 'n', '', 'K', ':first<CR>')
+	call g:submode#map('args', 'n', '', 'J', ':last<CR>')
+
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
+	call g:submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
+	call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
+	call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
+	call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
+	call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
 	" TODO いまいち効かないときがある(Submode表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
-	call submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
-	call submode#map('diff', 'n', '', 'k', '[c')
-	call submode#map('diff', 'n', '', 'j', ']c')
+	call g:submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
+	call g:submode#map('diff', 'n', '', 'k', '[c')
+	call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
 if s:HasPlugin('vim-tags') " {{{

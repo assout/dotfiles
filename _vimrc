@@ -658,9 +658,6 @@ if s:HasPlugin('syntastic') " {{{
 	let g:syntastic_always_populate_loc_list = 1 " :Errorsを実行しなくてもlocation listに表示する
 	let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 
-	if executable('shellcheck')
-		let g:syntastic_sh_checkers = ['shellcheck']
-	endif
 	if s:HasPlugin('vint-syntastic') " {{{
 		let g:syntastic_vim_checkers = ['vint']
 	endif " }}}

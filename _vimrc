@@ -425,7 +425,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
 	NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
-	NeoBundle 'mattn/webapi-vim'
+	NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'

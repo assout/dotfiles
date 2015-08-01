@@ -410,6 +410,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle "aklt/plantuml-syntax"
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chase/vim-ansible-yaml'
+	NeoBundle 'elzr/vim-json'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'gregsexton/VimCalc', {'disabled' : !executable('python')}

@@ -435,7 +435,10 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
 	NeoBundle 'tomtom/tcomment_vim'
 	NeoBundle 'todesking/vint-syntastic', {'depends': ['scrooloose/syntastic'], 'disabled' : !executable('vint')}
+	NeoBundle 'tpope/vim-abolish'
 	NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
+	NeoBundle 'tpope/vim-repeat'
+	NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tyru/restart.vim'
 	NeoBundle 'vim-jp/vimdoc-ja'

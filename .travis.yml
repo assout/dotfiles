@@ -1,7 +1,6 @@
 language: viml
 
 install:
-  - git clone https://github.com/syngan/vim-vimlint /tmp/vimlint
   - sudo pip install vim-vint
 
 script:

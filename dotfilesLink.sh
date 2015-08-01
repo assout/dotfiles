@@ -1,6 +1,6 @@
 #!/bin/bash
 ln -si ~/Development/dotfiles/_vimrc ~/.vimrc
-ln -si ~/Development/dotfiles/.local.vimrc ~/Development/vim-plugins
+ln -si ~/Development/dotfiles/.vimrc.devlopment ~/Development/vim-plugins
 ln -si ~/Development/dotfiles/_gvimrc ~/.gvimrc
 ln -si ~/Development/dotfiles/.bashrc ~/
 ln -si ~/Development/dotfiles/.inputrc ~/

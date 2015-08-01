@@ -233,7 +233,7 @@ endif
 
 " Section; Let defines {{{1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-let b:is_bash = 1 " shellのハイライトをbash基準にする
+let g:is_bash = 1 " shellのハイライトをbash基準にする
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -395,7 +395,7 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
 	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
-	NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/vimproc', 'Shougo/unite.vim']}
+	NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/vimproc', 'Shougo/unite.vim'], 'disabled' : !executable('git')}
 	NeoBundle 'Shougo/neocomplete', {'disabled' : !has('lua')}
 	NeoBundle 'Shougo/neomru.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
@@ -455,13 +455,13 @@ if isdirectory($HOME . '/.vim/bundle/neobundle.vim') " At home
 
 	" textobj {{{
 	NeoBundle 'kana/vim-textobj-user'
-	NeoBundle "sgur/vim-textobj-parameter", {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']} " caution: windows(非neobundle)でafter/ftpluginが読み込まれないっぽいので Section; Plug-ins でruntimepath強引に登録している
 	NeoBundle 'kana/vim-textobj-indent', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-line', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'mattn/vim-textobj-url', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'rhysd/vim-textobj-anyblock', {'depends': ['kana/vim-textobj-user']} " life changing. dib, dab.
+	NeoBundle 'sgur/vim-textobj-parameter', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']} " life changing. dif{char}, daf{char}
 	NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
 	" }}}
@@ -483,7 +483,7 @@ endif
 
 " plugin prefix mappings {{{
 if s:IsPluginEnabled()
-	" vimfilerなどpluginと競合防ぐため[plugin]にわりあてている
+	" <Space>キーのハンドリングをvimfilerなどpluginと競合防ぐため[plugin]にわりあてている
 	map  <Space>   [plugin]
 	map  [plugin]  <Nop>
 	xmap [plugin]a [alignta]
@@ -524,11 +524,12 @@ if s:HasPlugin('calendar.vim') " {{{
 	let g:calendar_google_task = has('unix') ? 1 : 0
 endif " }}}
 
-if s:HasPlugin('excitetranslate') " {{{
-	noremap [excite] :<C-u>ExciteTranslate<CR>
+if s:HasPlugin('excitetranslate-vim') " {{{
+	noremap  [excite] :<C-u>ExciteTranslate<CR>
+	xnoremap [excite] :ExciteTranslate<CR>
 endif " }}}
 
-if s:HasPlugin('fugitive') " {{{ TODO fugitive が有効なときのみマッピングしたい
+if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
 	nnoremap [fugitive]c :Gcommit -m ""<Left>
 	nnoremap [fugitive]d :Gdiff<CR>
 	nnoremap [fugitive]p :Git push<CR>
@@ -621,7 +622,7 @@ if s:HasPlugin('operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-	let g:previm_custom_css_path = has('unix') ? '/home/oji/Development/dotfiles/previm.css' : 'D:/admin/Documents/previm.css'
+	let g:previm_custom_css_path = has('unix') ? '/home/oji/Development/dotfiles/previm.css' : 'D:/admin/Documents/configure/previm.css'
 	nnoremap [previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
@@ -659,6 +660,7 @@ if s:HasPlugin('syntastic') " {{{
 		let g:syntastic_vim_checkers = ['vint']
 	endif " }}}
 
+	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
 	nnoremap [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
@@ -832,9 +834,9 @@ if s:HasPlugin('vim-operator-surround') " {{{
 	endif
 
 	if s:HasPlugin('vim-textobj-between')
-		nmap <silent>[surround-a]f <Plug>(operator-surround-append)<Plug>(textobj-between-a)
-		nmap <silent>[surround-d]f <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
-		nmap <silent>[surround-r]f <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
+		nmap <silent>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
+		nmap <silent>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+		nmap <silent>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-line')
@@ -853,8 +855,13 @@ if s:HasPlugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
-	nnoremap [ref] <Nop>
+	let g:ref_man_lang = 'ja_JP.UTF-8'
+	let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
 
+	nnoremap [ref] <Nop>
+	if has('unix')
+		nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
+	endif
 	if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
 		let g:ref_source_webdict_sites = {
 					\ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
@@ -866,10 +873,6 @@ if s:HasPlugin('vim-ref') " {{{
 		nnoremap [ref]w :<C-u>Ref webdict<Space>
 		nnoremap [ref]wj :<C-u>Ref webdict je<Space>
 		nnoremap [ref]we :<C-u>Ref webdict ej<Space>
-	endif
-	let g:ref_man_lang='ja_JP.UTF-8'
-	if has('unix')
-		nnoremap <expr> [ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
 	endif
 	" TODO 選択範囲の単語で検索
 	" TODO unite-actioinでyank
@@ -889,8 +892,12 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
 	call submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
 	call submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call submode#map('winsize', 'n', '', 'l', '<C-w>>')
+	call submode#map('winsize', 'n', '', 'H', '10<C-w><')
+	call submode#map('winsize', 'n', '', 'L', '10<C-w>>')
 	call submode#map('winsize', 'n', '', 'k', '<C-w>-')
 	call submode#map('winsize', 'n', '', 'j', '<C-w>+')
+	call submode#map('winsize', 'n', '', 'K', '10<C-w>-')
+	call submode#map('winsize', 'n', '', 'J', '10<C-w>+')
 
 	call submode#enter_with('scroll', 'n', '', '[sub]s', '<Nop>')
 	call submode#map('scroll', 'n', '', 'h', 'zh')
@@ -930,7 +937,7 @@ endif " }}}
 
 if s:HasPlugin('vim-textobj-between') " {{{
 	" textobj-functionとかぶるので変更(textobj-functionのマッピングはvrapperと合わせたいのでこちらを変える)
-	let g:textobj_between_no_default_key_mappings = 1 " d(istance)に変える。。
+	let g:textobj_between_no_default_key_mappings = 1 " 'd'istanceに変える。。
 	omap id <Plug>(textobj-between-i)
 	omap ad <Plug>(textobj-between-a)
 	vmap id <Plug>(textobj-between-i)

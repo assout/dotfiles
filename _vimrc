@@ -663,6 +663,9 @@ if s:HasPlugin('syntastic') " {{{
 	endif " }}}
 	let g:syntastic_yaml_checkers = ['jsyaml']
 
+	let g:syntastic_sh_checkers = ['sh', 'shellcheck', 'bashate']
+	let g:syntastic_sh_bashate_args = '-i E002,E003'
+
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
 	nnoremap [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}

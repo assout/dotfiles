@@ -1,3 +1,4 @@
+#!/bin/bash
 # .bashrc
 
 # Source global definitions
@@ -17,8 +18,8 @@ fi
 
 if [ "${USER}" = "oji" ] ; then
 	todayBackupPath=~/Backup/$(date +%Y%m%d)
-	mkdir -p ${todayBackupPath}
-	ln -sfn ${todayBackupPath} ~/Today
+	mkdir -p "${todayBackupPath}"
+	ln -sfn "${todayBackupPath}" ~/Today
 fi
 
 # LANG=ja_JP.UTF-8
@@ -41,26 +42,25 @@ fi
 if [ -e ~/.vimrc -o -e ~/_vimrc ] ; then
 	alias v="vi"
 else
-	here=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-	if [ -e ${here}/_vimrc ] ; then
-		alias v="vi -S ${here}/_vimrc"
+	here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+	if [ -e "${here}/_vimrc" ] ; then
+		alias v='vi -S ${here}/_vimrc'
 	else
 		alias v="vi"
 	fi
 fi
 
-function cdls() {
-	# cdがaliasでループするので\をつける.
-	\cd $1;
+function cdls {
+	cd "$1";
 	ls;
 }
 alias cd=cdls
 
 # settings for peco
-if [ $(which peco 2> /dev/null) ] ; then
+if [ "$(which peco 2> /dev/null)" ] ; then
 	# ls & cd
 	function peco-lscd {
-		local dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
+		local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
 		if [ ! -z "$dir" ] ; then
 			cd "$dir"
 		fi
@@ -68,21 +68,21 @@ if [ $(which peco 2> /dev/null) ] ; then
 	alias pcd=peco-lscd
 
 	# history
-	function peco-hist() {
-		time_column=`echo $HISTTIMEFORMAT | awk '{printf("%s",NF)}'`
-		column=`expr $time_column + 3`
-		cmd=`history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-`
+	function peco-hist {
+		time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
+		column=$(( time_column + 3))
+		cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
 		history -s "$cmd"
-		eval $cmd
+		eval "$cmd"
 	}
 	# TODO なんかC-pとかが遅くなるので一旦無効
 	# bind '"\C-p\C-r":"peco-hist\n"'
 fi
 
-function man-japanese() {
+function man-japanese {
 	LANG_ESCAPE=$LANG
 	LANG=ja_JP.UTF-8
-	man $*
+	man "$*"
 	LANG=$LANG_ESCAPE
 }
 alias jan=man-japanese

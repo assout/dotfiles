@@ -10,6 +10,7 @@
 	user = assout
 [core]
 	excludesfile = ~/.gitignore
+	quotepath = false
 [alias]
 	st = status
 	cm = commit -m

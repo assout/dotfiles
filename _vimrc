@@ -396,10 +396,10 @@ cnoremap <C-c> <Nop>
 
 " Section; Plug-ins {{{1
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
-let s:bundlePath = has('unix') ? '~/.vim/bundle/neobundle.vim' : '~/vimfiles/bundle/neobundle.vim'
-if isdirectory(s:bundlePath)
+let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bundle/'
+if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	if has('vim_starting')
-		execute 'set runtimepath+=' . s:bundlePath
+		execute 'set runtimepath+=' . s:bundlePath . 'neobundle.vim/'
 	endif
 	call g:neobundle#begin(expand(s:bundlePath))
 

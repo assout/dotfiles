@@ -621,7 +621,7 @@ if s:HasPlugin('memolist') " {{{
 	if s:HasPlugin('unite')
 		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
 		call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default'])
+		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
 		nnoremap [memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap [memolist]l :<C-u>MemoList<CR>

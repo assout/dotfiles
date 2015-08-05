@@ -14,8 +14,10 @@
 [alias]
 	st = status
 	cm = commit -m
+       cma = commit -a -m
 	br = branch
 	co = checkout
 	df = diff
+       dfc = diff --cahed
 	lg = log -p
 

@@ -186,7 +186,8 @@ set history=200
 set hlsearch
 set ignorecase
 set incsearch
-set iskeyword-=_
+" TODO やっぱ↓をやめるので_区切りのテキストオブジェクトが別途ほしい
+" set iskeyword-=_
 " Open Vim internal help by K command
 set keywordprg=:help
 set list

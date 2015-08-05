@@ -186,7 +186,7 @@ set history=200
 set hlsearch
 set ignorecase
 set incsearch
-set iskeyword& iskeyword-=_
+set iskeyword-=_
 " Open Vim internal help by K command
 set keywordprg=:help
 set list

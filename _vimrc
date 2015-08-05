@@ -396,43 +396,25 @@ cnoremap <C-c> <Nop>
 
 " Section; Plug-ins {{{1
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
-if has('unix') ? isdirectory($HOME . '/.vim/bundle/neobundle.vim') : isdirectory($HOME . '/vimfiles/bundle/neobundle.vim')
-	if has('unix') " TODO 条件演算子でスマートに
-		if has('vim_starting')
-			set runtimepath+=~/.vim/bundle/neobundle.vim/
-		endif
-		call g:neobundle#begin(expand('~/.vim/bundle'))
-	else
-		if has('vim_starting')
-			set runtimepath+=~/vimfiles/bundle/neobundle.vim/
-		endif
-		call g:neobundle#begin(expand('~/vimfiles/bundle'))
+let s:bundlePath = has('unix') ? '~/.vim/bundle/neobundle.vim' : '~/vimfiles/bundle/neobundle.vim'
+if isdirectory(s:bundlePath)
+	if has('vim_starting')
+		execute 'set runtimepath+=' . s:bundlePath
 	endif
+	call g:neobundle#begin(expand(s:bundlePath))
 
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
 	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
-	" TODO すっきり書きたい
-	if has('unix')
-		NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/vimproc', 'Shougo/unite.vim'], 'disabled' : !executable('git')}
-	else
-		NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/unite.vim'], 'disabled' : !executable('git')}
-	endif
-
+	NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/unite.vim'], 'disabled' : !executable('git')}
 	NeoBundle 'Shougo/neocomplete', {'disabled' : !has('lua')}
 	NeoBundle 'Shougo/neomru.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
-	" TODO すっきり書きたい
-	if has('unix')
-		NeoBundle 'Shougo/unite.vim', {'depends' : ['Shougo/vimproc']}
-	else
-		NeoBundle 'Shougo/unite.vim'
-	endif
+	NeoBundle 'Shougo/unite.vim'
 	NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
-	" TODO すっきり書きたい
 	if has('unix')
-		NeoBundle 'Shougo/vimproc', {'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
+		NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
 	endif
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle "aklt/plantuml-syntax"
@@ -448,12 +430,8 @@ if has('unix') ? isdirectory($HOME . '/.vim/bundle/neobundle.vim') : isdirectory
 	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
-	" TODO すっきり書きたい
-	if has('unix')
-		NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
-	else " TODO masterのだとwindowsでchromeのIE Tabのとき表示されないので
-		NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' }
-	endif
+	NeoBundle 'kannokanno/previm', {'disabled' : !has('win32'), 'depends' : ['tyru/open-browser.vim']}
+	NeoBundle 'kannokanno/previm', {'disabled' : has('win32'), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO masterのだとwindowsでchromeのIE Tabのとき表示されないので
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
 	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)

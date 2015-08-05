@@ -537,8 +537,9 @@ endif " }}}
 
 if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
 	nnoremap [fugitive]c :Gcommit -m ""<Left>
+	nnoremap [fugitive]C :Gcommit -a -m ""<Left>
 	nnoremap [fugitive]d :Gdiff<CR>
-	nnoremap [fugitive]p :Git push<CR>
+	nnoremap [fugitive]p :Gpush<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{

@@ -200,7 +200,7 @@ set number
 set nrformats=""
 set scrolloff=5
 " caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
-set shiftwidth=4
+set shiftwidth=2
 set showcmd
 set showtabline=1
 set sidescrolloff=5
@@ -216,7 +216,7 @@ set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
 set tags& tags+=.git/tags
-set tabstop=4
+set tabstop=2
 " 自動改行をなくす
 set textwidth=0
 set title

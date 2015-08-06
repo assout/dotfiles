@@ -1,5 +1,5 @@
 [include]
-    path = .gitconfig.local
+	path = .gitconfig.local
 [user]
 	name=assout
 	email = assout@users.noreply.github.com
@@ -14,10 +14,11 @@
 [alias]
 	st = status
 	cm = commit -m
-       cma = commit -a -m
+	cma = commit -a -m
 	br = branch
 	co = checkout
 	df = diff
-       dfc = diff --cahed
+	dfc = diff --cached
+	dfh = diff HEAD
 	lg = log -p
 

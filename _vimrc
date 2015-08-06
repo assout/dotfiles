@@ -148,8 +148,6 @@ augroup vimrc
 	if executable('xmllint') " TODO pretty format(xml,html,xhtml)
 		autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 	endif
-	" ansible plugin での設定だけだとたまにハードタブのままになっちゃうのでここで指定
-	autocmd FileType yaml,ansible setlocal shiftwidth=2 softtabstop=2 tabstop=2 expandtab
 	" restore cursor position
 	autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END
@@ -669,7 +667,7 @@ if s:HasPlugin('syntastic') " {{{
 	let g:syntastic_sh_bashate_args = '-i E002,E003'
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
-	nnoremap [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
+	nnoremap <silent> [syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{

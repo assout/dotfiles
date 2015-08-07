@@ -12,13 +12,13 @@
 	excludesfile = ~/.gitignore
 	quotepath = false
 [alias]
-	st = status
-	cm = commit -m
+	st  = status
+	cm  = commit -m
 	cma = commit -a -m
-	br = branch
-	co = checkout
-	df = diff
+	br  = branch
+	co  = checkout
+	df  = diff
 	dfc = diff --cached
 	dfh = diff HEAD
-	lg = log -p
+	lg  = log -p
 

@@ -31,6 +31,8 @@
 " # TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
+" * TODO neocompleteでたまに日本語入力が変になる
+" * TODO setなどの末尾にコメント入れるとvrapperが無効になる
 " }}}1
 
 " Section; Begin {{{1
@@ -241,6 +243,7 @@ let g:is_bash = 1 " shellのハイライトをbash基準にする
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
 " Normal,Visual mode basic mappings {{{
+map      #    <Nop>
 noremap  /    /\v
 noremap  ?    ?\v
 nnoremap j    gj
@@ -255,56 +258,56 @@ vnoremap y    y'>
 
 " Shortcut key prefix mappings {{{
 
-" <shourtcut>a,d,rはsurround-pluginで使用
-map      s           <shortcut>
-map      <shortcut>  <Nop>
-noremap  <shortcut>? ?
-noremap  <shortcut>/ /
-map      <shortcut>a <Nop>
-nnoremap <shortcut>b :bdelete<CR>
-map      <shortcut>d <Nop>
-noremap  <shortcut>h ^
-map      <shortcut>i <insertText>
-noremap  <shortcut>j 10j
-noremap  <shortcut>k 10k
-noremap  <shortcut>l g_
-nnoremap <shortcut>n :nohlsearch<CR>
-nmap     <shortcut>o <open>
-noremap  <shortcut>p :split<CR>
-map      <shortcut>r <Nop>
-nnoremap <shortcut>t :<C-u>DictionaryTranslate<CR>
-nnoremap <shortcut>u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-noremap  <shortcut>v :vsplit<CR>
+" #shortcut#a,d,rはsurround-pluginで使用
+map      s           #shortcut#
+map      #shortcut#  <Nop>
+noremap  #shortcut#? ?
+noremap  #shortcut#/ /
+map      #shortcut#a <Nop>
+nnoremap #shortcut#b :bdelete<CR>
+map      #shortcut#d <Nop>
+noremap  #shortcut#h ^
+map      #shortcut#i #insertText#
+noremap  #shortcut#j 10j
+noremap  #shortcut#k 10k
+noremap  #shortcut#l g_
+nnoremap #shortcut#n :nohlsearch<CR>
+nmap     #shortcut#o #open#
+noremap  #shortcut#p :split<CR>
+map      #shortcut#r <Nop>
+nnoremap #shortcut#t :<C-u>DictionaryTranslate<CR>
+nnoremap #shortcut#u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+noremap  #shortcut#v :vsplit<CR>
 
 " TODO to plugin
-noremap <insertText>   <Nop>
-noremap <silent><expr> <insertText>p ':InsertPrefix ' . input('prefix:') . '<CR>'
-noremap <silent>       <insertText>*  :InsertPrefix * <CR>
-noremap <silent>       <insertText>1  :InsertPrefix # <CR>A
-noremap <silent>       <insertText>2  :InsertPrefix ## <CR>A
-noremap <silent>       <insertText>3  :InsertPrefix ### <CR>A
-noremap <silent>       <insertText>4  :InsertPrefix #### <CR>A
-noremap <silent>       <insertText>>  :InsertPrefix > <CR>
-noremap <silent>       <insertText>T  :InsertPrefix TODO <CR>
-noremap <silent>       <insertText>f  :InsertPrefix file://<CR>
-noremap <silent><expr> <insertText>s ':InsertSuffix ' . input('suffix:') . '<CR>'
-noremap <silent><expr> <insertText>d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <silent><expr> <insertText>t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <silent><expr> <insertText>n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr> <insertText>a ':InsertSuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       <insertText>l  :InsertSuffix \<Space>\ <CR>
+noremap #insertText#   <Nop>
+noremap <silent><expr> #insertText#p ':InsertPrefix ' . input('prefix:') . '<CR>'
+noremap <silent>       #insertText#*  :InsertPrefix * <CR>
+noremap <silent>       #insertText#1  :InsertPrefix # <CR>A
+noremap <silent>       #insertText#2  :InsertPrefix ## <CR>A
+noremap <silent>       #insertText#3  :InsertPrefix ### <CR>A
+noremap <silent>       #insertText#4  :InsertPrefix #### <CR>A
+noremap <silent>       #insertText#>  :InsertPrefix > <CR>
+noremap <silent>       #insertText#T  :InsertPrefix TODO <CR>
+noremap <silent>       #insertText#f  :InsertPrefix file://<CR>
+noremap <silent><expr> #insertText#s ':InsertSuffix ' . input('suffix:') . '<CR>'
+noremap <silent><expr> #insertText#d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <silent><expr> #insertText#t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <silent><expr> #insertText#n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr> #insertText#a ':InsertSuffix \ @' . input('author:') . '<CR>'
+noremap <silent>       #insertText#l  :InsertSuffix \<Space>\ <CR>
 
-nnoremap <open>         <Nop>
+nnoremap #open#         <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 if has('unix')
-	nnoremap <silent><expr> <open>v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+	nnoremap <silent><expr> #open#v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 else " TODO windowsだと対象にならない
-	nnoremap <silent> <open>v :<C-u>edit D:/admin/Development/dotfiles/_vimrc<CR>
+	nnoremap <silent> #open#v :<C-u>edit D:/admin/Development/dotfiles/_vimrc<CR>
 endif
 
 if has('win32')
-	nnoremap <open>i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
+	nnoremap #open#i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif
 " }}}
 
@@ -488,39 +491,39 @@ endif
 " plugin prefix mappings {{{
 if s:IsPluginEnabled()
 	" <Space>キーのハンドリングをvimfilerなどpluginと競合防ぐため[plugin]にわりあてている
-	map  <Space>   <plugin>
-	map  <plugin>  <Nop>
-	xmap <plugin>a <alignta>
-	map  <plugin>c <camelize>
-	nmap <plugin>e <excite>
-	nmap <plugin>f <fugitive>
-	nmap <plugin>g <gista>
-	nmap <plugin>h <hateblo>
-	nmap <plugin>m <memolist>
-	nmap <plugin>p <previm>
-	nmap <plugin>q <qiita>
-	nmap <plugin>Q <quickrun>
-	nmap <plugin>r <ref>
-	nmap <plugin>s <sub>
-	nmap <plugin>S <syntastic>
-	map  <plugin>t <todo>
-	nmap <plugin>u <unite>
-	nmap <plugin>/ <migemo>
+	map  <Space>   #plugin#
+	map  #plugin#  <Nop>
+	xmap #plugin#a #alignta#
+	map  #plugin#c #camelize#
+	nmap #plugin#e #excite#
+	nmap #plugin#f #fugitive#
+	nmap #plugin#g #gista#
+	nmap #plugin#h #hateblo#
+	nmap #plugin#m #memolist#
+	nmap #plugin#p #previm#
+	nmap #plugin#q #qiita#
+	nmap #plugin#Q #quickrun#
+	nmap #plugin#r #ref#
+	nmap #plugin#s #sub#
+	nmap #plugin#S #syntastic#
+	map  #plugin#t #todo#
+	nmap #plugin#u #unite#
+	nmap #plugin#/ #migemo#
 
-	map  R           <replace>
-	nmap p           <yankround>
-	nmap P           <Yankround>
-	map  <shortcut>a <surround-a>
-	map  <shortcut>d <surround-d>
-	map  <shortcut>r <surround-r>
+	map  R           #replace#
+	nmap p           #yankround#
+	nmap P           #Yankround#
+	map  #shortcut#a #surround-a#
+	map  #shortcut#d #surround-d#
+	map  #shortcut#r #surround-r#
 endif
 " }}}
 
 if s:HasPlugin('alignta') " {{{
-	xnoremap <alignta><CR> :Alignta<Space>
-	xnoremap <alignta>s    :Alignta<Space><-<Space>
+	xnoremap #alignta#<CR> :Alignta<Space>
+	xnoremap #alignta#s    :Alignta<Space><-<Space>
 	" alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-	xnoremap <alignta>m    :Alignta<Space>v/^" <<0 \s\S/2
+	xnoremap #alignta#m    :Alignta<Space>v/^" <<0 \s\S/2
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
@@ -529,15 +532,15 @@ if s:HasPlugin('calendar.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('excitetranslate-vim') " {{{
-	noremap  <excite> :<C-u>ExciteTranslate<CR>
-	xnoremap <excite> :ExciteTranslate<CR>
+	noremap  #excite# :<C-u>ExciteTranslate<CR>
+	xnoremap #excite# :ExciteTranslate<CR>
 endif " }}}
 
 if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
-	nnoremap <fugitive>c :Gcommit -m ""<Left>
-	nnoremap <fugitive>C :Gcommit -a -m ""<Left>
-	nnoremap <fugitive>d :Gdiff<CR>
-	nnoremap <fugitive>p :Gpush<CR>
+	nnoremap #fugitive#c :Gcommit -m ""<Left>
+	nnoremap #fugitive#C :Gcommit -a -m ""<Left>
+	nnoremap #fugitive#d :Gdiff<CR>
+	nnoremap #fugitive#p :Gpush<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
@@ -551,12 +554,12 @@ if s:HasPlugin('hateblo') " {{{
 				\ } " api_keyはvimrc.localから設定
 	let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
 
-	nnoremap <hateblo>  <Nop>
-	nnoremap <hateblo>l :<C-u>HatebloList<CR>
-	nnoremap <hateblo>c :<C-u>HatebloCreate<CR>
-	nnoremap <hateblo>C :<C-u>HatebloCreateDraft<CR>
-	nnoremap <hateblo>d :<C-u>HatebloDelete<CR>
-	nnoremap <hateblo>u :<C-u>HatebloUpdate<CR>
+	nnoremap #hateblo#  <Nop>
+	nnoremap #hateblo#l :<C-u>HatebloList<CR>
+	nnoremap #hateblo#c :<C-u>HatebloCreate<CR>
+	nnoremap #hateblo#C :<C-u>HatebloCreateDraft<CR>
+	nnoremap #hateblo#d :<C-u>HatebloDelete<CR>
+	nnoremap #hateblo#u :<C-u>HatebloUpdate<CR>
 endif " }}}
 
 if s:HasPlugin('hybrid') " {{{
@@ -592,17 +595,17 @@ if s:HasPlugin('memolist') " {{{
 	let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
 	let g:memolist_template_dir_path = g:memolist_path
 
-	nnoremap <memolist>  <Nop>
-	nnoremap <memolist>a :<C-u>MemoNew<CR>
-	nnoremap <memolist>g :<C-u>MemoGrep<CR>
+	nnoremap #memolist#  <Nop>
+	nnoremap #memolist#a :<C-u>MemoNew<CR>
+	nnoremap #memolist#g :<C-u>MemoGrep<CR>
 
 	if s:HasPlugin('unite')
 		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
 		call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-		nnoremap <memolist>l :<C-u>Unite memolist -buffer-name=memolist<CR>
+		nnoremap #memolist#l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
-		nnoremap <memolist>l :<C-u>MemoList<CR>
+		nnoremap #memolist#l :<C-u>MemoList<CR>
 	endif
 endif " }}}
 
@@ -619,29 +622,29 @@ if s:HasPlugin('open-browser') " {{{
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{
-	map <camelize> <Plug>(operator-camelize-toggle)
+	map #camelize# <Plug>(operator-camelize-toggle)
 endif " }}}
 
 if s:HasPlugin('operator-replace') " {{{
-	map <replace> <Plug>(operator-replace)
+	map #replace# <Plug>(operator-replace)
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
 	let g:previm_custom_css_path = has('unix') ? '/home/oji/Development/dotfiles/previm.css' : 'D:/admin/Documents/configure/previm.css'
-	nnoremap <previm> :<C-u>PrevimOpen<CR>
+	nnoremap #previm# :<C-u>PrevimOpen<CR>
 endif " }}}
 
 if s:HasPlugin('qiita-vim') " {{{
-	nnoremap <qiita>     <Nop>
-	nnoremap <qiita>l    :<C-u>Unite qiita<CR>
-	nnoremap <qiita><CR> :<C-u>Qiita<CR>
-	nnoremap <qiita>c    :<C-u>Qiita<CR>
-	nnoremap <qiita>e    :<C-u>Qiita -e<CR>
-	nnoremap <qiita>d    :<C-u>Qiita -d<CR>
+	nnoremap #qiita#     <Nop>
+	nnoremap #qiita#l    :<C-u>Unite qiita<CR>
+	nnoremap #qiita#<CR> :<C-u>Qiita<CR>
+	nnoremap #qiita#c    :<C-u>Qiita<CR>
+	nnoremap #qiita#e    :<C-u>Qiita -e<CR>
+	nnoremap #qiita#d    :<C-u>Qiita -d<CR>
 endif " }}}
 
 if s:HasPlugin('quickrun') " {{{
-	nnoremap <quickrun> :<C-u>QuickRun<CR>
+	nnoremap #quickrun# :<C-u>QuickRun<CR>
 endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
@@ -667,7 +670,7 @@ if s:HasPlugin('syntastic') " {{{
 	let g:syntastic_sh_bashate_args = '-i E002,E003'
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
-	nnoremap <silent> <syntastic> :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
+	nnoremap <silent> #syntastic# :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
@@ -717,31 +720,31 @@ if s:HasPlugin('unite') " {{{
 		call g:unite#filters#matcher_default#use(['matcher_migemo'])
 	endif
 
-	nnoremap <unite>     <Nop>
-	nnoremap <unite><CR> :<C-u>Unite<CR>
-	nnoremap <unite>b    :<C-u>Unite buffer -buffer-name=buffer<CR>
-	nnoremap <unite>B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-	nnoremap <unite>d    :<C-u>Unite directory -buffer-name=directory<CR>
-	nnoremap <unite>f    :<C-u>Unite file -buffer-name=file<CR>
-	nnoremap <unite>g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
-	nnoremap <unite>m    :<C-u>Unite mapping -buffer-name=mapping<CR>
-	nnoremap <unite>o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
-	nnoremap <unite>r    :<C-u>Unite resume -buffer-name=resume<CR>
-	nnoremap <unite>R    :<C-u>Unite register -buffer-name=register<CR>
-	nnoremap <unite>s    :<C-u>Unite find -buffer-name=find<CR>
-	nnoremap <unite>t    :<C-u>Unite tab -buffer-name=tab<CR>
-	nnoremap <unite>w    :<C-u>Unite window -buffer-name=window<CR>
+	nnoremap #unite#     <Nop>
+	nnoremap #unite#<CR> :<C-u>Unite<CR>
+	nnoremap #unite#b    :<C-u>Unite buffer -buffer-name=buffer<CR>
+	nnoremap #unite#B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
+	nnoremap #unite#d    :<C-u>Unite directory -buffer-name=directory<CR>
+	nnoremap #unite#f    :<C-u>Unite file -buffer-name=file<CR>
+	nnoremap #unite#g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+	nnoremap #unite#m    :<C-u>Unite mapping -buffer-name=mapping<CR>
+	nnoremap #unite#o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
+	nnoremap #unite#r    :<C-u>Unite resume -buffer-name=resume<CR>
+	nnoremap #unite#R    :<C-u>Unite register -buffer-name=register<CR>
+	nnoremap #unite#s    :<C-u>Unite find -buffer-name=find<CR>
+	nnoremap #unite#t    :<C-u>Unite tab -buffer-name=tab<CR>
+	nnoremap #unite#w    :<C-u>Unite window -buffer-name=window<CR>
 	if has('unix')
-		nnoremap <unite>D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
-		nnoremap <unite>F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
+		nnoremap #unite#D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
+		nnoremap #unite#F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
 	else
-		nnoremap <unite>D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
-		nnoremap <unite>F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
+		nnoremap #unite#D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
+		nnoremap #unite#F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
 	endif
 	if s:HasPlugin('yankround')
-		nnoremap <unite>y :<C-u>Unite yankround -buffer-name=yankround<CR>
+		nnoremap #unite#y :<C-u>Unite yankround -buffer-name=yankround<CR>
 	else
-		nnoremap <unite>y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
+		nnoremap #unite#y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
 	endif
 
 	if s:HasPlugin('neomru') " {{{
@@ -750,29 +753,29 @@ if s:HasPlugin('unite') " {{{
 		let g:neomru#file_mru_limit = 200
 		let g:neomru#filename_format = ''
 
-		nmap     <unite>n  <neomru>
+		nmap     #unite#n  <neomru>
 		nnoremap <neomru>f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
 		nnoremap <neomru>d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
 	endif " }}}
 
 	if s:HasPlugin('unite-codic') " {{{
-		nnoremap <expr> <unite>c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
-		nnoremap        <unite>C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
+		nnoremap <expr> #unite#c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
+		nnoremap        #unite#C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
 	endif " }}}
 
 	if s:HasPlugin('unite-todo') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		noremap  <todo>     <Nop>
-		noremap  <todo><CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap  <todo>a    :UniteTodoAddSimple<CR>
-		noremap  <todo>t    :UniteTodoAddSimple -tag<CR>
-		noremap  <todo>m    :UniteTodoAddSimple -memo<CR>
-		nnoremap <todo>l    :Unite todo:undone -buffer-name=todo<CR>
-		nnoremap <todo>L    :Unite todo -buffer-name=todo<CR>
+		noremap  #todo#     <Nop>
+		noremap  #todo#<CR> :UniteTodoAddSimple -tag -memo<CR>
+		noremap  #todo#a    :UniteTodoAddSimple<CR>
+		noremap  #todo#t    :UniteTodoAddSimple -tag<CR>
+		noremap  #todo#m    :UniteTodoAddSimple -memo<CR>
+		nnoremap #todo#l    :Unite todo:undone -buffer-name=todo<CR>
+		nnoremap #todo#L    :Unite todo -buffer-name=todo<CR>
 		" TODO change to external grep
-		nnoremap <expr> <todo>g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
+		nnoremap <expr> #todo#g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
 	endif " }}}
 endif " }}}
 
@@ -804,10 +807,10 @@ endif " }}}
 if s:HasPlugin('vim-gista') " {{{
 	let g:gista#github_user = 'assout'
 	let g:gista#update_on_write = 1
-	nnoremap <gista>     <Nop>
-	nnoremap <gista>l    :<C-u>Unite gista<CR>
-	nnoremap <gista>c    :<C-u>Gista<CR>
-	nnoremap <gista><CR> :<C-u>Gista<CR>
+	nnoremap #gista#     <Nop>
+	nnoremap #gista#l    :<C-u>Unite gista<CR>
+	nnoremap #gista#c    :<C-u>Gista<CR>
+	nnoremap #gista#<CR> :<C-u>Gista<CR>
 endif " }}}
 
 if s:HasPlugin('vim-localrc') " {{{
@@ -821,9 +824,9 @@ endif " }}}
 if s:HasPlugin('vim-migemo') " {{{
 	if has('migemo')
 		if has('vim_starting') | call g:migemo#SearchChar(0) | endif " caution: probably slow
-		nnoremap <migemo> g/
+		nnoremap #migemo# g/
 	else
-		nnoremap <migemo> :<C-u>Migemo<Space>
+		nnoremap #migemo# :<C-u>Migemo<Space>
 	endif
 endif " }}}
 
@@ -833,34 +836,34 @@ if s:HasPlugin('vim-operator-surround') " {{{
 	let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
 	call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
-	map <silent> <surround-a> <Plug>(operator-surround-append)
-	map <silent> <surround-d> <Plug>(operator-surround-delete)
-	map <silent> <surround-r> <Plug>(operator-surround-replace)
+	map <silent> #surround-a# <Plug>(operator-surround-append)
+	map <silent> #surround-d# <Plug>(operator-surround-delete)
+	map <silent> #surround-r# <Plug>(operator-surround-replace)
 
 	if s:HasPlugin('vim-textobj-anyblock')
-		nmap <silent><surround-a>b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
-		nmap <silent><surround-d>b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-		nmap <silent><surround-r>b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+		nmap <silent>#surround-a#b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
+		nmap <silent>#surround-d#b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+		nmap <silent>#surround-r#b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-between')
-		nmap <silent><surround-a>d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
-		nmap <silent><surround-d>d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
-		nmap <silent><surround-r>d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
+		nmap <silent>#surround-a#d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
+		nmap <silent>#surround-d#d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+		nmap <silent>#surround-r#d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-line')
-		nmap <silent><surround-a>l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
-		nmap <silent><surround-d>l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
-		nmap <silent><surround-r>l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
+		nmap <silent>#surround-a#l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
+		nmap <silent>#surround-d#l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
+		nmap <silent>#surround-r#l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 	endif
 
 	if s:HasPlugin('vim-textobj-url')
-		nmap <silent><surround-a>u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+		nmap <silent>#surround-a#u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 		" TODO no block matches to the region となる
-		nmap <silent><surround-d>u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
+		nmap <silent>#surround-d#u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
 		" TODO appendの動きになってしまう
-		nmap <silent><surround-r>u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
+		nmap <silent>#surround-r#u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
 	endif
 endif " }}}
 
@@ -868,9 +871,9 @@ if s:HasPlugin('vim-ref') " {{{
 	let g:ref_man_lang = 'ja_JP.UTF-8'
 	let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
 
-	nnoremap <ref> <Nop>
+	nnoremap #ref# <Nop>
 	if has('unix')
-		nnoremap <expr> <ref>m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
+		nnoremap <expr> #ref#m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
 	endif
 	if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
 		let g:ref_source_webdict_sites = {
@@ -880,9 +883,9 @@ if s:HasPlugin('vim-ref') " {{{
 		let g:ref_source_webdict_sites.default = 'ej'
 		let g:ref_source_webdict_use_cache = 1
 
-		nnoremap <ref>w :<C-u>Ref webdict<Space>
-		nnoremap <ref>wj :<C-u>Ref webdict je<Space>
-		nnoremap <ref>we :<C-u>Ref webdict ej<Space>
+		nnoremap #ref#w :<C-u>Ref webdict<Space>
+		nnoremap #ref#wj :<C-u>Ref webdict je<Space>
+		nnoremap #ref#we :<C-u>Ref webdict ej<Space>
 	endif
 	" TODO 選択範囲の単語で検索
 	" TODO unite-actioinでyank
@@ -891,15 +894,15 @@ if s:HasPlugin('vim-ref') " {{{
 	" TODO 和英ができない
 	" TODO キャッシュ化されている？
 	if s:HasPlugin('vim-ref-gene')
-		nnoremap <expr> <ref>g ':<C-u>Ref gene<Space>'
-		nnoremap <expr> <ref>G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+		nnoremap <expr> #ref#g ':<C-u>Ref gene<Space>'
+		nnoremap <expr> #ref#G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
 	endif
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-	nnoremap <sub>    <Nop>
+	nnoremap #sub#    <Nop>
 
-	call g:submode#enter_with('winsize', 'n', '', '<sub>w', '<Nop>')
+	call g:submode#enter_with('winsize', 'n', '', '#sub#w', '<Nop>')
 	call g:submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call g:submode#map('winsize', 'n', '', 'l', '<C-w>>')
 	call g:submode#map('winsize', 'n', '', 'H', '10<C-w><')
@@ -909,34 +912,34 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
 	call g:submode#map('winsize', 'n', '', 'K', '10<C-w>-')
 	call g:submode#map('winsize', 'n', '', 'J', '10<C-w>+')
 
-	call g:submode#enter_with('scroll', 'n', '', '<sub>s', '<Nop>')
+	call g:submode#enter_with('scroll', 'n', '', '#sub#s', '<Nop>')
 	call g:submode#map('scroll', 'n', '', 'h', 'zh')
 	call g:submode#map('scroll', 'n', '', 'l', 'zl')
 	call g:submode#map('scroll', 'n', '', 'H', '10zh')
 	call g:submode#map('scroll', 'n', '', 'L', '10zl')
 
-	call g:submode#enter_with('buffer', 'n', '', '<sub>b', '<Nop>')
+	call g:submode#enter_with('buffer', 'n', '', '#sub#b', '<Nop>')
 	call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
 	call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
 	call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
 	call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
 	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call g:submode#enter_with('args', 'n', '', '<sub>a', '<Nop>')
+	call g:submode#enter_with('args', 'n', '', '#sub#a', '<Nop>')
 	call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
 	call g:submode#map('args', 'n', '', 'j', ':next<CR>')
 	call g:submode#map('args', 'n', '', 'K', ':first<CR>')
 	call g:submode#map('args', 'n', '', 'J', ':last<CR>')
 
 	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call g:submode#enter_with('quickfix', 'n', '', '<sub>q', '<Nop>')
+	call g:submode#enter_with('quickfix', 'n', '', '#sub#q', '<Nop>')
 	call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
 	call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
 	call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
 
 	" TODO いまいち効かないときがある(Submode表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
-	call g:submode#enter_with('diff', 'n', '', '<sub>d', '<Nop>')
+	call g:submode#enter_with('diff', 'n', '', '#sub#d', '<Nop>')
 	call g:submode#map('diff', 'n', '', 'k', '[c')
 	call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
@@ -971,8 +974,8 @@ endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
 	let g:yankround_dir = '~/.cache/yankround'
-	nmap <yankround> <Plug>(yankround-p)
-	nmap <Yankround> <Plug>(yankround-P)
+	nmap #yankround# <Plug>(yankround-p)
+	nmap #Yankround# <Plug>(yankround-P)
 	nmap <C-p> <Plug>(yankround-prev)
 	nmap <C-n> <Plug>(yankround-next)
 endif " }}}

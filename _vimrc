@@ -299,12 +299,9 @@ noremap <silent>       <SID>[insert]l  :InsertSuffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
-if has('unix')
-	nnoremap <silent><expr> <SID>[open]v  ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
-else " TODO windowsだと対象にならない
-	nnoremap <silent> <SID>[open]v :<C-u>edit D:/admin/Development/dotfiles/_vimrc<CR>
-endif
-
+" TODO windowsのとき$MYVIMRCの展開だと対象にならない
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/_vimrc' 
+nnoremap <expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if has('win32')
 	nnoremap <SID>[open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif

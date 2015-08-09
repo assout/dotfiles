@@ -79,7 +79,6 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
 	if l:word ==# '' | return | endif
-	" TODO relative path from home directory
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
 	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
 	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
@@ -301,7 +300,7 @@ nnoremap <SID>[open] <Nop>
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/_vimrc' 
-nnoremap <expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
+nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if has('win32')
 	nnoremap <SID>[open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
 endif

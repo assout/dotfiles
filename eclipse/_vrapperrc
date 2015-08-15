@@ -33,10 +33,11 @@
 " Ctrl + y - Redo
 " }}}1
 
+" Section; Begin {{{1
+source .vrapperrc.local
+" }}}1
+	
 " Section; Vim Settings {{{1
-scriptencoding utf-8
-source /home/oji/.vimrc
-source C:/Users/admin/_vimrc
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
 " }}}1
@@ -52,8 +53,6 @@ set startnormalmode
 set visualmouse
 " Search Regex
 set regexsearch
-" path to gvim executable. caution: linuxではコメントアウトすること TODO PATH通ってるとこから探してくれないか
-set gvimpath=D:/admin/Tools/vim74-kaoriya-win32/gvim.exe
 " }}}1
 
 " Section; Key-mappings {{{1

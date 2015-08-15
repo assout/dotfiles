@@ -7,3 +7,4 @@ ln -si ~/Development/dotfiles/.inputrc ~/
 ln -si ~/Development/dotfiles/.gitconfig ~/
 ln -si ~/Development/dotfiles/.gitignore ~/
 ln -si ~/Development/dotfiles/eclipse/_vrapperrc ~/.vrapperrc
+ln -si ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.local

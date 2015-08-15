@@ -87,6 +87,15 @@ function man-japanese {
 }
 alias jan=man-japanese
 
+# Docker
+function drm {
+	docker rm $(docker ps -a -q);
+}
+alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+alias dps="docker ps"
+alias drun="docker run"
+
 export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!

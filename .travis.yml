@@ -7,7 +7,7 @@ script:
   - vim --cmd version --cmd quit
 
   - vint --version
-  - vint _vimrc
-  - vint _gvimrc
+  - vint vim/_vimrc
+  - vint vim/_gvimrc
   # TODO vlmlparser通らないっぽいからダメ - vint eclipse/_vrapperrc
 

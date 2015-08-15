@@ -133,7 +133,8 @@ augroup vimrc
 	autocmd VimEnter,Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
 	autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 	" set markdown filetype
-	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} set filetype=markdown
+	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
+	autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
 	" enabe spell on markdown file
 	if &termencoding ==# 'utf-8' || has('gui_running')
 		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
@@ -415,6 +416,7 @@ if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
 	NeoBundle "aklt/plantuml-syntax"
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
+	NeoBundle 'chaquotay/ftl-vim-syntax'
 	NeoBundle 'chase/vim-ansible-yaml'
 	NeoBundle 'elzr/vim-json'
 	NeoBundle 'fuenor/im_control.vim'

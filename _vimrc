@@ -594,9 +594,11 @@ if s:HasPlugin('memolist') " {{{
 	nnoremap <SID>[memolist]g :<C-u>MemoGrep<CR>
 
 	if s:HasPlugin('unite')
-		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file', 'args' : g:memolist_path } }
+		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path } }
 		call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
+		" TODO 効かない
+		call g:unite#custom#source('memolist', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
 		nnoremap <SID>[memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap <SID>[memolist]l :<C-u>MemoList<CR>

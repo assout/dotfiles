@@ -442,6 +442,7 @@ if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'scrooloose/syntastic'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
+	NeoBundle 't9md/vim-textmanip'
 	NeoBundle 'thinca/vim-localrc'
 	NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
 	NeoBundle 'thinca/vim-quickrun'
@@ -935,6 +936,13 @@ endif " }}}
 
 if s:HasPlugin('vim-tags') " {{{
 	let g:vim_tags_auto_generate = has('unix') ? 1 : 0
+endif " }}}
+
+if s:HasPlugin('vim-textmanip') " {{{
+	xmap <C-j> <Plug>(textmanip-move-down)
+	xmap <C-k> <Plug>(textmanip-move-up)
+	xmap <C-h> <Plug>(textmanip-move-left)
+	xmap <C-l> <Plug>(textmanip-move-right)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-between') " {{{

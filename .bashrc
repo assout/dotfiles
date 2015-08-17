@@ -1,5 +1,6 @@
 #!/bin/bash
 # .bashrc
+# TODO Refactor
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then

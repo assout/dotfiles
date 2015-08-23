@@ -250,7 +250,7 @@ nnoremap k    gk
 nnoremap gj   j
 nnoremap gk   k
 nnoremap Y    y$
-nnoremap <CR> i<CR><Esc>
+nnoremap <CR> o<Esc>
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
 vnoremap y    y'>
 " }}}
@@ -387,8 +387,6 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-" caution: <C-]>に慣れるため無効化 TODO コマンドの中断ができなくなる?
-cnoremap <C-c> <Nop>
 " }}}1
 
 " Section; Plug-ins {{{1
@@ -664,6 +662,10 @@ if s:HasPlugin('syntastic') " {{{
 
 	let g:syntastic_sh_checkers = ['sh', 'shellcheck', 'bashate']
 	let g:syntastic_sh_bashate_args = '-i E002,E003'
+
+	" TODO mdlのほうでオプション指定するとエラーでる
+	" let g:syntastic_markdown_mdl_args = '--rules ~MD022'
+	let g:syntastic_markdown_mdl_args = '--no-warning'
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
 	nnoremap <SID>[syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>

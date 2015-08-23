@@ -532,12 +532,14 @@ if s:HasPlugin('excitetranslate-vim') " {{{
 endif " }}}
 
 if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
-	nnoremap <SID>[fugitive]c :Gcommit -m ""<Left>
-	nnoremap <SID>[fugitive]C :Gcommit -a<CR>
-	nnoremap <SID>[fugitive]d :Gdiff<CR>
-	nnoremap <SID>[fugitive]l :Glog<CR>
-	nnoremap <SID>[fugitive]p :Gpush<CR>
-	nnoremap <SID>[fugitive]s :Gstatus<CR>
+	nnoremap <SID>[fugitive]<CR> :Git<Space>
+	nnoremap <SID>[fugitive]cm   :Gcommit<CR>
+	nnoremap <SID>[fugitive]cmm  :Gcommit -m ""<Left>
+	nnoremap <SID>[fugitive]cma  :Gcommit -a<CR>
+	nnoremap <SID>[fugitive]d    :Gdiff<CR>
+	nnoremap <SID>[fugitive]l    :Glog<CR>
+	nnoremap <SID>[fugitive]p    :Gpush<CR>
+	nnoremap <SID>[fugitive]s    :Gstatus<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{

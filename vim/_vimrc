@@ -32,7 +32,7 @@
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
 " * TODO neocompleteでたまに日本語入力が変になる
-" * TODO setなどの末尾にコメント入れるとvrapperが無効になる
+" * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 " }}}1
 
 " Section; Begin {{{1
@@ -49,7 +49,7 @@ endif
 
 " Section; Functions and Commands {{{1
 function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
-	" TODO オプションなどで buffer に出力もしたい
+	" TODO オプションなどでbufferに出力もしたい
 	if has('clipboard')
 		redir @+>
 	else
@@ -300,7 +300,7 @@ nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/_vimrc' 
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/_vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if has('win32')
 	nnoremap <SID>[open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
@@ -461,7 +461,7 @@ if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	" operator {{{
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
-	NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb, sdf{char}.
+	NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb,sab.
 	NeoBundle 'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
@@ -469,13 +469,13 @@ if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	" textobj {{{
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
-	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']} " caution: windows(非neobundle)でafter/ftpluginが読み込まれないっぽいので Section; Plug-ins でruntimepath強引に登録している
+	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-indent', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-line', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'mattn/vim-textobj-url', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'rhysd/vim-textobj-anyblock', {'depends': ['kana/vim-textobj-user']} " life changing. dib, dab.
 	NeoBundle 'sgur/vim-textobj-parameter', {'depends': ['kana/vim-textobj-user']}
-	NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']} " life changing. dif{char}, daf{char}
+	NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
 	" }}}
 
@@ -533,9 +533,11 @@ endif " }}}
 
 if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
 	nnoremap <SID>[fugitive]c :Gcommit -m ""<Left>
-	nnoremap <SID>[fugitive]C :Gcommit -a -m ""<Left>
+	nnoremap <SID>[fugitive]C :Gcommit -a<CR>
 	nnoremap <SID>[fugitive]d :Gdiff<CR>
+	nnoremap <SID>[fugitive]l :Glog<CR>
 	nnoremap <SID>[fugitive]p :Gpush<CR>
+	nnoremap <SID>[fugitive]s :Gstatus<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
@@ -590,6 +592,7 @@ if s:HasPlugin('memolist') " {{{
 	let g:memolist_template_dir_path = g:memolist_path
 
 	nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
+	" TODO recursive option
 	nnoremap <SID>[memolist]g :<C-u>MemoGrep<CR>
 
 	if s:HasPlugin('unite')

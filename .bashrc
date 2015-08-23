@@ -100,3 +100,6 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
+
+# added by travis gem
+[ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh

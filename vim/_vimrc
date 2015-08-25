@@ -74,6 +74,7 @@ endfunction
 command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
+" TODO 消す。(RefソースorUniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
 function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
@@ -601,8 +602,7 @@ if s:HasPlugin('memolist') " {{{
 		let g:unite_source_alias_aliases = { 'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path } }
 		call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
 		call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-		" TODO 効かない
-		call g:unite#custom#source('memolist', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+		call g:unite#custom#source('memolist', 'ignore_pattern', 'reading\|\(png\|gif\|jpeg\|jpg\)$')
 		nnoremap <SID>[memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
 	else
 		nnoremap <SID>[memolist]l :<C-u>MemoList<CR>
@@ -646,6 +646,7 @@ if s:HasPlugin('quickrun') " {{{
 	nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
 endif " }}}
 
+" TODO Restart時にカーソル位置復元したい
 if s:HasPlugin('restart.vim') " {{{
 	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
@@ -717,8 +718,8 @@ if s:HasPlugin('unite') " {{{
 	call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
 	call g:unite#custom#default_action('directory', 'vimfiler')
 	call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-	call g:unite#custom#source('file_rec', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
-	call g:unite#custom#source('file_rec/async', 'ignore_pattern', '(png\|gif\|jpeg\|jpg)$')
+	call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+	call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
 	if has('win32') " windowsではよく日本語使うので
 		call g:unite#filters#matcher_default#use(['matcher_migemo'])
 	endif
@@ -870,6 +871,10 @@ endif " }}}
 if s:HasPlugin('vim-ref') " {{{
 	let g:ref_man_lang = 'ja_JP.UTF-8'
 	let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
+	autocmd FileType ref call s:initialize_ref_viewer()
+	function! s:initialize_ref_viewer()
+		resize 5
+	endfunction
 
 	if has('unix')
 		nnoremap <expr> <SID>[ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
@@ -882,9 +887,9 @@ if s:HasPlugin('vim-ref') " {{{
 		let g:ref_source_webdict_sites.default = 'ej'
 		let g:ref_source_webdict_use_cache = 1
 
-		nnoremap <SID>[ref]w :<C-u>Ref webdict<Space>
-		nnoremap <SID>[ref]wj :<C-u>Ref webdict je<Space>
-		nnoremap <SID>[ref]we :<C-u>Ref webdict ej<Space>
+		nnoremap <SID>[ref]w<CR> :<C-u>Ref webdict<Space>
+		nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
+		nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
 	endif
 	" TODO 選択範囲の単語で検索
 	" TODO unite-actioinでyank
@@ -893,8 +898,8 @@ if s:HasPlugin('vim-ref') " {{{
 	" TODO 和英ができない
 	" TODO キャッシュ化されている？
 	if s:HasPlugin('vim-ref-gene')
-		nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>'
-		nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+		nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+		nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
 	endif
 endif " }}}
 

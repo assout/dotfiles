@@ -1,6 +1,6 @@
 #!/bin/bash
 # .bashrc
-# TODO Refactor
+# TODO Refactor, Index
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -89,9 +89,7 @@ function man-japanese {
 alias jan=man-japanese
 
 # Docker
-function drm {
-	docker rm $(docker ps -a -q);
-}
+alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dps="docker ps"

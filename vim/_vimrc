@@ -871,7 +871,9 @@ endif " }}}
 if s:HasPlugin('vim-ref') " {{{
 	let g:ref_man_lang = 'ja_JP.UTF-8'
 	let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
-	autocmd FileType ref call s:initialize_ref_viewer()
+	augroup vimrc
+		autocmd FileType ref call s:initialize_ref_viewer()
+	augroup END
 	function! s:initialize_ref_viewer()
 		resize 5
 	endfunction

@@ -98,7 +98,10 @@ alias drun="docker run"
 export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-[[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
+#comment out as a workaround, slow.
+# [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
+
+[[ $TERM != "screen-256color" ]] && [[ "$(which tmux 2> /dev/null)" ]] && tmux

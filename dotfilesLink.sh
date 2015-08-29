@@ -1,5 +1,6 @@
 #!/bin/bash
 ln -si ~/Development/dotfiles/.bashrc ~/
+ln -si ~/Development/dotfiles/.tmux.conf ~/
 ln -si ~/Development/dotfiles/.inputrc ~/
 ln -si ~/Development/dotfiles/.mdlrc ~/
 ln -si ~/Development/dotfiles/.gitconfig ~/

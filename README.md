@@ -10,7 +10,7 @@ Linux
 mkdir -p ~/Development/vim-plugins
 cd ./Development
 git clone git@github.com:assout/dotfiles.git
-./dotfiles/dotfilesLink.sh
+./dotfiles/setup.sh
  ```
 
 Windows(CMD)
@@ -18,7 +18,7 @@ Windows(CMD)
 mkdir D:\Development\vim-plugins
 cd D:\Development
 git clone git@github.com:assout/dotfiles.git
-./dotfiles/dotfilesLink.bat
+./dotfiles/setup.bat
  ```
 
 Windows(unix tool e.g. msysgit)
@@ -26,6 +26,6 @@ Windows(unix tool e.g. msysgit)
 mkdir -p ~/Development/vim-plugins
 cd ./Development
 git clone git@github.com:assout/dotfiles.git
-./dotfiles/dotfilesLink.bat
+./dotfiles/setup.bat
  ```
 

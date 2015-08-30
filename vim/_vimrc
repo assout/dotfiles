@@ -562,7 +562,7 @@ if s:HasPlugin('hateblo') " {{{
 endif " }}}
 
 if s:HasPlugin('hybrid') " {{{
-	colorscheme hybrid-light
+	colorscheme hybrid
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{

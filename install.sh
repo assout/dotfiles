@@ -1,8 +1,9 @@
 #!/bin/bash
 mkdir -p ~/Development/vim-plugins
-cd ./Development
+cd ~/Development
 git clone git@github.com:assout/dotfiles.git
 
+ln -sf ~/Development/dotfiles/ ~/
 ln -sf ~/Development/dotfiles/.bashrc ~/
 ln -sf ~/Development/dotfiles/.tmux.conf ~/
 ln -sf ~/Development/dotfiles/.inputrc ~/

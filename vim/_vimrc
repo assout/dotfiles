@@ -819,7 +819,7 @@ if s:HasPlugin('vim-localrc') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-t>' " 't'oggle window maximize.
+	let g:maximizer_default_mapping_key = '<C-z>' " 'z'oom window maximize.
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{

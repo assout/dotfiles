@@ -31,6 +31,7 @@
 " Ctrl + w - Close,Close Rendering
 " Ctrl + x - Cut
 " Ctrl + y - Redo
+" Ctrl + z - Undo
 " }}}1
 
 " Section; Begin {{{1
@@ -87,8 +88,8 @@ nnoremap <C-c>  :bdelete<CR>
 nnoremap <C-m>  <Nop>
 nnoremap <C-w>o :only<CR>
 " cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ
-nnoremap <C-t>  :maximize<CR>
-inoremap <C-t>  <C-o>:maximize<CR>i
+nnoremap <C-z>  :maximize<CR>
+inoremap <C-z>  <C-o>:maximize<CR>i
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a>  <C-o>^
 inoremap <C-e>  <C-o>$

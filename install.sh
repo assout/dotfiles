@@ -1,4 +1,5 @@
 #!/bin/bash
+
 mkdir -p ~/Development/vim-plugins
 cd ~/Development
 git clone git@github.com:assout/dotfiles.git

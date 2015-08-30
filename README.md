@@ -3,7 +3,7 @@ dotfiles [![Build Status](https://travis-ci.org/assout/dotfiles.svg)](https://tr
 Configuration files for editors and other UNIX tools. This is to make it easier to setup programming environment for me.
 
 
-# How to run
+# How to install
 
 Linux
  ```

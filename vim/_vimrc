@@ -251,7 +251,7 @@ nnoremap k    gk
 nnoremap gj   j
 nnoremap gk   k
 nnoremap Y    y$
-nnoremap <CR> i<CR><Esc>
+" nnoremap <CR> i<CR><Esc>
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
 vnoremap y    y'>
 " }}}
@@ -826,7 +826,7 @@ if s:HasPlugin('vim-localrc') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-	let g:maximizer_default_mapping_key = '<C-z>' " 'z'oom window maximize.
+	let g:maximizer_default_mapping_key = '<C-t>' " 't'oggle window maximize.
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{

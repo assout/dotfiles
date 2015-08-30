@@ -4,6 +4,7 @@
 
 " caution: コメント分のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
+" TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
 
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する.
@@ -83,13 +84,16 @@ noremap  sv :vsplit<CR>
 nnoremap <C-h>  :tabprevious<CR>
 nnoremap <C-l>  :tabnext<CR>
 nnoremap <C-c>  :bdelete<CR>
-" TODO linuxでコマンドラインモードでも有効になってしまうので一旦コメントアウト
-" nnoremap <C-m>  i<CR><Esc>
-nnoremap <C-m>  <Nop>
+
+nnoremap <C-m>  i<CR><Esc>
+" TODO 本来は<CR>にしたいがコマンド実行後改行されてしまうため
+cnoremap <C-m>  <Nop>
 nnoremap <C-w>o :only<CR>
+
 " cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ
-nnoremap <C-z>  :maximize<CR>
-inoremap <C-z>  <C-o>:maximize<CR>i
+nnoremap <C-t>  :maximize<CR>
+inoremap <C-t>  <C-o>:maximize<CR>i
+
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a>  <C-o>^
 inoremap <C-e>  <C-o>$

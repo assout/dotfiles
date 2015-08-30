@@ -673,7 +673,6 @@ if s:HasPlugin('syntastic') " {{{
 
 	let g:syntastic_vim_checkers = ['vint']
 	let g:syntastic_yaml_checkers = ['jsyaml']
-
 	let g:syntastic_markdown_mdl_args = '--no-warning'
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)

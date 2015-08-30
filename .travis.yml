@@ -14,8 +14,6 @@ install:
   - sudo pip install bashate
 
 script:
-  - curl -L https://raw.githubusercontent.com/assout/dotfiles/master/install.sh | bash
-
   - vim --cmd version --cmd quit
 
   - vint --version

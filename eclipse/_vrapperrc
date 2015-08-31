@@ -85,8 +85,6 @@ nnoremap <C-l>  :tabnext<CR>
 nnoremap <C-c>  :bdelete<CR>
 
 nnoremap <C-m>  i<CR><Esc>
-" TODO 本来は<CR>にしたいがコマンド実行後改行されてしまうため
-cnoremap <C-m>  <Nop>
 nnoremap <C-w>o :only<CR>
 
 " cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ

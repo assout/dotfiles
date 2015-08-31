@@ -28,9 +28,7 @@ export GOPATH=$HOME/.go
 
 # [User process] {{{1
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
-if [ "$SSH_TTY" != "" ]; then
-	stty stop undef
-fi
+stty stop undef
 
 # Create Today backup directory
 if [ "${USER}" = "oji" ] ; then

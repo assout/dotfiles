@@ -3,8 +3,8 @@ scriptencoding utf-8
 let g:did_install_default_menus=1
 " フォント設定.
 if has('win32')
-	set guifont=Consolas:h10
-	set guifontwide=MS_Gothic:h10:cSHIFTJIS
+	set guifont=Consolas:h9
+	set guifontwide=MS_Gothic:h9:cSHIFTJIS
 else
 	set guifont=Ricty\ Diminished\ 11
 endif
@@ -24,4 +24,5 @@ set guioptions-=m
 set guioptions-=T
 " colorscheme.
 colorscheme hybrid-light
+" colorscheme hybrid
 

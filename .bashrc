@@ -56,7 +56,7 @@ fi
 # Cdls
 function cdls {
 	cd "$1";
-	ls;
+	ls --color=auto --show-control-chars;
 }
 alias cd=cdls
 

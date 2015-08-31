@@ -225,6 +225,7 @@ if has('persistent_undo')
 	set noundofile
 endif
 set wildmenu
+" set wildmode=list:longest
 set nowrap
 set nowrapscan
 if has('win32')
@@ -251,7 +252,7 @@ nnoremap k    gk
 nnoremap gj   j
 nnoremap gk   k
 nnoremap Y    y$
-" nnoremap <CR> i<CR><Esc>
+nnoremap <CR> i<CR><Esc>
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
 vnoremap y    y'>
 " }}}

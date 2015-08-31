@@ -793,6 +793,15 @@ if s:HasPlugin('vim-ansible-yaml') " {{{
 	let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
+if s:HasPlugin('vim-fakeclip') " {{{
+	if !has('gui_running')
+		map y  <Plug>(fakeclip-y)
+		map yy <Plug>(fakeclip-Y)
+		map p  <Plug>(fakeclip-p)
+		map dd <Plug>(fakeclip-D)
+	endif
+endif " }}}
+
 if s:HasPlugin('vim-gf-user') " {{{
 	function! g:GfFile() " refs <http://d.hatena.ne.jp/thinca/20140324/1395590910>
 		let l:path = expand('<cfile>')

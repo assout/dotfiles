@@ -28,7 +28,9 @@ export GOPATH=$HOME/.go
 
 # [User process] {{{1
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
-stty stop undef
+if [ "$(which stty 2> /dev/null)" ] ; then
+	stty stop undef
+fi
 
 # Create Today backup directory
 if [ "${USER}" = "oji" ] ; then
@@ -123,3 +125,4 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [[ $TERM != "screen-256color" ]] && [[ "$(which tmux 2> /dev/null)" ]] && tmux
 # }}}1
 
+# vim:nofoldenable:

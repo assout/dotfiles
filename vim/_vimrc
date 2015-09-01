@@ -112,7 +112,7 @@ endfunction
 command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTranslate(<f-args>)
 
 function! s:IsPluginEnabled() " pluginが有効か返す
-	return isdirectory(s:bundlePath) && $TERM !=# 'cygwin' " TODO workaround, winのconsoleだと読み込まれないので.
+	return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す
@@ -276,7 +276,7 @@ noremap  <SID>[shortcut]k 10k
 noremap  <SID>[shortcut]l g_
 nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]p :split<CR>
+noremap  <SID>[shortcut]s :split<CR>
 map      <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap <SID>[shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>

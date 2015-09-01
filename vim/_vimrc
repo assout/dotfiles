@@ -1,10 +1,10 @@
 " Index {{{1
 " * Introduction
 " * Begin
+" * Let defines
 " * Functions and Commands
 " * Auto-commands
 " * Options
-" * Let defines
 " * Key-mappings
 " * Plug-ins
 " * After
@@ -45,6 +45,13 @@ scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local'))
 	source ~/.vimrc.local
 endif
+" }}}1
+
+" Section; Let defines {{{1
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+let g:is_bash = 1 " shellのハイライトをbash基準にする
+" windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
+let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bundle/'
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -105,7 +112,7 @@ endfunction
 command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTranslate(<f-args>)
 
 function! s:IsPluginEnabled() " pluginが有効か返す
-	return has('unix') ? isdirectory($HOME . '/.vim/bundle') : isdirectory($HOME . '/vimfiles/bundle')
+	return isdirectory(s:bundlePath) && $TERM !=# 'cygwin' " TODO workaround, winのconsoleだと読み込まれないので.
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す
@@ -232,11 +239,6 @@ if has('win32')
 	" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
 	set noswapfile
 endif
-" }}}1
-
-" Section; Let defines {{{1
-let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-let g:is_bash = 1 " shellのハイライトをbash基準にする
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -392,9 +394,7 @@ cnoremap <M-f> <S-Right>
 " }}}1
 
 " Section; Plug-ins {{{1
-" windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
-let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bundle/'
-if isdirectory(expand(s:bundlePath . 'neobundle.vim'))
+if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	if has('vim_starting')
 		execute 'set runtimepath+=' . s:bundlePath . 'neobundle.vim/'
 	endif

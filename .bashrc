@@ -42,15 +42,14 @@ fi
 
 # [Functions & Aliases] {{{1
 # Vim
-if [ -e ~/.vimrc -o -e ~/_vimrc ] ; then
-	alias v="vi"
+if [ "$(which vim 2> /dev/null)" ] ; then
+	alias vi='vim'
+fi
+here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+if [ -e "${here}/_vimrc" ] ; then
+	alias v='vi -S ${here}/_vimrc'
 else
-	here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-	if [ -e "${here}/_vimrc" ] ; then
-		alias v='vi -S ${here}/_vimrc'
-	else
-		alias v="vi"
-	fi
+	alias v="vi"
 fi
 
 # Cdls

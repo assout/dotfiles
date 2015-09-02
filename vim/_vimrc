@@ -677,7 +677,7 @@ endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
 	" TODO <SID>[switch]としたい
-	let g:switch_mapping = "<Space><Space>t"
+	let g:switch_mapping = '<Space><Space>t'
 	let g:switch_custom_definitions =
 				\ [
 				\   ['foo', 'bar', 'baz'],

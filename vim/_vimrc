@@ -819,7 +819,7 @@ if s:HasPlugin('vim-fakeclip') " {{{
 		map y  <Plug>(fakeclip-y)
 		map yy <Plug>(fakeclip-Y)
 		map p  <Plug>(fakeclip-p)
-		map dd <Plug>(fakeclip-D)
+		map dd <Plug>(fakeclip-dd)
 	endif
 endif " }}}
 

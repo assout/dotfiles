@@ -1,18 +1,17 @@
 language: ruby
 cache:
   apt: true
-  # pip: true
-sudo: false
+  pip: true
 
 before_install:
-  - add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
-  - apt-get update -qq
+  - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
+  - sudo apt-get update -qq
 
 install:
-  - apt-get -qq install devscripts
-  - apt-get -qq install shellcheck
-  - pip install vim-vint
-  - pip install bashate
+  - sudo apt-get -qq install devscripts
+  - sudo apt-get -qq install shellcheck
+  - sudo pip install vim-vint
+  - sudo pip install bashate
 
 script:
   - vim --cmd version --cmd quit

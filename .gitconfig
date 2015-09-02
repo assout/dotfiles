@@ -17,7 +17,7 @@
 	cm   = commit
 	cmm  = commit -m
 	cma  = commit -a
-	cmam = commit -a -m
+	cmq  = commit -a -m
 	br   = branch
 	co   = checkout
 	df   = diff

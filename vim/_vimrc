@@ -400,6 +400,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	endif
 	call g:neobundle#begin(expand(s:bundlePath))
 
+	NeoBundle 'AndrewRadev/switch.vim'
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
 	NeoBundle 'LeafCage/vimhelpgenerator'
@@ -489,31 +490,36 @@ endif
 
 " plugin prefix mappings {{{
 if s:IsPluginEnabled()
-	map     <Space>          <SID>[plugin]
-	xmap    <SID>[plugin]a   <SID>[alignta]
-	map     <SID>[plugin]c   <SID>[camelize]
-	nmap    <SID>[plugin]e   <SID>[excite]
-	nmap    <SID>[plugin]f   <SID>[fugitive]
-	nmap    <SID>[plugin]g   <SID>[gista]
-	nmap    <SID>[plugin]h   <SID>[hateblo]
-	nmap    <SID>[plugin]m   <SID>[memolist]
-	nmap    <SID>[plugin]p   <SID>[previm]
-	nmap    <SID>[plugin]q   <SID>[qiita]
-	nmap    <SID>[plugin]Q   <SID>[quickrun]
-	nmap    <SID>[plugin]r   <SID>[ref]
-	" TODO <SID>つけれない
-	nmap    <SID>[plugin]s   [sub]
-	nmap    <SID>[plugin]S   <SID>[syntastic]
-	map     <SID>[plugin]t   <SID>[todo]
-	nmap    <SID>[plugin]u   <SID>[unite]
-	nmap    <SID>[plugin]/   <SID>[migemo]
+	map  <Space>              <SID>[plugin]
+	map  <SID>[plugin]<Space> <SID>[sub_plugin]
 
-	map     R                <SID>[replace]
-	nmap    p                <SID>[yankround]
-	nmap    P                <SID>[Yankround]
-	map     <SID>[shortcut]a <SID>[surround-a]
-	map     <SID>[shortcut]d <SID>[surround-d]
-	map     <SID>[shortcut]r <SID>[surround-r]
+	xmap <SID>[plugin]a       <SID>[alignta]
+	map  <SID>[plugin]c       <SID>[camelize]
+	nmap <SID>[plugin]e       <SID>[excite]
+	nmap <SID>[plugin]f       <SID>[fugitive]
+	map  <SID>[plugin]g       <SID>[gista]
+	nmap <SID>[plugin]h       <SID>[hateblo]
+	nmap <SID>[plugin]m       <SID>[memolist]
+	nmap <SID>[plugin]p       <SID>[previm]
+	nmap <SID>[plugin]q       <SID>[qiita]
+	nmap <SID>[plugin]Q       <SID>[quickrun]
+	nmap <SID>[plugin]r       <SID>[ref]
+	" TODO <SID>つけれない
+	nmap <SID>[plugin]s       [sub]
+	map  <SID>[plugin]t       <SID>[todo]
+	nmap <SID>[plugin]u       <SID>[unite]
+	nmap <SID>[plugin]/       <SID>[migemo]
+
+	" TODO <SID>つけれない
+	map  <SID>[sub_plugin]t   <SID>[switch]
+	nmap <SID>[sub_plugin]s   <SID>[syntastic]
+
+	map  R                    <SID>[replace]
+	nmap p                    <SID>[yankround]
+	nmap P                    <SID>[Yankround]
+	map  <SID>[shortcut]a     <SID>[surround-a]
+	map  <SID>[shortcut]d     <SID>[surround-d]
+	map  <SID>[shortcut]r     <SID>[surround-r]
 endif
 " }}}
 
@@ -667,6 +673,16 @@ endif " }}}
 if s:HasPlugin('singleton') && has('gui_running') " {{{
 	let g:singleton#opener = 'vsplit'
 	call g:singleton#enable()
+endif " }}}
+
+if s:HasPlugin('switch.vim') " {{{
+	" TODO <SID>[switch]としたい
+	let g:switch_mapping = "<Space><Space>t"
+	let g:switch_custom_definitions =
+				\ [
+				\   ['foo', 'bar', 'baz'],
+				\   ['hoge', 'fuga', 'piyo']
+				\ ]
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{

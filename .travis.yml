@@ -10,8 +10,8 @@ before_install:
 install:
   - sudo apt-get -qq install devscripts
   - sudo apt-get -qq install shellcheck
-  - pip install vim-vint
-  - pip install bashate
+  - sudo pip install vim-vint
+  - sudo pip install bashate
 
 script:
   - vim --cmd version --cmd quit

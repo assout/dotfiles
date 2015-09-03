@@ -101,6 +101,9 @@ alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dps="docker ps"
 alias drun="docker run"
+
+# Git
+alias g="git"
 # }}}1
 
 # [Environment settings] {{{1

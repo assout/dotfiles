@@ -256,7 +256,7 @@ nnoremap gk   k
 nnoremap Y    y$
 nnoremap <CR> i<CR><Esc>
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
-vnoremap y    y'>
+vnoremap y    y`>
 " }}}
 
 " Shortcut key prefix mappings {{{

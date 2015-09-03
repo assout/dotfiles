@@ -2,7 +2,7 @@
 
 # [Index] {{{1
 # * Begin
-# * Export variables
+# * Define, Export variables
 # * User process
 # * Functions & Aliases
 # * Environment settings
@@ -19,11 +19,15 @@ fi
 # export SYSTEMD_PAGER=
 # }}}1
 
-# [Export variables] {{{1
+# [Define, Export variables] {{{1
 # LANG=ja_JP.UTF-8
 LANG=en_US.UTF-8
 export LANG
 export GOPATH=$HOME/.go
+
+HISTSIZE=5000
+HISTFILESIZE=5000
+HISTCONTROL=ignoredups
 # }}}1
 
 # [User process] {{{1

@@ -70,10 +70,10 @@ unmap  <Space>
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
 nnoremap sb :bdelete<CR>
-noremap  sh ^
-noremap  sj 10j
-noremap  sk 10k
-noremap  sl g_
+" noremap  sh ^
+" noremap  sj 10j
+" noremap  sk 10k
+" noremap  sl g_
 nnoremap sn :nohlsearch<CR>
 noremap  ss :split<CR>
 noremap  sv :vsplit<CR>

@@ -269,11 +269,11 @@ noremap  <SID>[shortcut]/ /
 map      <SID>[shortcut]a <Nop>
 nnoremap <SID>[shortcut]b :bdelete<CR>
 map      <SID>[shortcut]d <Nop>
-noremap  <SID>[shortcut]h ^
+" noremap  <SID>[shortcut]h ^
 map      <SID>[shortcut]i <SID>[insert]
-noremap  <SID>[shortcut]j 10j
-noremap  <SID>[shortcut]k 10k
-noremap  <SID>[shortcut]l g_
+" noremap  <SID>[shortcut]j 10j
+" noremap  <SID>[shortcut]k 10k
+" noremap  <SID>[shortcut]l g_
 nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]s :split<CR>
@@ -572,7 +572,7 @@ endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
 	augroup vimrc
-		autocmd BufRead,BufNewFile * if &filetype == "" || &filetype == "text" | setlocal ft=hybrid | endif
+		autocmd BufRead,BufNewFile *.{txt,log} setlocal filetype=hybrid
 	augroup END
 endif " }}}
 

@@ -572,7 +572,7 @@ endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
 	augroup vimrc
-		autocmd BufRead,BufNewFile *.{txt,log} setlocal filetype=hybrid
+		autocmd BufRead,BufNewFile *.{txt,mindmap} setlocal filetype=hybrid
 	augroup END
 endif " }}}
 

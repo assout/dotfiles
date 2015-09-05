@@ -721,7 +721,7 @@ if s:HasPlugin('unite') " {{{
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
 		nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
-		nnoremap <buffer><expr><nowait> s unite#smart_map('s', unite#do_action('split'))
+		nnoremap <buffer><expr><nowait> p unite#smart_map('p', unite#do_action('split'))
 		nunmap   <buffer>  <C-h>
 		nunmap   <buffer>  <C-l>
 		nunmap   <buffer>  <C-k>

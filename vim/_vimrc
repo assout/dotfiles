@@ -598,10 +598,13 @@ if s:HasPlugin('memolist') " {{{
 	let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
 	let g:memolist_template_dir_path = g:memolist_path
 
-	nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
-	" TODO recursive option
-	nnoremap <SID>[memolist]g :<C-u>MemoGrep<CR>
+	function! s:MyMemoGrep(word)
+		call histadd('cmd', 'MemoGrep '  . a:word)
+		" TODO change to external grep
+		execute ':MemoGrep ' . a:word
+	endfunction
 
+	nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
 	if s:HasPlugin('unite')
 		let g:unite_source_alias_aliases = {
 					\'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
@@ -618,6 +621,7 @@ if s:HasPlugin('memolist') " {{{
 	else
 		nnoremap <SID>[memolist]l :<C-u>MemoList<CR>
 	endif
+	nnoremap <SID>[memolist]g :call <SID>MyMemoGrep(input('MemoGrep word: '))<CR>
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -790,14 +794,20 @@ if s:HasPlugin('unite') " {{{
 		let g:unite_todo_note_suffix = 'md'
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
-		noremap  <SID>[todo]<CR> :UniteTodoAddSimple -tag -memo<CR>
-		noremap  <SID>[todo]a    :UniteTodoAddSimple<CR>
-		noremap  <SID>[todo]t    :UniteTodoAddSimple -tag<CR>
-		noremap  <SID>[todo]m    :UniteTodoAddSimple -memo<CR>
-		nnoremap <SID>[todo]l    :Unite todo:undone -buffer-name=todo<CR>
-		nnoremap <SID>[todo]L    :Unite todo -buffer-name=todo<CR>
+		function! s:TodoGrep(word)
+			call histadd('cmd', 'TodoGrep '  . a:word)
 		" TODO change to external grep
-		nnoremap <expr> <SID>[todo]g ':vimgrep /' . input('TodoGrep word: ') . '/ ' . g:unite_todo_data_directory . '/todo/note/*<CR>'
+			execute ':vimgrep /' . a:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
+		endfunction
+		command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
+
+		noremap  <SID>[todo]<CR>    :UniteTodoAddSimple -tag -memo<CR>
+		noremap  <SID>[todo]a       :UniteTodoAddSimple<CR>
+		noremap  <SID>[todo]t       :UniteTodoAddSimple -tag<CR>
+		noremap  <SID>[todo]m       :UniteTodoAddSimple -memo<CR>
+		nnoremap <SID>[todo]l       :Unite todo:undone -buffer-name=todo<CR>
+		nnoremap <SID>[todo]L       :Unite todo -buffer-name=todo<CR>
+		nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 	endif " }}}
 endif " }}}
 

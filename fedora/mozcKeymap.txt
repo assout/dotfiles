@@ -24,7 +24,7 @@ Composition	Ctrl j	Commit
 Composition	Ctrl k	MoveCursorLeft
 Composition	Ctrl l	MoveCursorRight
 Composition	Ctrl m	Commit
-Composition	Ctrl n	ConvertNext
+Composition	Ctrl n	PredictAndConvert
 Composition	Ctrl o	ConvertToHalfWidth
 Composition	Ctrl p	ConvertPrev
 Composition	Ctrl s	MoveCursorLeft

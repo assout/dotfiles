@@ -20,8 +20,8 @@ fi
 # }}}1
 
 # [Define, Export variables] {{{1
-LANG=ja_JP.UTF-8
-#LANG=en_US.UTF-8
+# LANG=ja_JP.UTF-8
+LANG=en_US.UTF-8
 export LANG
 export GOPATH=$HOME/.go
 

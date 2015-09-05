@@ -70,18 +70,19 @@ unmap  <Space>
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
 nnoremap sb :bdelete<CR>
-" noremap  sh ^
-" noremap  sj 10j
-" noremap  sk 10k
-" noremap  sl g_
+nnoremap sc :bdelete<CR>
+nnoremap sh <C-w>h
+nnoremap sj <C-w>j
+nnoremap sk <C-w>k
+nnoremap sl <C-w>l
 nnoremap sn :nohlsearch<CR>
-noremap  ss :split<CR>
+noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl key mappings
 " caution: vimではwindow移動だがこっちではタブも使うので。
-nnoremap <C-h>  gT
-nnoremap <C-l>  gt
+nnoremap <C-h>  <C-w>gT
+nnoremap <C-l>  <C-w>gt
 nnoremap <C-c>  :bdelete<CR>
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>

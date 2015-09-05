@@ -268,19 +268,21 @@ noremap  <SID>[shortcut]? ?
 noremap  <SID>[shortcut]/ /
 map      <SID>[shortcut]a <Nop>
 nnoremap <SID>[shortcut]b :bdelete<CR>
+nnoremap <SID>[shortcut]c <C-w>c
 map      <SID>[shortcut]d <Nop>
-" noremap  <SID>[shortcut]h ^
+nnoremap <SID>[shortcut]h <C-w>h
 map      <SID>[shortcut]i <SID>[insert]
-" noremap  <SID>[shortcut]j 10j
-" noremap  <SID>[shortcut]k 10k
-" noremap  <SID>[shortcut]l g_
+nnoremap <SID>[shortcut]j <C-w>j
+nnoremap <SID>[shortcut]k <C-w>k
+nnoremap <SID>[shortcut]l <C-w>l
 nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]s :split<CR>
+noremap  <SID>[shortcut]p :split<CR>
 map      <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>DictionaryTranslate<CR>
 nnoremap <SID>[shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 noremap  <SID>[shortcut]v :vsplit<CR>
+nnoremap <SID>[shortcut]z :pclose<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
@@ -312,22 +314,9 @@ endif
 " }}}
 
 " Ctrl-key prefix mappings {{{
-nnoremap <C-h>     <C-w>h
-nnoremap <C-j>     <C-w>j
-nnoremap <C-k>     <C-w>k
-nnoremap <C-l>     <C-w>l
-nnoremap <C-Left>  <C-w>H
-nnoremap <C-Down>  <C-w>J
-nnoremap <C-Up>    <C-w>K
-nnoremap <C-Right> <C-w>L
-
-" caution: ほんとは<C-w>vを<C-S-s>とかに割り当てたいが<C-s>と区別されない。やろうとするとめんどいっぽい。
-nnoremap <C-c> <C-w>c
-nnoremap <C-z> <C-w>z
-
-" tab操作 caution: <TAB> == <C-i>
-nnoremap <C-TAB>   gt
-nnoremap <C-S-TAB> gT
+nnoremap <C-h> gT
+nnoremap <C-l> gt
+nnoremap <C-c> :tabclose<CR>
 
 " Use ':tjump' instead of ':tag'.
 nnoremap <C-]> g<C-]>
@@ -433,7 +422,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'kannokanno/previm', {'disabled' : has('win32'), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO masterのだとwindowsでchromeのIE Tabのとき表示されないので
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
 	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
-	NeoBundle 'mattn/emmet-vim' " markdownのurl 形式取得にしか使ってない(<C-y>a)
+	NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
 	NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
@@ -463,7 +452,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'vim-scripts/sh.vim' " for function block indentation
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 
-	" operator {{{
+	" Operators {{{
 	NeoBundle 'kana/vim-operator-user'
 	NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
 	NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb,sab.
@@ -471,7 +460,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
 
-	" textobj {{{
+	" Textobjects {{{
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
@@ -782,9 +771,9 @@ if s:HasPlugin('unite') " {{{
 	endif
 
 	if s:HasPlugin('neomru') " {{{
-		let g:neomru#directory_mru_limit = 200
+		let g:neomru#directory_mru_limit = 500
 		let g:neomru#do_validate = 0
-		let g:neomru#file_mru_limit = 200
+		let g:neomru#file_mru_limit = 500
 		let g:neomru#filename_format = ''
 
 		nmap     <SID>[unite]n  <neomru>

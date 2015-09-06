@@ -415,7 +415,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'itchyny/calendar.vim'
-	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない
+	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'disabled' : !has('win32'), 'depends' : ['tyru/open-browser.vim']}

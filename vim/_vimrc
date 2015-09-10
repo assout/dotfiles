@@ -449,7 +449,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'vim-scripts/HybridText'
-	NeoBundle 'vim-scripts/sh.vim' " for function block indentation
+	NeoBundle 'vim-scripts/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 
 	" Operators {{{
@@ -664,10 +664,6 @@ endif " }}}
 " TODO Restart時にカーソル位置復元したい
 if s:HasPlugin('restart.vim') " {{{
 	command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
-endif " }}}
-
-if s:HasPlugin('sh.vim') " {{{
-	let g:sh_indent_case_labels = 1
 endif " }}}
 
 if s:HasPlugin('singleton') && has('gui_running') " {{{

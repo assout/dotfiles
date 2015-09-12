@@ -660,10 +660,10 @@ endif " }}}
 if s:HasPlugin('quickrun') " {{{
 	nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
 	let g:quickrun_config = {
-				\   "plantuml" :{
-				\       "type" : "my_plantuml"
+				\   'plantuml' :{
+				\       'type' : 'my_plantuml'
 				\   },
-				\   "my_plantuml" : {
+				\   'my_plantuml' : {
 				\  'command': 'plantuml'
 				\, 'exec': ['%c %s', 'eog %s:p:r.png']
 				\, 'outputter': 'null'

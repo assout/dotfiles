@@ -492,7 +492,6 @@ if s:IsPluginEnabled()
 	nmap <SID>[plugin]m       <SID>[memolist]
 	nmap <SID>[plugin]p       <SID>[previm]
 	nmap <SID>[plugin]q       <SID>[qiita]
-	nmap <SID>[plugin]Q       <SID>[quickrun]
 	nmap <SID>[plugin]r       <SID>[ref]
 	" TODO <SID>つけれない
 	nmap <SID>[plugin]s       [sub]
@@ -502,6 +501,7 @@ if s:IsPluginEnabled()
 
 	" TODO <SID>つけれない
 	map  <SID>[sub_plugin]t   <SID>[switch]
+	nmap <SID>[sub_plugin]q   <SID>[quickrun]
 	nmap <SID>[sub_plugin]s   <SID>[syntastic]
 
 	map  R                    <SID>[replace]
@@ -659,6 +659,16 @@ endif " }}}
 
 if s:HasPlugin('quickrun') " {{{
 	nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
+	let g:quickrun_config = {
+				\   "plantuml" :{
+				\       "type" : "my_plantuml"
+				\   },
+				\   "my_plantuml" : {
+				\  'command': 'plantuml'
+				\, 'exec': ['%c %s', 'eog %s:p:r.png']
+				\, 'outputter': 'null'
+				\   },
+				\}
 endif " }}}
 
 " TODO Restart時にカーソル位置復元したい

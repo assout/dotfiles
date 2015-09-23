@@ -86,7 +86,9 @@ command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID
 function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
 	let l:word = a:0 == 0 ? expand('<cword>') : a:1
 	call histadd('cmd', 'DictionaryTranslate '  . l:word)
-	if l:word ==# '' | return | endif
+	if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
+		return
+	endif
 	let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
 	let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
 	let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
@@ -103,7 +105,9 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	while search('^' . l:word . '$', 'Wc') > 0
 		silent execute line('.') - l:jpn_to_eng . 'delete Z 2'
 	endwhile
-	silent 0put z
+	if @z !=# '' " caution 特定環境(office)でput zのエラーが出るため
+		silent 0put z
+	endif
 	let @z = l:esc
 	silent call append(line('.'), '==')
 	silent 1delete
@@ -203,6 +207,9 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
+if !has('folding') " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
+	set modelines=0
+endif
 set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""

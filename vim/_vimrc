@@ -390,7 +390,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	call g:neobundle#begin(expand(s:bundlePath))
 
 	NeoBundle 'AndrewRadev/switch.vim'
-	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo.
+	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo. TODO 本体に入ったらしい
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
 	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}

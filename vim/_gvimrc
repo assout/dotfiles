@@ -23,7 +23,7 @@ set guioptions-=m
 " ツールバーを非表示.
 set guioptions-=T
 " colorscheme.
-if has('unix')
+if has('unix') " TODO colorschemaプラグインの存在チェックしていない
 	" colorscheme hybrid
 	colorscheme hybrid-light
 else

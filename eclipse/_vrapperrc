@@ -5,6 +5,7 @@
 " caution: コメント分のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 " TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
+" TODO tabカーソル移動が循環しない
 
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する.
@@ -80,7 +81,6 @@ noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl key mappings
-" caution: vimではwindow移動だがこっちではタブも使うので。
 nnoremap <C-h>  <C-w>gT
 nnoremap <C-l>  <C-w>gt
 nnoremap <C-c>  :bdelete<CR>

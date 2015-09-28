@@ -571,7 +571,7 @@ if s:HasPlugin('HybridText') " {{{
 	augroup END
 endif " }}}
 
-if s:HasPlugin('hybrid') " {{{
+if s:HasPlugin('vim-hybrid') " {{{
 	colorscheme hybrid
 endif " }}}
 

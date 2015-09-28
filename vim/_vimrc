@@ -425,8 +425,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
-	NeoBundle 'kannokanno/previm', {'disabled' : !has('win32'), 'depends' : ['tyru/open-browser.vim']}
-	NeoBundle 'kannokanno/previm', {'disabled' : has('win32'), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO masterのだとwindowsでchromeのIE Tabのとき表示されないので
+	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']} " TODO IE Tabで表示されない(印刷プレビュー使いたい)
 	NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
 	NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/

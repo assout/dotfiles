@@ -426,6 +426,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
+	NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
@@ -449,7 +450,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'vim-scripts/HybridText'
-	NeoBundle 'vim-scripts/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのindentがだめになったっぽい
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 
 	" Operators {{{

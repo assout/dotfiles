@@ -48,10 +48,11 @@ endif
 " }}}1
 
 " Section; Let defines {{{1
-let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-let g:is_bash = 1 " shellのハイライトをbash基準にする
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
 let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bundle/'
+let g:is_bash = 1 " shellのハイライトをbash基準にする
+let g:loaded_matchparen = 1
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -128,7 +129,6 @@ function! s:RestoreCursorPosition()
 	if index(l:ignore_filetypes, &l:filetype) >= 0
 		return
 	endif
-
 	if line("'\"") > 1 && line("'\"") <= line('$')
 		execute 'normal! g`"'
 	endif
@@ -168,7 +168,6 @@ augroup END
 " }}}1
 
 " Section; Options {{{1
-" TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 set autoindent
 set nobackup
 set clipboard=unnamed,unnamedplus
@@ -185,12 +184,7 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-if executable('grep')
-	set grepprg=grep\ -nH
-endif
-" if executable('pt')
-"   set grepprg=pt\ --nogroup\ -iS
-" endif
+set grepprg=grep\ -nH
 " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set helplang=en,ja
 set hidden
@@ -455,7 +449,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'vim-scripts/HybridText'
-	NeoBundle 'vim-scripts/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+	NeoBundle 'vim-scripts/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのindentがだめになったっぽい
 	NeoBundle 'w0ng/vim-hybrid' " color scheme
 
 	" Operators {{{
@@ -605,10 +599,10 @@ if s:HasPlugin('memolist') " {{{
 	let g:memolist_template_dir_path = g:memolist_path
 
 	function! s:MyMemoGrep(word)
-		call histadd('cmd', 'MemoGrep '  . a:word)
-		" TODO change to external grep
-		execute ':MemoGrep ' . a:word
+		call histadd('cmd', 'MyMemoGrep '  . a:word)
+		execute ':grep -r --exclude-dir=.git ' . a:word . ' ' . g:memolist_path
 	endfunction
+	command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
 	nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
 	if s:HasPlugin('unite')
@@ -627,7 +621,7 @@ if s:HasPlugin('memolist') " {{{
 	else
 		nnoremap <SID>[memolist]l :<C-u>MemoList<CR>
 	endif
-	nnoremap <SID>[memolist]g :call <SID>MyMemoGrep(input('MemoGrep word: '))<CR>
+	nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -733,6 +727,8 @@ if s:HasPlugin('unite') " {{{
 	endfunction
 
 	function! s:unite_my_keymappings()
+		" TODO sort
+		" nnoremap <buffer><expr>         S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
 		nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
 		nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
 		nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
@@ -792,6 +788,7 @@ if s:HasPlugin('unite') " {{{
 		let g:neomru#file_mru_limit = 500
 		let g:neomru#filename_format = ''
 
+		" TODO windowsだと遅い -> ちょっと早くなったっポイ
 		nmap     <SID>[unite]n  <neomru>
 		nnoremap <neomru>f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
 		nnoremap <neomru>d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
@@ -808,15 +805,12 @@ if s:HasPlugin('unite') " {{{
 
 		function! s:TodoGrep(word)
 			call histadd('cmd', 'TodoGrep '  . a:word)
-		" TODO change to external grep
-			execute ':vimgrep /' . a:word . '/ ' . g:unite_todo_data_directory . '/todo/note/*'
+			execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
 		endfunction
 		command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
 
-		noremap  <SID>[todo]<CR>    :UniteTodoAddSimple -tag -memo<CR>
-		noremap  <SID>[todo]a       :UniteTodoAddSimple<CR>
-		noremap  <SID>[todo]t       :UniteTodoAddSimple -tag<CR>
-		noremap  <SID>[todo]m       :UniteTodoAddSimple -memo<CR>
+		noremap  <SID>[todo]a       :UniteTodoAddSimple -memo<CR>
+		noremap  <SID>[todo]q       :UniteTodoAddSimple<CR>
 		nnoremap <SID>[todo]l       :Unite todo:undone -buffer-name=todo<CR>
 		nnoremap <SID>[todo]L       :Unite todo -buffer-name=todo<CR>
 		nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'

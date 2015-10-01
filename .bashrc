@@ -40,7 +40,7 @@ function isOffice {
 function cd-parent {
 	local to=${1:-1}
 	local toStr="";
-	for i in $(seq 1 ${to}) ; do
+	for _ in $(seq 1 "${to}") ; do
 		toStr="${toStr}"../
 	done
 	cdls ${toStr}
@@ -48,7 +48,7 @@ function cd-parent {
 alias ..='cd-parent'
 
 function cdls {
-	\cd "$1"; # エスケープしないと循環しちゃう
+	command cd "$1"; # エスケープしないと循環しちゃう
 	ls --color=auto --show-control-chars;
 }
 alias cd=cdls

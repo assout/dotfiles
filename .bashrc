@@ -24,6 +24,7 @@ fi
 LANG=en_US.UTF-8
 export LANG
 export GOPATH=$HOME/.go
+export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 
 HISTSIZE=5000
 HISTFILESIZE=5000

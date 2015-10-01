@@ -2,10 +2,9 @@
 " vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
 " 詳細は http://vrapper.sourceforge.net/documentation
 
-" caution: コメント分のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
+" caution: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 " TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
-" TODO tabカーソル移動が循環しない
 
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する.

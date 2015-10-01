@@ -2,9 +2,9 @@
 
 # [Index] {{{1
 # * Begin
+# * Functions & Aliases
 # * Define, Export variables
 # * User process
-# * Functions & Aliases
 # * Environment settings
 # * After
 # }}}1
@@ -19,33 +19,40 @@ fi
 # export SYSTEMD_PAGER=
 # }}}1
 
-# [Define, Export variables] {{{1
-# LANG=ja_JP.UTF-8
-LANG=en_US.UTF-8
-export LANG
-export GOPATH=$HOME/.go
-export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
-
-HISTSIZE=5000
-HISTFILESIZE=5000
-HISTCONTROL=ignoredups
-# }}}1
-
-# [User process] {{{1
-# Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
-if [ "$(which stty 2> /dev/null)" ] ; then
-	stty stop undef
-fi
-
-# Create Today backup directory
-if [ "${USER}" = "oji" ] ; then
-	todayBackupPath=~/Backup/$(date +%Y%m%d)
-	mkdir -p "${todayBackupPath}"
-	ln -sfn "${todayBackupPath}" ~/Today
-fi
-# }}}1
-
 # [Functions & Aliases] {{{1
+# General
+function isHome {
+	if [ "${USER}" = oji ] ; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function isOffice {
+	if [ "${OSTYPE}" = msys -a "${USERNAME}" = admin ] ; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function cd-parent {
+	local to=${1:-1}
+	local toStr="";
+	for i in $(seq 1 ${to}) ; do
+		toStr="${toStr}"../
+	done
+	cdls ${toStr}
+}
+alias ..='cd-parent'
+
+function cdls {
+	\cd "$1"; # エスケープしないと循環しちゃう
+	ls --color=auto --show-control-chars;
+}
+alias cd=cdls
+
 # Vim
 if [ "$(which vim 2> /dev/null)" ] ; then
 	alias vi='vim'
@@ -54,15 +61,8 @@ here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/_vimrc" ] ; then
 	alias v='vi -S ${here}/_vimrc'
 else
-	alias v="vi"
+	alias v='vi'
 fi
-
-# Cdls
-function cdls {
-	cd "$1";
-	ls --color=auto --show-control-chars;
-}
-alias cd=cdls
 
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
@@ -94,7 +94,7 @@ function man-japanese {
 	man "$*"
 	LANG=$LANG_ESCAPE
 }
-alias jan=man-japanese
+alias jan='man-japanese'
 
 # Docker
 alias drm='docker rm $(docker ps -a -q)'
@@ -105,11 +105,59 @@ alias drun="docker run"
 
 # Git
 alias g="git"
+
+# Other
+if isOffice ; then
+	alias grepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/grep.exe'
+	alias egrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/egrep.exe'
+	alias fgrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/fgrep.exe'
+fi
+# }}}1
+
+# [Define, Export variables] {{{1
+# LANG=ja_JP.UTF-8
+LANG=en_US.UTF-8
+export LANG
+export GOPATH=$HOME/.go
+export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+
+HISTSIZE=5000
+HISTFILESIZE=5000
+HISTCONTROL=ignoredups
+# }}}1
+
+# [User process] {{{1
+# Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
+if [ "$(which stty 2> /dev/null)" ] ; then
+	stty stop undef
+fi
+
+# Create Today backup directory. TODO dirty
+if isHome || isOffice ; then
+	if isHome ; then
+		todayBackupPath=~/Backup/$(date +%Y%m%d)
+		todayBackupPathLink=~/Today
+	elif isOffice ; then
+		todayBackupPath="D:\\admin\\Backup\\$(date +%Y%m%d)"
+		todayBackupPathLink="D:\\admin\\Desktop\\Today"
+	fi
+	if [ ! -d "${todayBackupPath}" ] ; then
+		mkdir -p "${todayBackupPath}"
+		if isHome ; then
+			ln -sf "${todayBackupPath}" "${todayBackupPathLink}"
+		elif isOffice ; then
+			if [ -d "${todayBackupPathLink}" ] ; then
+				rmdir "${todayBackupPathLink}"
+			fi
+			cmd //c "mklink /D ${todayBackupPathLink} ${todayBackupPath}"
+		fi
+	fi
+fi
 # }}}1
 
 # [Environment settings] {{{1
-# msysgit
-if [ "${OSTYPE}" = "msys" ] ; then
+# office(msysgit)
+if isOffice ; then
 	alias l.='ls -d .* --color=auto --show-control-chars'
 	alias ll='ls -l --color=auto --show-control-chars'
 	alias ls='ls --color=auto --show-control-chars'

@@ -427,6 +427,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
+	NeoBundle "osyo-manga/shabadou.vim"
+	NeoBundle "osyo-manga/vim-watchdogs"
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
@@ -982,6 +984,13 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
 	call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
 	call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
+	
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
+	call g:submode#enter_with('loclist', 'n', '', '[sub]l', '<Nop>')
+	call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
+	call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
+	call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
+	call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>')
 
 	" TODO いまいち効かないときがある(Submode表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
 	call g:submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')

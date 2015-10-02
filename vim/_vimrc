@@ -66,7 +66,7 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 	execute a:command
 	redir END
 endfunction
-command! -nargs=1 -complete=command Capture call <SID>Capture(<q-args>)
+command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
 
 function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
@@ -74,13 +74,13 @@ function! s:ToggleTab() " TODO タブサイズも変更できるように(意外
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
 endfunction
-command! -complete=command ToggleTab call <SID>ToggleTab()
+command! -complete=command MyToggleTab call <SID>ToggleTab()
 
 function! s:InsertString(pos, str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 -complete=command InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 -complete=command InsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
+command! -range -nargs=1 -complete=command MyInsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 -complete=command MyInsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 消す。(RefソースorUniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
@@ -114,7 +114,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	silent 1delete
 	silent wincmd p
 endfunction
-command! -nargs=? -complete=command DictionaryTranslate call <SID>DictionaryTranslate(<f-args>)
+command! -nargs=? -complete=command MyTranslate call <SID>DictionaryTranslate(<f-args>)
 
 function! s:IsPluginEnabled() " pluginが有効か返す
 	return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
@@ -134,8 +134,8 @@ function! s:RestoreCursorPosition()
 	endif
 endfunction
 
-command! -bang BufClear %bdelete<bang>
-command! -bang BClear   BufClear<bang>
+command! -bang MyBufClear %bdelete<bang>
+command! -bang MyBClear   BufClear<bang>
 " }}}1
 
 " Section; Auto-commands {{{1
@@ -280,28 +280,28 @@ nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]p :split<CR>
 map      <SID>[shortcut]r <Nop>
-nnoremap <SID>[shortcut]t :<C-u>DictionaryTranslate<CR>
+nnoremap <SID>[shortcut]t :<C-u>MyDictionaryTranslate<CR>
 nnoremap <SID>[shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 noremap  <SID>[shortcut]v :vsplit<CR>
 nnoremap <SID>[shortcut]z :pclose<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
-noremap <silent><expr> <SID>[insert]p ':InsertPrefix ' . input('prefix:') . '<CR>'
-noremap <silent>       <SID>[insert]*  :InsertPrefix * <CR>
-noremap <silent>       <SID>[insert]1  :InsertPrefix # <CR>A
-noremap <silent>       <SID>[insert]2  :InsertPrefix ## <CR>A
-noremap <silent>       <SID>[insert]3  :InsertPrefix ### <CR>A
-noremap <silent>       <SID>[insert]4  :InsertPrefix #### <CR>A
-noremap <silent>       <SID>[insert]>  :InsertPrefix > <CR>
-noremap <silent>       <SID>[insert]T  :InsertPrefix TODO <CR>
-noremap <silent>       <SID>[insert]f  :InsertPrefix file://<CR>
-noremap <silent><expr> <SID>[insert]s ':InsertSuffix ' . input('suffix:') . '<CR>'
-noremap <silent><expr> <SID>[insert]d ':InsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <silent><expr> <SID>[insert]t ':InsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]n ':InsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]a ':InsertSuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       <SID>[insert]l  :InsertSuffix \<Space>\ <CR>
+noremap <silent><expr> <SID>[insert]p ':MyInsertPrefix ' . input('prefix:') . '<CR>'
+noremap <silent>       <SID>[insert]*  :MyInsertPrefix * <CR>
+noremap <silent>       <SID>[insert]1  :MyInsertPrefix # <CR>A
+noremap <silent>       <SID>[insert]2  :MyInsertPrefix ## <CR>A
+noremap <silent>       <SID>[insert]3  :MyInsertPrefix ### <CR>A
+noremap <silent>       <SID>[insert]4  :MyInsertPrefix #### <CR>A
+noremap <silent>       <SID>[insert]>  :MyInsertPrefix > <CR>
+noremap <silent>       <SID>[insert]T  :MyInsertPrefix TODO <CR>
+noremap <silent>       <SID>[insert]f  :MyInsertPrefix file://<CR>
+noremap <silent><expr> <SID>[insert]s ':MyInsertSuffix ' . input('suffix:') . '<CR>'
+noremap <silent><expr> <SID>[insert]d ':MyInsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <silent><expr> <SID>[insert]t ':MyInsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <silent><expr> <SID>[insert]n ':MyInsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr> <SID>[insert]a ':MyInsertSuffix \ @' . input('author:') . '<CR>'
+noremap <silent>       <SID>[insert]l  :MyInsertSuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
@@ -805,7 +805,7 @@ if s:HasPlugin('unite') " {{{
 			call histadd('cmd', 'TodoGrep '  . a:word)
 			execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
 		endfunction
-		command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
+		command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 
 		noremap  <SID>[todo]a       :UniteTodoAddSimple -memo<CR>
 		noremap  <SID>[todo]q       :UniteTodoAddSimple<CR>

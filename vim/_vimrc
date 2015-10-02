@@ -788,7 +788,6 @@ if s:HasPlugin('unite') " {{{
 		let g:neomru#file_mru_limit = 500
 		let g:neomru#filename_format = ''
 
-		" TODO windowsだと遅い -> ちょっと早くなったっポイ
 		nmap     <SID>[unite]n  <neomru>
 		nnoremap <neomru>f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
 		nnoremap <neomru>d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>

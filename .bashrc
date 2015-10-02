@@ -133,24 +133,27 @@ if [ "$(which stty 2> /dev/null)" ] ; then
 fi
 
 # Create Today backup directory. TODO dirty
-if isHome || isOffice ; then
-	if isHome ; then
-		todayBackupPath=~/Backup/$(date +%Y%m%d)
-		todayBackupPathLink=~/Today
-	elif isOffice ; then
-		todayBackupPath="D:\\admin\\Backup\\$(date +%Y%m%d)"
-		todayBackupPathLink="D:\\admin\\Desktop\\Today"
-	fi
+if isHome ; then
+	todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 	if [ ! -d "${todayBackupPath}" ] ; then
 		mkdir -p "${todayBackupPath}"
-		if isHome ; then
-			ln -sf "${todayBackupPath}" "${todayBackupPathLink}"
-		elif isOffice ; then
-			if [ -d "${todayBackupPathLink}" ] ; then
-				rmdir "${todayBackupPathLink}"
-			fi
-			cmd //c "mklink /D ${todayBackupPathLink} ${todayBackupPath}"
+		ln -sf "${todayBackupPath}" "${HOME}/Today"
+	fi
+elif isOffice ; then
+	todayBackupPath="D:\\admin\\Backup\\$(date +%Y%m%d)"
+	if [ ! -d "${todayBackupPath}" ] ; then
+		mkdir -p "${todayBackupPath}"
+
+		todayBackupLinkPathDesktop="D:\\admin\\Desktop\\Today"
+		todayBackupLinkPathHome="D:\\admin\\Today"
+		if [ -d "${todayBackupLinkPathDesktop}" ] ; then
+			rmdir "${todayBackupLinkPathDesktop}"
 		fi
+		if [ -d "${todayBackupLinkPathHome}" ] ; then
+			rmdir "${todayBackupLinkPathHome}"
+		fi
+		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}"
+		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}"
 	fi
 fi
 # }}}1

@@ -405,7 +405,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 		NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
 	endif
 	NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
-	NeoBundle "aklt/plantuml-syntax"
+	NeoBundle 'aklt/plantuml-syntax'
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chaquotay/ftl-vim-syntax'
 	NeoBundle 'chase/vim-ansible-yaml'
@@ -416,6 +416,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'itchyny/calendar.vim'
+	NeoBundle 'jceb/vim-hier'
 	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
@@ -427,8 +428,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
 	NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
-	NeoBundle "osyo-manga/shabadou.vim"
-	NeoBundle "osyo-manga/vim-watchdogs"
+	NeoBundle 'osyo-manga/shabadou.vim'
+	NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim']}
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
@@ -499,6 +500,7 @@ if s:IsPluginEnabled()
 	nmap <SID>[plugin]s       [sub]
 	map  <SID>[plugin]t       <SID>[todo]
 	nmap <SID>[plugin]u       <SID>[unite]
+	nmap <SID>[plugin]w       <SID>[watchdogs]
 	nmap <SID>[plugin]/       <SID>[migemo]
 
 	" TODO <SID>つけれない
@@ -1031,6 +1033,10 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 	omap aa <Plug>(textobj-parameter-a)
 	vmap ia <Plug>(textobj-parameter-i)
 	vmap aa <Plug>(textobj-parameter-a)
+endif " }}}
+
+if s:HasPlugin('vim-watchdogs') " {{{
+		nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
 endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>

@@ -490,6 +490,7 @@ if s:IsPluginEnabled()
 	map  <SID>[plugin]g       <SID>[gista]
 	nmap <SID>[plugin]h       <SID>[hateblo]
 	nmap <SID>[plugin]m       <SID>[memolist]
+	map  <SID>[plugin]o       <SID>[open-browser]
 	nmap <SID>[plugin]p       <SID>[previm]
 	nmap <SID>[plugin]q       <SID>[qiita]
 	nmap <SID>[plugin]r       <SID>[ref]
@@ -629,11 +630,8 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
-	if has('unix') " gxでディレクトリをエクスプローラで開くことができなくなるためunixのみで有効
-		let g:netrw_nogx = 1 " disable netrw's gx mapping
-		nmap gx <Plug>(openbrowser-smart-search)
-		vmap gx <Plug>(openbrowser-smart-search)
-	endif
+	nmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
+	vmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{

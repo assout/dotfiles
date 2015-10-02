@@ -433,7 +433,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle 'scrooloose/syntastic'
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
 	NeoBundle 't9md/vim-textmanip'
@@ -506,7 +505,6 @@ if s:IsPluginEnabled()
 	" TODO <SID>つけれない
 	map  <SID>[sub_plugin]t   <SID>[switch]
 	nmap <SID>[sub_plugin]q   <SID>[quickrun]
-	nmap <SID>[sub_plugin]s   <SID>[syntastic]
 
 	map  R                    <SID>[replace]
 	nmap p                    <SID>[yankround]
@@ -690,22 +688,6 @@ if s:HasPlugin('switch.vim') " {{{
 				\   ['foo', 'bar', 'baz'],
 				\   ['hoge', 'fuga', 'piyo']
 				\ ]
-endif " }}}
-
-if s:HasPlugin('syntastic') " {{{
-	let g:syntastic_check_on_wq = 0 " :wq時にチェックしない
-	let g:syntastic_always_populate_loc_list = 1 " :Errorsを実行しなくてもlocation listに表示する
-	let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
-
-	let g:syntastic_sh_checkers = ['sh', 'shellcheck', 'bashate']
-	let g:syntastic_sh_bashate_args = '-i E002,E003'
-
-	let g:syntastic_vim_checkers = ['vint']
-	let g:syntastic_yaml_checkers = ['jsyaml']
-	let g:syntastic_markdown_mdl_args = '--no-warning'
-
-	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
-	nnoremap <SID>[syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{

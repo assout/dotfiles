@@ -280,7 +280,7 @@ nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]p :split<CR>
 map      <SID>[shortcut]r <Nop>
-nnoremap <SID>[shortcut]t :<C-u>MyDictionaryTranslate<CR>
+nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 nnoremap <SID>[shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 noremap  <SID>[shortcut]v :vsplit<CR>
 nnoremap <SID>[shortcut]z :pclose<CR>

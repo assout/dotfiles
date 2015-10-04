@@ -415,7 +415,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chaquotay/ftl-vim-syntax'
 	NeoBundle 'chase/vim-ansible-yaml'
-	NeoBundle 'dannyob/quickfixstatus'
+	" NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー
 	NeoBundle 'elzr/vim-json'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
@@ -468,7 +468,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
 
-	" Textobjects {{{
+" Textobjects {{{
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
@@ -1043,7 +1043,7 @@ endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
 	nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
-	let g:watchdogs_check_BufWritePost_enable = 1
+	let g:watchdogs_check_BufWritePost_enable = 0 " Caution: 基本使わない
 
 	" Caution: quickfix開くとhookが動かない
 	" \		'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
@@ -1081,7 +1081,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
 				\	},
 				\	'watchdogs_checker/mdl' : {
 				\		'command' : 'mdl',
-				\		'cmdopt'  : '' ,
 				\	},
 				\
 				\	'yaml/watchdogs_checker': {
@@ -1089,7 +1088,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
 				\	},
 				\	'watchdogs_checker/js-yaml' : {
 				\		'command' : 'js-yaml',
-				\		'cmdopt'  : '' ,
 				\	},
 				\}
 	call g:watchdogs#setup(g:quickrun_config)

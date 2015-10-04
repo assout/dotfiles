@@ -169,6 +169,7 @@ augroup END
 
 " Section; Options {{{1
 set autoindent
+set background=dark
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1

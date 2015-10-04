@@ -137,7 +137,7 @@ if isHome ; then
 	todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 	if [ ! -d "${todayBackupPath}" ] ; then
 		mkdir -p "${todayBackupPath}"
-		ln -sf "${todayBackupPath}" "${HOME}/Today"
+		ln -sfn "${todayBackupPath}" "${HOME}/Today"
 	fi
 elif isOffice ; then
 	todayBackupPath="D:\\admin\\Backup\\$(date +%Y%m%d)"

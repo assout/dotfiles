@@ -393,6 +393,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'AndrewRadev/switch.vim'
 	NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo. TODO 本体に入ったらしい
 	NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
+	NeoBundle 'KazuakiM/vim-qfsigns'
 	NeoBundle 'LeafCage/vimhelpgenerator'
 	NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/unite.vim'], 'disabled' : !executable('git')}
@@ -417,7 +418,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'itchyny/calendar.vim'
-	NeoBundle 'jceb/vim-hier'
 	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
@@ -1036,17 +1036,20 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 	vmap aa <Plug>(textobj-parameter-a)
 endif " }}}
 
-" TODO quickfixstatus
-"	\		'hook/quickfix_status_enable/enable_exit' : 0,
 if s:HasPlugin('vim-watchdogs') " {{{
 	nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
 	let g:watchdogs_check_BufWritePost_enable = 1
+
+	" Caution: quickfix開くとhookが動かない
+	" \		'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
 	let g:quickrun_config = {
 				\	'watchdogs_checker/_' : {
-				\		'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
+				\		'outputter/quickfix/open_cmd' : '',
 				\		'runner/vimproc/updatetime' : 30,
 				\ 	'hook/echo/enable' : 1,
 				\ 	'hook/echo/output_success' : '> No Errors Found.',
+				\		'hook/qfsigns_update/enable_exit': 1,
+				\		'hook/quickfix_status_enable/enable_exit' : 1,
 				\	},
 				\
 				\	'sh/watchdogs_checker' : {

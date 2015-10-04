@@ -22,8 +22,6 @@ set guioptions+=b
 set guioptions-=m
 " ツールバーを非表示.
 set guioptions-=T
-" 背景色を変更
-set background=light
 " colorscheme.
 " TODO colorschemaプラグインの存在チェックしていない
 colorscheme hybrid

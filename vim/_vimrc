@@ -706,7 +706,7 @@ if s:HasPlugin('syntastic') " {{{
 	let g:syntastic_markdown_mdl_args = '--no-warning'
 
 	" TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
-	nnoremap <SID>[syntastic] :SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
+	nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{

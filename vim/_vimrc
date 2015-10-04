@@ -136,6 +136,8 @@ endfunction
 
 command! -bang MyBufClear %bdelete<bang>
 command! -bang MyBClear   BufClear<bang>
+command! MyTrimSpace %s/[ \t]*$// | nohlsearch | normal ``
+
 " }}}1
 
 " Section; Auto-commands {{{1

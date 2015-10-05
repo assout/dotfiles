@@ -57,7 +57,7 @@ alias cd=cdls
 if [ "$(which vim 2> /dev/null)" ] ; then
 	alias vi='vim'
 fi
-here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/_vimrc" ] ; then
 	alias v='vi -S ${here}/_vimrc'
 else
@@ -119,7 +119,9 @@ fi
 LANG=en_US.UTF-8
 export LANG
 export GOPATH=$HOME/.go
-export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+if isHome ; then
+	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+fi
 
 HISTSIZE=5000
 HISTFILESIZE=5000

@@ -417,7 +417,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'chaquotay/ftl-vim-syntax'
 	NeoBundle 'chase/vim-ansible-yaml'
-	" NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー
+	NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntastic 入れてる時っぽい
 	NeoBundle 'elzr/vim-json'
 	NeoBundle 'fuenor/im_control.vim'
 	NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
@@ -441,7 +441,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'pangloss/vim-javascript' " for indent only
 	NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
 	NeoBundle 'schickling/vim-bufonly'
-	NeoBundle 'scrooloose/syntastic'
+	" NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合する
 	NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
 	NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
 	NeoBundle 't9md/vim-textmanip'
@@ -1058,10 +1058,11 @@ endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
 	nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
-	let g:watchdogs_check_BufWritePost_enable = 0 " Caution: 基本使わない
+	let g:watchdogs_check_BufWritePost_enable = 1
 
 	" Caution: quickfix開くとhookが動かない
 	" \		'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
+	" TODO shellcheck,mdl のみ動作確認済み
 	let g:quickrun_config = {
 				\	'watchdogs_checker/_' : {
 				\		'outputter/quickfix/open_cmd' : '',

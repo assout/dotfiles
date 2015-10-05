@@ -504,14 +504,16 @@ if s:IsPluginEnabled()
 	nmap <SID>[plugin]p       <SID>[previm]
 	nmap <SID>[plugin]q       <SID>[qiita]
 	nmap <SID>[plugin]r       <SID>[ref]
-	" TODO <SID>つけれない
-	nmap <SID>[plugin]s       [sub]
+	nmap <SID>[plugin]s       <SID>[syntastic]
 	map  <SID>[plugin]t       <SID>[todo]
 	nmap <SID>[plugin]u       <SID>[unite]
 	nmap <SID>[plugin]w       <SID>[watchdogs]
 	nmap <SID>[plugin]/       <SID>[migemo]
+	" TODO <SID>つけれない
+	nmap <SID>[plugin][       [subP]
+	" TODO <SID>つけれない
+	nmap <SID>[plugin]]       [subN]
 
-	nmap <SID>[sub_plugin]s   <SID>[syntastic]
 	" TODO <SID>つけれない
 	map  <SID>[sub_plugin]t   <SID>[switch]
 	nmap <SID>[sub_plugin]q   <SID>[quickrun]
@@ -959,7 +961,8 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-	call g:submode#enter_with('winsize', 'n', '', '[sub]w', '<Nop>')
+	call g:submode#enter_with('winsize', 'n', '', '[subP]w', '<C-w><')
+	call g:submode#enter_with('winsize', 'n', '', '[subN]w', '<C-w>>')
 	call g:submode#map('winsize', 'n', '', 'h', '<C-w><')
 	call g:submode#map('winsize', 'n', '', 'l', '<C-w>>')
 	call g:submode#map('winsize', 'n', '', 'H', '10<C-w><')
@@ -969,41 +972,51 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
 	call g:submode#map('winsize', 'n', '', 'K', '10<C-w>-')
 	call g:submode#map('winsize', 'n', '', 'J', '10<C-w>+')
 
-	call g:submode#enter_with('scroll', 'n', '', '[sub]s', '<Nop>')
+	call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
+	call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')
 	call g:submode#map('scroll', 'n', '', 'h', 'zh')
 	call g:submode#map('scroll', 'n', '', 'l', 'zl')
 	call g:submode#map('scroll', 'n', '', 'H', '10zh')
 	call g:submode#map('scroll', 'n', '', 'L', '10zl')
 
-	call g:submode#enter_with('buffer', 'n', '', '[sub]b', '<Nop>')
+	call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>')
+	call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>')
 	call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
 	call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
 	call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
 	call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
-	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call g:submode#enter_with('args', 'n', '', '[sub]a', '<Nop>')
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+	call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>')
+	call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>')
 	call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
 	call g:submode#map('args', 'n', '', 'j', ':next<CR>')
 	call g:submode#map('args', 'n', '', 'K', ':first<CR>')
 	call g:submode#map('args', 'n', '', 'J', ':last<CR>')
 
-	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call g:submode#enter_with('quickfix', 'n', '', '[sub]q', '<Nop>')
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+	call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>')
+	call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>')
 	call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
 	call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
 	call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
 	call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
+	call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>')
+	call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>')
 
-	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない
-	call g:submode#enter_with('loclist', 'n', '', '[sub]l', '<Nop>')
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+	call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>')
+	call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>')
 	call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
 	call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
 	call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
 	call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>')
+	call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>')
+	call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>')
 
-	" TODO いまいち効かないときがある(Submode表記はされつづけるけど一行ごとにカーソル移動しちゃうときがある)
-	call g:submode#enter_with('diff', 'n', '', '[sub]d', '<Nop>')
+	" TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+	call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c')
+	call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
 	call g:submode#map('diff', 'n', '', 'k', '[c')
 	call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}

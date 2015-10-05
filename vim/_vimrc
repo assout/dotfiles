@@ -812,7 +812,7 @@ if s:HasPlugin('unite') " {{{
 		let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
 
 		function! s:TodoGrep(word)
-			call histadd('cmd', 'TodoGrep '  . a:word)
+			call histadd('cmd', 'MyTodoGrep '  . a:word)
 			execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
 		endfunction
 		command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
@@ -821,7 +821,7 @@ if s:HasPlugin('unite') " {{{
 		noremap  <SID>[todo]q       :UniteTodoAddSimple<CR>
 		nnoremap <SID>[todo]l       :Unite todo:undone -buffer-name=todo<CR>
 		nnoremap <SID>[todo]L       :Unite todo -buffer-name=todo<CR>
-		nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
+		nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
 	endif " }}}
 endif " }}}
 

@@ -515,7 +515,7 @@ if s:IsPluginEnabled()
 	nmap <SID>[plugin]]       [subN]
 
 	" TODO <SID>つけれない
-	map  <SID>[sub_plugin]t   <SID>[switch]
+	map  <SID>[sub_plugin]s   <SID>[switch]
 	nmap <SID>[sub_plugin]q   <SID>[quickrun]
 
 	map  R                    <SID>[replace]

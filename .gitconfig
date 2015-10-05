@@ -1,7 +1,5 @@
-[include]
-	path = .gitconfig.local
 [user]
-	name=assout
+	name = assout
 	email = assout@users.noreply.github.com
 [push]
 	default = simple
@@ -24,3 +22,5 @@
 	dfh  = diff HEAD
 	lg   = log -p
 	st   = status
+[include] # user.name,user.email,proxy from local
+	path = .gitconfig.local

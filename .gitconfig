@@ -13,17 +13,15 @@
 	quotepath = false
 	autocrlf = input
 [alias]
-	br   = branch
+	st   = status
 	cm   = commit
-	cma  = commit -a
 	cmm  = commit -m
+	cma  = commit -a
 	cmq  = commit -a -m
+	br   = branch
 	co   = checkout
 	df   = diff
 	dfc  = diff --cached
 	dfh  = diff HEAD
 	lg   = log -p
-	ph   = push
-	pl   = pull
-	st   = status
 

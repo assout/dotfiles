@@ -10,25 +10,21 @@ Linux
 curl -L https://raw.githubusercontent.com/assout/dotfiles/master/install.sh | bash
 ```
 
-Windows(CMD)
+Windows (CMD) (Caution: change repository git user config)
 ```
 mkdir D:\Development\vim-plugins
 cd D:\Development
 git clone git@github.com:assout/dotfiles.git
-./dotfiles/install.bat
+cd .\dotfiles
+.\install.bat
 ```
 
-Windows(unix tool e.g. msysgit)
+Windows(unix tool e.g. msysgit) (Caution: change repository git user config)
 ```
 mkdir -p ~/Development/vim-plugins
 cd ./Development
 git clone git@github.com:assout/dotfiles.git
-./dotfiles/install.bat
-```
-
-Office (It switched the account for the office)
-```
-git config user.name = "assout"
-git config user.email = assout@users.noreply.github.com
+cd ./dotfiles
+./install.bat
 ```
 

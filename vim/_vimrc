@@ -470,7 +470,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
 	" }}}
 
-" Textobjects {{{
+	" Textobjects {{{
 	NeoBundle 'kana/vim-textobj-user'
 	NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
@@ -514,9 +514,9 @@ if s:IsPluginEnabled()
 	" TODO <SID>つけれない
 	nmap <SID>[plugin]]       [subN]
 
+	nmap <SID>[sub_plugin]q   <SID>[quickrun]
 	" TODO <SID>つけれない
 	map  <SID>[sub_plugin]s   <SID>[switch]
-	nmap <SID>[sub_plugin]q   <SID>[quickrun]
 
 	map  R                    <SID>[replace]
 	nmap p                    <SID>[yankround]
@@ -694,7 +694,7 @@ endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
 	" TODO <SID>[switch]としたい
-	let g:switch_mapping = '<Space><Space>t'
+	let g:switch_mapping = '<Space><Space>s'
 	let g:switch_custom_definitions =
 				\ [
 				\   ['foo', 'bar', 'baz'],
@@ -1082,14 +1082,14 @@ if s:HasPlugin('vim-watchdogs') " {{{
 				\	},
 				\	'watchdogs_checker/shellcheck' : {
 				\		'command' : 'shellcheck',
-				\		'cmdopt'  : '-f gcc' ,
+				\		'cmdopt'  : '-f gcc',
 				\	},
 				\	'watchdogs_checker/bashate' : {
 				\		'command' : 'bashate',
 				\	},
 				\	'watchdogs_checker/checkbashisms' : {
 				\		'command' : 'checkbashisms',
-				\		'cmdopt'  : '-f' ,
+				\		'cmdopt'  : '-f',
 				\	},
 				\
 				\	'markdown/watchdogs_checker': {

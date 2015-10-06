@@ -8,5 +8,5 @@ mklink %HOME%"\.gitignore" "D:\admin\Development\dotfiles\.gitignore"
 mklink "D:\admin\_vrapperrc" "D:\admin\Development\dotfiles\eclipse\_vrapperrc"
 mklink "D:\admin\.vrapperrc.local" "D:\admin\Development\dotfiles\eclipse\_vrapperrc.win"
 
-git config user.name = "assout"
-git config user.email = assout@users.noreply.github.com
+git config user.name "assout"
+git config user.email "assout@users.noreply.github.com"

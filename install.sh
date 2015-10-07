@@ -16,4 +16,4 @@ ln -sf ~/Development/dotfiles/vim/_vimrc ~/.vimrc
 ln -sf ~/Development/dotfiles/vim/.vimrc.devlopment ~/Development/vim-plugins
 ln -sf ~/Development/dotfiles/vim/_gvimrc ~/.gvimrc
 ln -sf ~/Development/dotfiles/eclipse/_vrapperrc ~/.vrapperrc
-ln -sf ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.local
+ln -sf ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.environment

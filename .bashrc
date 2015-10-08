@@ -5,7 +5,6 @@
 # * Functions & Aliases
 # * Define, Export variables
 # * User process
-# * Environment settings
 # * After
 # }}}1
 
@@ -37,7 +36,7 @@ function isOffice {
 	fi
 }
 
-function cd-parent {
+function cdParent {
 	local to=${1:-1}
 	local toStr="";
 	for _ in $(seq 1 "${to}") ; do
@@ -45,13 +44,13 @@ function cd-parent {
 	done
 	cdls ${toStr}
 }
-alias ..='cd-parent'
+alias ..='cdParent'
 
 function cdls {
 	command cd "$1"; # エスケープしないと循環しちゃう
 	ls --color=auto --show-control-chars;
 }
-alias cd=cdls
+alias cd='cdls'
 
 # Vim
 if [ "$(which vim 2> /dev/null)" ] ; then
@@ -67,34 +66,34 @@ fi
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
 	# ls & cd
-	function peco-lscd {
+	function pecoLscd {
 		local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
-		if [ ! -z "$dir" ] ; then
-			cd "$dir"
-		fi
-	}
-	alias pcd=peco-lscd
+	if [ ! -z "$dir" ] ; then
+		cd "$dir"
+	fi
+}
+alias pcd='pecoLscd'
 
-	# history
-	function peco-hist {
-		time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
-		column=$(( time_column + 3))
-		cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
-		history -s "$cmd"
-		eval "$cmd"
-	}
-	# TODO なんかC-pとかが遅くなるので一旦無効
-	# bind '"\C-p\C-r":"peco-hist\n"'
+# history
+function pecoHist {
+	time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
+	column=$(( time_column + 3))
+	cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
+	history -s "$cmd"
+	eval "$cmd"
+}
+# TODO なんかC-pとかが遅くなるので一旦無効
+# bind '"\C-p\C-r":"peco-hist\n"'
 fi
 
 # Man
-function man-japanese {
+function manJapanese {
 	LANG_ESCAPE=$LANG
 	LANG=ja_JP.UTF-8
 	man "$*"
 	LANG=$LANG_ESCAPE
 }
-alias jan='man-japanese'
+alias jan='manJapanese'
 
 # Docker
 alias drm='docker rm $(docker ps -a -q)'
@@ -111,21 +110,31 @@ if isOffice ; then
 	alias grepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/grep.exe'
 	alias egrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/egrep.exe'
 	alias fgrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/fgrep.exe'
+
+	alias l.='ls -d .* --color=auto --show-control-chars'
+	alias ll='ls -l --color=auto --show-control-chars'
+	alias ls='ls --color=auto --show-control-chars'
+
+	alias e='explorer'
 fi
 # }}}1
 
 # [Define, Export variables] {{{1
-# LANG=ja_JP.UTF-8
-LANG=en_US.UTF-8
-export LANG
-export GOPATH=$HOME/.go
-if isHome ; then
-	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
-fi
-
 HISTSIZE=5000
 HISTFILESIZE=5000
 HISTCONTROL=ignoredups
+
+export GOPATH=$HOME/.go
+
+if isHome ; then
+	export LANG=en_US.UTF-8
+elif isOffice ; then
+	export LANG=ja_JP.UTF-8
+fi
+
+if isHome ; then
+	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+fi
 # }}}1
 
 # [User process] {{{1
@@ -160,18 +169,6 @@ elif isOffice ; then
 fi
 # }}}1
 
-# [Environment settings] {{{1
-# office(msysgit)
-if isOffice ; then
-	alias l.='ls -d .* --color=auto --show-control-chars'
-	alias ll='ls -l --color=auto --show-control-chars'
-	alias ls='ls --color=auto --show-control-chars'
-
-	LANG=ja_JP.UTF-8
-	export LANG
-fi
-# }}}1
-
 # [After] {{{1
 export PATH="$HOME/.cabal/bin:$PATH"
 
@@ -186,3 +183,4 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # }}}1
 
 # vim:nofoldenable:
+

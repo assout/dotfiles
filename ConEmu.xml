@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2015-10-02 18:31:59" build="150513">
+		<key name=".Vanilla" modified="2015-10-08 13:57:37" build="150513">
 			<value name="StartType" type="hex" data="02"/>
 			<value name="CmdLine" type="string" data=""/>
 			<value name="StartTasksFile" type="string" data=""/>
@@ -139,11 +139,11 @@
 			<value name="ColorKeyValue" type="dword" data="00010101"/>
 			<value name="UseCurrentSizePos" type="hex" data="01"/>
 			<value name="WindowMode" type="dword" data="0000051f"/>
-			<value name="ConWnd Width" type="dword" data="00000069"/>
-			<value name="ConWnd Height" type="dword" data="0000002d"/>
+			<value name="ConWnd Width" type="dword" data="000000aa"/>
+			<value name="ConWnd Height" type="dword" data="0000003a"/>
 			<value name="Cascaded" type="hex" data="01"/>
-			<value name="ConWnd X" type="dword" data="00000461"/>
-			<value name="ConWnd Y" type="dword" data="000000e6"/>
+			<value name="ConWnd X" type="dword" data="00000289"/>
+			<value name="ConWnd Y" type="dword" data="00000050"/>
 			<value name="16bit Height" type="dword" data="00000000"/>
 			<value name="AutoSaveSizePos" type="hex" data="00"/>
 			<value name="IntegralSize" type="hex" data="00"/>
@@ -376,7 +376,7 @@
 			<value name="Update.DownloadPath" type="string" data="%TEMP%\ConEmu"/>
 			<value name="Update.LeavePackages" type="hex" data="00"/>
 			<value name="Update.PostUpdateCmd" type="string" data="echo Last successful update&gt;ConEmuUpdate.info &amp;&amp; date /t&gt;&gt;ConEmuUpdate.info &amp;&amp; time /t&gt;&gt;ConEmuUpdate.info"/>
-			<key name="HotKeys" modified="2015-10-02 18:31:59" build="150513">
+			<key name="HotKeys" modified="2015-10-08 13:57:37" build="150513">
 				<value name="KeyMacroVersion" type="hex" data="02"/>
 				<value name="Multi.Modifier" type="dword" data="00000011"/>
 				<value name="Multi.ArrowsModifier" type="dword" data="0000005b"/>
@@ -396,19 +396,19 @@
 				<value name="Multi.NewConsolePopup" type="dword" data="00000000"/>
 				<value name="Multi.NewConsolePopup2" type="dword" data="00000000"/>
 				<value name="Multi.NewAttach" type="dword" data="00000000"/>
-				<value name="Multi.NewSplitV" type="dword" data="00101150"/>
-				<value name="Multi.NewSplitH" type="dword" data="00101156"/>
-				<value name="Multi.SplitMaximize" type="dword" data="00101154"/>
+				<value name="Multi.NewSplitV" type="dword" data="00001250"/>
+				<value name="Multi.NewSplitH" type="dword" data="00001256"/>
+				<value name="Multi.SplitMaximize" type="dword" data="00001254"/>
 				<value name="Multi.SplitSizeVU" type="dword" data="00105d26"/>
 				<value name="Multi.SplitSizeVD" type="dword" data="00105d28"/>
 				<value name="Multi.SplitSizeHL" type="dword" data="00105d25"/>
 				<value name="Multi.SplitSizeHR" type="dword" data="00105d27"/>
 				<value name="Key.TabPane1" type="dword" data="00000000"/>
 				<value name="Key.TabPane2" type="dword" data="00000000"/>
-				<value name="Multi.SplitFocusU" type="dword" data="0010114b"/>
-				<value name="Multi.SplitFocusD" type="dword" data="0010114a"/>
-				<value name="Multi.SplitFocusL" type="dword" data="00101148"/>
-				<value name="Multi.SplitFocusR" type="dword" data="0010114c"/>
+				<value name="Multi.SplitFocusU" type="dword" data="0000124b"/>
+				<value name="Multi.SplitFocusD" type="dword" data="0000124a"/>
+				<value name="Multi.SplitFocusL" type="dword" data="00001248"/>
+				<value name="Multi.SplitFocusR" type="dword" data="0000124c"/>
 				<value name="Multi.Next" type="dword" data="00000000"/>
 				<value name="Multi.NextShift" type="dword" data="00000000"/>
 				<value name="Multi.Recreate" type="dword" data="00000000"/>
@@ -417,7 +417,7 @@
 				<value name="Multi.Scroll" type="dword" data="00000000"/>
 				<value name="Multi.GroupInput" type="dword" data="00005d47"/>
 				<value name="Multi.Detach" type="dword" data="00000000"/>
-				<value name="Multi.Close" type="dword" data="00101143"/>
+				<value name="Multi.Close" type="dword" data="00001243"/>
 				<value name="CloseTabKey" type="dword" data="00000000"/>
 				<value name="CloseGroupKey" type="dword" data="00000000"/>
 				<value name="CloseGroupPrcKey" type="dword" data="00000000"/>
@@ -427,15 +427,15 @@
 				<value name="KillProcessKey" type="dword" data="00000000"/>
 				<value name="KillAllButShellKey" type="dword" data="00105b2e"/>
 				<value name="DuplicateRootKey" type="dword" data="00000000"/>
-				<value name="CloseConEmuKey" type="dword" data="00101151"/>
+				<value name="CloseConEmuKey" type="dword" data="00001251"/>
 				<value name="Multi.Rename" type="dword" data="00000000"/>
 				<value name="AffinityPriorityKey" type="dword" data="00005d41"/>
 				<value name="Multi.MoveLeft" type="dword" data="00125b25"/>
 				<value name="Multi.MoveRight" type="dword" data="00125b27"/>
 				<value name="CTS.VkBlockStart" type="dword" data="00000000"/>
-				<value name="CTS.VkTextStart" type="dword" data="001011db"/>
+				<value name="CTS.VkTextStart" type="dword" data="000012db"/>
 				<value name="CTS.VkCopyFmt0" type="dword" data="00001143"/>
-				<value name="CTS.VkCopyFmt1" type="dword" data="00101143"/>
+				<value name="CTS.VkCopyFmt1" type="dword" data="00001243"/>
 				<value name="CTS.VkCopyFmt2" type="dword" data="00000000"/>
 				<value name="CTS.VkCopyAll" type="dword" data="00000000"/>
 				<value name="HighlightMouseSwitch" type="dword" data="00005d4c"/>
@@ -443,7 +443,7 @@
 				<value name="Multi.ShowTabsList" type="dword" data="00000000"/>
 				<value name="Multi.ShowTabsList2" type="dword" data="00000000"/>
 				<value name="ClipboardVkAllLines" type="dword" data="0000102d"/>
-				<value name="ClipboardVkFirstLine" type="dword" data="00001256"/>
+				<value name="ClipboardVkFirstLine" type="dword" data="00101156"/>
 				<value name="DeleteWordToLeft" type="dword" data="00001108"/>
 				<value name="FindTextKey" type="dword" data="00005d46"/>
 				<value name="ScreenshotKey" type="dword" data="00000000"/>
@@ -554,9 +554,9 @@
 				<value name="DndRKey" type="hex" data="a2"/>
 				<value name="WndDragKey" type="dword" data="00121101"/>
 			</key>
-			<key name="Tasks" modified="2015-10-02 18:31:59" build="150513">
-				<value name="Count" type="dword" data="00000009"/>
-				<key name="Task1" modified="2015-10-02 18:31:59" build="150513">
+			<key name="Tasks" modified="2015-10-08 13:57:37" build="150513">
+				<value name="Count" type="dword" data="0000000a"/>
+				<key name="Task1" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Shells::cmd}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -565,7 +565,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task2" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task2" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Shells::cmd (Admin)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -574,7 +574,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task3" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task3" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Shells::PowerShell}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -583,7 +583,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task4" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task4" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Shells::PowerShell (Admin)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -592,7 +592,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task5" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task5" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Bash::CygWin bash}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -601,7 +601,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task6" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task6" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Bash::bash}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -610,7 +610,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task7" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task7" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Tests::Show ANSI colors}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -619,7 +619,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task8" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task8" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{Scripts::Chocolatey (Admin)}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -628,7 +628,7 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task9" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Task9" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="{RLogin::com01dm}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
@@ -637,22 +637,22 @@
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
-				<key name="Task10" modified="2015-10-02 18:16:59" build="150513">
-					<value name="Name" type="string" data="{RLogin::com01dm}"/>
+				<key name="Task10" modified="2015-10-08 13:57:37" build="150513">
+					<value name="Name" type="string" data="{Teraterm::com01dm}"/>
 					<value name="Flags" type="dword" data="00000000"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
 					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="D:\admin\Tools\rlogin\RLogin.exe"/>
+					<value name="Cmd1" type="string" data="D:\admin\Tools\teraterm-4.82\ttermpro.exe"/>
 					<value name="Active" type="dword" data="00000000"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
 			</key>
-			<key name="Apps" modified="2015-10-02 18:31:59" build="150513">
+			<key name="Apps" modified="2015-10-08 13:57:37" build="150513">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
-			<key name="Colors" modified="2015-10-02 18:31:59" build="150513">
+			<key name="Colors" modified="2015-10-08 13:57:37" build="150513">
 				<value name="Count" type="dword" data="00000001"/>
-				<key name="Palette1" modified="2015-10-02 18:31:59" build="150513">
+				<key name="Palette1" modified="2015-10-08 13:57:37" build="150513">
 					<value name="Name" type="string" data="Monokai"/>
 					<value name="ExtendColors" type="hex" data="00"/>
 					<value name="ExtendColorIdx" type="hex" data="0e"/>

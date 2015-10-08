@@ -375,6 +375,9 @@ inoremap <C-d> <Del>
 inoremap <C-k> <C-o>D
 " caution: <C-]>に慣れるため無効化。Escapeとして使用したくなったときはim_controlで日本語入力モードONの動きをしてしまうので<Esc>にmappingすること。
 inoremap <C-c> <Nop>
+inoremap <M-b> <S-Left>
+inoremap <M-f> <S-Right>
+inoremap <M-d> <C-o>dw
 " }}}
 
 " Command-line mode mappings {{{
@@ -388,6 +391,8 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
+" TODO 一単語削除
+" cnoremap <M-d>
 " }}}1
 
 " Section; Plug-ins {{{1

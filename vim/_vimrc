@@ -149,10 +149,8 @@ augroup vimrc
 	" set markdown filetype
 	autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
 	autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
-	" enabe spell on markdown file
-	if &termencoding ==# 'utf-8' || has('gui_running')
-		autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-	endif
+	" enable spell on markdown file
+	autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
 	" 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
 	autocmd FileType * set textwidth=0 formatoptions-=o
 	" QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
@@ -1139,7 +1137,9 @@ if s:HasPlugin('vim-hybrid')
 		highlight SpellBad term=reverse ctermbg=52 gui=undercurl guisp=Red
 		highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
 	endfunction
-	autocmd ColorScheme * :call DefineMyHighlight()
+	augroup vimrc
+		autocmd ColorScheme * :call DefineMyHighlight()
+	augroup END
 endif
 " }}}1
 

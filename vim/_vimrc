@@ -74,13 +74,20 @@ function! s:ToggleTab() " TODO タブサイズも変更できるように(意外
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
 	endif
 endfunction
-command! -complete=command MyToggleTab call <SID>ToggleTab()
+command! MyToggleTab call <SID>ToggleTab()
+
+function! s:ChangeTabstep(size) " TODO タブサイズも変更できるように(意外とめんどい。やるとしても別コマンドでは?)
+	setlocal tabstop=a:size
+	setlocal shiftwidth=a:size
+	retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
+endfunction
+command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep()
 
 function! s:InsertString(pos, str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 -complete=command MyInsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 -complete=command MyInsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
+command! -range -nargs=1 MyInsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 MyInsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 消す。(RefソースorUniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
@@ -114,7 +121,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 	silent 1delete
 	silent wincmd p
 endfunction
-command! -nargs=? -complete=command MyTranslate call <SID>DictionaryTranslate(<f-args>)
+command! -nargs=? MyTranslate call <SID>DictionaryTranslate(<f-args>)
 
 function! s:IsPluginEnabled() " pluginが有効か返す
 	return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
@@ -1138,7 +1145,7 @@ if s:HasPlugin('vim-hybrid')
 		highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
 	endfunction
 	augroup vimrc
-		autocmd ColorScheme * :call DefineMyHighlight()
+		autocmd ColorScheme * :call <SID>DefineMyHighlight()
 	augroup END
 endif
 " }}}1

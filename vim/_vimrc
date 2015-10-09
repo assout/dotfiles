@@ -135,7 +135,7 @@ function! s:RestoreCursorPosition()
 endfunction
 
 command! -bang MyBufClear %bdelete<bang>
-command! -bang MyBClear   BufClear<bang>
+command! -bang MyBClear   MyBufClear<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
 
 " }}}1

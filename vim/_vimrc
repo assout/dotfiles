@@ -171,11 +171,7 @@ augroup END
 
 " Section; Options {{{1
 set autoindent
-if has('gui_running')
-	set background=light
-else
-	set background=dark
-endif
+set background=dark
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
@@ -219,6 +215,7 @@ set scrolloff=5
 set shiftwidth=2
 set showcmd
 set showtabline=1
+set shortmess=a
 set sidescrolloff=5
 set smartcase
 set smartindent
@@ -462,10 +459,10 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
 	NeoBundle 'tyru/open-browser.vim'
 	NeoBundle 'tyru/restart.vim'
+	NeoBundle 'ujihisa/unite-colorscheme'
 	NeoBundle 'vim-jp/vimdoc-ja'
 	NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
 	NeoBundle 'vim-scripts/HybridText'
-	NeoBundle 'w0ng/vim-hybrid' " color scheme
 
 	" Operators {{{
 	NeoBundle 'kana/vim-operator-user'
@@ -486,6 +483,13 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'sgur/vim-textobj-parameter', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']}
 	NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
+
+	" colorschemes {{{
+	NeoBundle 'altercation/vim-colors-solarized'
+	NeoBundle 'chriskempson/vim-tomorrow-theme'
+	NeoBundle 'sickill/vim-monokai'
+	NeoBundle 'tomasr/molokai'
+	NeoBundle 'w0ng/vim-hybrid'
 	" }}}
 
 	call g:neobundle#end()
@@ -582,10 +586,6 @@ if s:HasPlugin('HybridText') " {{{
 	augroup vimrc
 		autocmd BufRead,BufNewFile *.{txt,mindmap} setlocal filetype=hybrid
 	augroup END
-endif " }}}
-
-if s:HasPlugin('vim-hybrid') " {{{
-	colorscheme hybrid
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
@@ -1130,6 +1130,16 @@ filetype on
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 
 nohlsearch " Don't (re)highlighting the last search pattern on reloading.
+
+if s:HasPlugin('vim-hybrid')
+	colorscheme hybrid
+	highlight clear SpellBad
+	highlight clear SpellCap
+	highlight SpellBad term=reverse ctermbg=52 gui=undercurl guisp=Red
+	highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
+elseif s:HasPlugin('vim-tomorrow-theme')
+	colorscheme Tomorrow-Night
+endif
 " }}}1
 
 " vim:nofoldenable:

@@ -1133,12 +1133,13 @@ nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 
 if s:HasPlugin('vim-hybrid')
 	colorscheme hybrid
-	highlight clear SpellBad
-	highlight clear SpellCap
-	highlight SpellBad term=reverse ctermbg=52 gui=undercurl guisp=Red
-	highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
-elseif s:HasPlugin('vim-tomorrow-theme')
-	colorscheme Tomorrow-Night
+	function! s:DefineMyHighlight()
+		highlight clear SpellBad
+		highlight clear SpellCap
+		highlight SpellBad term=reverse ctermbg=52 gui=undercurl guisp=Red
+		highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
+	endfunction
+	autocmd ColorScheme * :call DefineMyHighlight()
 endif
 " }}}1
 

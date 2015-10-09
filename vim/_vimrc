@@ -68,7 +68,7 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
 
-function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい)
+function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい。やるとしても別コマンドでは?)
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``

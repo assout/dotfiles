@@ -432,7 +432,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
 	NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
 	NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
 	NeoBundle 'itchyny/calendar.vim'
-	NeoBundle 'kana/vim-fakeclip' " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
+	NeoBundle 'kana/vim-fakeclip'
 	NeoBundle 'kana/vim-gf-user'
 	NeoBundle 'kana/vim-submode'
 	NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']} " TODO IE Tabで表示されない(印刷プレビュー使いたい)
@@ -848,10 +848,11 @@ endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{
 	if !has('gui_running')
-		map y  <Plug>(fakeclip-y)
-		map yy <Plug>(fakeclip-Y)
-		map p  <Plug>(fakeclip-p)
-		map dd <Plug>(fakeclip-dd)
+		" TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
+		" map y  <Plug>(fakeclip-y)
+		" map yy <Plug>(fakeclip-Y)
+		" map p  <Plug>(fakeclip-p)
+		" map dd <Plug>(fakeclip-dd)
 	endif
 endif " }}}
 

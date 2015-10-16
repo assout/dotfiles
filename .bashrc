@@ -117,6 +117,9 @@ if isOffice ; then
 
 	alias e='explorer'
 fi
+if isHome ; then
+	alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+fi
 # }}}1
 
 # [Define, Export variables] {{{1

@@ -182,7 +182,6 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
-[[ $TERM != "screen-256color" ]] && [[ "$(which tmux 2> /dev/null)" ]] && exec tmux
 # }}}1
 
 # vim:nofoldenable:

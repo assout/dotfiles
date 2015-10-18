@@ -3,10 +3,10 @@ scriptencoding utf-8
 let g:did_install_default_menus=1
 " フォント設定.
 if has('unix')
-	set guifont=Ricty\ Diminished\ 11
+  set guifont=Ricty\ Diminished\ 11
 else
-	set guifont=Consolas:h9
-	set guifontwide=MS_Gothic:h9:cSHIFTJIS
+  set guifont=Consolas:h9
+  set guifontwide=MS_Gothic:h9:cSHIFTJIS
 endif
 " 縦幅 デフォルトは24.
 set lines=40

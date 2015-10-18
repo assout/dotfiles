@@ -1,6 +1,6 @@
 mklink /J "D:\admin\dotfiles" "D:\admin\Development\dotfiles"
-mklink "C:\Users\admin\_vimrc" "D:\admin\Development\dotfiles\vim\_vimrc"
-mklink "C:\Users\admin\_gvimrc" "D:\admin\Development\dotfiles\vim\_gvimrc"
+mklink "C:\Users\admin\_vimrc" "D:\admin\Development\dotfiles\vim\.vimrc"
+mklink "C:\Users\admin\_gvimrc" "D:\admin\Development\dotfiles\vim\.gvimrc"
 mklink "C:\Users\admin\.bashrc" "D:\admin\Development\dotfiles\.bashrc"
 mklink "C:\Users\admin\.bashrc" "D:\admin\Development\dotfiles\.bashrc"
 mklink "C:\Users\admin\.gitconfig" "D:\admin\Development\dotfiles\.gitconfig"

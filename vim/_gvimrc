@@ -24,5 +24,4 @@ set guioptions-=m
 set guioptions-=T
 " colorscheme.
 " TODO colorschemaプラグインの存在チェックしていない
-set background=light
 colorscheme hybrid

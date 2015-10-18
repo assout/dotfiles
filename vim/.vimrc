@@ -443,20 +443,20 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'kana/vim-submode'
   NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']} " TODO IE Tabで表示されない(印刷プレビュー使いたい)
   NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
-  NeoBundle 'lambdalisue/vim-gista', {'depends': ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
+  NeoBundle 'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-  NeoBundle 'mattn/excitetranslate-vim', {'depends': ['mattn/webapi-vim']}
+  NeoBundle 'mattn/excitetranslate-vim', {'depends' : ['mattn/webapi-vim']}
   NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
   NeoBundle 'osyo-manga/shabadou.vim'
   NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
-  NeoBundle 'rhysd/unite-codic.vim', {'depends': ['Shougo/unite.vim', 'koron/codic-vim']}
+  NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合する
   NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
-  NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags')}
+  NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags'), 'depends': ['tpope/vim-dispatch'] }
   NeoBundle 't9md/vim-textmanip'
   NeoBundle 'thinca/vim-localrc'
   NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
@@ -465,6 +465,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
   NeoBundle 'tomtom/tcomment_vim'
   NeoBundle 'tpope/vim-abolish'
+  NeoBundle 'tpope/vim-dispatch'
   NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle 'tpope/vim-repeat'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
@@ -1044,6 +1045,7 @@ endif " }}}
 
 if s:HasPlugin('vim-tags') " {{{
   let g:vim_tags_auto_generate = has('unix') ? 1 : 0
+  let g:vim_tags_use_vim_dispatch = s:HasPlugin('vim-dispatch') ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

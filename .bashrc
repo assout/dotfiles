@@ -181,7 +181,6 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
-
 # }}}1
 
 # vim:nofoldenable:

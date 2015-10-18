@@ -68,7 +68,7 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
 
-function! s:ToggleTab() " TODO タブサイズも変更できるように(意外とめんどい。やるとしても別コマンドでは?)
+function! s:ToggleTab()
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
 		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
@@ -76,12 +76,15 @@ function! s:ToggleTab() " TODO タブサイズも変更できるように(意外
 endfunction
 command! MyToggleTab call <SID>ToggleTab()
 
-function! s:ChangeTabstep(size) " TODO タブサイズも変更できるように(意外とめんどい。やるとしても別コマンドでは?)
-	setlocal tabstop=a:size
-	setlocal shiftwidth=a:size
-	retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
+function! s:ChangeTabstep(size)
+	let &l:tabstop = a:size
+	let &l:softtabstop = a:size
+	let &l:shiftwidth = a:size
+	if &l:expandtab
+		execute '%substitute@^\v(%(\s{' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
+	endif
 endfunction
-command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep()
+command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
 function! s:InsertString(pos, str) range
 	execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
@@ -1072,50 +1075,50 @@ if s:HasPlugin('vim-watchdogs') " {{{
 	let g:watchdogs_check_BufWritePost_enable = 1
 
 	" Caution: quickfix開くとhookが動かない
-	" \		'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
+	" \   'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
 	" TODO shellcheck,mdl のみ動作確認済み
 	let g:quickrun_config = {
-				\	'watchdogs_checker/_' : {
-				\		'outputter/quickfix/open_cmd' : '',
-				\		'runner/vimproc/updatetime' : 30,
-				\ 	'hook/echo/enable' : 1,
-				\ 	'hook/echo/output_success' : 'No Errors Found.',
-				\		'hook/qfsigns_update/enable_exit': 1,
-				\		'hook/quickfix_status_enable/enable_exit' : 1,
-				\	},
+				\ 'watchdogs_checker/_' : {
+				\   'outputter/quickfix/open_cmd' : '',
+				\   'runner/vimproc/updatetime' : 30,
+				\   'hook/echo/enable' : 1,
+				\   'hook/echo/output_success' : 'No Errors Found.',
+				\   'hook/qfsigns_update/enable_exit': 1,
+				\   'hook/quickfix_status_enable/enable_exit' : 1,
+				\ },
 				\
-				\	'sh/watchdogs_checker' : {
-				\		'type'
-				\			: executable('shellcheck') ? 'watchdogs_checker/shellcheck'
-				\			: executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
-				\			: executable('bashate') ? 'watchdogs_checker/bashate'
-				\			: '',
-				\	},
-				\	'watchdogs_checker/shellcheck' : {
-				\		'command' : 'shellcheck',
-				\		'cmdopt'  : '-f gcc',
-				\	},
-				\	'watchdogs_checker/bashate' : {
-				\		'command' : 'bashate',
-				\	},
-				\	'watchdogs_checker/checkbashisms' : {
-				\		'command' : 'checkbashisms',
-				\		'cmdopt'  : '-f',
-				\	},
+				\ 'sh/watchdogs_checker' : {
+				\   'type'
+				\     : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
+				\     : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
+				\     : executable('bashate') ? 'watchdogs_checker/bashate'
+				\     : '',
+				\ },
+				\ 'watchdogs_checker/shellcheck' : {
+				\   'command' : 'shellcheck',
+				\   'cmdopt'  : '-f gcc',
+				\ },
+				\ 'watchdogs_checker/bashate' : {
+				\   'command' : 'bashate',
+				\ },
+				\ 'watchdogs_checker/checkbashisms' : {
+				\   'command' : 'checkbashisms',
+				\   'cmdopt'  : '-f',
+				\ },
 				\
-				\	'markdown/watchdogs_checker': {
-				\		'type': executable('mdl') ? 'watchdogs_checker/mdl' : '',
-				\	},
-				\	'watchdogs_checker/mdl' : {
-				\		'command' : 'mdl',
-				\	},
+				\ 'markdown/watchdogs_checker': {
+				\   'type': executable('mdl') ? 'watchdogs_checker/mdl' : '',
+				\ },
+				\ 'watchdogs_checker/mdl' : {
+				\   'command' : 'mdl',
+				\ },
 				\
-				\	'yaml/watchdogs_checker': {
-				\		'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
-				\	},
-				\	'watchdogs_checker/js-yaml' : {
-				\		'command' : 'js-yaml',
-				\	},
+				\ 'yaml/watchdogs_checker': {
+				\   'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
+				\ },
+				\ 'watchdogs_checker/js-yaml' : {
+				\   'command' : 'js-yaml',
+				\ },
 				\}
 	call g:watchdogs#setup(g:quickrun_config)
 endif " }}}

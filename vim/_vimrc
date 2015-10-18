@@ -1148,16 +1148,20 @@ cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 
 if s:HasPlugin('vim-hybrid')
-  colorscheme hybrid
   function! s:DefineMyHighlight()
     highlight clear SpellBad
     highlight clear SpellCap
-    highlight SpellBad term=reverse ctermbg=52 gui=undercurl guisp=Red
-    highlight SpellCap term=reverse ctermbg=17 gui=undercurl guisp=Blue
+    highlight clear SpellRare
+    highlight clear SpellLocal
+    highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
+    highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
+    highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
+    highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
   endfunction
   augroup vimrc
     autocmd ColorScheme * :call <SID>DefineMyHighlight()
   augroup END
+  colorscheme hybrid
 endif
 " }}}1
 

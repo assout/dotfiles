@@ -275,12 +275,13 @@ vnoremap y    y`>
 " Shortcut key prefix mappings {{{
 
 " <SID>[shortcut]a,d,rはsurround-pluginで使用
+" <SID>[shortcut]mはmaximizer-pluginで使用
+" <SID>[shortcut]H,J,K,Lはsubmode-pluginで使用
 map      s                <SID>[shortcut]
 noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]? ?
 noremap  <SID>[shortcut]/ /
 map      <SID>[shortcut]a <Nop>
-nnoremap <SID>[shortcut]b :bdelete<CR>
 nnoremap <SID>[shortcut]c <C-w>c
 map      <SID>[shortcut]d <Nop>
 nnoremap <SID>[shortcut]h <C-w>h
@@ -288,6 +289,7 @@ map      <SID>[shortcut]i <SID>[insert]
 nnoremap <SID>[shortcut]j <C-w>j
 nnoremap <SID>[shortcut]k <C-w>k
 nnoremap <SID>[shortcut]l <C-w>l
+map      <SID>[shortcut]m <Nop>
 nnoremap <SID>[shortcut]n :nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]p :split<CR>
@@ -326,10 +328,11 @@ if has('win32')
 endif
 " }}}
 
-" Ctrl-key prefix mappings {{{
-nnoremap <C-h> gT
-nnoremap <C-l> gt
-nnoremap <C-c> :tabclose<CR>
+" Ctrl,Alt key prefix mappings {{{
+nnoremap <M-h> gT
+nnoremap <M-l> gt
+nnoremap <M-t> :<C-u>tabedit<CR>
+nnoremap <M-c> :<C-u>tabclose<CR>
 
 " Use ':tjump' instead of ':tag'.
 nnoremap <C-]> g<C-]>
@@ -541,6 +544,7 @@ if s:IsPluginEnabled()
   map  <SID>[shortcut]a     <SID>[surround-a]
   map  <SID>[shortcut]d     <SID>[surround-d]
   map  <SID>[shortcut]r     <SID>[surround-r]
+  map  <SID>[shortcut]m     <SID>[maximizer]
 endif
 " }}}
 
@@ -888,7 +892,8 @@ if s:HasPlugin('vim-localrc') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
-  let g:maximizer_default_mapping_key = '<C-t>' " 't'oggle window maximize.
+  let g:maximizer_set_default_mapping = 0
+  noremap <SID>[maximizer] :<C-u>MaximizerToggle<CR>
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
@@ -975,16 +980,18 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-  call g:submode#enter_with('winsize', 'n', '', '[subP]w', '<C-w><')
-  call g:submode#enter_with('winsize', 'n', '', '[subN]w', '<C-w>>')
+  call g:submode#enter_with('winsize', 'n', '', 'sH', '<C-w><')
+  call g:submode#enter_with('winsize', 'n', '', 'sL', '<C-w>>')
+  call g:submode#enter_with('winsize', 'n', '', 'sK', '<C-w>-')
+  call g:submode#enter_with('winsize', 'n', '', 'sJ', '<C-w>+')
   call g:submode#map('winsize', 'n', '', 'h', '<C-w><')
   call g:submode#map('winsize', 'n', '', 'l', '<C-w>>')
-  call g:submode#map('winsize', 'n', '', 'H', '10<C-w><')
-  call g:submode#map('winsize', 'n', '', 'L', '10<C-w>>')
+  call g:submode#map('winsize', 'n', '', 'H', '5<C-w><')
+  call g:submode#map('winsize', 'n', '', 'L', '5<C-w>>')
   call g:submode#map('winsize', 'n', '', 'k', '<C-w>-')
   call g:submode#map('winsize', 'n', '', 'j', '<C-w>+')
-  call g:submode#map('winsize', 'n', '', 'K', '10<C-w>-')
-  call g:submode#map('winsize', 'n', '', 'J', '10<C-w>+')
+  call g:submode#map('winsize', 'n', '', 'K', '5<C-w>-')
+  call g:submode#map('winsize', 'n', '', 'J', '5<C-w>+')
 
   call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
   call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')

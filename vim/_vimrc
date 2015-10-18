@@ -71,18 +71,17 @@ command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
 function! s:ToggleTab()
 	setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
 	if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
-		execute '%substitute@^\v(%( {' . &tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
+		execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! ``
 	endif
 endfunction
 command! MyToggleTab call <SID>ToggleTab()
 
 function! s:ChangeTabstep(size)
-	let &l:tabstop = a:size
-	let &l:softtabstop = a:size
-	let &l:shiftwidth = a:size
 	if &l:expandtab
-		execute '%substitute@^\v(%(\s{' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1))/' . &tabstop . ')@e' | normal! ``
+		execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! ``
 	endif
+	let &l:tabstop = a:size
+	let &l:shiftwidth = a:size
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
@@ -219,8 +218,7 @@ set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-" caution: 0 だと tabstop の値が使われるが vim version によって指定不可なので tabstop と同じ値を直接指定
-set shiftwidth=2
+set shiftwidth=0
 set showcmd
 set showtabline=1
 set shortmess=a
@@ -232,6 +230,7 @@ if has('unix')
 else
 	set spellfile=D:/admin/Documents/spell/en.utf-8.add
 endif
+set softtabstop=0
 set splitbelow
 set splitright
 " スペルチェックで日本語は除外する

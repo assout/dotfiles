@@ -321,7 +321,7 @@ nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/_vimrc'
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if has('win32')
   nnoremap <SID>[open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>

@@ -22,4 +22,6 @@ set guioptions+=b
 set guioptions-=m
 " ツールバーを非表示.
 set guioptions-=T
+" カラースキーム TODO kaoriya版の場合vimrcに定義していても再定義が必要
+colorscheme hybrid
 

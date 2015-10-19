@@ -53,6 +53,13 @@ let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bu
 let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+
+if has('win32unix') " for minitty
+  let &t_ti.="\e[1 q"
+  let &t_SI.="\e[5 q"
+  let &t_EI.="\e[1 q"
+  let &t_te.="\e[0 q"
+endif
 " }}}1
 
 " Section; Functions and Commands {{{1
@@ -324,7 +331,7 @@ nnoremap <SID>[open] <Nop>
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if has('win32')
-  nnoremap <SID>[open]i :<C-u>edit D:\admin\Documents\ipmsg.log<CR>
+  nnoremap <SID>[open]i :<C-u>edit D:\admin\Tools\ChatAndMessenger\logs\どなどな.log<CR>
 endif
 " }}}
 

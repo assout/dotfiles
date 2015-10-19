@@ -1,0 +1,13 @@
+BoldAsFont=no
+Locale=ja_JP
+Charset=UTF-8
+FontSmoothing=default
+Transparency=medium
+FontHeight=9
+Rows=25
+OpaqueWhenFocused=yes
+Font=Consolas
+CursorType=line
+CursorBlinks=yes
+Term=xterm-256color
+BellTaskbar=yes

@@ -9,8 +9,8 @@ fi
 
 ln -sf ~/Development/dotfiles/ ~/
 ln -sf ~/Development/dotfiles/.bashrc ~/
-ln -sf ~/Development/dotfiles/.tmux.conf ~/
 ln -sf ~/Development/dotfiles/.inputrc ~/
+ln -sf ~/Development/dotfiles/.tmux.conf ~/
 ln -sf ~/Development/dotfiles/.ctags ~/
 ln -sf ~/Development/dotfiles/.gitconfig ~/
 ln -sf ~/Development/dotfiles/.gitconfig.linux ~/.gitconfig.environment

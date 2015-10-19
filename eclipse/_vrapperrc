@@ -69,25 +69,26 @@ unmap  <Space>
 " shortcut prefix mappings
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
-nnoremap sb :bdelete<CR>
-nnoremap sc :bdelete<CR>
+" TODO 挙動確認
+nnoremap sc <C-w>c
 nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
+" cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ
+nnoremap sm :maximize<CR>
+inoremap sm <C-o>:maximize<CR>i
 nnoremap sn :nohlsearch<CR>
 noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
-" Ctrl key mappings
-nnoremap <C-h>  <C-w>gT
-nnoremap <C-l>  <C-w>gt
-nnoremap <C-c>  :bdelete<CR>
+" Ctrl,Alt key mappings
+nnoremap <M-h>  <C-w>gT
+nnoremap <M-l>  <C-w>gt
+nnoremap <M-t>  :tabedit<CR>
+nnoremap <M-c>  :tabclose<CR>
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
-" cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ
-nnoremap <C-t>  :maximize<CR>
-inoremap <C-t>  <C-o>:maximize<CR>i
 
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a>  <C-o>^

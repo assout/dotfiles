@@ -129,11 +129,12 @@ HISTCONTROL=ignoredups
 
 export GOPATH=$HOME/.go
 
-if isHome ; then
-	export LANG=en_US.UTF-8
-elif isOffice ; then
-	export LANG=ja_JP.UTF-8
-fi
+export LANG=en_US.UTF-8
+# if isHome ; then
+# 	export LANG=en_US.UTF-8
+# elif isOffice ; then
+# 	export LANG=ja_JP.UTF-8
+# fi
 
 if isHome ; then
 	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
@@ -182,6 +183,14 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 # }}}1
+
+# show branch name on msys2. TODO 表示されない。gitコマンド結果に色がつく。
+if isOffice ; then
+	source /d/admin/Tools/msys32/usr/share/git/completion/git-prompt.sh
+	source /d/admin/Tools/msys32/usr/share/git/completion/git-completion.bash
+	GIT_PS1_SHOWDIRTYSTATE=true
+	export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+fi
 
 # vim:nofoldenable:
 

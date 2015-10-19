@@ -49,16 +49,16 @@ endif
 
 " Section; Let defines {{{1
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
-let s:bundlePath = has('unix') ? $HOME . '/.vim/bundle/' : $HOME . '/vimfiles/bundle/'
+let s:bundlePath = has('win32') || has('win32unix') ? $HOME . '/vimfiles/bundle/' : $HOME . '/.vim/bundle/'
 let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-if has('win32unix') " for minitty
-  let &t_ti.="\e[1 q"
-  let &t_SI.="\e[5 q"
-  let &t_EI.="\e[1 q"
-  let &t_te.="\e[0 q"
+if has('win32unix') " for minitty. TODO カーソル変化するまで間がある
+  let &t_ti .= "\e[1 q"
+  let &t_SI .= "\e[5 q"
+  let &t_EI .= "\e[1 q"
+  let &t_te .= "\e[0 q"
 endif
 " }}}1
 
@@ -132,8 +132,18 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
 endfunction
 command! -nargs=? MyTranslate call <SID>DictionaryTranslate(<f-args>)
 
+function! s:IsHome()
+  return $USERNAME ==# 'oji'
+endfunction
+
+function! s:IsOffice()
+  return $USERNAME ==# 'admin'
+endfunction
+
 function! s:IsPluginEnabled() " pluginが有効か返す
-  return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
+  " return isdirectory(s:bundlePath)
+  return isdirectory(s:bundlePath) && ! has('win32unix')
+  " return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す
@@ -330,7 +340,7 @@ nnoremap <SID>[open] <Nop>
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
-if has('win32')
+if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit D:\admin\Tools\ChatAndMessenger\logs\どなどな.log<CR>
 endif
 " }}}
@@ -429,7 +439,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
-  if has('unix')
+  if s:IsHome()
     NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   endif
   NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
@@ -609,8 +619,8 @@ if s:HasPlugin('HybridText') " {{{
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
-  let g:IM_CtrlMode = has('unix') ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
-  if has('unix')
+  let g:IM_CtrlMode = s:IsHome() ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
+  if s:IsHome()
     function! g:IMCtrl(cmd)
       if a:cmd ==? 'On'
         let l:res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
@@ -634,7 +644,7 @@ endif " }}}
 
 if s:HasPlugin('memolist') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = has('unix') ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
+  let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MyMemoGrep(word)
@@ -681,7 +691,7 @@ if s:HasPlugin('operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-  let g:previm_custom_css_path = has('unix') ? '/home/oji/Development/dotfiles/vim/previm.css' : 'D:/admin/Development/dotfiles/vim/previm.css'
+  let g:previm_custom_css_path = s:IsHome() ? '/home/oji/Development/dotfiles/vim/previm.css' : 'D:/admin/Development/dotfiles/vim/previm.css'
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
@@ -1150,6 +1160,7 @@ endif " }}}
 
 " Section; After {{{1
 filetype on
+syntax on
 
 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>

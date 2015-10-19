@@ -166,9 +166,10 @@ augroup vimrc
 	if executable('python')
 		autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
 	endif
-	if executable('xmllint') " TODO pretty format(xml,html,xhtml)
-		autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
-	endif
+	" TODO 基本は標準にする。↓は別のキーマップで割り当てる。
+	" if executable('xmllint') " TODO pretty format(xml,html,xhtml)
+	" 	autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+	" endif
 	" restore cursor position
 	autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END

@@ -1,3 +1,5 @@
+REM TODO 既存リンク上書き
+
 mklink /J "D:\admin\dotfiles" "D:\admin\Development\dotfiles"
 mklink "C:\Users\admin\_vimrc" "D:\admin\Development\dotfiles\vim\.vimrc"
 mklink "C:\Users\admin\_gvimrc" "D:\admin\Development\dotfiles\vim\.gvimrc"

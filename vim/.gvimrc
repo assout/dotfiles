@@ -10,8 +10,6 @@ else
 endif
 " 縦幅 デフォルトは24.
 set lines=40
-" コマンドライン高さ.
-set cmdheight=1
 " 横幅 デフォルトは80.
 set columns=120
 " 自動選択(autoselect)をオフにする

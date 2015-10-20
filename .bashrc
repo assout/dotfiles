@@ -116,8 +116,8 @@ if isOffice ; then
 	alias ls='ls --color=auto --show-control-chars'
 
 	alias e='explorer'
-fi
-if isHome ; then
+	alias git='winpty git'
+elif isHome ; then
 	alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 # }}}1
@@ -178,12 +178,15 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 # }}}1
 
-# show branch name on msys2. TODO 表示されない。gitコマンド結果に色がつく。
+# show branch name on msys2. TODO 表示されない。ちょっと遅い?
 if isOffice ; then
-	source /d/admin/Tools/msys32/usr/share/git/completion/git-prompt.sh
-	source /d/admin/Tools/msys32/usr/share/git/completion/git-completion.bash
-	export GIT_PS1_SHOWDIRTYSTATE=true
-	export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+	source /usr/share/git/completion/git-prompt.sh
+	source /usr/share/git/completion/git-completion.bash
+	GIT_PS1_SHOWDIRTYSTATE=true
+	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+	# export PS1='\[\033[32m\]\u@\h\[\033[00m\]:\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\$ '
+	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+	# export PS1='\[\033[32m\]\u@\h\[\033[00m\]:\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\n\$ '
 fi
 
 # vim:nofoldenable:

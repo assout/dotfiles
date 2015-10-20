@@ -128,13 +128,7 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups
 
 export GOPATH=$HOME/.go
-
 export LANG=en_US.UTF-8
-# if isHome ; then
-# 	export LANG=en_US.UTF-8
-# elif isOffice ; then
-# 	export LANG=ja_JP.UTF-8
-# fi
 
 if isHome ; then
 	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
@@ -162,10 +156,10 @@ elif isOffice ; then
 		todayBackupLinkPathDesktop="D:\\admin\\Desktop\\Today"
 		todayBackupLinkPathHome="D:\\admin\\Today"
 		if [ -d "${todayBackupLinkPathDesktop}" ] ; then
-			rmdir "${todayBackupLinkPathDesktop}"
+			rm -r "${todayBackupLinkPathDesktop}"
 		fi
 		if [ -d "${todayBackupLinkPathHome}" ] ; then
-			rmdir "${todayBackupLinkPathHome}"
+			rm -r "${todayBackupLinkPathHome}"
 		fi
 		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}"
 		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}"
@@ -188,7 +182,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 if isOffice ; then
 	source /d/admin/Tools/msys32/usr/share/git/completion/git-prompt.sh
 	source /d/admin/Tools/msys32/usr/share/git/completion/git-completion.bash
-	GIT_PS1_SHOWDIRTYSTATE=true
+	export GIT_PS1_SHOWDIRTYSTATE=true
 	export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 fi
 

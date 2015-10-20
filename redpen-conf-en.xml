@@ -1,0 +1,20 @@
+<redpen-conf lang="en">
+    <validators>
+        <validator name="SentenceLength">
+            <property name="max_len" value="100"/>
+        </validator>
+        <validator name="InvalidSymbol"/>
+        <validator name="SymbolWithSpace"/>
+        <validator name="SectionLength">
+            <property name="max_char_num" value="2000"/>
+        </validator>
+        <validator name="ParagraphNumber"/>
+        <validator name="Spelling"/>
+        <validator name="Contraction" />
+        <validator name="DoubledWord" />
+        <validator name="SuccessiveWord" />
+        <validator name="EndOfSentence" />
+        <validator name="SpaceBeginningOfSentence" />
+        <validator name="JavaScript" />
+    </validators>
+</redpen-conf>

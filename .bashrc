@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # [Index] {{{1
 # * Begin
 # * Functions & Aliases
@@ -182,7 +181,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 if isOffice ; then
 	source /usr/share/git/completion/git-prompt.sh
 	source /usr/share/git/completion/git-completion.bash
-	GIT_PS1_SHOWDIRTYSTATE=true
+	export GIT_PS1_SHOWDIRTYSTATE=true
 	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
 	# export PS1='\[\033[32m\]\u@\h\[\033[00m\]:\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\$ '
 	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'

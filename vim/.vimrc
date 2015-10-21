@@ -1116,6 +1116,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   'runner/vimproc/updatetime' : 30,
         \   'hook/echo/enable' : 1,
         \   'hook/echo/output_success' : 'No Errors Found.',
+        \   'hook/echo/output_failure' : 'Errors Found.',
         \   'hook/qfsigns_update/enable_exit': 1,
         \   'hook/quickfix_status_enable/enable_exit' : 1,
         \ },

@@ -1,20 +1,26 @@
-<redpen-conf lang="en">
+<redpen-conf lang="en" type="zenkaku">
     <validators>
         <validator name="SentenceLength">
             <property name="max_len" value="100"/>
         </validator>
         <validator name="InvalidSymbol"/>
-        <validator name="SymbolWithSpace"/>
+        <validator name="KatakanaEndHyphen"/>
+        <validator name="KatakanaSpellCheck"/>
         <validator name="SectionLength">
-            <property name="max_char_num" value="2000"/>
+            <property name="max_num" value="1500"/>
         </validator>
         <validator name="ParagraphNumber"/>
-        <validator name="Spelling"/>
-        <validator name="Contraction" />
         <validator name="DoubledWord" />
+        <!-- <validator name="SpaceBetweenAlphabeticalWord" /> -->
+        <validator name="CommaNumber" />
         <validator name="SuccessiveWord" />
-        <validator name="EndOfSentence" />
-        <validator name="SpaceBeginningOfSentence" />
         <validator name="JavaScript" />
     </validators>
+    <symbols>
+      <symbol name="FULL_STOP" value="。" />
+      <!-- TODO 効かない -->
+      <symbol name="SPACE" value=" " invalidChars="　" />
+      <symbol name="COMMA" value="、" />
+      <symbol name="HYPHEN_SIGN" value="ー" />
+    </symbols>
 </redpen-conf>

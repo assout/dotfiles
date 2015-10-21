@@ -5,9 +5,11 @@
 " caution: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 " TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
+" TODO Alt + hogeに逃がすの微妙(Alt + hogeでメニューのショートカットができる)
 
 " eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
 " 例えば, Ctrl + c (copy)は、Alt + c に退避する.
+" 埋まってたら、Shift + Alt + hoge に逃がす.
 " 以下に退避するキーバインドの一覧を示す.
 
 " Ctrl + a - Select All
@@ -69,8 +71,8 @@ unmap  <Space>
 " shortcut prefix mappings
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
-" TODO 挙動確認
-nnoremap sc <C-w>c
+" TODO 機能しない
+" nnoremap sc <C-w>c
 nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -83,6 +85,7 @@ noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl,Alt key mappings
+" TODO 重複してる
 nnoremap <M-h>  <C-w>gT
 nnoremap <M-l>  <C-w>gt
 nnoremap <M-t>  :tabedit<CR>

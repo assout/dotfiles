@@ -451,7 +451,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'elzr/vim-json'
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle 'gregsexton/VimCalc', {'disabled' : !executable('python')}
+  NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
   NeoBundle 'itchyny/calendar.vim'

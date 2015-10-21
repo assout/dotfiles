@@ -187,7 +187,7 @@ augroup vimrc
     autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
   endif
   if executable('xmllint') " TODO pretty format(xml,html,xhtml)
-    autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+    " autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
   endif
   " restore cursor position
   autocmd BufReadPost * call s:RestoreCursorPosition()
@@ -239,7 +239,7 @@ set scrolloff=5
 set shiftwidth=2
 set showcmd
 set showtabline=1
-set shortmess=a
+set shortmess+=atTO
 set sidescrolloff=5
 set smartcase
 set smartindent
@@ -872,12 +872,18 @@ if s:HasPlugin('vim-ansible-yaml') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{
-  if !has('gui_running')
+  if (! has('gui_running')) && s:IsHome()
     " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
     " map y  <Plug>(fakeclip-y)
     " map yy <Plug>(fakeclip-Y)
     " map p  <Plug>(fakeclip-p)
     " map dd <Plug>(fakeclip-dd)
+    map y  <Plug>(fakeclip-screen-y)
+    map yy <Plug>(fakeclip-screen-Y)
+    map p  <Plug>(fakeclip-screen-p)
+    map P  <Plug>(fakeclip-screen-P)
+    map dd <Plug>(fakeclip-screen-dd)
+    map D  <Plug>(fakeclip-screen-D)
   endif
 endif " }}}
 
@@ -1101,6 +1107,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:watchdogs_check_BufWritePost_enable = 1
 
   " Caution: quickfix開くとhookが動かない
+  " TODO quickfix modifiable
   " \   'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
   " TODO shellcheck,mdl のみ動作確認済み
   let g:quickrun_config = {
@@ -1133,10 +1140,18 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ },
         \
         \ 'markdown/watchdogs_checker': {
-        \   'type': executable('mdl') ? 'watchdogs_checker/mdl' : '',
+        \  'type'
+        \    : executable('redpen') ? 'watchdogs_checker/redpen'
+        \    : executable('mdl') ? 'watchdogs_checker/mdl'
+        \    : '',
         \ },
         \ 'watchdogs_checker/mdl' : {
         \   'command' : 'mdl',
+        \ },
+        \ 'watchdogs_checker/redpen' : {
+        \   'command' : 'redpen',
+        \   'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
+        \   'exec'    : '%c %o %s:p 2> /dev/null',
         \ },
         \
         \ 'yaml/watchdogs_checker': {

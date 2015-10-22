@@ -181,8 +181,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 if isHome ; then
 	source /usr/share/git-core/contrib/completion/git-prompt.sh
-	source /usr/share/doc/git/contrib/completion/git-completion.bash
-elif isOffice ; then
+elif isOffice ; then # TODO 遅い
 	source /usr/share/git/completion/git-completion.bash
 	source /usr/share/git/completion/git-prompt.sh
 fi

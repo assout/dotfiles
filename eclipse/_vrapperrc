@@ -1,15 +1,13 @@
 " Section; Introduction {{{1
-" vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
-" 詳細は http://vrapper.sourceforge.net/documentation
-
+"
 " caution: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 " TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
-" TODO Alt + hogeに逃がすの微妙(Alt + hogeでメニューのショートカットができる)
 
-" eclipse のデフォルトキーバインドを Alt + hoge のバインドに退避することとする.
-" 例えば, Ctrl + c (copy)は、Alt + c に退避する.
-" 埋まってたら、Shift + Alt + hoge に逃がす.
+" vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
+" 詳細は <http://vrapper.sourceforge.net/documentation>
+" eclipse のデフォルトキーバインドを <Alt-hoge> のバインドに退避することとする.(メニューへのショートカットができなくなるがまあ良い)
+" <Alt-hoge>のキーバインドが重複したら<C-S-A-hoge>にする。。
 " 以下に退避するキーバインドの一覧を示す.
 
 " Ctrl + a - Select All
@@ -71,8 +69,7 @@ unmap  <Space>
 " shortcut prefix mappings
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
-" TODO 機能しない
-" nnoremap sc <C-w>c
+nnoremap sc :x<CR>
 nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -84,14 +81,17 @@ nnoremap sn :nohlsearch<CR>
 noremap  sp :split<CR>
 noremap  sv :vsplit<CR>
 
-" Ctrl,Alt key mappings
-" TODO 重複してる
-nnoremap <M-h>  <C-w>gT
-nnoremap <M-l>  <C-w>gt
-nnoremap <M-t>  :tabedit<CR>
-nnoremap <M-c>  :tabclose<CR>
+" Ctrl key mappings
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
+
+" Alt key mappings
+" Caution: <M-h>はシステムが利用するのでマッピング不可.Eclipseの設定で変える.(<M-l>は定義できるが合わせる).
+" nnoremap <M-h>  <C-w>gT
+" nnoremap <M-l>  <C-w>gt
+" Caution: <M-t,c>系はタブ作成、クローズだがEclipseではあまりつかわないので定義しない.
+" nnoremap <M-t>  :tabedit<CR>
+" nnoremap <M-c>  :bdelete<CR>
 
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a>  <C-o>^

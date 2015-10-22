@@ -179,6 +179,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 # }}}1
 
+# TODO ちょっと表示が遅くなる
 if isOffice ; then
 	source /usr/share/git/completion/git-completion.bash
 	source /usr/share/git/completion/git-prompt.sh

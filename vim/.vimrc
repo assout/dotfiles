@@ -878,12 +878,12 @@ if s:HasPlugin('vim-fakeclip') " {{{
     " map yy <Plug>(fakeclip-Y)
     " map p  <Plug>(fakeclip-p)
     " map dd <Plug>(fakeclip-dd)
-    map y  <Plug>(fakeclip-screen-y)
-    map yy <Plug>(fakeclip-screen-Y)
-    map p  <Plug>(fakeclip-screen-p)
-    map P  <Plug>(fakeclip-screen-P)
-    map dd <Plug>(fakeclip-screen-dd)
-    map D  <Plug>(fakeclip-screen-D)
+    " map y  <Plug>(fakeclip-screen-y)
+    " map yy <Plug>(fakeclip-screen-Y)
+    " map p  <Plug>(fakeclip-screen-p)
+    " map P  <Plug>(fakeclip-screen-P)
+    " map dd <Plug>(fakeclip-screen-dd)
+    " map D  <Plug>(fakeclip-screen-D)
   endif
 endif " }}}
 

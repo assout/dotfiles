@@ -179,14 +179,18 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 # }}}1
 
-# TODO ちょっと表示が遅くなる
-if isOffice ; then
+if isHome ; then
+	source /usr/share/git-core/contrib/completion/git-prompt.sh
+	source /usr/share/doc/git/contrib/completion/git-completion.bash
+elif isOffice ; then
 	source /usr/share/git/completion/git-completion.bash
 	source /usr/share/git/completion/git-prompt.sh
-	GIT_PS1_SHOWDIRTYSTATE=true
-	GIT_PS1_SHOWSTASHSTATE=true
-	GIT_PS1_SHOWUNTRACKEDFILES=true
-	GIT_PS1_SHOWUPSTREAM=auto
+fi
+if isHome || isOffice ; then
+	export GIT_PS1_SHOWDIRTYSTATE=true
+	export GIT_PS1_SHOWSTASHSTATE=true
+	export GIT_PS1_SHOWUNTRACKEDFILES=true
+	export GIT_PS1_SHOWUPSTREAM=auto
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 fi
 

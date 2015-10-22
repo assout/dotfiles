@@ -179,16 +179,14 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 # }}}1
 
-# show branch name on msys2. TODO 表示されない。ちょっと遅い?
 if isOffice ; then
-	source /usr/share/git/completion/git-prompt.sh
 	source /usr/share/git/completion/git-completion.bash
-	export GIT_PS1_SHOWDIRTYSTATE=true
-	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-	# export PS1='\[\033[32m\]\u@\h\[\033[00m\]:\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\$ '
-	# export PS1='\[\033[32m\]\u@\h\[\033[00m\]:\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\n\$ '
-	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
-	# export PS1="$PS1"'$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD")'
+	source /usr/share/git/completion/git-prompt.sh
+	GIT_PS1_SHOWDIRTYSTATE=true
+	GIT_PS1_SHOWSTASHSTATE=true
+	GIT_PS1_SHOWUNTRACKEDFILES=true
+	GIT_PS1_SHOWUPSTREAM=auto
+	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 fi
 
 # vim:nofoldenable:

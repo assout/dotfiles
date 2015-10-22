@@ -12,6 +12,8 @@ endif
 set lines=40
 " 横幅 デフォルトは80.
 set columns=120
+" コマンドライン高さ TODO kaoriya版の場合vimrcに定義していても再定義が必要
+set cmdheight=1
 " 自動選択(autoselect)をオフにする
 set guioptions-=a
 " 水平スクロールバーを表示.

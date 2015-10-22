@@ -31,6 +31,6 @@ Cyan=138,190,183
 BoldCyan=90,162,152
 White=197,200,198
 BoldWhite=255,255,255
-ClipShortcuts=yes
+ClipShortcuts=no
 Columns=160
 CtrlShiftShortcuts=yes

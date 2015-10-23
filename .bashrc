@@ -181,15 +181,15 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 if isHome ; then
 	source /usr/share/git-core/contrib/completion/git-prompt.sh
-elif isOffice ; then # TODO 遅い
-	source /usr/share/git/completion/git-completion.bash
+	# TODO Officeだと遅い
+	export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
+	export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
+	export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
+	export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチがUPSTREAMとの進み具合を">","<","="で表示
+elif isOffice ; then
 	source /usr/share/git/completion/git-prompt.sh
 fi
 if isHome || isOffice ; then
-	export GIT_PS1_SHOWDIRTYSTATE=true
-	export GIT_PS1_SHOWSTASHSTATE=true
-	export GIT_PS1_SHOWUNTRACKEDFILES=true
-	export GIT_PS1_SHOWUPSTREAM=auto
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 	PS1=$PS1'$( [ -n $TMUX ] && tmux rename-window $(basename $PWD))'
 fi

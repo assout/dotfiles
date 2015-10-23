@@ -54,7 +54,7 @@ let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-if has('win32unix') " for minitty. TODO カーソル変化するまで間がある
+if has('win32unix') " for minitty.
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -197,6 +197,7 @@ augroup END
 " Section; Options {{{1
 set autoindent
 set background=dark
+set backspace=indent,eol,start
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
@@ -258,6 +259,7 @@ set tabstop=2
 " 自動改行をなくす
 set textwidth=0
 set title
+set ttimeoutlen=0
 if has('persistent_undo')
   set noundofile
 endif

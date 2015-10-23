@@ -185,7 +185,7 @@ if isHome ; then
 	export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
 	export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
 	export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
-	export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチがUPSTREAMとの進み具合を">","<","="で表示
+	export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif isOffice ; then
 	source /usr/share/git/completion/git-prompt.sh
 fi

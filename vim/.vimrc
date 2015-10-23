@@ -343,7 +343,7 @@ nnoremap <SID>[open] <Nop>
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
-  nnoremap <SID>[open]i :<C-u>edit D:\\admin\\Tools\\ChatAndMessenger\\logs\\どなどな.log<CR>
+  nnoremap <SID>[open]i :<C-u>edit D:/admin/Tools/ChatAndMessenger/logs/どなどな.log<CR>
 endif
 " }}}
 

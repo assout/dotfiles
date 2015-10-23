@@ -86,10 +86,10 @@ nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
 
 " Alt key mappings
-" Caution: <M-h>はシステムが利用するのでマッピング不可.Eclipseの設定で変える.(<M-l>は定義できるが合わせる).
+" Caution: <M-h>はシステムが利用するのでマッピング不可.Eclipseの設定で変える.
 " nnoremap <M-h>  <C-w>gT
-" nnoremap <M-l>  <C-w>gt
-" Caution: <M-t,c>系はタブ作成、クローズだがEclipseではあまりつかわないので定義しない.
+nnoremap <M-l>  <C-w>gt
+" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが、Eclipseではあまりつかわないので定義しない.
 " nnoremap <M-t>  :tabedit<CR>
 " nnoremap <M-c>  :bdelete<CR>
 

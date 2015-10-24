@@ -54,7 +54,7 @@ let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-if has('unix') " for mintty.
+if has('win32unix') && !s:IsHome() " for mintty.
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"

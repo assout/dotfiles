@@ -1,1 +1,2 @@
 --langmap=vim:+.vimrc.gvimrc
+--langmap=sh:+.bashrc

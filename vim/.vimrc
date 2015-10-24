@@ -488,9 +488,10 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle 'tpope/vim-repeat'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
+  NeoBundle 'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'tyru/open-browser.vim'
   NeoBundle 'tyru/restart.vim'
-  NeoBundle 'ujihisa/unite-colorscheme'
+  NeoBundle 'ujihisa/unite-colorscheme', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'vim-jp/vimdoc-ja'
   NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle 'vim-scripts/HybridText'
@@ -817,7 +818,8 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
   nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
-  nnoremap <SID>[unite]t    :<C-u>Unite tab -buffer-name=tab<CR>
+  nnoremap <SID>[unite]t    :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright<CR>
+  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
   if has('unix')
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>

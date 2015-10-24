@@ -558,13 +558,15 @@ if s:IsPluginEnabled()
   " TODO <SID>つけれない
   map  <SID>[sub_plugin]s   <SID>[switch]
 
-  map  R                    <SID>[replace]
-  nmap p                    <SID>[yankround]
-  nmap P                    <SID>[Yankround]
-  map  <SID>[shortcut]a     <SID>[surround-a]
-  map  <SID>[shortcut]d     <SID>[surround-d]
-  map  <SID>[shortcut]r     <SID>[surround-r]
-  map  <SID>[shortcut]m     <SID>[maximizer]
+  map  R                <SID>[replace]
+  nmap p                <Plug>(yankround-p)
+  nmap P                <Plug>(yankround-P)
+  nmap <C-p>            <Plug>(yankround-prev)
+  nmap <C-n>            <Plug>(yankround-next)
+  map  <SID>[shortcut]a <SID>[surround-a]
+  map  <SID>[shortcut]d <SID>[surround-d]
+  map  <SID>[shortcut]r <SID>[surround-r]
+  map  <SID>[shortcut]m <SID>[maximizer]
 endif
 " }}}
 
@@ -1169,10 +1171,6 @@ endif " }}}
 
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
   let g:yankround_dir = '~/.cache/yankround'
-  nmap <SID>[yankround] <Plug>(yankround-p)
-  nmap <SID>[Yankround] <Plug>(yankround-P)
-  nmap <C-p>            <Plug>(yankround-prev)
-  nmap <C-n>            <Plug>(yankround-next)
 endif " }}}
 " }}}1
 

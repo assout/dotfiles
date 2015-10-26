@@ -359,30 +359,32 @@ nnoremap <C-]> g<C-]>
 " }}}
 
 " []key prefix mappings(based on unimpaired plugin) {{{
-nnoremap [a     :previous<CR>
-nnoremap ]a     :next<CR>
-nnoremap [A     :first<CR>
-nnoremap ]A     :last<CR>
-nnoremap [b     :bprevious<CR>
-nnoremap ]b     :bnext<CR>
-nnoremap [B     :bfirst<CR>
-nnoremap ]B     :blast<CR>
-nnoremap [l     :lprevious<CR>
-nnoremap ]l     :lnext<CR>
-nnoremap [L     :lfirst<CR>
-nnoremap ]L     :llast<CR>
-nnoremap [<C-L> :lpfile<CR>
-nnoremap ]<C-L> :llast<CR>
-nnoremap [q     :cprevious<CR>
-nnoremap ]q     :cnext<CR>
-nnoremap [Q     :cfirst<CR>
-nnoremap ]Q     :clast<CR>
-nnoremap [<C-Q> :cpfile<CR>
-nnoremap ]<C-Q> :cnfile<CR>
-nnoremap [t     :tbprevious<CR>
-nnoremap ]t     :tnext<CR>
-nnoremap [T     :tfirst<CR>
-nnoremap ]T     :tlast<CR>
+if ! s:HasPlugin('vim-unimpaired')
+  nnoremap [a     :previous<CR>
+  nnoremap ]a     :next<CR>
+  nnoremap [A     :first<CR>
+  nnoremap ]A     :last<CR>
+  nnoremap [b     :bprevious<CR>
+  nnoremap ]b     :bnext<CR>
+  nnoremap [B     :bfirst<CR>
+  nnoremap ]B     :blast<CR>
+  nnoremap [l     :lprevious<CR>
+  nnoremap ]l     :lnext<CR>
+  nnoremap [L     :lfirst<CR>
+  nnoremap ]L     :llast<CR>
+  nnoremap [<C-L> :lpfile<CR>
+  nnoremap ]<C-L> :llast<CR>
+  nnoremap [q     :cprevious<CR>
+  nnoremap ]q     :cnext<CR>
+  nnoremap [Q     :cfirst<CR>
+  nnoremap ]Q     :clast<CR>
+  nnoremap [<C-Q> :cpfile<CR>
+  nnoremap ]<C-Q> :cnfile<CR>
+  nnoremap [t     :tbprevious<CR>
+  nnoremap ]t     :tnext<CR>
+  nnoremap [T     :tfirst<CR>
+  nnoremap ]T     :tlast<CR>
+endif
 " adding to unimpaired plugin mapping
 nnoremap [g     :tabprevious<CR>
 nnoremap ]g     :tabnext<CR>
@@ -401,11 +403,10 @@ inoremap <C-a> <Home>
 inoremap <C-e> <End>
 inoremap <C-d> <Del>
 inoremap <C-k> <C-o>D
-" caution: <C-]>に慣れるため無効化。Escapeとして使用したくなったときはim_controlで日本語入力モードONの動きをしてしまうので<Esc>にmappingすること。
-inoremap <C-c> <Nop>
 inoremap <M-b> <S-Left>
 inoremap <M-f> <S-Right>
 inoremap <M-d> <C-o>dw
+" TODO <C-M-h>での一単語Backspace(<C-w>はできている)
 " }}}
 
 " Command-line mode mappings {{{
@@ -419,7 +420,7 @@ cnoremap <C-n> <Down>
 cnoremap <C-p> <Up>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-" TODO 一単語削除
+" TODO 一単語Delete
 " cnoremap <M-d>
 " }}}1
 

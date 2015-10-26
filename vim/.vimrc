@@ -463,7 +463,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'kana/vim-gf-user'
   NeoBundle 'kana/vim-submode'
   NeoBundle 'kannokanno/previm', {'disabled' : has('win32') || has('win32unix'), 'depends' : ['tyru/open-browser.vim']} " for home
-  NeoBundle 'kannokanno/previm', {'disabled' : ! (has('win32') || has('win32unix')), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " for office TODO IE Tabで表示されない(印刷プレビュー使いたい)
+  NeoBundle 'kannokanno/previm', {'disabled' : ! (has('win32') || has('win32unix')), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " for office TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい)
   NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle 'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/

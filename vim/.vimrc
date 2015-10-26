@@ -309,14 +309,15 @@ nnoremap <SID>[shortcut]j <C-w>j
 nnoremap <SID>[shortcut]k <C-w>k
 nnoremap <SID>[shortcut]l <C-w>l
 map      <SID>[shortcut]m <Nop>
-nnoremap <SID>[shortcut]n :nohlsearch<CR>
+nnoremap <SID>[shortcut]n :<C-u>nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]p :split<CR>
+noremap  <SID>[shortcut]p :<C-u>split<CR>
 map      <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
-nnoremap <SID>[shortcut]u :update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
-noremap  <SID>[shortcut]v :vsplit<CR>
-nnoremap <SID>[shortcut]z :pclose<CR>
+nnoremap <SID>[shortcut]u :<C-u>update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
+nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>
+nnoremap <SID>[shortcut]z :<C-u>pclose<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>

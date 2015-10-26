@@ -79,6 +79,7 @@ nnoremap sm :maximize<CR>
 inoremap sm <C-o>:maximize<CR>i
 nnoremap sn :nohlsearch<CR>
 noremap  sp :split<CR>
+noremap  sx :x<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl key mappings

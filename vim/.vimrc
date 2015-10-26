@@ -254,7 +254,11 @@ set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
-set tags& tags+=.git/tags
+if has('path_extra')
+  set tags& tags+=tags;
+else
+  set tags& tags+=.git/tags
+endif
 set tabstop=2
 " 自動改行をなくす
 set textwidth=0

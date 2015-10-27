@@ -1176,11 +1176,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   'command' : 'js-yaml',
         \ },
         \
-        \ "watchdogs_checker/javac" : {
-        \   "command" : "javac",
-        \   "exec"    : "%c -encoding utf8 -d $TEMP %o %S:p",
-        \   "errorformat" : '%tarning: %m,%-G%*\d error,%-G%*\d warnings,%f:%l: %trror: %m,%f:%l: %tarning: %m,%+G%.%#',
-        \ },
         \}
   " FIXME できてない
   " if s:IsOffice()

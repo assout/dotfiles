@@ -85,7 +85,7 @@ command! -range -nargs=1 MyInsertSuffix <line1>,<line2>call <SID>InsertString('$
 
 " TODO 消す。(RefソースorUniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
-function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
+function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
   let l:word = a:0 == 0 ? expand('<cword>') : a:1
   call histadd('cmd', 'MyTranslate '  . l:word)
   if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
@@ -115,7 +115,7 @@ function! s:DictionaryTranslate(...) " required gene.txt, kaoriya/dicwin.vimで�
   silent 1delete
   silent wincmd p
 endfunction
-command! -nargs=? MyTranslate call <SID>DictionaryTranslate(<f-args>)
+command! -nargs=? MyTranslate call <SID>Translate(<f-args>)
 
 function! s:IsHome()
   return $USERNAME ==# 'oji'

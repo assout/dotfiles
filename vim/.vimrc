@@ -441,7 +441,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   call g:neobundle#begin(expand(s:bundlePath))
 
   NeoBundle 'AndrewRadev/switch.vim'
-  NeoBundle 'Arkham/vim-quickfixdo' " like argdo, bufdo. TODO 本体に入ったらしい
   NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle 'KazuakiM/vim-qfsigns'
   NeoBundle 'LeafCage/vimhelpgenerator'
@@ -1176,7 +1175,22 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ 'watchdogs_checker/js-yaml' : {
         \   'command' : 'js-yaml',
         \ },
+        \
+        \ "watchdogs_checker/javac" : {
+        \   "command" : "javac",
+        \   "exec"    : "%c -encoding utf8 -d $TEMP %o %S:p",
+        \   "errorformat" : '%tarning: %m,%-G%*\d error,%-G%*\d warnings,%f:%l: %trror: %m,%f:%l: %tarning: %m,%+G%.%#',
+        \ },
         \}
+  " FIXME できてない
+  " if s:IsOffice()
+  "   let g:quickrun_config['watchdogs_checker/javac'] = '{
+  "         \   "command" : "javac",
+  "         \   "exec"    : "%c -encoding utf8 -d $TEMP %o %S:p",
+  "         \   "errorformat" : '%tarning: %m,%-G%*\d error,%-G%*\d warnings,%f:%l: %trror: %m,%f:%l: %tarning: %m,%+G%.%#',
+  "         \  }'
+  " endif
+
   call g:watchdogs#setup(g:quickrun_config)
 endif " }}}
 

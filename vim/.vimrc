@@ -1163,8 +1163,8 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \
         \ 'markdown/watchdogs_checker': {
         \  'type'
-        \    : executable('redpen') ? 'watchdogs_checker/redpen'
         \    : executable('mdl') ? 'watchdogs_checker/mdl'
+        \    : executable('redpen') ? 'watchdogs_checker/redpen'
         \    : '',
         \ },
         \ 'watchdogs_checker/mdl' : {

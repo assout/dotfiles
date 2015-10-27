@@ -305,24 +305,28 @@ map      s                <SID>[shortcut]
 noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]? ?
 noremap  <SID>[shortcut]/ /
-map      <SID>[shortcut]a <Nop>
+noremap  <SID>[shortcut]a <Nop>
 nnoremap <SID>[shortcut]c <C-w>c
-map      <SID>[shortcut]d <Nop>
+noremap  <SID>[shortcut]d <Nop>
 nnoremap <SID>[shortcut]h <C-w>h
 map      <SID>[shortcut]i <SID>[insert]
 nnoremap <SID>[shortcut]j <C-w>j
 nnoremap <SID>[shortcut]k <C-w>k
 nnoremap <SID>[shortcut]l <C-w>l
-map      <SID>[shortcut]m <Nop>
+noremap  <SID>[shortcut]m <Nop>
 nnoremap <SID>[shortcut]n :<C-u>nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]p :<C-u>split<CR>
-map      <SID>[shortcut]r <Nop>
+noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 nnoremap <SID>[shortcut]u :<C-u>update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap <SID>[shortcut]z :<C-u>pclose<CR>
+nnoremap <SID>[shortcut]H <Nop>
+nnoremap <SID>[shortcut]J <Nop>
+nnoremap <SID>[shortcut]K <Nop>
+nnoremap <SID>[shortcut]L <Nop>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
@@ -468,7 +472,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'kana/vim-gf-user'
   NeoBundle 'kana/vim-submode'
   NeoBundle 'kannokanno/previm', {'disabled' : has('win32') || has('win32unix'), 'depends' : ['tyru/open-browser.vim']} " for home
-  NeoBundle 'kannokanno/previm', {'disabled' : ! (has('win32') || has('win32unix')), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " for office TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい)
+  NeoBundle 'kannokanno/previm', {'disabled' : ! (has('win32') || has('win32unix')), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " for office TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく)
   NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle 'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -567,6 +571,7 @@ if s:IsPluginEnabled()
   " TODO <SID>つけれない
   map  <SID>[sub_plugin]s   <SID>[switch]
 
+  " TODO マッピング変える(必然性がない)
   map  R                <SID>[replace]
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)
@@ -1018,6 +1023,7 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
+  " TODO マッピング微妙かも(H,L,K,J)
   call g:submode#enter_with('winsize', 'n', '', 'sH', '<C-w><')
   call g:submode#enter_with('winsize', 'n', '', 'sL', '<C-w>>')
   call g:submode#enter_with('winsize', 'n', '', 'sK', '<C-w>-')

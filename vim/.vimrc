@@ -254,6 +254,7 @@ set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
+" TODO tagのポリシー決まってない(生成pluginも含めて)
 if has('path_extra')
   set tags& tags+=tags;
 else
@@ -482,7 +483,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合する
   NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
-  NeoBundle 'szw/vim-tags', {'disabled' : !executable('ctags'), 'depends': ['tpope/vim-dispatch'] }
   NeoBundle 't9md/vim-textmanip'
   NeoBundle 'thinca/vim-localrc'
   NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
@@ -1078,18 +1078,6 @@ if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長す�
   call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
   call g:submode#map('diff', 'n', '', 'k', '[c')
   call g:submode#map('diff', 'n', '', 'j', ']c')
-endif " }}}
-
-if s:HasPlugin('vim-tags') " {{{
-  let g:vim_tags_auto_generate = has('unix') ? 1 : 0
-  let g:vim_tags_cache_dir = expand('$HOME/.cache')
-  let g:vim_tags_use_vim_dispatch = s:HasPlugin('vim-dispatch') ? 1 : 0
-  if s:IsOffice()
-    " let g:vim_tags_project_tags_command = "ctags.exe"
-    let g:vim_tags_project_tags_command = "{CTAGS} -R"
-    " let g:vim_tags_project_tags_command = "{CTAGS} -R {OPTIONS} {DIRECTORY}"
-    " let g:vim_tags_project_tags_command = "{CTAGS} -R --disable-external-sort {DIRECTORY}"
-  endif
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

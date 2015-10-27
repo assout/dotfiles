@@ -254,11 +254,10 @@ set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
-" TODO tagのポリシー決まってない(生成pluginも含めて)
 if has('path_extra')
-  set tags& tags+=tags;
+  set tags& tags^=.tags;
 else
-  set tags& tags+=.git/tags
+  set tags& tags^=./.tags,.tags
 endif
 set tabstop=2
 " 自動改行をなくす
@@ -459,7 +458,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'chaquotay/ftl-vim-syntax'
   NeoBundle 'chase/vim-ansible-yaml'
-  NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntastic 入れてる時っぽい
+  NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntasticと競合してるっぽい
   NeoBundle 'elzr/vim-json'
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
@@ -484,7 +483,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'pangloss/vim-javascript' " for indent only
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
-  " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合する
+  " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
   NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
   NeoBundle 't9md/vim-textmanip'
   NeoBundle 'thinca/vim-localrc'
@@ -506,6 +505,9 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'vim-jp/vimdoc-ja'
   NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle 'vim-scripts/HybridText'
+  NeoBundle 'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}
+  NeoBundle 'xolox/vim-misc'
+  NeoBundle 'xolox/vim-shell'
 
   " Operators {{{
   NeoBundle 'kana/vim-operator-user'
@@ -887,6 +889,11 @@ endif " }}}
 
 if s:HasPlugin('vim-ansible-yaml') " {{{
   let g:ansible_options = {'ignore_blank_lines': 1}
+endif " }}}
+
+if s:HasPlugin('vim-easytags') " {{{
+  let g:easytags_async = 1
+  let g:easytags_dynamic_files = 2
 endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{

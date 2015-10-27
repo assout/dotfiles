@@ -50,6 +50,9 @@ Session.vim
 .netrwhist
 *~
 
+# add manually
+tags
+.tags
 
 ### Java ###
 *.class

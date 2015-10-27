@@ -1078,7 +1078,14 @@ endif " }}}
 
 if s:HasPlugin('vim-tags') " {{{
   let g:vim_tags_auto_generate = has('unix') ? 1 : 0
+  let g:vim_tags_cache_dir = expand('$HOME/.cache')
   let g:vim_tags_use_vim_dispatch = s:HasPlugin('vim-dispatch') ? 1 : 0
+  if s:IsOffice()
+    " let g:vim_tags_project_tags_command = "ctags.exe"
+    let g:vim_tags_project_tags_command = "{CTAGS} -R"
+    " let g:vim_tags_project_tags_command = "{CTAGS} -R {OPTIONS} {DIRECTORY}"
+    " let g:vim_tags_project_tags_command = "{CTAGS} -R --disable-external-sort {DIRECTORY}"
+  endif
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

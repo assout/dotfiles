@@ -193,7 +193,9 @@ elif isOffice ; then
 fi
 if isHome || isOffice ; then
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-	PS1=$PS1'$( [ -n $TMUX ] && _=${PWD##*/} && tmux rename-window "${_:-/}")'
+	PS1=$PS1'$( [ -n $TMUX ] && tmux rename-window "${PWD##*/}")'
+	# TODO /(root)だとうまく表示されない。↓のコメントアウトでもダメ
+	# PS1=$PS1'$( [ -n $TMUX ] && _=${PWD##*/} && tmux rename-window "${_:-/}")'
 fi
 
 # vim:nofoldenable:

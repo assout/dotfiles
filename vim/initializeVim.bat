@@ -1,1 +1,0 @@
-mkdir %userprofile%\.vim\bundle

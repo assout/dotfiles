@@ -175,7 +175,7 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
   " enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-  " TODO CUI(MSYS2)だと効いてないっぽい(augroup全体?)
+  " TODO CUI(MSYS2)だと効いてないっぽい(augroup全体効いてない?)
   autocmd FileType vim setlocal expandtab
   " 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
   autocmd FileType * set textwidth=0 formatoptions-=o

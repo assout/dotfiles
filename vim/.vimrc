@@ -247,7 +247,7 @@ set smartindent
 if has('unix')
   set spellfile=~/Dropbox/spell/en.utf-8.add
 else
-  set spellfile=D:/admin/Documents/spell/en.utf-8.add
+  set spellfile=~/Documents/spell/en.utf-8.add
 endif
 set softtabstop=0
 set splitbelow
@@ -255,9 +255,9 @@ set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
 if has('path_extra')
-  set tags& tags^=.tags;
+  set tags& tags=./.tags;
 else
-  set tags& tags^=./.tags,.tags
+  set tags& tags=./.tags
 endif
 set tabstop=2
 " 自動改行をなくす
@@ -349,10 +349,10 @@ nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
-  nnoremap <SID>[open]i :<C-u>edit D:/admin/Tools/ChatAndMessenger/logs/どなどな.log<CR>
+  nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
 endif
 " }}}
 
@@ -663,7 +663,7 @@ endif " }}}
 
 if s:HasPlugin('memolist') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : 'D:/admin/Documents/memolist'
+  let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : '~/Documents/memolist'
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MyMemoGrep(word)
@@ -710,7 +710,8 @@ if s:HasPlugin('operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-  let g:previm_custom_css_path = s:IsHome() ? '/home/oji/Development/dotfiles/vim/previm.css' : 'D:/admin/Development/dotfiles/vim/previm.css'
+  " TODO 見えている?(expand等必要?)
+  let g:previm_custom_css_path = '~/Development/dotfiles/vim/previm.css'
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
@@ -866,7 +867,7 @@ if s:HasPlugin('unite') " {{{
 
   if s:HasPlugin('unite-todo') " {{{
     let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : 'D:/admin/Documents'
+    let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : '~/Documents'
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)

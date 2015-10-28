@@ -106,9 +106,9 @@ alias g="git"
 
 # Other
 if isOffice ; then
-	alias grepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/grep.exe'
-	alias egrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/egrep.exe'
-	alias fgrepsjis='/d/admin/Tools/grep-2.5.4-bin/bin/fgrep.exe'
+	alias grepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/grep.exe'
+	alias egrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/egrep.exe'
+	alias fgrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/fgrep.exe'
 
 	alias l.='ls -d .* --color=auto --show-control-chars'
 	alias ll='ls -l --color=auto --show-control-chars'
@@ -150,20 +150,22 @@ if isHome ; then
 		ln -sfn "${todayBackupPath}" "${HOME}/Today"
 	fi
 elif isOffice ; then
-	todayBackupPath="D:\\admin\\Backup\\$(date +%Y%m%d)"
+	# cmd実行時のため、Windows形式のHOMEパス取得
+	_home=$(cmd //c echo %HOME%)
+	todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
 	if [ ! -d "${todayBackupPath}" ] ; then
 		mkdir -p "${todayBackupPath}"
 
-		todayBackupLinkPathDesktop="D:\\admin\\Desktop\\Today"
-		todayBackupLinkPathHome="D:\\admin\\Today"
+		todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
 		if [ -d "${todayBackupLinkPathDesktop}" ] ; then
 			rm -r "${todayBackupLinkPathDesktop}"
 		fi
+		todayBackupLinkPathHome="${_home}\\Today"
 		if [ -d "${todayBackupLinkPathHome}" ] ; then
 			rm -r "${todayBackupLinkPathHome}"
 		fi
-		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}"
-		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}"
+		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" | nkf32.exe -w
+		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" | nkf32.exe -w
 	fi
 fi
 # }}}1

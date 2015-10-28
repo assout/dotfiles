@@ -12,8 +12,8 @@ curl -L https://raw.githubusercontent.com/assout/dotfiles/master/install.sh | ba
 
 Windows (CMD) (Caution: change repository git user config)
 ```
-mkdir D:\Development\vim-plugins
-cd D:\Development
+mkdir D:\admin\Development\vim-plugins
+cd D:\admin\Development
 git clone git@github.com:assout/dotfiles.git
 cd .\dotfiles
 .\install.bat

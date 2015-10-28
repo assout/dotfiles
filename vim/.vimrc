@@ -693,7 +693,7 @@ if s:HasPlugin('memolist') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = has('lua') && has('unix') ? 1 : 0 " 基本は開発時のみ必要なので
+  let g:neocomplete#enable_at_startup = has('lua') && has('unix') ? 1 : 0 " 若干不可あるので最低限有効
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{

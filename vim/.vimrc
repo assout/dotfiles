@@ -126,9 +126,7 @@ function! s:IsOffice()
 endfunction
 
 function! s:IsPluginEnabled() " pluginが有効か返す
-  " return isdirectory(s:bundlePath)
-  return isdirectory(s:bundlePath) && ! has('win32unix')
-  " return isdirectory(s:bundlePath) && !(!has('gui_running') && $TERM ==# 'cygwin') " TODO workaround, winのconsoleだと読み込まれないので.
+  return isdirectory(s:bundlePath)
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す
@@ -177,6 +175,7 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
   " enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
+  " TODO CUI(MSYS2)だと効いてないっぽい(augroup全体?)
   autocmd FileType vim setlocal expandtab
   " 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
   autocmd FileType * set textwidth=0 formatoptions-=o
@@ -433,7 +432,7 @@ cnoremap <M-f> <S-Right>
 " }}}1
 
 " Section; Plug-ins {{{1
-if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
+if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
     execute 'set runtimepath+=' . s:bundlePath . 'neobundle.vim/'
   endif
@@ -493,7 +492,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
   NeoBundle 'tomtom/tcomment_vim'
   NeoBundle 'tpope/vim-abolish'
-  NeoBundle 'tpope/vim-dispatch'
   NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle 'tpope/vim-repeat'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
@@ -540,6 +538,12 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim'))
   call g:neobundle#end()
   filetype plugin indent on " Required!
   NeoBundleCheck " Installation check.
+elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
+  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
+  " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
+  "   let &runtimepath = &runtimepath . ',' . s:path
+  " endfor
 endif
 
 " plugin prefix mappings {{{

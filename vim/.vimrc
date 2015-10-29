@@ -476,7 +476,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'aklt/plantuml-syntax'
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'chaquotay/ftl-vim-syntax'
-  NeoBundle 'chase/vim-ansible-yaml'
   NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntasticと競合してるっぽい
   NeoBundle 'elzr/vim-json'
   NeoBundle 'fuenor/im_control.vim'
@@ -570,25 +569,29 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
   "   let &runtimepath = &runtimepath . ',' . s:path
   " endfor
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'memolist.vim'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neomru.vim'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'tcomment_vim'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-outline'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-easytags'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-misc'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-replace'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-shell'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim'
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim/after'
+  " FIXME 速度試す
+  for s:path in split(globpath('~/vimfiles/bundle/','*'), '\n')
+    let &runtimepath = &runtimepath . ',' . s:path
+  endfor
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'memolist.vim'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neomru.vim'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'tcomment_vim'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-outline'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-easytags'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-misc'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-replace'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-shell'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim'
+  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim/after'
 endif
 
 " plugin prefix mappings {{{

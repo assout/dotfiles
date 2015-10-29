@@ -487,8 +487,11 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'kana/vim-fakeclip'
   NeoBundle 'kana/vim-gf-user'
   NeoBundle 'kana/vim-submode'
-  NeoBundle 'kannokanno/previm', {'disabled' : has('win32') || has('win32unix'), 'depends' : ['tyru/open-browser.vim']} " for home
-  NeoBundle 'kannokanno/previm', {'disabled' : ! (has('win32') || has('win32unix')), 'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " for office TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく)
+  if s:IsHome()
+    NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
+  else
+    NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく)
+  endif
   NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle 'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -516,8 +519,11 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle 'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'tyru/open-browser.vim'
-  NeoBundle 'tyru/restart.vim', {'disabled' : has('win32') || has('win32unix')} " for home
-  NeoBundle 'tyru/restart.vim', {'disabled' : ! (has('win32') || has('win32unix')), 'rev' : 'v0.0.8' } " for home TODO 最新版はwindowsで異常終了する
+  if s:IsHome()
+    NeoBundle 'tyru/restart.vim'
+  else
+    NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はwindowsで異常終了する
+  endif
   NeoBundle 'ujihisa/unite-colorscheme', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'vim-jp/vimdoc-ja'
   NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする

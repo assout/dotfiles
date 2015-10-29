@@ -70,13 +70,13 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
 endfunction
 command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
 
-function! s:ToggleTab()
+function! s:ToggleExpandTab()
   setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! ``
   endif
 endfunction
-command! MyToggleTab call <SID>ToggleTab()
+command! MyToggleExpandTab call <SID>ToggleExpandTab()
 
 function! s:ChangeTabstep(size)
   if &l:expandtab

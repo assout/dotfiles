@@ -15,7 +15,6 @@ AppID=mintty
 ClipShortcuts=no
 Columns=160
 CtrlShiftShortcuts=yes
-# color hybrid
 BackgroundColour=29,31,33
 ForegroundColour=197,200,198
 BoldBlack=40,42,46

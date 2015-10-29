@@ -131,6 +131,7 @@ elif isOffice ; then
 	export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 	# TODO homeではどうか
 	export GREP_OPTIONS="--color=auto"
+	export LESS='-R'
 fi
 # }}}1
 

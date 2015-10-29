@@ -341,6 +341,7 @@ nnoremap <SID>[shortcut]H <Nop>
 nnoremap <SID>[shortcut]J <Nop>
 nnoremap <SID>[shortcut]K <Nop>
 nnoremap <SID>[shortcut]L <Nop>
+nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag ".expand("<cword>"))<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>

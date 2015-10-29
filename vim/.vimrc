@@ -114,7 +114,7 @@ function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが�
   " 完全一致したものを上部に移動
   let l:esc = @z
   let @z = ''
-  while search('^' . l:word . '$', 'Wc') > 0
+  while search('\c^' . l:word . '$', 'Wc') > 0
     silent execute line('.') - l:jpn_to_eng . 'delete Z 2'
   endwhile
   if @z !=# '' " caution 特定環境(office)でput zのエラーが出るため

@@ -243,7 +243,7 @@ set shortmess+=atTO
 set sidescrolloff=5
 set smartcase
 set smartindent
-if has('unix')
+if s:IsHome()
   set spellfile=~/Dropbox/spell/en.utf-8.add
 else
   set spellfile=~/Documents/spell/en.utf-8.add
@@ -540,7 +540,19 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundleCheck " Installation check.
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'memolist.vim'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neomru.vim'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'tcomment_vim'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-outline'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
   " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
   "   let &runtimepath = &runtimepath . ',' . s:path
   " endfor
@@ -606,7 +618,7 @@ if s:HasPlugin('excitetranslate-vim') " {{{
   xnoremap <SID>[excite] :ExciteTranslate<CR>
 endif " }}}
 
-if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO windowsでfugitiveバッファ側の保存時にエラー(:Gwはうまくいく)
+if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>

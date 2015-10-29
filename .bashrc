@@ -106,11 +106,6 @@ alias g="git"
 
 # Other
 if isOffice ; then
-	# TODO MSYS2だと文字化ける( | nkf32.exe -w でworkaround)
-	alias grepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/grep.exe'
-	alias egrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/egrep.exe'
-	alias fgrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/fgrep.exe'
-
 	alias l.='ls -d .* --color=auto --show-control-chars'
 	alias ll='ls -l --color=auto --show-control-chars'
 	alias ls='ls --color=auto --show-control-chars'

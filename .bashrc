@@ -129,6 +129,8 @@ if isHome ; then
 	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 elif isOffice ; then
 	export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+	# TODO homeではどうか
+	export GREP_OPTIONS="--color=auto"
 fi
 # }}}1
 

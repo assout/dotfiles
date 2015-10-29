@@ -842,12 +842,6 @@ if s:HasPlugin('unite') " {{{
     nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
     nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
     nnoremap <buffer><expr><nowait> p unite#smart_map('p', unite#do_action('split'))
-    nunmap   <buffer>  <C-h>
-    nunmap   <buffer>  <C-l>
-    nunmap   <buffer>  <C-k>
-    nmap     <buffer> g<C-h> <Plug>(unite_delete_backward_path)
-    nmap     <buffer> g<C-l> <Plug>(unite_redraw)
-    nmap     <buffer> g<C-k> <Plug>(unite_print_candidate)
     nmap     <buffer>  <C-w> <Plug>(unite_delete_backward_path)
   endfunction
   augroup vimrc

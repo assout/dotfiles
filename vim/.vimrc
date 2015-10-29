@@ -570,12 +570,15 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-replace'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim/after'
 endif
 
 " plugin prefix mappings {{{

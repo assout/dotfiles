@@ -101,7 +101,7 @@ function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが�
   if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
     return
   endif
-  let l:gene_path = has('unix') ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
+  let l:gene_path = s:IsHome() ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
   let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
   let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
 
@@ -364,7 +364,7 @@ nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
@@ -629,8 +629,8 @@ if s:HasPlugin('alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = has('unix') ? 1 : 0
-  let g:calendar_google_task = has('unix') ? 1 : 0
+  let g:calendar_google_calendar = s:IsHome() : ? 1 : 0
+  let g:calendar_google_task = s:IsHome() ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('excitetranslate-vim') " {{{
@@ -729,7 +729,7 @@ if s:HasPlugin('memolist') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = has('lua') && has('unix') ? 1 : 0 " 若干不可あるので最低限有効
+  let g:neocomplete#enable_at_startup = has('lua') && s:IsHome() ? 1 : 0 " 若干不可あるので最低限有効
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{

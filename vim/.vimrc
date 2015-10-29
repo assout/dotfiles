@@ -569,11 +569,14 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-outline'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-easytags'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-misc'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-replace'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-shell'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
@@ -857,9 +860,6 @@ if s:HasPlugin('unite') " {{{
   call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
   call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
   call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-  if has('win32') " windowsではよく日本語使うので
-    call g:unite#filters#matcher_default#use(['matcher_migemo'])
-  endif
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>

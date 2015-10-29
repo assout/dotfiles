@@ -83,7 +83,7 @@ endfunction
 command! -range -nargs=1 MyInsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 MyInsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO 消す。(RefソースorUniteソースにする)
+" TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
 function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
   let l:word = a:0 == 0 ? expand('<cword>') : a:1
@@ -144,8 +144,8 @@ function! s:RestoreCursorPosition()
 endfunction
 
 command! -bang MyBufClear %bdelete<bang>
-command! -bang MyBClear   MyBufClear<bang>
-command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
+command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
+command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 " }}}1
 
@@ -175,9 +175,9 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
   " enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-  " TODO CUI(MSYS2)だと効いてないっぽい(augroup全体効いてない?)
+  " TODO CUI(MSYS2)だと効いてないっぽい(augroup 全体効いてない?)
   autocmd FileType vim setlocal expandtab
-  " 改行時の自動コメント継続をやめる(o,Oコマンドでの改行時のみ)
+  " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)
   autocmd FileType * set textwidth=0 formatoptions-=o
   " QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
   autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif | setlocal modifiable nowrap
@@ -348,7 +348,7 @@ nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : 'D:/admin/Development/dotfiles/vim/.vimrc'
 nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
@@ -606,7 +606,7 @@ if s:HasPlugin('excitetranslate-vim') " {{{
   xnoremap <SID>[excite] :ExciteTranslate<CR>
 endif " }}}
 
-if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい
+if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO windowsでfugitiveバッファ側の保存時にエラー(:Gwはうまくいく)
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
@@ -667,7 +667,7 @@ endif " }}}
 
 if s:HasPlugin('memolist') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : '~/Documents/memolist'
+  let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MyMemoGrep(word)
@@ -871,7 +871,7 @@ if s:HasPlugin('unite') " {{{
 
   if s:HasPlugin('unite-todo') " {{{
     let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : '~/Documents'
+    let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : expand('~/Documents')
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)

@@ -629,7 +629,7 @@ if s:HasPlugin('alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = s:IsHome() : ? 1 : 0
+  let g:calendar_google_calendar = s:IsHome() ? 1 : 0
   let g:calendar_google_task = s:IsHome() ? 1 : 0
 endif " }}}
 

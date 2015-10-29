@@ -106,6 +106,7 @@ alias g="git"
 
 # Other
 if isOffice ; then
+	# TODO MSYS2だと文字化ける( | nkf32.exe -w でworkaround)
 	alias grepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/grep.exe'
 	alias egrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/egrep.exe'
 	alias fgrepsjis='${HOME}/Tools/grep-2.5.4-bin/bin/fgrep.exe'
@@ -164,8 +165,8 @@ elif isOffice ; then
 		if [ -d "${todayBackupLinkPathHome}" ] ; then
 			rm -r "${todayBackupLinkPathHome}"
 		fi
-		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" | nkf32.exe -w
-		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" | nkf32.exe -w
+		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" 2>&1 | nkf32.exe -w
+		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
 	fi
 fi
 # }}}1

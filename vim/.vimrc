@@ -903,7 +903,7 @@ if s:HasPlugin('unite') " {{{
 
   if s:HasPlugin('unite-todo') " {{{
     let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = has('unix') ? '~/Dropbox' : expand('~/Documents')
+    let g:unite_todo_data_directory = s:IsHome() ? '~/Dropbox' : expand('~/Documents')
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)

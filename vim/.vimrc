@@ -1,4 +1,5 @@
 " Index {{{1
+"
 " * Introduction
 " * Begin
 " * Functions and Commands
@@ -8,18 +9,22 @@
 " * Key-mappings
 " * Plug-ins
 " * After
+"
 " }}}1
 
 " Section; Introduction {{{1
+"
 " # Principles/Points
+"
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
 " * executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 " * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
-
+"
 " # References
+"
 " * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
 " * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
 " * [Vimスクリプトリファレンス &mdash; 名無しのvim使い](http://nanasi.jp/code.html)
@@ -27,15 +32,18 @@
 " * [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
 " * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
-
+"
 " # TODOs
+"
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
+"
 " }}}1
 
 " Section; Begin {{{1
+
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 if has('win32')
   set termencoding=cp932
@@ -45,9 +53,11 @@ scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
+
 " }}}1
 
 " Section; Functions and Commands {{{1
+
 function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
   " TODO オプションなどでbufferに出力もしたい
   if has('clipboard')
@@ -150,6 +160,7 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " }}}1
 
 " Section; Let defines {{{1
+
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
 let s:bundlePath = has('win32') || has('win32unix') ? $HOME . '/vimfiles/bundle/' : $HOME . '/.vim/bundle/'
 let g:is_bash = 1 " shellのハイライトをbash基準にする
@@ -162,9 +173,11 @@ if has('win32unix') " for mintty.
   let &t_EI .= "\e[1 q"
   let &t_te .= "\e[0 q"
 endif
+
 " }}}1
 
 " Section; Auto-commands {{{1
+
 augroup vimrc
   autocmd!
   " double byte space highlight
@@ -191,9 +204,11 @@ augroup vimrc
   " restore cursor position
   autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END
+
 " }}}1
 
 " Section; Options {{{1
+
 set autoindent
 set background=dark
 set backspace=indent,eol,start
@@ -274,6 +289,7 @@ if has('win32')
   " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
   set noswapfile
 endif
+
 " }}}1
 
 " Section; Key-mappings {{{1
@@ -429,9 +445,12 @@ cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 " TODO 一単語Delete
 " cnoremap <M-d>
+" }}}
+
 " }}}1
 
 " Section; Plug-ins {{{1
+
 if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
     execute 'set runtimepath+=' . s:bundlePath . 'neobundle.vim/'
@@ -526,6 +545,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'sgur/vim-textobj-parameter', {'depends': ['kana/vim-textobj-user']}
   NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']}
   NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
+  " }}}
 
   " colorschemes {{{
   NeoBundle 'altercation/vim-colors-solarized'
@@ -540,6 +560,9 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundleCheck " Installation check.
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
+  " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
+  "   let &runtimepath = &runtimepath . ',' . s:path
+  " endfor
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'memolist.vim'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neomru.vim'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'tcomment_vim'
@@ -553,9 +576,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
   let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
-  " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
-  "   let &runtimepath = &runtimepath . ',' . s:path
-  " endfor
 endif
 
 " plugin prefix mappings {{{
@@ -1198,9 +1218,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ },
         \ 'watchdogs_checker/js-yaml' : {
         \   'command' : 'js-yaml',
-        \ },
-        \
-        \}
+        \ }, }
   " FIXME できてない
   " if s:IsOffice()
   "   let g:quickrun_config['watchdogs_checker/javac'] = '{
@@ -1216,9 +1234,11 @@ endif " }}}
 if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
   let g:yankround_dir = '~/.cache/yankround'
 endif " }}}
+
 " }}}1
 
 " Section; After {{{1
+
 filetype on
 syntax on
 
@@ -1243,6 +1263,7 @@ if s:HasPlugin('vim-hybrid')
   augroup END
   colorscheme hybrid
 endif
+
 " }}}1
 
 " vim:nofoldenable:

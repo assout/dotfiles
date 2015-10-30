@@ -45,9 +45,6 @@
 " Section; Begin {{{1
 
 set encoding=utf-8 " inner encoding(before the scriptencoding)
-if has('win32')
-  set termencoding=cp932
-endif
 scriptencoding utf-8 " before multi byte
 
 if filereadable(expand('~/.vimrc.local'))
@@ -588,6 +585,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'vim-textobj-parameter',
         \ 'vim-textobj-url',
         \ 'vim-textobj-user',
+        \ 'vimfiler.vim',
         \ 'yankround.vim',
         \ 'yankround.vim/after',
         \ ]
@@ -763,6 +761,12 @@ endif " }}}
 if s:HasPlugin('open-browser') " {{{
   nmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
   vmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
+  if has('win32unix')
+    let g:openbrowser_browser_commands = [
+          \ {"name": "rundll32",
+          \  "args": "rundll32 url.dll,FileProtocolHandler {uri}"}
+          \]
+  endif
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{
@@ -857,8 +861,8 @@ if s:HasPlugin('unite') " {{{
   endfunction
 
   function! s:unite_my_keymappings()
-    " TODO sort
-    nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+    " TODO sort. ↓じゃダメ。
+    " nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
     nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
     nnoremap <buffer><expr> p unite#smart_map('p', unite#do_action('split'))

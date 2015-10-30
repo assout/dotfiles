@@ -110,7 +110,7 @@ if isOffice ; then
 	alias ll='ls -l --color=auto --show-control-chars'
 	alias ls='ls --color=auto --show-control-chars'
 
-	alias grep='grep --color=auto'
+	alias grep='grep --color=auto --binary-files=without-match'
 	alias e='explorer'
 	alias git='winpty git'
 elif isHome ; then

@@ -500,7 +500,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
   NeoBundle 'osyo-manga/shabadou.vim'
-  NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim']}
+  NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'vim-quickrun', 'Shougo/vimproc']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
@@ -565,33 +565,51 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   filetype plugin indent on " Required!
   NeoBundleCheck " Installation check.
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
-  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
+  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
+
+  let s:plugins = [
+        \ 'memolist.vim',
+        \ 'neomru.vim',
+        \ 'open-browser.vim',
+        \ 'previm',
+        \ 'sh.vim',
+        \ 'tcomment_vim',
+        \ 'unite-outline',
+        \ 'unite-todo',
+        \ 'unite.vim',
+        \ 'vim-easytags',
+        \ 'vim-hybrid',
+        \ 'vim-javascript',
+        \ 'vim-maximizer',
+        \ 'vim-misc',
+        \ 'vim-operator-replace',
+        \ 'vim-operator-surround',
+        \ 'vim-operator-user',
+        \ 'vim-repeat',
+        \ 'vim-shell',
+        \ 'vim-textobj-anyblock',
+        \ 'vim-textobj-between',
+        \ 'vim-textobj-entire',
+        \ 'vim-textobj-function',
+        \ 'vim-textobj-parameter',
+        \ 'vim-textobj-url',
+        \ 'vim-textobj-user',
+        \ 'yankround.vim',
+        \ 'yankround.vim/after',
+        \ ]
+
+  for s:plugin in s:plugins
+    let &runtimepath = &runtimepath . ',' . s:bundlePath . s:plugin
+  endfor
+
+  " " slow!
   " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
   "   let &runtimepath = &runtimepath . ',' . s:path
   " endfor
-  " FIXME 速度試す
-  for s:path in split(globpath('~/vimfiles/bundle/','*'), '\n')
-    let &runtimepath = &runtimepath . ',' . s:path
-  endfor
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'memolist.vim'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neomru.vim'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'tcomment_vim'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-outline'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite-todo'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'unite.vim'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-easytags'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-hybrid'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-misc'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-replace'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-surround'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-operator-user'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-repeat'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-shell'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-anyblock'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-url'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vim-textobj-user'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim'
-  " let &runtimepath = &runtimepath . ',' . s:bundlePath . 'yankround.vim/after'
+  " " slow
+  " for s:path in split(globpath('~/vimfiles/bundle/','*'), '\n')
+  "   let &runtimepath = &runtimepath . ',' . s:path
+  " endfor
 endif
 
 " plugin prefix mappings {{{

@@ -95,6 +95,7 @@ command! -range -nargs=1 MyInsertSuffix <line1>,<line2>call <SID>InsertString('$
 
 " TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
+" TODO あいまい検索的なものがほしい(vim spellの`z=`的なもの)
 function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
   let l:word = a:0 == 0 ? expand('<cword>') : a:1
   call histadd('cmd', 'MyTranslate '  . l:word)

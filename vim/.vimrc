@@ -314,7 +314,6 @@ vnoremap y    y`>
 
 " <SID>[shortcut]a,d,rはsurround-pluginで使用
 " <SID>[shortcut]mはmaximizer-pluginで使用
-" <SID>[shortcut]H,J,K,Lはsubmode-pluginで使用
 map      s                <SID>[shortcut]
 noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]? ?
@@ -337,10 +336,6 @@ nnoremap <SID>[shortcut]u :<C-u>update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:sourc
 noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap <SID>[shortcut]z :<C-u>pclose<CR>
-nnoremap <SID>[shortcut]H <Nop>
-nnoremap <SID>[shortcut]J <Nop>
-nnoremap <SID>[shortcut]K <Nop>
-nnoremap <SID>[shortcut]L <Nop>
 nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag ".expand("<cword>"))<CR>
 
 " TODO to plugin
@@ -469,9 +464,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'Shougo/unite.vim'
   NeoBundle 'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
-  if s:IsHome()
-    NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
-  endif
+  NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   NeoBundle 'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   NeoBundle 'aklt/plantuml-syntax'
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
@@ -864,13 +857,13 @@ if s:HasPlugin('unite') " {{{
 
   function! s:unite_my_keymappings()
     " TODO sort
-    " nnoremap <buffer><expr>         S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
-    nnoremap <buffer><expr>         f unite#smart_map('f', unite#do_action('vimfiler'))
-    nnoremap <buffer><expr>         m unite#smart_map('m', unite#do_action('relative_move'))
-    nnoremap <buffer><expr>         v unite#smart_map('v', unite#do_action('vsplit'))
-    nnoremap <buffer><expr>         x unite#smart_map('x', unite#do_action('start'))
-    nnoremap <buffer><expr><nowait> p unite#smart_map('p', unite#do_action('split'))
-    nmap     <buffer>  <C-w> <Plug>(unite_delete_backward_path)
+    nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+    nnoremap <buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
+    nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
+    nnoremap <buffer><expr> p unite#smart_map('p', unite#do_action('split'))
+    nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+    nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+    nmap     <buffer><C-w>  <Plug>(unite_delete_backward_path)
   endfunction
   augroup vimrc
     autocmd FileType unite call s:unite_my_keymappings()
@@ -916,9 +909,9 @@ if s:HasPlugin('unite') " {{{
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
 
-    nmap     <SID>[unite]n  <neomru>
-    nnoremap <neomru>f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
-    nnoremap <neomru>d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
+    nmap     <SID>[unite]n  <SID>[neomru]
+    nnoremap <SID>[neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
+    nnoremap <SID>[neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
   endif " }}}
 
   if s:HasPlugin('unite-codic') " {{{
@@ -1091,19 +1084,14 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-  " TODO マッピング微妙かも(H,L,K,J)
-  call g:submode#enter_with('winsize', 'n', '', 'sH', '<C-w><')
-  call g:submode#enter_with('winsize', 'n', '', 'sL', '<C-w>>')
-  call g:submode#enter_with('winsize', 'n', '', 'sK', '<C-w>-')
-  call g:submode#enter_with('winsize', 'n', '', 'sJ', '<C-w>+')
-  call g:submode#map('winsize', 'n', '', 'h', '<C-w><')
-  call g:submode#map('winsize', 'n', '', 'l', '<C-w>>')
-  call g:submode#map('winsize', 'n', '', 'H', '5<C-w><')
-  call g:submode#map('winsize', 'n', '', 'L', '5<C-w>>')
-  call g:submode#map('winsize', 'n', '', 'k', '<C-w>-')
-  call g:submode#map('winsize', 'n', '', 'j', '<C-w>+')
-  call g:submode#map('winsize', 'n', '', 'K', '5<C-w>-')
-  call g:submode#map('winsize', 'n', '', 'J', '5<C-w>+')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>+', '5<C-w>+')
+  call g:submode#map('winsize', 'n', '', '<', '5<C-w><')
+  call g:submode#map('winsize', 'n', '', '>', '5<C-w>>')
+  call g:submode#map('winsize', 'n', '', '-', '5<C-w>-')
+  call g:submode#map('winsize', 'n', '', '+', '5<C-w>+')
 
   call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
   call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')

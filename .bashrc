@@ -105,6 +105,9 @@ alias drun="docker run"
 alias g="git"
 
 # Other
+alias jp='LANG=ja_JP.UTF8'
+alias en='LANG=en_US.UTF8'
+
 if isOffice ; then
 	alias l.='ls -d .* --color=auto --show-control-chars'
 	alias ll='ls -l --color=auto --show-control-chars'

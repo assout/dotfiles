@@ -763,8 +763,8 @@ if s:HasPlugin('open-browser') " {{{
   vmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
   if has('win32unix')
     let g:openbrowser_browser_commands = [
-          \ {"name": "rundll32",
-          \  "args": "rundll32 url.dll,FileProtocolHandler {uri}"}
+          \ {'name': 'rundll32',
+          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}'}
           \]
   endif
 endif " }}}

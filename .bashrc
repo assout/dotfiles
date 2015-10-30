@@ -110,6 +110,7 @@ if isOffice ; then
 	alias ll='ls -l --color=auto --show-control-chars'
 	alias ls='ls --color=auto --show-control-chars'
 
+	alias grep='grep --color=auto'
 	alias e='explorer'
 	alias git='winpty git'
 elif isHome ; then
@@ -130,7 +131,6 @@ if isHome ; then
 	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 elif isOffice ; then
 	export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
-	export GREP_OPTIONS="--color=auto"
 fi
 # }}}1
 

@@ -850,6 +850,9 @@ if s:HasPlugin('unite') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
   let g:unite_source_grep_max_candidates = 200
+  if has('win32')
+    let g:unite_source_rec_async_command = ['find', '-L']
+  endif
   let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
   function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction
@@ -895,7 +898,7 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]t    :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright<CR>
   nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
-  if has('unix')
+  if s:HasPlugin('vimproc')
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
   else

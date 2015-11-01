@@ -271,6 +271,9 @@ if has('path_extra')
 else
   set tags& tags=./.tags
 endif
+if has('win32unix') " windowsだとgvimとmsys2 vimでパスセパレータがことなるのでmsys2 vimでは無効にする
+  set tags=''
+endif
 set tabstop=2
 " 自動改行をなくす
 set textwidth=0
@@ -568,16 +571,13 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'unite-outline',
         \ 'unite-todo',
         \ 'unite.vim',
-        \ 'vim-easytags',
         \ 'vim-hybrid',
         \ 'vim-javascript',
         \ 'vim-maximizer',
-        \ 'vim-misc',
         \ 'vim-operator-replace',
         \ 'vim-operator-surround',
         \ 'vim-operator-user',
         \ 'vim-repeat',
-        \ 'vim-shell',
         \ 'vim-textobj-anyblock',
         \ 'vim-textobj-between',
         \ 'vim-textobj-entire',

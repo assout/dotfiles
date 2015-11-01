@@ -778,8 +778,6 @@ if s:HasPlugin('operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-  " TODO 見えている?(expand等必要?)
-  let g:previm_custom_css_path = '~/Development/dotfiles/vim/previm.css'
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 

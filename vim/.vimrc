@@ -374,8 +374,8 @@ nnoremap <M-l> gt
 nnoremap <M-t> :<C-u>tabedit<CR>
 nnoremap <M-c> :<C-u>tabclose<CR>
 
-" Use ':tjump' instead of ':tag'.
-nnoremap <C-]> g<C-]>
+" Use ':tjump' instead of ':tag'. -> 一旦無効にする(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
+" nnoremap <C-]> g<C-]>
 " }}}
 
 " []key prefix mappings(based on unimpaired plugin) {{{

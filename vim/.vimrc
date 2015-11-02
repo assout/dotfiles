@@ -381,7 +381,7 @@ nnoremap <M-l> gt
 nnoremap <M-t> :<C-u>tabedit<CR>
 nnoremap <M-c> :<C-u>tabclose<CR>
 
-" Use ':tjump' instead of ':tag'. -> 一旦無効にする(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
+" Use ':tjump' instead of ':tag'. -> Caution: 下記の設定はしない!(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
 " nnoremap <C-]> g<C-]>
 " }}}
 

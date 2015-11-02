@@ -155,6 +155,13 @@ command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
+if has('unix')
+  " FIXME prg
+  command! TODO !exploror.exe %:h
+else
+  silent command! MyExplorerHere !start explorer.exe %:h
+endif
+
 " }}}1
 
 " Section; Let defines {{{1

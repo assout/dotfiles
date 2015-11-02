@@ -471,7 +471,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'chaquotay/ftl-vim-syntax'
   NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntasticと競合してるっぽい
-  NeoBundle 'elzr/vim-json'
+  " NeoBundle 'elzr/vim-json' " TODO なぜ入れてるか忘れたためいったんコメントアウト
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない

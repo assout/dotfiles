@@ -874,7 +874,6 @@ if s:HasPlugin('unite') " {{{
     nnoremap <buffer><expr> p unite#smart_map('p', unite#do_action('split'))
     nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
     nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
-    nmap     <buffer><C-w>  <Plug>(unite_delete_backward_path)
   endfunction
   augroup vimrc
     autocmd FileType unite call s:unite_my_keymappings()

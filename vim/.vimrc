@@ -155,11 +155,11 @@ command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
-if has('unix')
+if s:IsOffice()
+  silent command! MyExplorerHere !start explorer.exe %:h
+else
   " FIXME prg
   command! TODO !exploror.exe %:h
-else
-  silent command! MyExplorerHere !start explorer.exe %:h
 endif
 
 " }}}1
@@ -962,7 +962,7 @@ if s:HasPlugin('vim-easytags') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{
-  if (! has('gui_running')) && s:IsHome()
+  if (! has('gui_running')) && s:IsHome() " Caution: office msys2(tmux) では不要(出来ている)
     " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
     " map y  <Plug>(fakeclip-y)
     " map yy <Plug>(fakeclip-Y)

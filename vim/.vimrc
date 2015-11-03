@@ -156,9 +156,9 @@ command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 if s:IsOffice()
-  silent command! MyExplorerHere !start explorer.exe %:h
+  silent command! MyHere !start explorer.exe %:h
 else
-  silent command! MyExplorerHere !nautilus %:h
+  silent command! MyHere !nautilus %:h
 endif
 
 " }}}1

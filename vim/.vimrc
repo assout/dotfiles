@@ -1202,6 +1202,9 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \
         \ 'sh/watchdogs_checker' : {
         \   'type'
+        \     : executable('shellcheck') && has('unix') ? 'watchdogs_checker/shellcheck'
+        \     : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
+        \     : executable('bashate') ? 'watchdogs_checker/bashate'
         \     : executable('sh') ? 'watchdogs_checker/sh'
         \     : '',
         \ },

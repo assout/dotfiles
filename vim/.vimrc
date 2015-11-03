@@ -158,8 +158,7 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 if s:IsOffice()
   silent command! MyExplorerHere !start explorer.exe %:h
 else
-  " FIXME prg
-  command! TODO !exploror.exe %:h
+  silent command! MyExplorerHere !nautilus %:h
 endif
 
 " }}}1

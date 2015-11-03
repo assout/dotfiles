@@ -87,8 +87,8 @@ command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 function! s:InsertString(pos, str) range
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 MyInsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 MyInsertSuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
+command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
@@ -354,21 +354,21 @@ nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag ".expand("<cword>"))<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
-noremap <silent><expr> <SID>[insert]p ':MyInsertPrefix ' . input('prefix:') . '<CR>'
-noremap <silent>       <SID>[insert]*  :MyInsertPrefix * <CR>
-noremap <silent>       <SID>[insert]1  :MyInsertPrefix # <CR>A
-noremap <silent>       <SID>[insert]2  :MyInsertPrefix ## <CR>A
-noremap <silent>       <SID>[insert]3  :MyInsertPrefix ### <CR>A
-noremap <silent>       <SID>[insert]4  :MyInsertPrefix #### <CR>A
-noremap <silent>       <SID>[insert]>  :MyInsertPrefix > <CR>
-noremap <silent>       <SID>[insert]T  :MyInsertPrefix TODO <CR>
-noremap <silent>       <SID>[insert]f  :MyInsertPrefix file://<CR>
-noremap <silent><expr> <SID>[insert]s ':MyInsertSuffix ' . input('suffix:') . '<CR>'
-noremap <silent><expr> <SID>[insert]d ':MyInsertSuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <silent><expr> <SID>[insert]t ':MyInsertSuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]n ':MyInsertSuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]a ':MyInsertSuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       <SID>[insert]l  :MyInsertSuffix \<Space>\ <CR>
+noremap <silent><expr> <SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
+noremap <silent>       <SID>[insert]*  :MyPrefix * <CR>
+noremap <silent>       <SID>[insert]1  :MyPrefix # <CR>A
+noremap <silent>       <SID>[insert]2  :MyPrefix ## <CR>A
+noremap <silent>       <SID>[insert]3  :MyPrefix ### <CR>A
+noremap <silent>       <SID>[insert]4  :MyPrefix #### <CR>A
+noremap <silent>       <SID>[insert]>  :MyPrefix > <CR>
+noremap <silent>       <SID>[insert]T  :MyPrefix TODO <CR>
+noremap <silent>       <SID>[insert]f  :MyPrefix file://<CR>
+noremap <silent><expr> <SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
+noremap <silent><expr> <SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <silent><expr> <SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <silent><expr> <SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr> <SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
+noremap <silent>       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため

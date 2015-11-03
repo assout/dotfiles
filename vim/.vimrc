@@ -865,9 +865,9 @@ if s:HasPlugin('unite') " {{{
   if has('win32')
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
-  let s:my_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
+  let s:My_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-  function! s:my_relative_move.func(candidates) " move先を相対パスで指定するaction
+  function! s:My_relative_move.func(candidates) " move先を相対パスで指定するaction
     let l:candidate = a:candidates[0]
     let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
     execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
@@ -875,7 +875,7 @@ if s:HasPlugin('unite') " {{{
     call g:unite#force_redraw() " 呼ばないと表示更新されない
   endfunction
 
-  function! s:unite_my_keymappings()
+  function! s:Unite_my_keymappings()
     " TODO sort. ↓じゃダメ。
     " nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
@@ -885,10 +885,10 @@ if s:HasPlugin('unite') " {{{
     nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
   endfunction
   augroup vimrc
-    autocmd FileType unite call s:unite_my_keymappings()
+    autocmd FileType unite call s:Unite_my_keymappings()
   augroup END
 
-  call g:unite#custom#action('file,directory', 'relative_move', s:my_relative_move)
+  call g:unite#custom#action('file,directory', 'relative_move', s:My_relative_move)
   call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
   call g:unite#custom#default_action('directory', 'vimfiler')
   call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
@@ -1069,11 +1069,8 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
   augroup vimrc
-    autocmd FileType ref call s:initialize_ref_viewer()
+    autocmd FileType ref resize 5
   augroup END
-  function! s:initialize_ref_viewer()
-    resize 5
-  endfunction
 
   if has('unix')
     nnoremap <expr> <SID>[ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'

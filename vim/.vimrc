@@ -738,7 +738,7 @@ if s:HasPlugin('memolist') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':grep -r --exclude-dir=.git ' . a:word . ' ' . g:memolist_path
+    silent execute ':grep -r --exclude-dir=.git ' . a:word . ' ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
@@ -937,7 +937,7 @@ if s:HasPlugin('unite') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
+      silent execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 
@@ -1202,9 +1202,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \
         \ 'sh/watchdogs_checker' : {
         \   'type'
-        \     : executable('shellcheck') && has('unix') ? 'watchdogs_checker/shellcheck'
-        \     : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
-        \     : executable('bashate') ? 'watchdogs_checker/bashate'
         \     : executable('sh') ? 'watchdogs_checker/sh'
         \     : '',
         \ },

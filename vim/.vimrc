@@ -631,23 +631,19 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]o       <SID>[open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[qiita]
-  nmap <SID>[plugin]r       <SID>[ref]
+  map  <SID>[plugin]r       <SID>[replace]
   nmap <SID>[plugin]s       <SID>[syntastic]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
   nmap <SID>[plugin]/       <SID>[migemo]
-  " TODO <SID>つけれない
   nmap <SID>[plugin][       [subP]
-  " TODO <SID>つけれない
   nmap <SID>[plugin]]       [subN]
 
-  nmap <SID>[sub_plugin]q   <SID>[quickrun]
-  " TODO <SID>つけれない
   map  <SID>[sub_plugin]s   <SID>[switch]
+  nmap <SID>[sub_plugin]q   <SID>[quickrun]
+  nmap <SID>[sub_plugin]r   <SID>[ref]
 
-  " TODO マッピング変える(必然性がない)
-  map  R                <SID>[replace]
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)
   nmap <C-p>            <Plug>(yankround-prev)

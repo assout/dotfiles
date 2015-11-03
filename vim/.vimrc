@@ -1186,8 +1186,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
   let g:watchdogs_check_BufWritePost_enable = 1
 
-  " TODO quickfix開くとhookが動かない.暫定で`'outputter/quickfix/open_cmd' : ''`とし開かないようにしている
-  " TODO quickfix modifiable -> 'outputter/quickfix/open_cmd' : 'cwindow | setlocal modifiable',
+  " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
   " TODO shellcheck,mdl のみ動作確認済み
   " TODO windowsで文字コードの関係でshellcheckが使えない
   let g:quickrun_config = {

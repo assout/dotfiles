@@ -199,6 +199,7 @@ augroup vimrc
   " QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
   autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif | setlocal modifiable nowrap
   autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif | setlocal modifiable nowrap
+  autocmd BufReadPost quickfix,loclist setlocal modifiable " QuickfixCmdPostだとwatchdogs,syntasticsの結果がmodifiableにならなかったため
   if executable('python')
     autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
   endif
@@ -843,8 +844,7 @@ if s:HasPlugin('syntastic') " {{{
   let g:syntastic_yaml_checkers = ['jsyaml']
   let g:syntastic_markdown_mdl_args = '--no-warning'
 
-  " TODO lwindow表示などをautocmdで設定したい(autocmd QuickfixCmdPostを拾わないっぽい)
-  nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<Bar>setlocal modifiable nowrap<CR>
+  nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<CR>
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{

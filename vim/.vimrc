@@ -441,6 +441,8 @@ inoremap <M-d> <C-o>dw
 " }}}
 
 " Command-line mode mappings {{{
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
 cnoremap <C-a> <Home>

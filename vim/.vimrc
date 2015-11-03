@@ -189,6 +189,7 @@ augroup vimrc
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   " set markdown filetype
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
+  " set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
   " enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
@@ -200,14 +201,17 @@ augroup vimrc
   autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif | setlocal modifiable nowrap
   autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif | setlocal modifiable nowrap
   autocmd BufReadPost quickfix,loclist setlocal modifiable " QuickfixCmdPostだとwatchdogs,syntasticsの結果がmodifiableにならなかったため
+
+  " TODO CUI(MSYS2)だと効いてないっぽい(augroup 全体効いてない?)
+  autocmd FileType vim setlocal expandtab
+  " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)
+  autocmd FileType * set textwidth=0 formatoptions-=o
   if executable('python')
     autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
   endif
   if executable('xmllint') " TODO pretty format(xml,html,xhtml)
     " autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
   endif
-  " restore cursor position
-  autocmd BufReadPost * call s:RestoreCursorPosition()
 augroup END
 
 " }}}1

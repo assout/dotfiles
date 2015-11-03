@@ -469,7 +469,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 
   NeoBundle 'AndrewRadev/switch.vim'
   NeoBundle 'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
-  NeoBundle 'KazuakiM/vim-qfsigns'
+  NeoBundle 'KazuakiM/vim-qfsigns' " for watchdogs.
   NeoBundle 'LeafCage/vimhelpgenerator'
   NeoBundle 'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'Shougo/neobundle.vim', {'depends' : ['Shougo/unite.vim'], 'disabled' : !executable('git')}
@@ -483,7 +483,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'aklt/plantuml-syntax'
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'chaquotay/ftl-vim-syntax'
-  NeoBundle 'dannyob/quickfixstatus' " TODO 原因不明のエラー -> syntasticと競合してるっぽい
+  NeoBundle 'dannyob/quickfixstatus' " for watchdogs. TODO syntasticと競合するっぽい
   " NeoBundle 'elzr/vim-json' " TODO なぜ入れてるか忘れたためいったんコメントアウト
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
@@ -506,7 +506,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle 'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1 TODO functionのインデントがだめ(fork版なら行けそうだったがだめっぽい)
-  NeoBundle 'osyo-manga/shabadou.vim'
+  NeoBundle 'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
@@ -515,7 +515,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'szw/vim-maximizer' " windowの最大化・復元
   NeoBundle 't9md/vim-textmanip'
   NeoBundle 'thinca/vim-localrc'
-  NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
+  NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換.
   NeoBundle 'thinca/vim-quickrun'
   NeoBundle 'thinca/vim-ref'
   NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')}
@@ -536,8 +536,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle 'vim-scripts/HybridText'
   NeoBundle 'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}
-  NeoBundle 'xolox/vim-misc'
-  NeoBundle 'xolox/vim-shell'
+  NeoBundle 'xolox/vim-misc' " for easytags.
+  NeoBundle 'xolox/vim-shell' " for easytags.
 
   " Operators {{{
   NeoBundle 'kana/vim-operator-user'
@@ -573,7 +573,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundleCheck " Installation check.
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
-
   let s:plugins = [
         \ 'memolist.vim',
         \ 'neomru.vim',

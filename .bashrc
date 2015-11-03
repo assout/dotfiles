@@ -1,13 +1,17 @@
 #!/bin/bash
+
 # [Index] {{{1
+#
 # * Begin
 # * Functions & Aliases
 # * Define, Export variables
 # * User process
 # * After
+#
 # }}}1
 
 # [Begin] {{{1
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -15,9 +19,11 @@ fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
+
 # }}}1
 
 # [Functions & Aliases] {{{1
+
 # General
 function isHome {
 	if [ "${USER}" = oji ] ; then
@@ -118,9 +124,11 @@ if isOffice ; then
 elif isHome ; then
 	alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
+
 # }}}1
 
 # [Define, Export variables] {{{1
+
 HISTSIZE=5000
 HISTFILESIZE=5000
 HISTCONTROL=ignoredups
@@ -134,9 +142,11 @@ if isHome ; then
 elif isOffice ; then
 	export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 fi
+
 # }}}1
 
 # [User process] {{{1
+
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 if [ "$(which stty 2> /dev/null)" ] ; then
 	stty stop undef
@@ -168,9 +178,11 @@ elif isOffice ; then
 		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
 	fi
 fi
+
 # }}}1
 
 # [After] {{{1
+
 export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
@@ -179,7 +191,6 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
-# }}}1
 
 if isHome ; then
 	source /usr/share/git-core/contrib/completion/git-prompt.sh
@@ -195,6 +206,8 @@ if isHome || isOffice ; then
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 	PS1=$PS1'$( [ -n $TMUX ] && [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
 fi
+
+# }}}1
 
 # vim:nofoldenable:
 

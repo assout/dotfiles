@@ -107,14 +107,12 @@ alias g="git"
 # Other
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
+alias grep='grep --color=auto --binary-files=without-match'
 
 if isOffice ; then
 	alias l.='ls -d .* --color=auto --show-control-chars'
-	alias ll='ls -l --color=auto --show-control-chars'
 	alias ls='ls --color=auto --show-control-chars'
-
-	# TODO homeを合わせる
-	alias grep='grep --color=auto --binary-files=without-match'
+	alias ll='ls -l --color=auto --show-control-chars'
 	alias e='explorer'
 	alias git='winpty git'
 elif isHome ; then

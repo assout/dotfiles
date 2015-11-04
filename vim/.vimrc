@@ -668,6 +668,8 @@ if s:HasPlugin('alignta') " {{{
   xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
   " Alignta for 't'able.
   xnoremap <SID>[alignta]t    :Alignta<Space>\|<CR>
+  " Alignta for ':' separator
+  xnoremap <SID>[alignta]:    :Alignta<Space>:<CR>
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{

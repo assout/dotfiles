@@ -396,7 +396,7 @@ nnoremap <M-c> :<C-u>tabclose<CR>
 " nnoremap <C-]> g<C-]>
 " }}}
 
-" []key prefix mappings(based on unimpaired plugin) {{{
+" Like unimpaired plugin mappings {{{
 if ! s:HasPlugin('vim-unimpaired')
   nnoremap [a     :previous<CR>
   nnoremap ]a     :next<CR>
@@ -423,7 +423,7 @@ if ! s:HasPlugin('vim-unimpaired')
   nnoremap [T     :tfirst<CR>
   nnoremap ]T     :tlast<CR>
 endif
-" adding to unimpaired plugin mapping
+" Adding to unimpaired plugin mapping
 nnoremap [g     :tabprevious<CR>
 nnoremap ]g     :tabnext<CR>
 nnoremap [G     :tabfirst<CR>

@@ -232,7 +232,7 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-set grepprg=grep\ -nH
+set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set helplang=en,ja
 set hidden
@@ -736,7 +736,7 @@ if s:HasPlugin('memolist') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    silent execute ':grep -r --exclude-dir=.git ' . a:word . ' ' . g:memolist_path
+    execute ':grep -r ' . a:word . ' ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 

@@ -200,7 +200,7 @@ augroup vimrc
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
   " Enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-  " vimの場合ソフトタブにする TODO MSYS2だと効いてないっぽい(augroup 全体効いてない?)
+  " vimの場合ソフトタブにする TODO MSYS2だと効かないことがある("su"でのvimrc updateのタイミングっぽい)
   autocmd FileType vim setlocal expandtab
   " JSONの整形
   if executable('python')

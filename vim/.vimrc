@@ -191,8 +191,11 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
-  " QuickFixを自動で開く、QuickFix内<CR>で選択できるようにする
-  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " QuickfixCmdPostでもできるが、watchdogs,syntasticsの結果表示時には呼ばれていなそうなため TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs,syntastic)
+  autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif
+  autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif
+  " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs,syntasticsの結果表示時には呼ばれないため別で設定)
+  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)
   autocmd FileType * setlocal textwidth=0 formatoptions-=o

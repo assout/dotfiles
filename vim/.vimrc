@@ -197,7 +197,7 @@ augroup vimrc
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs,syntasticsの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
 
-  " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)
+  " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
   " Enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell

@@ -662,9 +662,12 @@ endif
 
 if s:HasPlugin('alignta') " {{{
   xnoremap <SID>[alignta]<CR> :Alignta<Space>
+  " Alignta for 's'hift align.
   xnoremap <SID>[alignta]s    :Alignta<Space><-<Space>
-  " alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-  xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2
+  " Alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
+  xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
+  " Alignta for 't'able.
+  xnoremap <SID>[alignta]t    :Alignta<Space>\|<CR>
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{

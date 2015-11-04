@@ -1,4 +1,4 @@
-" Index {{{1
+" # Index {{{1
 "
 " * Introduction
 " * Begin
@@ -12,9 +12,9 @@
 "
 " }}}1
 
-" [Introduction] {{{1
+" # Introduction {{{1
 "
-" # Principles/Points
+" ## Principles/Points
 "
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
@@ -23,7 +23,7 @@
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 " * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
 "
-" # References
+" ## References
 "
 " * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
 " * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
@@ -33,7 +33,7 @@
 " * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 "
-" # TODOs
+" ## TODOs
 "
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
@@ -41,7 +41,7 @@
 "
 " }}}1
 
-" [Begin] {{{1
+" # Begin {{{1
 
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
@@ -52,7 +52,7 @@ endif
 
 " }}}1
 
-" [Functions and Commands] {{{1
+" # Functions and Commands {{{1
 
 function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
   " TODO オプションなどでbufferに出力もしたい
@@ -162,7 +162,7 @@ endif
 
 " }}}1
 
-" [Let defines] {{{1
+" # Let defines {{{1
 
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
 let s:bundlePath = has('win32') || has('win32unix') ? $HOME . '/vimfiles/bundle/' : $HOME . '/.vim/bundle/'
@@ -179,7 +179,7 @@ endif
 
 " }}}1
 
-" [Auto-commands] {{{1
+" # Auto-commands {{{1
 
 augroup vimrc
   autocmd!
@@ -219,7 +219,7 @@ augroup END
 
 " }}}1
 
-" [Options] {{{1
+" # Options {{{1
 
 set autoindent
 set background=dark
@@ -307,7 +307,7 @@ endif
 
 " }}}1
 
-" [Key-mappings] {{{1
+" # Key-mappings {{{1
 
 " caution: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
@@ -464,7 +464,7 @@ cnoremap <M-f> <S-Right>
 
 " }}}1
 
-" [Plug-ins] {{{1
+" # Plug-ins {{{1
 
 if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
@@ -1259,7 +1259,7 @@ endif " }}}
 
 " }}}1
 
-" [After] {{{1
+" # After {{{1
 
 filetype on
 syntax on

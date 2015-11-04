@@ -12,7 +12,7 @@
 "
 " }}}1
 
-" Section; Introduction {{{1
+" [Introduction] {{{1
 "
 " # Principles/Points
 "
@@ -36,13 +36,12 @@
 " # TODOs
 "
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
-" * TODO このファイルのoutline見えるようにならないか(関数分割すればunite-outlineで見れそうだがやりすぎ)
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 "
 " }}}1
 
-" Section; Begin {{{1
+" [Begin] {{{1
 
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
@@ -53,7 +52,7 @@ endif
 
 " }}}1
 
-" Section; Functions and Commands {{{1
+" [Functions and Commands] {{{1
 
 function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
   " TODO オプションなどでbufferに出力もしたい
@@ -163,7 +162,7 @@ endif
 
 " }}}1
 
-" Section; Let defines {{{1
+" [Let defines] {{{1
 
 " windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
 let s:bundlePath = has('win32') || has('win32unix') ? $HOME . '/vimfiles/bundle/' : $HOME . '/.vim/bundle/'
@@ -180,7 +179,7 @@ endif
 
 " }}}1
 
-" Section; Auto-commands {{{1
+" [Auto-commands] {{{1
 
 augroup vimrc
   autocmd!
@@ -220,7 +219,7 @@ augroup END
 
 " }}}1
 
-" Section; Options {{{1
+" [Options] {{{1
 
 set autoindent
 set background=dark
@@ -308,7 +307,7 @@ endif
 
 " }}}1
 
-" Section; Key-mappings {{{1
+" [Key-mappings] {{{1
 
 " caution: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
@@ -465,7 +464,7 @@ cnoremap <M-f> <S-Right>
 
 " }}}1
 
-" Section; Plug-ins {{{1
+" [Plug-ins] {{{1
 
 if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
@@ -566,7 +565,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
   " }}}
 
-  " colorschemes {{{
+  " Colorschemes {{{
   NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'chriskempson/vim-tomorrow-theme'
   NeoBundle 'sickill/vim-monokai'
@@ -622,7 +621,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " endfor
 endif
 
-" plugin prefix mappings {{{
+" Plugin prefix mappings {{{
 if s:IsPluginEnabled()
   map  <Space>              <SID>[plugin]
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
@@ -902,6 +901,7 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
+  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright<CR>
   nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
   nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
@@ -1259,7 +1259,7 @@ endif " }}}
 
 " }}}1
 
-" Section; After {{{1
+" [After] {{{1
 
 filetype on
 syntax on

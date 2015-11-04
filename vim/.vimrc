@@ -266,7 +266,7 @@ set scrolloff=5
 set shiftwidth=2
 set showcmd
 set showtabline=1
-set shortmess+=atTO
+set shortmess& shortmess+=atTO
 set sidescrolloff=5
 set smartcase
 set smartindent

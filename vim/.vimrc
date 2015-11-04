@@ -184,18 +184,21 @@ endif
 
 augroup vimrc
   autocmd!
+
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  " Set markdown filetype TODO 最新のvimだと設定不要らしい
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
-  " Set freemaker filetype
-  autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs,syntastic)
   autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs,syntasticsの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  " Set markdown filetype TODO 最新のvimだと設定不要らしい
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
+  " Set freemaker filetype
+  autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
+
+  " ファイルタイプごとの設定 {{{
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
@@ -211,6 +214,8 @@ augroup vimrc
   if executable('xmllint') " TODO pretty format(xml,html,xhtml)
     " autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
   endif
+
+  " }}}
 augroup END
 
 " }}}1

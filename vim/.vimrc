@@ -905,12 +905,12 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
-  nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright<CR>
-  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright<CR>
+  nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
+  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
   nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
-  nnoremap <SID>[unite]t    :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright<CR>
+  nnoremap <SID>[unite]t    :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
   if s:HasPlugin('vimproc')

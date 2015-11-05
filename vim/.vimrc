@@ -600,6 +600,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'vim-operator-surround',
         \ 'vim-operator-user',
         \ 'vim-repeat',
+        \ 'vim-submode',
         \ 'vim-textobj-anyblock',
         \ 'vim-textobj-between',
         \ 'vim-textobj-entire',
@@ -753,7 +754,7 @@ if s:HasPlugin('memolist') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':grep -r ' . a:word . ' ' . g:memolist_path
+    execute ':silent grep -r ' . a:word . ' ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
@@ -953,7 +954,7 @@ if s:HasPlugin('unite') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      silent execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
+      execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 

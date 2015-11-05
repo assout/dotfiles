@@ -647,6 +647,7 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
+  nmap <SID>[plugin]W       <SID>[Watchdogs]
   nmap <SID>[plugin]/       <SID>[migemo]
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
@@ -1200,7 +1201,8 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせ�
 endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
-  nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
+  nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
+  nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
   let g:watchdogs_check_BufWritePost_enable = 1
 
   " TODO quickfix開くとhookが動かない.暫定で開かないようにしている

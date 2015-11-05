@@ -265,9 +265,13 @@ set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定
-" -> TODO 副作用があるためコメントアウト。(e.g. MyHereコマンドで正しく開けなくなる) Refs. <https://github.com/vim-jp/issues/issues/43>
-" set shellslash
+if has('win32') && has('gui_running')
+  " TODO 関係するオプション(shellcmdflag等)の設定は不要か
+  set shell=bash.exe
+  " Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定。TODO tagsのため(gui,cui両方同じパスセパレータとしたい)。
+  " -> TODO 副作用がある。(e.g. MyHereコマンドで正しく開けなくなる) Refs. <https://github.com/vim-jp/issues/issues/43>
+  set shellslash
+endif
 set shiftwidth=2
 set showcmd
 set showtabline=1
@@ -289,9 +293,6 @@ if has('path_extra')
   set tags& tags=./.tags;
 else
   set tags& tags=./.tags
-endif
-if has('win32unix') " windowsだとgvimとmsys2 vimでパスセパレータがことなるのでmsys2 vimでは無効にする
-  set tags=''
 endif
 set tabstop=2
 " 自動改行をなくす
@@ -593,13 +594,16 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'unite-outline',
         \ 'unite-todo',
         \ 'unite.vim',
+        \ 'vim-easytags',
         \ 'vim-hybrid',
         \ 'vim-javascript',
         \ 'vim-maximizer',
+        \ 'vim-misc',
         \ 'vim-operator-replace',
         \ 'vim-operator-surround',
         \ 'vim-operator-user',
         \ 'vim-repeat',
+        \ 'vim-shell',
         \ 'vim-submode',
         \ 'vim-textobj-anyblock',
         \ 'vim-textobj-between',

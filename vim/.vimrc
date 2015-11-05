@@ -266,7 +266,7 @@ set number
 set nrformats=""
 set scrolloff=5
 " Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定
-" TODO 副作用があるためコメントアウト。(e.g. MyHereコマンドで正しく開けなくなる) Refs. <https://github.com/vim-jp/issues/issues/43>
+" -> TODO 副作用があるためコメントアウト。(e.g. MyHereコマンドで正しく開けなくなる) Refs. <https://github.com/vim-jp/issues/issues/43>
 " set shellslash
 set shiftwidth=2
 set showcmd

@@ -264,8 +264,9 @@ set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定。ただし副作用があるかも Refs. <https://github.com/vim-jp/issues/issues/43>
-set shellslash
+" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定。
+" TODO 副作用があるためコメントアウト Refs. <https://github.com/vim-jp/issues/issues/43>
+" set shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1

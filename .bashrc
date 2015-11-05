@@ -129,9 +129,13 @@ fi
 
 # [Define, Export variables] {{{1
 
+# History settings
 HISTSIZE=5000
 HISTFILESIZE=5000
+# 重複を排除
 HISTCONTROL=ignoredups
+# コマンド実行時刻を記録する
+HISTTIMEFORMAT='%F %T '
 
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8

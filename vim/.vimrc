@@ -155,6 +155,7 @@ command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 if s:IsOffice()
+  " TODO Windowsで set shellslashしているときうまくいかない
   silent command! MyHere !start explorer.exe %:h
 else
   silent command! MyHere !nautilus %:h &

@@ -157,7 +157,7 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 if s:IsOffice()
   silent command! MyHere !start explorer.exe %:h
 else
-  silent command! MyHere !nautilus %:h
+  silent command! MyHere !nautilus %:h &
 endif
 
 " }}}1

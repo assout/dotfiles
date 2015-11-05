@@ -239,7 +239,8 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-" TODO Windowsでgrep結果のファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)
+" TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)
+" TODO Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set helplang=en,ja
@@ -264,9 +265,9 @@ set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定。
-" TODO 副作用があるためコメントアウト Refs. <https://github.com/vim-jp/issues/issues/43>
-" set shellslash
+" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定
+" TODO 副作用がある。 Refs. <https://github.com/vim-jp/issues/issues/43>
+set shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1
@@ -952,7 +953,7 @@ if s:HasPlugin('unite') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      silent execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md '
+      silent execute ':grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 

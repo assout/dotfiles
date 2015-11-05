@@ -188,10 +188,10 @@ augroup vimrc
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
-  autocmd QuickfixCmdPost [^l]* if len(getqflist()) != 0  | copen | endif
-  autocmd QuickfixCmdPost l*    if len(getloclist(0)) != 0 | lopen | endif
+  autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
+  autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  autocmd BufReadPost quickfix,loclist nested setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set markdown filetype TODO 最新のvimだと設定不要らしい
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
   " Set freemaker filetype
@@ -239,6 +239,7 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
+" TODO Windowsでgrep結果のファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
 set helplang=en,ja
@@ -263,6 +264,8 @@ set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
+" Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため設定。ただし副作用があるかも Refs. <https://github.com/vim-jp/issues/issues/43>
+set shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1

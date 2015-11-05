@@ -54,7 +54,7 @@ endif
 
 " # Functions and Commands {{{1
 
-function! s:Capture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
+function! s:MyCapture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
   " TODO オプションなどでbufferに出力もしたい
   if has('clipboard')
     redir @+>
@@ -64,24 +64,24 @@ function! s:Capture(command) " command 実行結果をキャプチャ TODO 実�
   execute a:command
   redir END
 endfunction
-command! -nargs=1 -complete=command MyCapture call <SID>Capture(<q-args>)
+command! -nargs=1 -complete=command MyCapture call <SID>MyCapture(<q-args>)
 
-function! s:ToggleExpandTab()
+function! s:MyToggleExpandTab()
   setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! ``
   endif
 endfunction
-command! MyToggleExpandTab call <SID>ToggleExpandTab()
+command! MyToggleExpandTab call <SID>MyToggleExpandTab()
 
-function! s:ChangeTabstep(size)
+function! s:MyChangeTabstep(size)
   if &l:expandtab
     execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! ``
   endif
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
 endfunction
-command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
+command! -nargs=1 MyChangeTabstep call <SID>MyChangeTabstep(<q-args>)
 
 function! s:InsertString(pos, str) range
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
@@ -92,7 +92,7 @@ command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-
 " TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
 " TODO あいまい検索的なものがほしい(vim spellの`z=`的なもの)
-function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
+function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
   let l:word = a:0 == 0 ? expand('<cword>') : a:1
   call histadd('cmd', 'MyTranslate '  . l:word)
   if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
@@ -122,7 +122,7 @@ function! s:Translate(...) " required gene.txt, kaoriya/dicwin.vimで良いが�
   silent 1delete
   silent wincmd p
 endfunction
-command! -nargs=? MyTranslate call <SID>Translate(<f-args>)
+command! -nargs=? MyTranslate call <SID>MyTranslate(<f-args>)
 
 function! s:IsHome()
   return $USERNAME ==# 'oji'
@@ -957,11 +957,11 @@ if s:HasPlugin('unite') " {{{
     let g:unite_todo_note_suffix = 'md'
     let g:unite_todo_data_directory = s:IsHome() ? '~/Dropbox' : expand('~/Documents')
 
-    function! s:TodoGrep(word)
+    function! s:MyTodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
       execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
-    command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
+    command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
 
     noremap  <SID>[todo]a       :UniteTodoAddSimple -memo<CR>
     noremap  <SID>[todo]q       :UniteTodoAddSimple<CR>

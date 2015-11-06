@@ -361,9 +361,9 @@ noremap  <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 if has('gui_running')
-  nnoremap <SID>[shortcut]u :<C-u>update $MYVIMRC<Bar>:update $MYGVIMRC<Bar>:source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
 else
-  nnoremap <SID>[shortcut]u :<C-u>update $MYVIMRC<Bar>:source $MYVIMRC<CR>
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<CR>
 endif
 noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>

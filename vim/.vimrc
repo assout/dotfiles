@@ -1274,11 +1274,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ }
 
   if s:IsOffice()
-    let g:quickrun_config['watchdogs_checker/shellcheck'] = {
-          \   'command' : 'shellcheck',
-          \   'cmdopt'  : '-f gcc',
-          \   'exec'    : 'cmd /c "chcp.com 65001 | %c %o %s:p"',
-          \ }
+    let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
   endif
 
   call g:watchdogs#setup(g:quickrun_config)

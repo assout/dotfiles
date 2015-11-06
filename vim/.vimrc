@@ -172,7 +172,7 @@ silent command! MyHere call <SID>MyHere()
 " # Let defines {{{1
 
 " Caution: windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
-let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : '~/.vim/bundle/'
+let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : expand('~/.vim/bundle/')
 let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更

@@ -730,9 +730,7 @@ if s:HasPlugin('hateblo') " {{{
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
-  augroup vimrc
-    autocmd BufRead,BufNewFile *.{txt,mindmap} setlocal filetype=hybrid
-  augroup END
+  autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} setlocal filetype=hybrid
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
@@ -905,9 +903,7 @@ if s:HasPlugin('unite') " {{{
     nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
     nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
   endfunction
-  augroup vimrc
-    autocmd FileType unite call s:Unite_my_keymappings()
-  augroup END
+  autocmd vimrc FileType unite call s:Unite_my_keymappings()
 
   call g:unite#custom#action('file,directory', 'relative_move', s:My_relative_move)
   call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -1090,9 +1086,8 @@ endif " }}}
 if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
-  augroup vimrc
-    autocmd FileType ref resize 5
-  augroup END
+
+  autocmd vimrc FileType ref resize 5
 
   if has('unix')
     nnoremap <expr> <SID>[ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
@@ -1304,9 +1299,7 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
   endfunction
-  augroup vimrc
-    autocmd ColorScheme * :call <SID>DefineMyHighlight()
-  augroup END
+  autocmd vimrc ColorScheme * :call <SID>DefineMyHighlight()
   colorscheme hybrid
 endif
 

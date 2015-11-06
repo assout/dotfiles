@@ -591,6 +591,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundleCheck " Installation check.
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
+  " MSYS2 Plugin settings {{{
   let s:plugins = [
         \ 'memolist.vim',
         \ 'neomru.vim',
@@ -599,6 +600,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'sh.vim',
         \ 'tcomment_vim',
         \ 'unite-outline',
+        \ 'unite-tag',
         \ 'unite-todo',
         \ 'unite.vim',
         \ 'vim-easytags',
@@ -636,6 +638,8 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " for s:path in split(globpath('~/vimfiles/bundle/','*'), '\n')
   "   let &runtimepath = &runtimepath . ',' . s:path
   " endfor
+
+  " }}}
 endif
 
 " Plugin prefix mappings {{{
@@ -924,15 +928,17 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
   nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
-  nnoremap <SID>[unite]t    :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
+  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   if s:HasPlugin('vimproc')
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
   else
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
+  endif
+  if s:HasPlugin('unite-tag')
+    nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   endif
   if s:HasPlugin('yankround')
     nnoremap <SID>[unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>

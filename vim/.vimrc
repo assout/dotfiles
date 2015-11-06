@@ -98,7 +98,7 @@ function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが
   if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
     return
   endif
-  let l:gene_path = s:IsHome() ? '~/.vim/dict/gene.txt' : $HOME . '/vimfiles/dict/gene95/GENE.TXT'
+  let l:gene_path = s:IsHome() ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene95/GENE.TXT'
   let l:jpn_to_eng = l:word !~? '^[a-z_]\+$'
   let l:output_option = l:jpn_to_eng ? '-B 1' : '-A 1' " 和英 or 英和
 
@@ -171,8 +171,8 @@ silent command! MyHere call <SID>MyHere()
 
 " # Let defines {{{1
 
-" windowsでも~/.vimにしてもよいが何かとvimfilesのほうが都合よい(migemo pluginがデフォルトでruntimepathとしてに行ってくれたり？)
-let s:bundlePath = has('win32') || has('win32unix') ? $HOME . '/vimfiles/bundle/' : $HOME . '/.vim/bundle/'
+" Caution: windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
+let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : '~/.vim/bundle/'
 let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
@@ -720,7 +720,7 @@ if s:HasPlugin('hateblo') " {{{
         \ 'always_yes': 0,
         \ 'edit_command': 'edit'
         \ } " api_keyはvimrc.localから設定
-  let g:hateblo_dir = '$HOME/.cache/hateblo/blog'
+  let g:hateblo_dir = expand('~/.cache/hateblo/blog')
 
   nnoremap <SID>[hateblo]l :<C-u>HatebloList<CR>
   nnoremap <SID>[hateblo]c :<C-u>HatebloCreate<CR>

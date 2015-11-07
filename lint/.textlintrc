@@ -8,7 +8,7 @@
     "prh": {
       "rulePaths": [
         /* TODO relative path */
-        "/home/oji/dotfiles/prh.yml"
+        "/home/oji/dotfiles/lint/prh.yml"
       ]
     },
     "max-number-of-lines": true,

@@ -1217,7 +1217,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:watchdogs_check_BufWritePost_enable = 1
 
   " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
-  " TODO shellcheck,mdl のみ動作確認済み
+  " TODO checkbashisms, bashate, js-yamlの動作未確認
   let g:quickrun_config = {
         \ 'watchdogs_checker/_' : {
         \   'outputter/quickfix/open_cmd' : '',

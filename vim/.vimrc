@@ -1228,7 +1228,9 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   'hook/qfsigns_update/enable_exit': 1,
         \   'hook/quickfix_status_enable/enable_exit' : 1,
         \ },
-        \
+        \}
+
+  call extend(g:quickrun_config, {
         \ 'sh/watchdogs_checker' : {
         \   'type'
         \     : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
@@ -1248,7 +1250,12 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   'command' : 'checkbashisms',
         \   'cmdopt'  : '-f',
         \ },
-        \
+        \})
+  if s:IsOffice()
+    let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
+  endif
+
+  call extend(g:quickrun_config, {
         \ 'markdown/watchdogs_checker': {
         \  'type'
         \    : executable('mdl') ? 'watchdogs_checker/mdl'
@@ -1269,18 +1276,16 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
         \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
         \ },
-        \
+        \})
+
+  call extend(g:quickrun_config, {
         \ 'yaml/watchdogs_checker': {
         \   'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
         \ },
         \ 'watchdogs_checker/js-yaml' : {
         \   'command' : 'js-yaml',
         \ },
-        \ }
-
-  if s:IsOffice()
-    let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
-  endif
+        \})
 
   let g:quickrun_config['watchdogs_checker/eslint'] = {
         \  'command' : 'eslint',

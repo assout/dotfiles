@@ -543,6 +543,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'tpope/vim-abolish'
   NeoBundle 'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle 'tpope/vim-repeat'
+  NeoBundle 'tpope/vim-speeddating'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle 'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'tyru/open-browser.vim'

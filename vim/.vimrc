@@ -1282,6 +1282,12 @@ if s:HasPlugin('vim-watchdogs') " {{{
     let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
   endif
 
+  let g:quickrun_config['watchdogs_checker/eslint'] = {
+        \  'command' : 'eslint',
+        \  'exec'    : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
+        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
+        \ }
+
   call g:watchdogs#setup(g:quickrun_config)
 endif " }}}
 

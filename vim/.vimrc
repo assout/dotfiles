@@ -508,6 +508,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
+  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type': 'plugin'}
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'kana/vim-fakeclip'
   NeoBundle 'kana/vim-gf-user'
@@ -983,10 +984,6 @@ endif " }}}
 if s:HasPlugin('vimfiler') " {{{
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
   let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
-endif " }}}
-
-if s:HasPlugin('vim-ansible-yaml') " {{{
-  let g:ansible_options = {'ignore_blank_lines': 1}
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{

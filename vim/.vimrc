@@ -1266,7 +1266,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ },
         \ 'watchdogs_checker/textlint' : {
         \  'command'     : 'textlint',
-        \  'exec'        : '%c -f compact %o %s:p',
+        \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
         \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
         \ },
         \

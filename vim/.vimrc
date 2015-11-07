@@ -462,17 +462,15 @@ inoremap <M-d> <C-o>dw
 
 " Command-line mode mappings {{{
 " TODO 一単語Delete
-if ! s:HasPlugin('vim-emacscommandline') 
-  cnoremap <C-a> <Home>
-  cnoremap <C-b> <Left>
-  cnoremap <C-f> <Right>
-  cnoremap <C-p> <Up>
-  cnoremap <C-n> <Down>
-  cnoremap <C-d> <Del>
-  cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
-  cnoremap <M-b> <S-Left>
-  cnoremap <M-f> <S-Right>
-endif
+cnoremap <C-a> <Home>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <C-d> <Del>
+cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
+cnoremap <M-b> <S-Left>
+cnoremap <M-f> <S-Right>
 " }}}
 
 " }}}1
@@ -508,7 +506,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
-  NeoBundle 'houtsnip/vim-emacscommandline'
   NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type': 'plugin'}
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'kana/vim-fakeclip'

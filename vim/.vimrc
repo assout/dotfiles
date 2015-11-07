@@ -1252,6 +1252,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ 'markdown/watchdogs_checker': {
         \  'type'
         \    : executable('mdl') ? 'watchdogs_checker/mdl'
+        \    : executable('textlint') ? 'watchdogs_checker/textlint'
         \    : executable('redpen') ? 'watchdogs_checker/redpen'
         \    : '',
         \ },
@@ -1262,6 +1263,11 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   'command' : 'redpen',
         \   'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
         \   'exec'    : '%c %o %s:p 2> /dev/null',
+        \ },
+        \ 'watchdogs_checker/textlint' : {
+        \  'command'     : 'textlint',
+        \  'exec'        : '%c -f compact %o %s:p',
+        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
         \ },
         \
         \ 'yaml/watchdogs_checker': {

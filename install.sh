@@ -16,6 +16,7 @@ ln -sf ~/Development/dotfiles/.gitconfig.linux ~/.gitconfig.environment
 ln -sf ~/Development/dotfiles/.gitignore ~/
 ln -sf ~/Development/dotfiles/.inputrc ~/
 ln -sf ~/Development/dotfiles/.tmux.conf ~/
+ln -sf ~/Development/dotfiles/.textlintrc ~/
 ln -sf ~/Development/dotfiles/eclipse/_vrapperrc ~/.vrapperrc
 ln -sf ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.environment
 ln -sf ~/Development/dotfiles/markdown/.mdlrc ~/

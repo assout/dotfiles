@@ -12,5 +12,8 @@
     },
     "spellcheck-tech-word": true
   },
-  "vim_modeline": " vim:set ft=json:"
+  "z_comments": [
+    "failed jtf-style-plugin",
+    " vim:set ft=json:"
+  ]
 }

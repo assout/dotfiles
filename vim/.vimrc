@@ -210,11 +210,11 @@ augroup vimrc
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
   " Enable spell on markdown file
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-  " vimの場合ソフトタブにする TODO MSYS2だと効かないことがある("su"でのvimrc updateのタイミングっぽい)
-  autocmd FileType vim setlocal expandtab
+  " ハードタブにする TODO MSYS2だと効かないことがある?("su"でのvimrc updateのタイミングっぽい)
+  autocmd FileType markdown,java setlocal noexpandtab
   " JSONの整形
   if executable('python')
-    autocmd BufNewFile,BufRead *.json setlocal equalprg=python\ -m\ json.tool
+    " autocmd FileType json setlocal equalprg=python\ -m\ json.tool
   endif
   " XMLの整形
   if executable('xmllint') " TODO pretty format(xml,html,xhtml)
@@ -238,7 +238,7 @@ if has('patch-7.4.399')
   set cryptmethod=blowfish2
 endif
 set diffopt& diffopt+=vertical
-set noexpandtab
+set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 if has('folding')
   set foldlevelstart=0
@@ -265,6 +265,8 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
+" jsonファイルの場合を考慮
+set modelines=2
 if !has('folding') " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
   set modelines=0
 endif
@@ -500,7 +502,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'chaquotay/ftl-vim-syntax'
   NeoBundle 'dannyob/quickfixstatus' " for watchdogs. TODO syntasticと競合するっぽい
-  " NeoBundle 'elzr/vim-json' " TODO なぜ入れてるか忘れたためいったんコメントアウト
+  NeoBundle 'elzr/vim-json' " for json filetype
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
@@ -1028,6 +1030,10 @@ if s:HasPlugin('vim-gista') " {{{
   nnoremap <SID>[gista]l    :<C-u>Unite gista<CR>
   nnoremap <SID>[gista]c    :<C-u>Gista<CR>
   nnoremap <SID>[gista]<CR> :<C-u>Gista<CR>
+endif " }}}
+
+if s:HasPlugin('vim-json') " {{{
+  let g:vim_json_syntax_conceal = 0
 endif " }}}
 
 if s:HasPlugin('vim-localrc') " {{{

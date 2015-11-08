@@ -14,7 +14,7 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+  . /etc/bashrc
 fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
@@ -26,66 +26,66 @@ fi
 
 # General
 function isHome {
-	if [ "${USER}" = oji ] ; then
-		return 0
-	else
-		return 1
-	fi
+  if [ "${USER}" = oji ] ; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function isOffice {
-	if [ "${OSTYPE}" = msys -a "${USERNAME}" = admin ] ; then
-		return 0
-	else
-		return 1
-	fi
+  if [ "${OSTYPE}" = msys -a "${USERNAME}" = admin ] ; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 function cdParent {
-	local to=${1:-1}
-	local toStr="";
-	for _ in $(seq 1 "${to}") ; do
-		toStr="${toStr}"../
-	done
-	cdls ${toStr}
+  local to=${1:-1}
+  local toStr="";
+  for _ in $(seq 1 "${to}") ; do
+    toStr="${toStr}"../
+  done
+  cdls ${toStr}
 }
 alias ..='cdParent'
 
 function cdls {
-	command cd "$1"; # エスケープしないと循環しちゃう
-	ls --color=auto --show-control-chars;
+  command cd "$1"; # エスケープしないと循環しちゃう
+  ls --color=auto --show-control-chars;
 }
 alias cd='cdls'
 
 # Vim
 if [ "$(which vim 2> /dev/null)" ] ; then
-	alias vi='vim'
+  alias vi='vim'
 fi
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/_vimrc" ] ; then
-	alias v='vi -S ${here}/_vimrc'
+  alias v='vi -S ${here}/_vimrc'
 else
-	alias v='vi'
+  alias v='vi'
 fi
 
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
-	# ls & cd
-	function pecoLscd {
-		local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
-	if [ ! -z "$dir" ] ; then
-		cd "$dir"
-	fi
+  # ls & cd
+  function pecoLscd {
+    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
+  if [ ! -z "$dir" ] ; then
+    cd "$dir"
+  fi
 }
 alias pcd='pecoLscd'
 
 # history
 function pecoHist {
-	time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
-	column=$(( time_column + 3))
-	cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
-	history -s "$cmd"
-	eval "$cmd"
+  time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
+  column=$(( time_column + 3))
+  cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
+  history -s "$cmd"
+  eval "$cmd"
 }
 # TODO なんかC-pとかが遅くなるので一旦無効
 # bind '"\C-p\C-r":"peco-hist\n"'
@@ -93,10 +93,10 @@ fi
 
 # Man
 function manJapanese {
-	LANG_ESCAPE=$LANG
-	LANG=ja_JP.UTF-8
-	man "$*"
-	LANG=$LANG_ESCAPE
+  LANG_ESCAPE=$LANG
+  LANG=ja_JP.UTF-8
+  man "$*"
+  LANG=$LANG_ESCAPE
 }
 alias jan='manJapanese'
 
@@ -116,13 +116,13 @@ alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match'
 
 if isOffice ; then
-	alias l.='ls -d .* --color=auto --show-control-chars'
-	alias ls='ls --color=auto --show-control-chars'
-	alias ll='ls -l --color=auto --show-control-chars'
-	alias e='explorer'
-	alias git='winpty git'
+  alias l.='ls -d .* --color=auto --show-control-chars'
+  alias ls='ls --color=auto --show-control-chars'
+  alias ll='ls -l --color=auto --show-control-chars'
+  alias e='explorer'
+  alias git='winpty git'
 elif isHome ; then
-	alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+  alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
 # }}}1
@@ -142,9 +142,9 @@ export LANG=en_US.UTF-8
 export LESS='-R'
 
 if isHome ; then
-	export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+  export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 elif isOffice ; then
-	export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+  export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 fi
 
 # }}}1
@@ -153,34 +153,34 @@ fi
 
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 if [ "$(which stty 2> /dev/null)" ] ; then
-	stty stop undef
+  stty stop undef
 fi
 
 # Create Today backup directory. TODO dirty
 if isHome ; then
-	todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
-	if [ ! -d "${todayBackupPath}" ] ; then
-		mkdir -p "${todayBackupPath}"
-		ln -sfn "${todayBackupPath}" "${HOME}/Today"
-	fi
+  todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
+  if [ ! -d "${todayBackupPath}" ] ; then
+    mkdir -p "${todayBackupPath}"
+    ln -sfn "${todayBackupPath}" "${HOME}/Today"
+  fi
 elif isOffice ; then
-	# cmd実行時のため、Windows形式のHOMEパス取得
-	_home=$(cmd //c echo %HOME%)
-	todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
-	if [ ! -d "${todayBackupPath}" ] ; then
-		mkdir -p "${todayBackupPath}"
+  # cmd実行時のため、Windows形式のHOMEパス取得
+  _home=$(cmd //c echo %HOME%)
+  todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
+  if [ ! -d "${todayBackupPath}" ] ; then
+    mkdir -p "${todayBackupPath}"
 
-		todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
-		if [ -d "${todayBackupLinkPathDesktop}" ] ; then
-			rm -r "${todayBackupLinkPathDesktop}"
-		fi
-		todayBackupLinkPathHome="${_home}\\Today"
-		if [ -d "${todayBackupLinkPathHome}" ] ; then
-			rm -r "${todayBackupLinkPathHome}"
-		fi
-		cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" 2>&1 | nkf32.exe -w
-		cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
-	fi
+    todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
+    if [ -d "${todayBackupLinkPathDesktop}" ] ; then
+      rm -r "${todayBackupLinkPathDesktop}"
+    fi
+    todayBackupLinkPathHome="${_home}\\Today"
+    if [ -d "${todayBackupLinkPathHome}" ] ; then
+      rm -r "${todayBackupLinkPathHome}"
+    fi
+    cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" 2>&1 | nkf32.exe -w
+    cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
+  fi
 fi
 
 # }}}1
@@ -197,18 +197,18 @@ export PATH="$HOME/.cabal/bin:$PATH"
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if isHome ; then
-	source /usr/share/git-core/contrib/completion/git-prompt.sh
-	# TODO Officeだと遅い
-	export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
-	export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
-	export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
-	export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
+  source /usr/share/git-core/contrib/completion/git-prompt.sh
+  # TODO Officeだと遅い
+  export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
+  export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
+  export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
+  export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif isOffice ; then
-	source /usr/share/git/completion/git-prompt.sh
+  source /usr/share/git/completion/git-prompt.sh
 fi
 if isHome || isOffice ; then
-	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-	[ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
+  PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
+  [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
 fi
 
 # }}}1

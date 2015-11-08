@@ -22,6 +22,7 @@ ln -sf ~/Development/dotfiles/lint/.mdlrc ~/
 ln -sf ~/Development/dotfiles/lint/.mdlrc.style.rb ~/
 ln -sf ~/Development/dotfiles/lint/.eslintrc ~/
 ln -sf ~/Development/dotfiles/lint/.textlintrc ~/
+ln -sf ~/Development/dotfiles/lint/.textstatrc ~/
 ln -sf ~/Development/dotfiles/vim/.gvimrc ~/
 ln -sf ~/Development/dotfiles/vim/.vimrc ~/
 ln -sf ~/Development/dotfiles/vim/.vimrc.devlopment ~/Development/vim-plugins

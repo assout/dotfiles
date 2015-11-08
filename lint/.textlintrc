@@ -1,17 +1,14 @@
 {
-  "rules": {
-    "no-todo": true,
+"rules": {
+    "max-number-of-lines": true,
     "max-ten": true,
-    "spellcheck-tech-word": true,
     "no-mix-dearu-desumasu": true,
     "no-start-duplicated-conjunction": true,
+    "no-todo": true,
     "prh": {
-      "rulePaths": [
-        /* TODO relative path */
-        "/home/oji/dotfiles/lint/prh.yml"
-      ]
+      "rulePaths": ["/home/oji/dotfiles/lint/prh.yml"]
     },
-    "max-number-of-lines": true,
-  }
+    "spellcheck-tech-word": true
+  },
+  "comment": " vim:set ft=json:"
 }
-

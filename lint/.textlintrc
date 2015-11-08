@@ -6,9 +6,11 @@
     "no-start-duplicated-conjunction": true,
     "no-todo": true,
     "prh": {
-      "rulePaths": ["/home/oji/dotfiles/lint/prh.yml"]
+      "rulePaths": [
+        "/home/oji/dotfiles/lint/prh.yml"
+      ]
     },
     "spellcheck-tech-word": true
   },
-  "comment": " vim:set ft=json:"
+  "vim_modeline": " vim:set ft=json:"
 }

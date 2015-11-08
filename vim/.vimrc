@@ -1264,18 +1264,24 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    : executable('mdl') ? 'watchdogs_checker/mdl'
         \    : executable('textlint') ? 'watchdogs_checker/textlint'
         \    : executable('redpen') ? 'watchdogs_checker/redpen'
+        \    : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
         \    : '',
         \ },
         \ 'watchdogs_checker/mdl' : {
         \   'command' : 'mdl',
+        \ },
+        \ 'watchdogs_checker/textlint' : {
+        \  'command'     : 'textlint',
+        \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
+        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
         \ },
         \ 'watchdogs_checker/redpen' : {
         \   'command' : 'redpen',
         \   'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
         \   'exec'    : '%c %o %s:p 2> /dev/null',
         \ },
-        \ 'watchdogs_checker/textlint' : {
-        \  'command'     : 'textlint',
+        \ 'watchdogs_checker/eslint-md' : {
+        \  'command'     : 'eslint-md',
         \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
         \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
         \ },

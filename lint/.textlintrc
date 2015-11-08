@@ -1,5 +1,5 @@
 {
-"rules": {
+  "rules": {
     "max-number-of-lines": true,
     "max-ten": true,
     "no-mix-dearu-desumasu": true,

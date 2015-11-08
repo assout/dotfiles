@@ -1,4 +1,4 @@
 {
   "extends": "google",
-  "comment": " vim:set ft=json:"
+  "vim_modeline": " vim:set ft=json:"
 }

@@ -1,0 +1,8 @@
+{
+  "plugins":[
+    "ja"
+  ],
+  "z_comments": [
+    " vim:set ft=json:"
+  ]
+}

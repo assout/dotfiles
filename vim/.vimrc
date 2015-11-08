@@ -212,13 +212,13 @@ augroup vimrc
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
   " ハードタブにする TODO MSYS2だと効かないことがある?("su"でのvimrc updateのタイミングっぽい)
   autocmd FileType markdown,java setlocal noexpandtab
-  " JSONの整形
+
   if executable('python')
-    " autocmd FileType json setlocal equalprg=python\ -m\ json.tool
+    autocmd! FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
   endif
-  " XMLの整形
-  if executable('xmllint') " TODO pretty format(xml,html,xhtml)
-    " autocmd FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
+
+  if executable('xmllint')
+    autocmd! FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
   endif
 
   " }}}

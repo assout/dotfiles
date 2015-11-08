@@ -266,7 +266,7 @@ set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
 " jsonファイルの場合を考慮
-set modelines=2
+set modelines=3
 if !has('folding') " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
   set modelines=0
 endif

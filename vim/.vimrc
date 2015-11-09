@@ -203,12 +203,12 @@ augroup vimrc
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist nested setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
-  " Set markdown filetype TODO 最新のvimだと設定不要らしい
+  " Set markdown filetype TODO 最新のvimだと設定不要らしい(fedora 23 のdnfのだとまだだめ)
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
 
-  " ファイルタイプごとの設定 {{{
+  " FileType settings - ファイルタイプごとの設定 {{{
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
@@ -563,7 +563,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'xolox/vim-misc' " for easytags.
   NeoBundle 'xolox/vim-shell' " for easytags.
 
-  " Operators {{{
+  " User Operators {{{
   NeoBundle 'kana/vim-operator-user'
   NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
   NeoBundle 'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb,sab.
@@ -571,7 +571,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
   " }}}
 
-  " Textobjects {{{
+  " User Textobjects {{{
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
   NeoBundle 'kana/vim-textobj-function', {'depends': ['kana/vim-textobj-user']}
@@ -778,7 +778,7 @@ if s:HasPlugin('memolist') " {{{
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
   nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
-  if s:HasPlugin('unite')
+  if s:HasPlugin('unite') " {{{
     let g:unite_source_alias_aliases = {
           \'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
           \'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
@@ -791,7 +791,7 @@ if s:HasPlugin('memolist') " {{{
     call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
     nnoremap <SID>[memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
     nnoremap <SID>[memolist]L :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
-  else
+  else " }}}
     nnoremap <SID>[memolist]l :<C-u>MemoList<CR>
   endif
   nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
@@ -935,19 +935,19 @@ if s:HasPlugin('unite') " {{{
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
   nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
-  if s:HasPlugin('vimproc')
+  if s:HasPlugin('vimproc') " {{{
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
-  else
+  else " }}}
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
   endif
-  if s:HasPlugin('unite-tag')
+  if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  endif
-  if s:HasPlugin('yankround')
+  endif " }}}
+  if s:HasPlugin('yankround') " {{{
     nnoremap <SID>[unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
-  else
+  else " }}}
     nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
   endif
 
@@ -1067,31 +1067,31 @@ if s:HasPlugin('vim-operator-surround') " {{{
   map <silent> <SID>[surround-d] <Plug>(operator-surround-delete)
   map <silent> <SID>[surround-r] <Plug>(operator-surround-replace)
 
-  if s:HasPlugin('vim-textobj-anyblock')
+  if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
     nmap <silent><SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
     nmap <silent><SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
-  endif
+  endif " }}}
 
-  if s:HasPlugin('vim-textobj-between')
+  if s:HasPlugin('vim-textobj-between') " {{{
     nmap <silent><SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
     nmap <silent><SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
     nmap <silent><SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
-  endif
+  endif " }}}
 
-  if s:HasPlugin('vim-textobj-line')
+  if s:HasPlugin('vim-textobj-line') " {{{
     nmap <silent><SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
     nmap <silent><SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
     nmap <silent><SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
-  endif
+  endif " }}}
 
-  if s:HasPlugin('vim-textobj-url')
+  if s:HasPlugin('vim-textobj-url') " {{{
     nmap <silent><SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
     " TODO no block matches to the region となる
     nmap <silent><SID>[surround-d]u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
     " TODO appendの動きになってしまう
     nmap <silent><SID>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
-  endif
+  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
@@ -1121,10 +1121,10 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO コマンド履歴に残したい
   " TODO 和英ができない
   " TODO キャッシュ化されている？
-  if s:HasPlugin('vim-ref-gene')
+  if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
     nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
-  endif
+  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)

@@ -33,6 +33,10 @@
 " * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 "
+" ## Caution
+"
+" * emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
+"
 " ## TODOs
 "
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
@@ -508,7 +512,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
-  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type': 'plugin'}
+  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya')}
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'kana/vim-fakeclip'
   NeoBundle 'kana/vim-gf-user'
@@ -756,7 +760,6 @@ if s:HasPlugin('im_control') " {{{
 endif " }}}
 
 if has('kaoriya') " {{{
-  let g:plugin_hz_ja_disable = 1 " hz_ja plugin無効
   let g:plugin_dicwin_disable = 1 " dicwin plugin無効
   let g:plugin_scrnmode_disable = 1 " scrnmode plugin無効
 else

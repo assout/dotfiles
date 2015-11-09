@@ -18,7 +18,7 @@
 "
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
-" * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)
+" * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
 " * executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 " * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
@@ -348,6 +348,7 @@ vnoremap y    y`>
 
 " <SID>[shortcut]a,d,rはsurround-pluginで使用
 " <SID>[shortcut]mはmaximizer-pluginで使用
+noremap  gs               s
 map      s                <SID>[shortcut]
 noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]? ?
@@ -694,10 +695,9 @@ if s:HasPlugin('alignta') " {{{
   xnoremap <SID>[alignta]s    :Alignta<Space><-<Space>
   " Alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
   xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
-  " Alignta for 't'able.
-  xnoremap <SID>[alignta]t    :Alignta<Space>\|<CR>
-  " Alignta for ':' separator
+  xnoremap <SID>[alignta]\|   :Alignta<Space>\|<CR>
   xnoremap <SID>[alignta]:    :Alignta<Space>:<CR>
+  xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{

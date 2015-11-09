@@ -773,7 +773,7 @@ if s:HasPlugin('memolist') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':silent grep -r ' . a:word . ' ' . g:memolist_path
+    execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
@@ -785,7 +785,7 @@ if s:HasPlugin('memolist') " {{{
           \}
     call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
     call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-    call g:unite#custom#source('memolist', 'ignore_pattern', 'exercises\|reading\|\(png\|gif\|jpeg\|jpg\)$')
+    call g:unite#custom#source('memolist', 'ignore_pattern', 'exercises\|reading\|_book\|\(png\|gif\|jpeg\|jpg\)$')
     call g:unite#custom_source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
     call g:unite#custom_source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
     call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')

@@ -35,7 +35,7 @@
 "
 " ## Caution
 "
-" * emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
+" * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
 "
 " ## TODOs
 "

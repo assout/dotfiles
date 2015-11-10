@@ -608,7 +608,9 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'neomru.vim',
         \ 'open-browser.vim',
         \ 'previm',
+        \ 'quickfixstatus',
         \ 'sh.vim',
+        \ 'shabadou.vim',
         \ 'tcomment_vim',
         \ 'unite-outline',
         \ 'unite-tag',
@@ -622,6 +624,8 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'vim-operator-replace',
         \ 'vim-operator-surround',
         \ 'vim-operator-user',
+        \ 'vim-qfsigns',
+        \ 'vim-quickrun',
         \ 'vim-repeat',
         \ 'vim-shell',
         \ 'vim-submode',
@@ -632,6 +636,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'vim-textobj-parameter',
         \ 'vim-textobj-url',
         \ 'vim-textobj-user',
+        \ 'vim-watchdogs',
         \ 'vimfiler.vim',
         \ 'yankround.vim',
         \ 'yankround.vim/after',
@@ -640,6 +645,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   for s:plugin in s:plugins
     let &runtimepath = &runtimepath . ',' . s:bundlePath . s:plugin
   endfor
+  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vimproc'
 
   " " slow!
   " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
@@ -834,20 +840,6 @@ if s:HasPlugin('qiita-vim') " {{{
   nnoremap <SID>[qiita]c    :<C-u>Qiita<CR>
   nnoremap <SID>[qiita]e    :<C-u>Qiita -e<CR>
   nnoremap <SID>[qiita]d    :<C-u>Qiita -d<CR>
-endif " }}}
-
-if s:HasPlugin('quickrun') " {{{
-  nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
-  let g:quickrun_config = {
-        \   'plantuml' :{
-        \       'type' : 'my_plantuml'
-        \   },
-        \   'my_plantuml' : {
-        \  'command': 'plantuml'
-        \, 'exec': ['%c %s', 'eog %s:p:r.png']
-        \, 'outputter': 'null'
-        \   },
-        \}
 endif " }}}
 
 " TODO Restart時にカーソル位置復元したい
@@ -1098,6 +1090,20 @@ if s:HasPlugin('vim-operator-surround') " {{{
   endif " }}}
 endif " }}}
 
+if s:HasPlugin('vim-quickrun') " {{{
+  nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
+  let g:quickrun_config = {
+        \   'plantuml' :{
+        \       'type' : 'my_plantuml'
+        \   },
+        \   'my_plantuml' : {
+        \  'command': 'plantuml'
+        \, 'exec': ['%c %s', 'eog %s:p:r.png']
+        \, 'outputter': 'null'
+        \   },
+        \}
+endif " }}}
+
 if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
@@ -1228,6 +1234,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
 
   " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
+  " TODO MSYS2で動かない
   let g:quickrun_config = {
         \ 'watchdogs_checker/_' : {
         \   'outputter/quickfix/open_cmd' : '',
@@ -1265,7 +1272,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
     if &shell =~ ".*cmd.exe"
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
     else
-      " FIXME うまく動かない
+      " FIXME Window + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 ; %c %o %s:p"'
     endif
   endif

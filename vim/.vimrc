@@ -235,6 +235,8 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
+" Caution: smartindentは、コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため使わない。Refs. :help si
+set cindent
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 if has('patch-7.4.399')
@@ -261,6 +263,8 @@ set ignorecase
 set incsearch
 " TODO やっぱ↓をやめるので_区切りのテキストオブジェクトが別途ほしい
 " set iskeyword-=_
+" <<,>>で#をインデントできるようにする
+set indentkeys-=0#
 " Open Vim internal help by K command
 set keywordprg=:help
 set list
@@ -295,7 +299,6 @@ set showtabline=1
 set shortmess& shortmess+=atTO
 set sidescrolloff=5
 set smartcase
-set smartindent
 if s:IsHome()
   set spellfile=~/Dropbox/spell/en.utf-8.add
 else
@@ -569,7 +572,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}
   NeoBundle 'xolox/vim-misc' " for easytags.
   NeoBundle 'xolox/vim-shell' " for easytags.
-
+  
   " User Operators {{{
   NeoBundle 'kana/vim-operator-user'
   NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
@@ -577,7 +580,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
   NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
   " }}}
-
+  
   " User Textobjects {{{
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
@@ -590,7 +593,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']}
   NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
   " }}}
-
+  
   " Colorschemes {{{
   NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'chriskempson/vim-tomorrow-theme'
@@ -1054,7 +1057,6 @@ if s:HasPlugin('vim-markdown') " {{{
     nnoremap <buffer><SID>[plugin]H :HeaderDecrease<CR>
     vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>
   endfunction
-  " TODO 二回呼ばれてるっぽい(デフォルトとvim-markdownプラグイン？) @office
   autocmd! vimrc FileType markdown call s:Vim_markdown_keymappings()
 endif " }}}
 
@@ -1288,7 +1290,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ },
         \})
   if s:IsOffice()
-    if &shell =~ ".*cmd.exe"
+    if &shell =~# '.*cmd.exe'
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
     else
       " FIXME Window + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)

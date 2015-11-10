@@ -8,12 +8,16 @@
 # * User process
 # * After
 #
+# TODOs
+# * shellcheck disable=SC1091を一括で無効にしたい
+#
 # }}}1
 
 # [Begin] {{{1
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
+  # shellcheck disable=SC1091
   . /etc/bashrc
 fi
 
@@ -34,7 +38,7 @@ function isHome {
 }
 
 function isOffice {
-  if [ "${OSTYPE}" = msys -a "${USERNAME}" = admin ] ; then
+  if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then
     return 0
   else
     return 1
@@ -74,7 +78,7 @@ if [ "$(which peco 2> /dev/null)" ] ; then
   function pecoLscd {
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
   if [ ! -z "$dir" ] ; then
-    cd "$dir"
+    cd "$dir" || exit 1
   fi
 }
 alias pcd='pecoLscd'
@@ -194,9 +198,11 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
+# shellcheck disable=SC1091
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if isHome ; then
+  # shellcheck disable=SC1091
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # TODO Officeだと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -204,6 +210,7 @@ if isHome ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif isOffice ; then
+  # shellcheck disable=SC1091
   source /usr/share/git/completion/git-prompt.sh
 fi
 if isHome || isOffice ; then

@@ -250,7 +250,7 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-" TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)
+" TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
@@ -279,10 +279,14 @@ set number
 set nrformats=""
 set scrolloff=5
 if has('win32')
-  " Caution: 関係するオプション(shellcmdflag等)の設定も必要かも
-  " TODO watchdogsが動かなくなったのでコメントアウト
+  " Caution: 関係するオプション(shellcmdflag等)の設定も必要かも -> 自動設定されるっポイ
+  " TODO 副作用ありのためコメントアウト (watchdogsでcmd.exeに依存したチェックをしている箇所が動かなくなる など)
   " set shell=bash.exe
-  " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるため、GUI,CUIでのtags利用時のパスセパレータ統一のために設定。副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>
+
+  " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
+  " Caution: GUI,CUIでのtags利用時のパスセパレータ統一のために設定。
+  " Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
+  "  * TODO Windowsでgxでエクスプローラ開けなくなる
   set shellslash
 endif
 set shiftwidth=2
@@ -1258,7 +1262,12 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \ },
         \})
   if s:IsOffice()
-    let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
+    if &shell =~ ".*cmd.exe"
+      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
+    else
+      " FIXME うまく動かない
+      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 ; %c %o %s:p"'
+    endif
   endif
 
   call extend(g:quickrun_config, {

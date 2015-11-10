@@ -669,7 +669,6 @@ endif
 
 " Plugin prefix mappings {{{
 if s:IsPluginEnabled()
-  " Caution <SID>[plugin]h,lはvim-markdownで使用(markdownファイル時のみ有効)
   map  <Space>              <SID>[plugin]
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
 
@@ -678,7 +677,10 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]e       <SID>[excite]
   nmap <SID>[plugin]f       <SID>[fugitive]
   map  <SID>[plugin]g       <SID>[gista]
-  nmap <SID>[plugin]h       <SID>[hateblo]
+  map  <SID>[plugin]h       <SID>[markdown_h]
+  nmap <SID>[plugin]H       <SID>[markdown_H]
+  map  <SID>[plugin]l       <SID>[markdown_l]
+  nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
@@ -693,6 +695,7 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
 
+  map  <SID>[sub_plugin]h   <SID>[hateblo]
   map  <SID>[sub_plugin]s   <SID>[switch]
   nmap <SID>[sub_plugin]q   <SID>[quickrun]
   nmap <SID>[sub_plugin]r   <SID>[ref]
@@ -1053,12 +1056,13 @@ if s:HasPlugin('vim-markdown') " {{{
 
   " TODO Refinement
   function! s:Vim_markdown_keymappings()
-    nnoremap <buffer><SID>[plugin]l :.HeaderIncrease<CR>
-    nnoremap <buffer><SID>[plugin]L msHmt:HeaderIncrease<CR>'tzt`s
-    vnoremap <buffer><SID>[plugin]l :HeaderIncrease<CR>`<v`>
-    nnoremap <buffer><SID>[plugin]h :.HeaderDecrease<CR>
-    nnoremap <buffer><SID>[plugin]H msHmt:HeaderDecrease<CR>'tzt`s
-    vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>`<v`>
+    nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
+    vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
+    nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
+
+    nnoremap <buffer><SID>[markdown_h]     :.HeaderDecrease<CR>
+    vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
+    nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
   endfunction
   autocmd vimrc FileType markdown call s:Vim_markdown_keymappings()
 endif " }}}

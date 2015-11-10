@@ -58,7 +58,8 @@ endif
 
 " # Functions and Commands {{{1
 
-function! s:MyCapture(command) " command 実行結果をキャプチャ TODO 実行が遅い(silent で描画しないようにしても遅そう)
+function! s:MyCapture(command) " command 実行結果をキャプチャ
+  " TODO 実行が遅い(silent で描画しないようにしても遅そう)(特にwindows)
   " TODO オプションなどでbufferに出力もしたい
   if has('clipboard')
     redir @+>
@@ -203,8 +204,6 @@ augroup vimrc
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist nested setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
-  " Set markdown filetype TODO 最新のvimだと設定不要らしい(fedora 23 のdnfのだとまだだめ)
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
 
@@ -212,10 +211,10 @@ augroup vimrc
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
-  " Enable spell on markdown file
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
-  " ハードタブにする TODO MSYS2だと効かないことがある?("su"でのvimrc updateのタイミングっぽい)
-  autocmd FileType markdown,java setlocal noexpandtab
+  " Enable spell on markdown file, To hard tab.
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell noexpandtab
+  " To hard tab
+  autocmd FileType java setlocal noexpandtab
 
   if executable('python')
     autocmd! FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
@@ -287,6 +286,7 @@ if has('win32')
   " Caution: GUI,CUIでのtags利用時のパスセパレータ統一のために設定。
   " Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
   "  * TODO Windowsでgxでエクスプローラ開けなくなる
+  "  * TODO vim-markdownのgxでリンク開けなくなる
   set shellslash
 endif
 set shiftwidth=2
@@ -514,6 +514,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'elzr/vim-json' " for json filetype
   NeoBundle 'fuenor/im_control.vim'
   NeoBundle 'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
+  NeoBundle 'godlygeek/tabular'
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
@@ -537,6 +538,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
+  NeoBundle 'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
@@ -661,6 +663,7 @@ endif
 
 " Plugin prefix mappings {{{
 if s:IsPluginEnabled()
+  " Caution <SID>[plugin]h,lはvim-markdownで使用(markdownファイル時のみ有効)
   map  <Space>              <SID>[plugin]
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
 
@@ -1037,6 +1040,22 @@ endif " }}}
 
 if s:HasPlugin('vim-localrc') " {{{
   let g:localrc_filename = '.vimrc.development'
+endif " }}}
+
+if s:HasPlugin('vim-markdown') " {{{
+  let g:vim_markdown_folding_disabled = 1
+
+  " TODO Refinement
+  function! s:Vim_markdown_keymappings()
+    nnoremap <buffer><SID>[plugin]l :.HeaderIncrease<CR>
+    nnoremap <buffer><SID>[plugin]L :HeaderIncrease<CR>
+    vnoremap <buffer><SID>[plugin]l :HeaderIncrease<CR>
+    nnoremap <buffer><SID>[plugin]h :.HeaderDecrease<CR>
+    nnoremap <buffer><SID>[plugin]H :HeaderDecrease<CR>
+    vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>
+  endfunction
+  " TODO 二回呼ばれてるっぽい(デフォルトとvim-markdownプラグイン？) @office
+  autocmd! vimrc FileType markdown call s:Vim_markdown_keymappings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{

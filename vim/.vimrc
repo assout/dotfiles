@@ -235,7 +235,7 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" Caution: smartindentは、コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため使わない。Refs. :help si
+" Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si)
 set cindent
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
@@ -541,7 +541,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
-  NeoBundle 'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions
+  NeoBundle 'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
@@ -1051,10 +1051,10 @@ if s:HasPlugin('vim-markdown') " {{{
   " TODO Refinement
   function! s:Vim_markdown_keymappings()
     nnoremap <buffer><SID>[plugin]l :.HeaderIncrease<CR>
-    nnoremap <buffer><SID>[plugin]L :HeaderIncrease<CR>
+    nnoremap <buffer><SID>[plugin]L :HeaderIncrease<CR><C-o>
     vnoremap <buffer><SID>[plugin]l :HeaderIncrease<CR>
     nnoremap <buffer><SID>[plugin]h :.HeaderDecrease<CR>
-    nnoremap <buffer><SID>[plugin]H :HeaderDecrease<CR>
+    nnoremap <buffer><SID>[plugin]H :HeaderDecrease<CR><C-o>
     vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>
   endfunction
   autocmd! vimrc FileType markdown call s:Vim_markdown_keymappings()

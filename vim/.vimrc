@@ -203,11 +203,13 @@ augroup vimrc
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  autocmd BufReadPost quickfix,loclist nested setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
-  autocmd BufNewFile,BufRead *.ftl setfiletype html.ftl
+  autocmd BufNewFile,BufRead *.ftl nested setfiletype html.ftl
 
   " FileType settings - ファイルタイプごとの設定 {{{
+
+  filetype on " before autocmds. Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
@@ -217,13 +219,14 @@ augroup vimrc
   autocmd FileType java setlocal noexpandtab
 
   if executable('python')
-    autocmd! FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
+    autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
   endif
 
   if executable('xmllint')
-    autocmd! FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
+    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
   endif
 
+  filetype off
   " }}}
 augroup END
 
@@ -572,7 +575,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}
   NeoBundle 'xolox/vim-misc' " for easytags.
   NeoBundle 'xolox/vim-shell' " for easytags.
-  
+
   " User Operators {{{
   NeoBundle 'kana/vim-operator-user'
   NeoBundle 'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
@@ -580,7 +583,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
   NeoBundle 'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
   " }}}
-  
+
   " User Textobjects {{{
   NeoBundle 'kana/vim-textobj-user'
   NeoBundle 'kana/vim-textobj-entire', {'depends': ['kana/vim-textobj-user']}
@@ -593,7 +596,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'thinca/vim-textobj-between', {'depends': ['kana/vim-textobj-user']}
   NeoBundle 'thinca/vim-textobj-comment', {'depends': ['kana/vim-textobj-user']}
   " }}}
-  
+
   " Colorschemes {{{
   NeoBundle 'altercation/vim-colors-solarized'
   NeoBundle 'chriskempson/vim-tomorrow-theme'
@@ -756,7 +759,7 @@ if s:HasPlugin('hateblo') " {{{
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
-  autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} setlocal filetype=hybrid
+  autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setlocal filetype=hybrid
 endif " }}}
 
 if s:HasPlugin('im_control') " {{{
@@ -1051,13 +1054,13 @@ if s:HasPlugin('vim-markdown') " {{{
   " TODO Refinement
   function! s:Vim_markdown_keymappings()
     nnoremap <buffer><SID>[plugin]l :.HeaderIncrease<CR>
-    nnoremap <buffer><SID>[plugin]L :HeaderIncrease<CR><C-o>
-    vnoremap <buffer><SID>[plugin]l :HeaderIncrease<CR>
+    nnoremap <buffer><SID>[plugin]L msHmt:HeaderIncrease<CR>'tzt`s
+    vnoremap <buffer><SID>[plugin]l :HeaderIncrease<CR>`<v`>
     nnoremap <buffer><SID>[plugin]h :.HeaderDecrease<CR>
-    nnoremap <buffer><SID>[plugin]H :HeaderDecrease<CR><C-o>
-    vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>
+    nnoremap <buffer><SID>[plugin]H msHmt:HeaderDecrease<CR>'tzt`s
+    vnoremap <buffer><SID>[plugin]h :HeaderDecrease<CR>`<v`>
   endfunction
-  autocmd! vimrc FileType markdown call s:Vim_markdown_keymappings()
+  autocmd vimrc FileType markdown call s:Vim_markdown_keymappings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
@@ -1233,7 +1236,8 @@ if s:HasPlugin('vim-textobj-between') " {{{
   vmap ad <Plug>(textobj-between-a)
 endif " }}}
 
-if s:HasPlugin('vim-textobj-entire') " {{{ TODO カーソル行位置は戻るが列位置が戻らない)
+if s:HasPlugin('vim-textobj-entire') " {{{
+  " TODO カーソル行位置は戻るが列位置が戻らない) :h restore-positionはうまく行かない
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``

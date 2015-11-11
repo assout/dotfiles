@@ -584,7 +584,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
     NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はwindowsで異常終了する
   endif
   NeoBundle 'ujihisa/unite-colorscheme', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle 'vim-jp/vimdoc-ja'
+  NeoBundle 'vim-jp/vimdoc-ja' " TODO msys2で有効にならない(runtimeに手動追加しても)
   NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle 'vim-scripts/HybridText'
   NeoBundle 'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}

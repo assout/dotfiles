@@ -44,7 +44,7 @@
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 " * TODO autoindent,smartindent,cindent,indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
-"
+" * TODO filetype syntax on,off関係見直す(特に問題があるわけではないがあまりわかってない)
 " }}}1
 
 " # Begin {{{1
@@ -574,6 +574,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'tpope/vim-speeddating'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle 'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
+  NeoBundle 'tyru/capture.vim'
   NeoBundle 'tyru/open-browser.vim' " TODO シングルクォートで囲まれたURLが開けない@office(gui,cui)(e.g. 'http://hoge')
   if s:IsHome()
     NeoBundle 'tyru/restart.vim'

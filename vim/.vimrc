@@ -60,6 +60,7 @@ endif
 
 " # Functions and Commands {{{1
 
+" TODO 消す(caputure.vimに一本化-> ただクリップボードに入れたいについて要検討)
 " TODO 実行が遅い(silent で描画しないようにしても遅そう)(特にwindows)
 " TODO オプションなどでbufferに出力もしたい
 function! s:MyCapture(command) " command 実行結果をキャプチャ

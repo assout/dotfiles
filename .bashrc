@@ -62,14 +62,13 @@ function cdls {
 alias cd='cdls'
 
 # Vim
-if [ "$(which vim 2> /dev/null)" ] ; then
-  alias vi='vim'
-fi
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/.vimrc" ] ; then
-  alias v='vi -S ${here}/.vimrc'
+  alias v='vim -S ${here}/.vimrc'
+  alias vi='vim -S ${here}/.vimrc --noplugin'
 else
-  alias v='vi'
+  alias v='vim'
+  alias vi='vim -noplugin'
 fi
 
 # Peco
@@ -111,10 +110,8 @@ alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dps="docker ps"
 alias drun="docker run"
 
-# Git
-alias g="git"
-
 # Other
+alias g="git"
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match'

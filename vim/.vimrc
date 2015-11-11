@@ -76,6 +76,7 @@ function! s:HasPlugin(plugin) " pluginが存在するか返す
   return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
+" TODO autocmdで呼んであげてない？
 function! s:RestoreCursorPosition()
   let l:ignore_filetypes = ['gitcommit']
   if index(l:ignore_filetypes, &l:filetype) >= 0
@@ -123,11 +124,11 @@ function! s:MyChangeTabstep(size)
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>MyChangeTabstep(<q-args>)
 
-function! s:MyInsertString(pos, str) range
+function! s:InsertString(pos, str) range
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>MyInsertString('^', <f-args>)
-command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>MyInsertString('$', <f-args>)
+command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
@@ -937,7 +938,7 @@ if s:HasPlugin('unite') " {{{
   endfunction
   autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
-  call g:unite#custom#action('file,directory', 'relative_move', s:My_relative_move)
+  call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove)
   call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
   call g:unite#custom#default_action('directory', 'vimfiler')
   call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])

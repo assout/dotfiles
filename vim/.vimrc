@@ -43,6 +43,7 @@
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
+" * TODO autoindent,smartindent,cindent,indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 "
 " }}}1
 
@@ -163,7 +164,8 @@ function! s:RestoreCursorPosition()
 endfunction
 
 command! -bang MyBufClear %bdelete<bang>
-command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch
+" TODO <:help restore-position>
+command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 function! s:MyHere()
@@ -206,7 +208,9 @@ augroup vimrc
 
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+  if s:IsHome() || s:IsOffice() " TODO 環境によってエラーとなる @office dev(Vim 7.2.411)
+    autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+  endif
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
@@ -552,7 +556,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle 'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle 'pangloss/vim-javascript' " for indent only
-  NeoBundle 'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう
+  NeoBundle 'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo,Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう)
   NeoBundle 'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
@@ -570,7 +574,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'tpope/vim-speeddating'
   NeoBundle 'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle 'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle 'tyru/open-browser.vim'
+  NeoBundle 'tyru/open-browser.vim' " TODO シングルクォートで囲まれたURLが開けない@office(gui,cui)(e.g. 'http://hoge')
   if s:IsHome()
     NeoBundle 'tyru/restart.vim'
   else
@@ -1269,7 +1273,8 @@ endif " }}}
 if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
-  let g:watchdogs_check_BufWritePost_enable = 1
+  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaround
+  let g:watchdogs_check_BufWritePost_enable = has('gui_running') ? 1 : 0
 
   " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
@@ -1312,7 +1317,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
     else
       " FIXME Window + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
-      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 ; %c %o %s:p"'
+      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 > /dev/null; %c %o %s:p"'
     endif
   endif
 

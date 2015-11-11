@@ -889,6 +889,7 @@ if s:HasPlugin('switch.vim') " {{{
   let g:switch_custom_definitions = [
         \   ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \   ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
+        \   ['public', 'protected', 'private', ],
         \ ]
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}

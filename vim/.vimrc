@@ -106,8 +106,8 @@ function! s:MyToggleExpandTab()
   setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs. <:help restore-position>
-    normal msHmt
-    execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal 'tzt`s
+    normal! msHmt
+    execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
 command! MyToggleExpandTab call <SID>MyToggleExpandTab()
@@ -116,8 +116,8 @@ command! MyToggleExpandTab call <SID>MyToggleExpandTab()
 function! s:MyChangeTabstep(size)
   if &l:expandtab
     " Refs. <:help restore-position>
-    normal msHmt
-    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal 'tzt`s
+    normal! msHmt
+    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! 'tzt`s
   endif
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
@@ -182,7 +182,7 @@ command! MyHere call <SID>MyHere()
 
 command! -bang MyBufClear %bdelete<bang>
 " TODO <:help restore-position>
-command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
+command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 " }}}1

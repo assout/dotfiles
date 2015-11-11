@@ -699,7 +699,7 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
-  nmap <SID>[plugin]q       <SID>[qiita]
+  nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
   nmap <SID>[plugin]s       <SID>[syntastic]
   map  <SID>[plugin]t       <SID>[todo]
@@ -712,7 +712,7 @@ if s:IsPluginEnabled()
 
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   map  <SID>[sub_plugin]s   <SID>[switch]
-  nmap <SID>[sub_plugin]q   <SID>[quickrun]
+  nmap <SID>[sub_plugin]q   <SID>[qiita]
   " TODO 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
 

@@ -627,45 +627,45 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
   " MSYS2 Plugin settings {{{
   let s:plugins = [
-        \ 'memolist.vim',
-        \ 'neomru.vim',
-        \ 'open-browser.vim',
-        \ 'previm',
-        \ 'quickfixstatus',
-        \ 'sh.vim',
-        \ 'shabadou.vim',
-        \ 'tcomment_vim',
-        \ 'unite-outline',
-        \ 'unite-tag',
-        \ 'unite-todo',
-        \ 'unite.vim',
-        \ 'vim-easytags',
-        \ 'vim-hybrid',
-        \ 'vim-javascript',
-        \ 'vim-maximizer',
-        \ 'vim-misc',
-        \ 'vim-operator-replace',
-        \ 'vim-operator-surround',
-        \ 'vim-operator-user',
-        \ 'vim-qfsigns',
-        \ 'vim-quickrun',
-        \ 'vim-ref',
-        \ 'vim-ref-gene',
-        \ 'vim-repeat',
-        \ 'vim-shell',
-        \ 'vim-submode',
-        \ 'vim-textobj-anyblock',
-        \ 'vim-textobj-between',
-        \ 'vim-textobj-entire',
-        \ 'vim-textobj-function',
-        \ 'vim-textobj-parameter',
-        \ 'vim-textobj-url',
-        \ 'vim-textobj-user',
-        \ 'vim-watchdogs',
-        \ 'vimfiler.vim',
-        \ 'yankround.vim',
-        \ 'yankround.vim/after',
-        \ ]
+        \  'memolist.vim',
+        \  'neomru.vim',
+        \  'open-browser.vim',
+        \  'previm',
+        \  'quickfixstatus',
+        \  'sh.vim',
+        \  'shabadou.vim',
+        \  'tcomment_vim',
+        \  'unite-outline',
+        \  'unite-tag',
+        \  'unite-todo',
+        \  'unite.vim',
+        \  'vim-easytags',
+        \  'vim-hybrid',
+        \  'vim-javascript',
+        \  'vim-maximizer',
+        \  'vim-misc',
+        \  'vim-operator-replace',
+        \  'vim-operator-surround',
+        \  'vim-operator-user',
+        \  'vim-qfsigns',
+        \  'vim-quickrun',
+        \  'vim-ref',
+        \  'vim-ref-gene',
+        \  'vim-repeat',
+        \  'vim-shell',
+        \  'vim-submode',
+        \  'vim-textobj-anyblock',
+        \  'vim-textobj-between',
+        \  'vim-textobj-entire',
+        \  'vim-textobj-function',
+        \  'vim-textobj-parameter',
+        \  'vim-textobj-url',
+        \  'vim-textobj-user',
+        \  'vim-watchdogs',
+        \  'vimfiler.vim',
+        \  'yankround.vim',
+        \  'yankround.vim/after',
+        \]
 
   for s:plugin in s:plugins
     let &runtimepath = &runtimepath . ',' . s:bundlePath . s:plugin
@@ -765,13 +765,13 @@ endif " }}}
 
 if s:HasPlugin('hateblo') " {{{
   let g:hateblo_vim = {
-        \ 'user': 'assout',
-        \ 'api_key': g:hateblo_api_key,
-        \ 'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
-        \ 'WYSIWYG_mode': 0,
-        \ 'always_yes': 0,
-        \ 'edit_command': 'edit'
-        \ } " api_keyはvimrc.localから設定
+        \  'user': 'assout',
+        \  'api_key': g:hateblo_api_key,
+        \  'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
+        \  'WYSIWYG_mode': 0,
+        \  'always_yes': 0,
+        \  'edit_command': 'edit'
+        \} " api_keyはvimrc.localから設定
   let g:hateblo_dir = expand('~/.cache/hateblo/blog')
 
   nnoremap <SID>[hateblo]l :<C-u>HatebloList<CR>
@@ -822,8 +822,8 @@ if s:HasPlugin('memolist') " {{{
   nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
   if s:HasPlugin('unite') " {{{
     let g:unite_source_alias_aliases = {
-          \'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
-          \'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
+          \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
+          \  'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
           \}
     call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
     call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
@@ -847,10 +847,10 @@ if s:HasPlugin('open-browser') " {{{
   nmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
   vmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
   if has('win32unix')
-    let g:openbrowser_browser_commands = [
-          \ {'name': 'rundll32',
-          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}'}
-          \]
+    let g:openbrowser_browser_commands = [{
+          \  'name': 'rundll32',
+          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}',
+          \}]
   endif
 endif " }}}
 
@@ -887,10 +887,10 @@ endif " }}}
 if s:HasPlugin('switch.vim') " {{{
   let g:switch_mapping = '[switch]'
   let g:switch_custom_definitions = [
-        \   ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
-        \   ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
-        \   ['public', 'protected', 'private', ],
-        \ ]
+        \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
+        \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
+        \  ['public', 'protected', 'private', ],
+        \]
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}
 
@@ -1142,14 +1142,14 @@ endif " }}}
 if s:HasPlugin('vim-quickrun') " {{{
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
   let g:quickrun_config = {
-        \   'plantuml' :{
-        \       'type' : 'my_plantuml'
-        \   },
-        \   'my_plantuml' : {
-        \  'command': 'plantuml'
-        \, 'exec': ['%c %s', 'eog %s:p:r.png']
-        \, 'outputter': 'null'
-        \   },
+        \  'plantuml' :{
+        \    'type' : 'my_plantuml'
+        \  },
+        \  'my_plantuml' : {
+        \    'command': 'plantuml',
+        \    'exec': ['%c %s', 'eog %s:p:r.png'],
+        \    'outputter': 'null'
+        \  },
         \}
 endif " }}}
 
@@ -1166,9 +1166,10 @@ if s:HasPlugin('vim-ref') " {{{
   endif
   if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
     let g:ref_source_webdict_sites = {
-          \ 'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
-          \ 'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
-          \ 'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23}, }
+          \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
+          \  'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
+          \  'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23},
+          \}
     let g:ref_source_webdict_sites.default = 'ej'
     let g:ref_source_webdict_use_cache = 1
 
@@ -1264,14 +1265,14 @@ if s:HasPlugin('vim-textobj-between') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
-  " TODO カーソル行位置は戻るが列位置が戻らない) <:help restore-position>はうまく行かない
+  " TODO カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
   nmap =ie =ie``
 endif " }}}
 
-if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせる
+if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせる('a'rguments)
   let g:textobj_parameter_no_default_key_mappings = 1
   omap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
@@ -1282,43 +1283,43 @@ endif " }}}
 if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
-  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaround
+  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
   let g:watchdogs_check_BufWritePost_enable = has('gui_running') ? 1 : 0
 
-  " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
+  " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
   let g:quickrun_config = {
-        \ 'watchdogs_checker/_' : {
-        \   'outputter/quickfix/open_cmd' : '',
-        \   'runner/vimproc/updatetime' : 30,
-        \   'hook/echo/enable' : 1,
-        \   'hook/echo/output_success' : 'No Errors Found.',
-        \   'hook/echo/output_failure' : 'Errors Found!',
-        \   'hook/qfsigns_update/enable_exit': 1,
-        \   'hook/quickfix_status_enable/enable_exit' : 1,
-        \ },
+        \  'watchdogs_checker/_' : {
+        \    'outputter/quickfix/open_cmd' : '',
+        \    'runner/vimproc/updatetime' : 30,
+        \    'hook/echo/enable' : 1,
+        \    'hook/echo/output_success' : 'No Errors Found.',
+        \    'hook/echo/output_failure' : 'Errors Found!',
+        \    'hook/qfsigns_update/enable_exit': 1,
+        \    'hook/quickfix_status_enable/enable_exit' : 1,
+        \  },
         \}
 
   call extend(g:quickrun_config, {
-        \ 'sh/watchdogs_checker' : {
-        \   'type'
-        \     : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
-        \     : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
-        \     : executable('bashate') ? 'watchdogs_checker/bashate'
-        \     : executable('sh') ? 'watchdogs_checker/sh'
-        \     : '',
-        \ },
-        \ 'watchdogs_checker/shellcheck' : {
-        \   'command' : 'shellcheck',
-        \   'cmdopt'  : '-f gcc',
-        \ },
-        \ 'watchdogs_checker/bashate' : {
-        \   'command' : 'bashate',
-        \ },
-        \ 'watchdogs_checker/checkbashisms' : {
-        \   'command' : 'checkbashisms',
-        \   'cmdopt'  : '-f',
-        \ },
+        \  'sh/watchdogs_checker' : {
+        \    'type'
+        \      : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
+        \      : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
+        \      : executable('bashate') ? 'watchdogs_checker/bashate'
+        \      : executable('sh') ? 'watchdogs_checker/sh'
+        \      : '',
+        \    },
+        \  'watchdogs_checker/shellcheck' : {
+        \    'command' : 'shellcheck',
+        \    'cmdopt'  : '-f gcc',
+        \  },
+        \  'watchdogs_checker/bashate' : {
+        \    'command' : 'bashate',
+        \  },
+        \  'watchdogs_checker/checkbashisms' : {
+        \    'command' : 'checkbashisms',
+        \    'cmdopt'  : '-f',
+        \  },
         \})
   if s:IsOffice()
     if &shell =~# '.*cmd.exe'
@@ -1330,48 +1331,48 @@ if s:HasPlugin('vim-watchdogs') " {{{
   endif
 
   call extend(g:quickrun_config, {
-        \ 'markdown/watchdogs_checker': {
-        \  'type'
-        \    : executable('mdl') ? 'watchdogs_checker/mdl'
-        \    : executable('textlint') ? 'watchdogs_checker/textlint'
-        \    : executable('redpen') ? 'watchdogs_checker/redpen'
-        \    : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
-        \    : '',
-        \ },
-        \ 'watchdogs_checker/mdl' : {
-        \   'command' : 'mdl',
-        \ },
-        \ 'watchdogs_checker/textlint' : {
-        \  'command'     : 'textlint',
-        \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
-        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \ },
-        \ 'watchdogs_checker/redpen' : {
-        \   'command' : 'redpen',
-        \   'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
-        \   'exec'    : '%c %o %s:p 2> /dev/null',
-        \ },
-        \ 'watchdogs_checker/eslint-md' : {
-        \  'command'     : 'eslint-md',
-        \  'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
-        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \ },
+        \  'markdown/watchdogs_checker': {
+        \    'type'
+        \      : executable('mdl') ? 'watchdogs_checker/mdl'
+        \      : executable('textlint') ? 'watchdogs_checker/textlint'
+        \      : executable('redpen') ? 'watchdogs_checker/redpen'
+        \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
+        \      : '',
+        \   },
+        \  'watchdogs_checker/mdl' : {
+        \    'command' : 'mdl',
+        \  },
+        \  'watchdogs_checker/textlint' : {
+        \    'command'     : 'textlint',
+        \    'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
+        \    'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
+        \  },
+        \  'watchdogs_checker/redpen' : {
+        \    'command' : 'redpen',
+        \    'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
+        \    'exec'    : '%c %o %s:p 2> /dev/null',
+        \  },
+        \  'watchdogs_checker/eslint-md' : {
+        \   'command'     : 'eslint-md',
+        \   'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
+        \   'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
+        \  },
         \})
 
   call extend(g:quickrun_config, {
-        \ 'yaml/watchdogs_checker': {
-        \   'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
-        \ },
-        \ 'watchdogs_checker/js-yaml' : {
-        \   'command' : 'js-yaml',
-        \ },
+        \  'yaml/watchdogs_checker': {
+        \    'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
+        \  },
+        \  'watchdogs_checker/js-yaml' : {
+        \    'command' : 'js-yaml',
+        \  },
         \})
 
   let g:quickrun_config['watchdogs_checker/eslint'] = {
         \  'command' : 'eslint',
         \  'exec'    : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
         \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \ }
+        \}
 
   call g:watchdogs#setup(g:quickrun_config)
 endif " }}}

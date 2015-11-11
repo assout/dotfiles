@@ -131,7 +131,7 @@ endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO 消す。(Refソース or Uniteソースにする)
+" TODO 消す。(Refソース or Uniteソースにする)(Ref-geneがあるが和英ができないっぽい)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
 " TODO あいまい検索的なものがほしい(vim spellの`z=`的なもの)
 function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため

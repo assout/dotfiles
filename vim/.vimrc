@@ -269,8 +269,8 @@ set formatoptions& formatoptions-=o
 " TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
-" If true Vim master, use English help file. NeoBundle 'vim-jp/vimdoc-ja'. :h index or :h index@ja .
-set helplang=en,ja
+" keywordprgで日本語優先にしたいため
+set helplang=ja,en
 set hidden
 set history=200
 set hlsearch
@@ -280,7 +280,7 @@ set incsearch
 " set iskeyword-=_
 " <<,>>で#をインデントできるようにする
 set indentkeys-=0#
-" Open Vim internal help by K command
+" vim-refとの兼ね合いでここではhelp
 set keywordprg=:help
 set list
 set listchars=tab:>.,trail:_,extends:\
@@ -1140,6 +1140,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
+  " TODO プレビューウィンドウで開けないか(szで閉じやすいので)
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
   let g:quickrun_config = {
         \  'plantuml' :{
@@ -1158,12 +1159,14 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
+  " TODO デフォルトに一括追加の指定方法(現状は上書き)
+  let g:ref_detect_filetype = {
+        \  'markdown' : 'gene',
+        \  'sh' : 'man',
+        \}
 
   autocmd vimrc FileType ref resize 5
 
-  if executable('man') " TODO Windowsで動かない(guiのみ)
-    nnoremap <expr> <SID>[ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
-  endif
   if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
     let g:ref_source_webdict_sites = {
           \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},

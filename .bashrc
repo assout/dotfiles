@@ -16,7 +16,7 @@
 # [Begin] {{{1
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
+if [ -f /etc/bashrc ] ; then
   # shellcheck disable=SC1091
   . /etc/bashrc
 fi
@@ -66,8 +66,8 @@ if [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim'
 fi
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if [ -e "${here}/_vimrc" ] ; then
-  alias v='vi -S ${here}/_vimrc'
+if [ -e "${here}/.vimrc" ] ; then
+  alias v='vi -S ${here}/.vimrc'
 else
   alias v='vi'
 fi

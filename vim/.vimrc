@@ -711,10 +711,10 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]]       [subN]
 
   map  <SID>[sub_plugin]h   <SID>[hateblo]
-  map  <SID>[sub_plugin]s   <SID>[switch]
   nmap <SID>[sub_plugin]q   <SID>[qiita]
   " TODO 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
+  map  <SID>[sub_plugin]s   <SID>[switch]
 
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)

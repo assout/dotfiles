@@ -222,7 +222,7 @@ augroup vimrc
 
   " FileType settings - ファイルタイプごとの設定 {{{
 
-  filetype on " before autocmds. Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
+  filetype on " before filetype autocmds. Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 
   " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o

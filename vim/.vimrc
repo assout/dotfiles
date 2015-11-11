@@ -69,11 +69,11 @@ function! s:IsOffice()
 endfunction
 
 function! s:IsPluginEnabled() " pluginが有効か返す
-  return isdirectory(s:bundlePath)
+  return isdirectory(s:bundlePath) && &loadplugins
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す
-  return !empty(matchstr(&runtimepath, a:plugin))
+  return !empty(matchstr(&runtimepath, a:plugin)) && &loadplugins
 endfunction
 
 " TODO autocmdで呼んであげてない？(けどカーソル位置復元してるっポイ？)
@@ -210,10 +210,8 @@ augroup vimrc
   autocmd!
 
   " Double byte space highlight
-  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-  if s:IsHome() || s:IsOffice() " TODO 環境によってエラーとなる @office dev(Vim 7.2.411)
-    autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  endif
+  highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif

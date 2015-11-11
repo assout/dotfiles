@@ -76,7 +76,7 @@ function! s:HasPlugin(plugin) " pluginが存在するか返す
   return !empty(matchstr(&runtimepath, a:plugin))
 endfunction
 
-" TODO autocmdで呼んであげてない？
+" TODO autocmdで呼んであげてない？(けどカーソル位置復元してるっポイ？)
 function! s:RestoreCursorPosition()
   let l:ignore_filetypes = ['gitcommit']
   if index(l:ignore_filetypes, &l:filetype) >= 0

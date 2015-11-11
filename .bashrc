@@ -151,6 +151,10 @@ elif isOffice ; then
   export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 fi
 
+if isHome || isOffice ; then
+  PATH="${PATH}:${HOME}/Development/scripts"
+fi
+
 # }}}1
 
 # [User process] {{{1

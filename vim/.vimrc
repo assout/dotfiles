@@ -649,6 +649,8 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \ 'vim-operator-user',
         \ 'vim-qfsigns',
         \ 'vim-quickrun',
+        \ 'vim-ref',
+        \ 'vim-ref-gene',
         \ 'vim-repeat',
         \ 'vim-shell',
         \ 'vim-submode',
@@ -1158,7 +1160,7 @@ if s:HasPlugin('vim-ref') " {{{
 
   autocmd vimrc FileType ref resize 5
 
-  if has('unix')
+  if executable('man') " TODO Windowsで動かない(guiのみ)
     nnoremap <expr> <SID>[ref]m ':<C-u>Ref man<Space>' . expand('<cword>') . '<CR>'
   endif
   if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')

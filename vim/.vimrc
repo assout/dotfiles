@@ -36,13 +36,13 @@
 " ## Caution
 "
 " * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
+" * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
 "
 " ## TODOs
 "
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
-" * TODO Refs. <:help restore-position>
 "
 " }}}1
 
@@ -59,9 +59,9 @@ endif
 
 " # Functions and Commands {{{1
 
+" TODO 実行が遅い(silent で描画しないようにしても遅そう)(特にwindows)
+" TODO オプションなどでbufferに出力もしたい
 function! s:MyCapture(command) " command 実行結果をキャプチャ
-  " TODO 実行が遅い(silent で描画しないようにしても遅そう)(特にwindows)
-  " TODO オプションなどでbufferに出力もしたい
   if has('clipboard')
     redir @+>
   else
@@ -72,17 +72,23 @@ function! s:MyCapture(command) " command 実行結果をキャプチャ
 endfunction
 command! -nargs=1 -complete=command MyCapture call <SID>MyCapture(<q-args>)
 
+" TODO undoしても&expandtabの値は戻らないので注意
 function! s:MyToggleExpandTab()
   setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
-    execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! ``
+    " Refs. <:help restore-position>
+    normal msHmt
+    execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal 'tzt`s
   endif
 endfunction
 command! MyToggleExpandTab call <SID>MyToggleExpandTab()
 
+" TODO undoしても&tabstopの値は戻らないので注意
 function! s:MyChangeTabstep(size)
   if &l:expandtab
-    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! ``
+    " Refs. <:help restore-position>
+    normal msHmt
+    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal 'tzt`s
   endif
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
@@ -166,6 +172,7 @@ function! s:MyHere()
     " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
     setlocal noshellslash
     !start explorer.exe "%:h"
+    " TODO エスケープした値を復元するように直す
     setlocal shellslash
   else
     !nautilus %:h &
@@ -1244,7 +1251,7 @@ if s:HasPlugin('vim-textobj-between') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
-  " TODO カーソル行位置は戻るが列位置が戻らない) :h restore-positionはうまく行かない
+  " TODO カーソル行位置は戻るが列位置が戻らない) <:help restore-position>はうまく行かない
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``

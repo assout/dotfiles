@@ -327,6 +327,7 @@ set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
+" Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs. <:help f-args>
 if has('path_extra')
   set tags& tags=./.tags;
 else
@@ -389,7 +390,7 @@ nnoremap <SID>[shortcut]l <C-w>l
 noremap  <SID>[shortcut]m <Nop>
 nnoremap <SID>[shortcut]n :<C-u>nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]p :<C-u>split<CR>
+nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 if has('gui_running')
@@ -397,10 +398,10 @@ if has('gui_running')
 else
   nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<CR>
 endif
-noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
-nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>
-nnoremap <SID>[shortcut]z :<C-u>pclose<CR>
-nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag " . expand("<cword>"))<CR>
+nnoremap        <SID>[shortcut]v :<C-u>vsplit<CR>
+nnoremap        <SID>[shortcut]x :<C-u>bdelete<CR>
+nnoremap        <SID>[shortcut]z :<C-u>pclose<CR>
+nnoremap <expr> <SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
@@ -841,7 +842,7 @@ if s:HasPlugin('memolist') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = has('lua') && s:IsHome() ? 1 : 0 " 若干不可あるので最低限有効
+  let g:neocomplete#enable_at_startup = has('lua') && s:IsHome() ? 1 : 0 " 若干負荷あるので最低限有効
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{

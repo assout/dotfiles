@@ -713,6 +713,7 @@ if s:IsPluginEnabled()
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   map  <SID>[sub_plugin]s   <SID>[switch]
   nmap <SID>[sub_plugin]q   <SID>[quickrun]
+  " TODO 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
 
   nmap p                <Plug>(yankround-p)
@@ -1151,6 +1152,7 @@ endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
+  let g:ref_noenter = 1
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
 
   autocmd vimrc FileType ref resize 5

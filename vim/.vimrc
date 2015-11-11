@@ -1151,6 +1151,7 @@ if s:HasPlugin('vim-quickrun') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
+  " TODO プレビューウィンドウで開けないか(szで閉じやすいので)
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
   let g:ref_cache_dir = '~/.cache/.vim_ref_cache'

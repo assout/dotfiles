@@ -1280,7 +1280,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
 
   " TODO quickfix開くとhookが動かない.暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
-  " TODO MSYS2で動かない
   let g:quickrun_config = {
         \ 'watchdogs_checker/_' : {
         \   'outputter/quickfix/open_cmd' : '',

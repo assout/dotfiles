@@ -124,6 +124,7 @@ function! s:MyChangeTabstep(size)
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>MyChangeTabstep(<q-args>)
 
+" Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs. <:help f-args>
 function! s:InsertString(pos, str) range
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction

@@ -158,7 +158,7 @@ function! s:RestoreCursorPosition()
     return
   endif
   if line("'\"") > 1 && line("'\"") <= line('$')
-    execute 'normal! g`"'
+    normal! g`"
   endif
 endfunction
 
@@ -393,7 +393,7 @@ endif
 noremap  <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap <SID>[shortcut]z :<C-u>pclose<CR>
-nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag ".expand("<cword>"))<CR>
+nnoremap <SID>[shortcut]] :vsplit<CR>:execute("tag " . expand("<cword>"))<CR>
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
@@ -504,7 +504,7 @@ cnoremap <M-f> <S-Right>
 
 if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
-    execute 'set runtimepath+=' . s:bundlePath . 'neobundle.vim/'
+    let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neobundle.vim/'
   endif
   call g:neobundle#begin(expand(s:bundlePath))
 

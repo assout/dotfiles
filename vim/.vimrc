@@ -701,7 +701,7 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
-  nmap <SID>[plugin]s       <SID>[syntastic]
+  nmap <SID>[plugin]s       <SID>[switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -714,7 +714,7 @@ if s:IsPluginEnabled()
   nmap <SID>[sub_plugin]q   <SID>[qiita]
   " TODO 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
-  map  <SID>[sub_plugin]s   <SID>[switch]
+  map  <SID>[sub_plugin]s   <SID>[syntastic]
 
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)

@@ -42,6 +42,7 @@
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
+" * TODO Refs. <:help restore-position>
 "
 " }}}1
 
@@ -524,7 +525,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle 'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle 'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
-  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya')}
+  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya')} " TODO homeでエラーメッセージ出るっポイ(これが原因か不明だが)
   NeoBundle 'itchyny/calendar.vim'
   NeoBundle 'kana/vim-fakeclip'
   NeoBundle 'kana/vim-gf-user'
@@ -869,9 +870,10 @@ if s:HasPlugin('switch.vim') " {{{
   let g:switch_mapping = '<Space><Space>s'
   let g:switch_custom_definitions =
         \ [
-        \   ['foo', 'bar', 'baz'],
-        \   ['hoge', 'fuga', 'piyo']
+        \   ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
+        \   ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ]
         \ ]
+  " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{
@@ -1055,6 +1057,7 @@ if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_folding_disabled = 1
 
   " TODO Refinement
+  " Refs. <:help restore-position>
   function! s:Vim_markdown_keymappings()
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>

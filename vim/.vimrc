@@ -701,7 +701,8 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
-  nmap <SID>[plugin]s       <SID>[switch]
+  " TODO <SID>つけれない
+  nmap <SID>[plugin]s       [switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -881,12 +882,10 @@ if s:HasPlugin('singleton') && has('gui_running') " {{{
 endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
-  " TODO <SID>[switch]としたい
-  let g:switch_mapping = '<Space><Space>s'
-  let g:switch_custom_definitions =
-        \ [
+  let g:switch_mapping = '[switch]'
+  let g:switch_custom_definitions = [
         \   ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
-        \   ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ]
+        \   ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
         \ ]
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}

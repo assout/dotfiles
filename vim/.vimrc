@@ -60,6 +60,32 @@ endif
 
 " # Functions and Commands {{{1
 
+function! s:IsHome()
+  return $USERNAME ==# 'oji'
+endfunction
+
+function! s:IsOffice()
+  return $USERNAME ==# 'admin'
+endfunction
+
+function! s:IsPluginEnabled() " pluginが有効か返す
+  return isdirectory(s:bundlePath)
+endfunction
+
+function! s:HasPlugin(plugin) " pluginが存在するか返す
+  return !empty(matchstr(&runtimepath, a:plugin))
+endfunction
+
+function! s:RestoreCursorPosition()
+  let l:ignore_filetypes = ['gitcommit']
+  if index(l:ignore_filetypes, &l:filetype) >= 0
+    return
+  endif
+  if line("'\"") > 1 && line("'\"") <= line('$')
+    normal! g`"
+  endif
+endfunction
+
 " TODO 消す(caputure.vimに一本化-> ただクリップボードに入れたいについて要検討)
 " TODO 実行が遅い(silent で描画しないようにしても遅い)(特にwindows)
 " TODO オプションなどでbufferに出力もしたい
@@ -97,11 +123,11 @@ function! s:MyChangeTabstep(size)
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>MyChangeTabstep(<q-args>)
 
-function! s:InsertString(pos, str) range
+function! s:MyInsertString(pos, str) range
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
+command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>MyInsertString('^', <f-args>)
+command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>MyInsertString('$', <f-args>)
 
 " TODO 消す。(Refソース or Uniteソースにする)
 " TODO 超汚い。あとたまにバグる(カレントバッファがPreviewになってしまう)
@@ -138,37 +164,6 @@ function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが
 endfunction
 command! -nargs=? MyTranslate call <SID>MyTranslate(<f-args>)
 
-function! s:IsHome()
-  return $USERNAME ==# 'oji'
-endfunction
-
-function! s:IsOffice()
-  return $USERNAME ==# 'admin'
-endfunction
-
-function! s:IsPluginEnabled() " pluginが有効か返す
-  return isdirectory(s:bundlePath)
-endfunction
-
-function! s:HasPlugin(plugin) " pluginが存在するか返す
-  return !empty(matchstr(&runtimepath, a:plugin))
-endfunction
-
-function! s:RestoreCursorPosition()
-  let l:ignore_filetypes = ['gitcommit']
-  if index(l:ignore_filetypes, &l:filetype) >= 0
-    return
-  endif
-  if line("'\"") > 1 && line("'\"") <= line('$')
-    normal! g`"
-  endif
-endfunction
-
-command! -bang MyBufClear %bdelete<bang>
-" TODO <:help restore-position>
-command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
-command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
-
 function! s:MyHere()
   if s:IsOffice()
     " Caution: Windowsで set shellslashしているときうまく開かないため設定。
@@ -181,7 +176,12 @@ function! s:MyHere()
     !nautilus %:h &
   endif
 endfunction
-silent command! MyHere call <SID>MyHere()
+command! MyHere call <SID>MyHere()
+
+command! -bang MyBufClear %bdelete<bang>
+" TODO <:help restore-position>
+command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal ``
+command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 " }}}1
 
@@ -916,9 +916,9 @@ if s:HasPlugin('unite') " {{{
   if has('win32')
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
-  let s:My_relative_move = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
+  let s:MyRelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-  function! s:My_relative_move.func(candidates) " move先を相対パスで指定するaction
+  function! s:MyRelativeMove.func(candidates) " move先を相対パスで指定するaction
     let l:candidate = a:candidates[0]
     let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
     execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
@@ -926,7 +926,7 @@ if s:HasPlugin('unite') " {{{
     call g:unite#force_redraw() " 呼ばないと表示更新されない
   endfunction
 
-  function! s:Unite_my_keymappings()
+  function! s:MyUniteKeymappings()
     " TODO sort. ↓じゃダメ。
     " nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
@@ -935,7 +935,7 @@ if s:HasPlugin('unite') " {{{
     nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
     nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
   endfunction
-  autocmd vimrc FileType unite call s:Unite_my_keymappings()
+  autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
   call g:unite#custom#action('file,directory', 'relative_move', s:My_relative_move)
   call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -1071,7 +1071,7 @@ if s:HasPlugin('vim-markdown') " {{{
 
   " TODO Refinement
   " Refs. <:help restore-position>
-  function! s:Vim_markdown_keymappings()
+  function! s:MyVimMarkdownKeymappings()
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
@@ -1080,7 +1080,7 @@ if s:HasPlugin('vim-markdown') " {{{
     vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
   endfunction
-  autocmd vimrc FileType markdown call s:Vim_markdown_keymappings()
+  autocmd vimrc FileType markdown call s:MyVimMarkdownKeymappings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
@@ -1386,7 +1386,7 @@ cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 
 if s:HasPlugin('vim-hybrid')
-  function! s:DefineMyHighlight()
+  function! s:MyDefineHighlight()
     highlight clear SpellBad
     highlight clear SpellCap
     highlight clear SpellRare
@@ -1396,7 +1396,7 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
   endfunction
-  autocmd vimrc ColorScheme * :call <SID>DefineMyHighlight()
+  autocmd vimrc ColorScheme * :call <SID>MyDefineHighlight()
   colorscheme hybrid
 endif
 

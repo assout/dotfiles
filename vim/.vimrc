@@ -627,6 +627,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
   " MSYS2 Plugin settings {{{
   let s:plugins = [
+        \  'benchvimrc-vim',
         \  'memolist.vim',
         \  'neomru.vim',
         \  'open-browser.vim',
@@ -1158,8 +1159,10 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO プレビューウィンドウで開けないか(szで閉じやすいので)
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
-  let g:ref_cache_dir = '~/.cache/.vim_ref_cache'
+  let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
   " TODO デフォルトに一括追加の指定方法(現状は上書き)
+  " TODO msys2 vimでmarkdownのgene開けない
+  " TODO windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
         \  'sh' : 'man',
@@ -1180,16 +1183,14 @@ if s:HasPlugin('vim-ref') " {{{
     nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
     nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
   endif
+
+  " TODOs for ref-gene
   " TODO 選択範囲の単語で検索
   " TODO unite-actioinでyank
   " TODO unite重い
   " TODO コマンド履歴に残したい
   " TODO 和英ができない
   " TODO キャッシュ化されている？
-  if s:HasPlugin('vim-ref-gene') " {{{
-    nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
-    nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
-  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)

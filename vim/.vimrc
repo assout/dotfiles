@@ -325,7 +325,6 @@ set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
 set spelllang& spelllang+=cjk
-" Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs. <:help f-args>
 if has('path_extra')
   set tags& tags=./.tags;
 else

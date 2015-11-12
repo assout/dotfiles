@@ -68,7 +68,7 @@ if [ -e "${here}/.vimrc" ] ; then
   alias vi='vim -S ${here}/.vimrc --noplugin'
 else
   alias v='vim'
-  alias vi='vim -noplugin'
+  alias vi='vim --noplugin'
 fi
 
 # Peco

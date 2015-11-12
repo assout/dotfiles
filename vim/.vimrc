@@ -210,7 +210,8 @@ augroup vimrc
   autocmd!
 
   " Double byte space highlight
-  highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+  colorscheme default " Caution: ここで実施しないとColorschemeイベント起こさないとmatch DoubleByteSpaceが未定義エラーになることがある
+  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif

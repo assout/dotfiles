@@ -1006,10 +1006,10 @@ if s:HasPlugin('unite') " {{{
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
 
-    noremap  <SID>[todo]a       :UniteTodoAddSimple -memo<CR>
-    noremap  <SID>[todo]q       :UniteTodoAddSimple<CR>
-    nnoremap <SID>[todo]l       :Unite todo:undone -buffer-name=todo<CR>
-    nnoremap <SID>[todo]L       :Unite todo -buffer-name=todo<CR>
+    noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
+    noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
+    nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
+    nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
     nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
   endif " }}}
 endif " }}}

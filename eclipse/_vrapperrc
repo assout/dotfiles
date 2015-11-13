@@ -69,7 +69,7 @@ unmap  <Space>
 " shortcut prefix mappings
 " caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
-nnoremap sc :x<CR>
+nnoremap sc :q<CR>
 nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
@@ -79,7 +79,7 @@ nnoremap sm :maximize<CR>
 inoremap sm <C-o>:maximize<CR>i
 nnoremap sn :nohlsearch<CR>
 noremap  sp :split<CR>
-noremap  sx :x<CR>
+noremap  sx :q<CR>
 noremap  sv :vsplit<CR>
 
 " Ctrl key mappings

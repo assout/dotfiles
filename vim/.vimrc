@@ -378,28 +378,28 @@ if has('gui_running')
 else
   nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<CR>
 endif
-nnoremap        <SID>[shortcut]v :<C-u>vsplit<CR>
-nnoremap        <SID>[shortcut]x :<C-u>bdelete<CR>
-nnoremap        <SID>[shortcut]z :<C-u>pclose<CR>
-nnoremap <expr> <SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
+nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
+nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
+nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
+nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO to plugin
 noremap <SID>[insert]  <Nop>
-noremap <silent><expr> <SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
-noremap <silent>       <SID>[insert]*  :MyPrefix * <CR>
-noremap <silent>       <SID>[insert]1  :MyPrefix # <CR>A
-noremap <silent>       <SID>[insert]2  :MyPrefix ## <CR>A
-noremap <silent>       <SID>[insert]3  :MyPrefix ### <CR>A
-noremap <silent>       <SID>[insert]4  :MyPrefix #### <CR>A
-noremap <silent>       <SID>[insert]>  :MyPrefix > <CR>
-noremap <silent>       <SID>[insert]T  :MyPrefix TODO <CR>
-noremap <silent>       <SID>[insert]f  :MyPrefix file://<CR>
-noremap <silent><expr> <SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
-noremap <silent><expr> <SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <silent><expr> <SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr> <SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
-noremap <silent>       <SID>[insert]l  :MySuffix \<Space>\ <CR>
+noremap <silent><expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
+noremap <silent>      <SID>[insert]*  :MyPrefix * <CR>
+noremap <silent>      <SID>[insert]1  :MyPrefix # <CR>A
+noremap <silent>      <SID>[insert]2  :MyPrefix ## <CR>A
+noremap <silent>      <SID>[insert]3  :MyPrefix ### <CR>A
+noremap <silent>      <SID>[insert]4  :MyPrefix #### <CR>A
+noremap <silent>      <SID>[insert]>  :MyPrefix > <CR>
+noremap <silent>      <SID>[insert]T  :MyPrefix TODO <CR>
+noremap <silent>      <SID>[insert]f  :MyPrefix file://<CR>
+noremap <silent><expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
+noremap <silent><expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <silent><expr><SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <silent><expr><SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <silent><expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
+noremap <silent>      <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
@@ -909,12 +909,12 @@ if s:HasPlugin('unite') " {{{
 
   function! s:MyUniteKeymappings()
     " TODO sort. ↓じゃダメ。
-    " nnoremap <buffer><expr> S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
-    nnoremap <buffer><expr> f unite#smart_map('f', unite#do_action('vimfiler'))
-    nnoremap <buffer><expr> m unite#smart_map('m', unite#do_action('relative_move'))
-    nnoremap <buffer><expr> p unite#smart_map('p', unite#do_action('split'))
-    nnoremap <buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
-    nnoremap <buffer><expr> x unite#smart_map('x', unite#do_action('start'))
+    " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+    nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
+    nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
+    nnoremap <buffer><expr>p unite#smart_map('p', unite#do_action('split'))
+    nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
+    nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('start'))
   endfunction
   autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
@@ -967,8 +967,8 @@ if s:HasPlugin('unite') " {{{
   endif " }}}
 
   if s:HasPlugin('unite-codic') " {{{
-    nnoremap <expr> <SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
-    nnoremap        <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
+    nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
+    nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
   endif " }}}
 
   if s:HasPlugin('unite-todo') " {{{
@@ -981,11 +981,11 @@ if s:HasPlugin('unite') " {{{
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
 
-    noremap         <SID>[todo]a :UniteTodoAddSimple -memo<CR>
-    noremap         <SID>[todo]q :UniteTodoAddSimple<CR>
-    nnoremap        <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
-    nnoremap        <SID>[todo]L :Unite todo -buffer-name=todo<CR>
-    nnoremap <expr> <SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
+    noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
+    noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
+    nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
+    nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
+    nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
   endif " }}}
 endif " }}}
 

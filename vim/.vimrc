@@ -45,6 +45,7 @@
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 " * TODO autoindent,smartindent,cindent,indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on,off関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO 推奨: Vimの設定ファイルは全て $HOME/.vim/ ディレクトリ(MS-Windowsでは$HOME/vimfiles/)に置くこと。そうすれば設定ファイルを別のシステムにコピーするのが容易になる。 Refs. <:h vimrc>
 " }}}1
 
 " # Begin {{{1
@@ -210,7 +211,6 @@ augroup vimrc
   autocmd!
 
   " Double byte space highlight
-  colorscheme default " Caution: ここで実施しないとColorschemeイベント起こさないとmatch DoubleByteSpaceが未定義エラーになることがある
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
@@ -513,6 +513,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   endif
   call g:neobundle#begin(expand(s:bundlePath))
 
+  " TODO dependsはパフォーマンス悪いかも
   NeoBundle     'AndrewRadev/switch.vim'
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle     'KazuakiM/vim-qfsigns' " for watchdogs.
@@ -549,7 +550,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   endif
   NeoBundle     'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle     'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
-  NeoBundle     'mattn/benchvimrc-vim'
+  NeoBundle     'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない
   NeoBundle     'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   NeoBundle     'mattn/excitetranslate-vim', {'depends' : ['mattn/webapi-vim']}
   NeoBundle     'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
@@ -626,6 +627,9 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
   " MSYS2 Plugin settings {{{
+  " TODO slows
+        " \  'vim-easytags',
+        " \  'vim-watchdogs',
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'memolist.vim',
@@ -640,7 +644,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'unite-tag',
         \  'unite-todo',
         \  'unite.vim',
-        \  'vim-easytags',
+        \  'vim-alignta',
         \  'vim-hybrid',
         \  'vim-javascript',
         \  'vim-maximizer',
@@ -662,7 +666,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-textobj-parameter',
         \  'vim-textobj-url',
         \  'vim-textobj-user',
-        \  'vim-watchdogs',
         \  'vimfiler.vim',
         \  'yankround.vim',
         \  'yankround.vim/after',
@@ -731,17 +734,6 @@ if s:IsPluginEnabled()
   map  <SID>[shortcut]m <SID>[maximizer]
 endif
 " }}}
-
-if s:HasPlugin('alignta') " {{{
-  xnoremap <SID>[alignta]<CR> :Alignta<Space>
-  " Alignta for 's'hift align.
-  xnoremap <SID>[alignta]s    :Alignta<Space><-<Space>
-  " Alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-  xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
-  xnoremap <SID>[alignta]\|   :Alignta<Space>\|<CR>
-  xnoremap <SID>[alignta]:    :Alignta<Space>:<CR>
-  xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
-endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = s:IsHome() ? 1 : 0
@@ -1019,6 +1011,17 @@ if s:HasPlugin('vimfiler') " {{{
   let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 
+if s:HasPlugin('vim-alignta') " {{{
+  xnoremap <SID>[alignta]<CR> :Alignta<Space>
+  " Alignta for 's'hift align.
+  xnoremap <SID>[alignta]s    :Alignta<Space><-<Space>
+  " Alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
+  xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
+  xnoremap <SID>[alignta]\|   :Alignta<Space>\|<CR>
+  xnoremap <SID>[alignta]:    :Alignta<Space>:<CR>
+  xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
+endif " }}}
+
 if s:HasPlugin('vim-easytags') " {{{
   let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
@@ -1287,8 +1290,8 @@ endif " }}}
 if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
-  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
-  let g:watchdogs_check_BufWritePost_enable = has('gui_running') ? 1 : 0
+
+  let g:watchdogs_check_BufWritePost_enable = 1
 
   " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
@@ -1300,10 +1303,12 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    'hook/echo/output_success' : 'No Errors Found.',
         \    'hook/echo/output_failure' : 'Errors Found!',
         \    'hook/qfsigns_update/enable_exit': 1,
-        \    'hook/quickfix_status_enable/enable_exit' : 1,
         \  },
         \}
+  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
+  let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
 
+  " TODO extendはパフォーマンス悪いかも
   call extend(g:quickrun_config, {
         \  'sh/watchdogs_checker' : {
         \    'type'
@@ -1410,6 +1415,8 @@ if s:HasPlugin('vim-hybrid')
   endfunction
   autocmd vimrc ColorScheme * :call <SID>MyDefineHighlight()
   colorscheme hybrid
+else
+  colorscheme default " Caution: 実行しないと全角ハイライトがされない
 endif
 
 " }}}1

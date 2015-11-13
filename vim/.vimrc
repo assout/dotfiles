@@ -43,9 +43,10 @@
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
-" * TODO autoindent,smartindent,cindent,indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO filetype syntax on,off関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO 推奨: Vimの設定ファイルは全て $HOME/.vim/ ディレクトリ(MS-Windowsでは$HOME/vimfiles/)に置くこと。そうすれば設定ファイルを別のシステムにコピーするのが容易になる。 Refs. <:h vimrc>
+" * TODO Add performance test for travisci
 " }}}1
 
 " # Begin {{{1
@@ -213,32 +214,13 @@ augroup vimrc
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  " QuickFixを自動で開く " TODO grep,makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  " QuickFixを自動で開く " TODO grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setfiletype html.ftl
-
-  " FileType settings - ファイルタイプごとの設定 {{{
-
-  filetype on " before filetype autocmds. Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
-
-  " 改行時の自動コメント継続をやめる(o,O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
-  autocmd FileType * setlocal textwidth=0 formatoptions-=o
-  " Enable spell on markdown file, To hard tab.
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell noexpandtab
-  " To hard tab
-  autocmd FileType java setlocal noexpandtab
-
-  if executable('python')
-    autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
-  endif
-
-  if executable('xmllint')
-    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
-  endif
 
   " }}}
 augroup END
@@ -265,7 +247,7 @@ if has('folding')
   set foldlevelstart=0
   set foldmethod=marker
 endif
-" フォーマットオプション(-oでo,Oコマンドでの改行時のコメント継続をなくす)
+" フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
 " TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
@@ -303,7 +285,7 @@ if has('win32')
   " set shell=bash.exe
 
   " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
-  " Caution: GUI,CUIでのtags利用時のパスセパレータ統一のために設定。
+  " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
   " Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
   "  * TODO Windowsでgxでエクスプローラ開けなくなる
   "  * TODO vim-markdownのgxでリンク開けなくなる
@@ -354,7 +336,7 @@ endif
 " caution: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
-" Normal,Visual mode basic mappings {{{
+" Normal, Visual mode basic mappings {{{
 noremap  /    /\v
 noremap  ?    ?\v
 nnoremap j    gj
@@ -369,7 +351,7 @@ vnoremap y    y`>
 
 " Shortcut key prefix mappings {{{
 
-" <SID>[shortcut]a,d,rはsurround-pluginで使用
+" <SID>[shortcut]a, d, rはsurround-pluginで使用
 " <SID>[shortcut]mはmaximizer-pluginで使用
 noremap  gs               s
 map      s                <SID>[shortcut]
@@ -429,7 +411,7 @@ if s:IsOffice()
 endif
 " }}}
 
-" Ctrl,Alt key prefix mappings {{{
+" Ctrl, Alt key prefix mappings {{{
 nnoremap <M-h> gT
 nnoremap <M-l> gt
 nnoremap <M-t> :<C-u>tabedit<CR>
@@ -559,7 +541,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle     'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle     'pangloss/vim-javascript' " for indent only
-  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo,Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう)
+  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう)
   NeoBundle     'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']}
   NeoBundle     'schickling/vim-bufonly'
   " NeoBundle     'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
@@ -578,7 +560,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle     'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'tyru/capture.vim'
-  NeoBundle     'tyru/open-browser.vim' " TODO シングルクォートで囲まれたURLが開けない@office(gui,cui)(e.g. 'http://hoge')
+  NeoBundle     'tyru/open-browser.vim' " TODO シングルクォートで囲まれたURLが開けない@office(gui, cui)(e.g. 'http://hoge')
   if s:IsHome()
     NeoBundle 'tyru/restart.vim'
   else
@@ -588,14 +570,14 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'vim-jp/vimdoc-ja' " TODO msys2で有効にならない(runtimeに手動追加しても)
   NeoBundle     'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle     'vim-scripts/HybridText'
-  NeoBundle     'xolox/vim-easytags', {'depends' : ['xolox/vim-misc','xolox/vim-shell']}
+  NeoBundle     'xolox/vim-easytags', {'depends' : ['xolox/vim-misc', 'xolox/vim-shell']}
   NeoBundle     'xolox/vim-misc' " for easytags.
   NeoBundle     'xolox/vim-shell' " for easytags.
 
   " User Operators {{{
   NeoBundle     'kana/vim-operator-user'
   NeoBundle     'kana/vim-operator-replace', {'depends': ['kana/vim-operator-user']}
-  NeoBundle     'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb,sab.
+  NeoBundle     'rhysd/vim-operator-surround', {'depends': ['kana/vim-operator-user']} " life changing. sdb, sab.
   NeoBundle     'syngan/vim-operator-inserttext', {'depends': ['kana/vim-operator-user']}
   NeoBundle     'tyru/operator-camelize.vim', {'depends': ['kana/vim-operator-user']}
   " }}}
@@ -622,7 +604,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   " }}}
 
   call g:neobundle#end()
-  filetype plugin indent on " Required!
+  " filetype plugin indent on " Required! 最後にまとめてやる
   " Caution: NeoBundleCheckはやらない（パフォーマンス）
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
@@ -1029,7 +1011,7 @@ endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{
   if (! has('gui_running')) && s:IsHome() " Caution: office msys2(tmux) では不要(出来ている)
-    " TODO pasteは効くがyank,deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
+    " TODO pasteは効くがyank, deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
     " map y  <Plug>(fakeclip-y)
     " map yy <Plug>(fakeclip-Y)
     " map p  <Plug>(fakeclip-p)
@@ -1044,7 +1026,7 @@ if s:HasPlugin('vim-fakeclip') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
-  function! g:GfFile() " refs <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+  function! g:GfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
     let l:path = expand('<cfile>')
     let l:line = 0
     if l:path =~# ':\d\+:\?$'
@@ -1107,8 +1089,8 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
-  " refs <http://d.hatena.ne.jp/syngan/20140301/1393676442>
-  " refs <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
+  " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
+  " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
   let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
   call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
@@ -1196,7 +1178,7 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO キャッシュ化されている？
 endif " }}}
 
-if s:HasPlugin('vim-submode') " {{{ caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
+if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
   call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
   call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
   call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
@@ -1394,14 +1376,14 @@ endif " }}}
 
 " # After {{{1
 
-filetype on
+filetype plugin indent on " Caution: Required for NeoBundle
 syntax on
 
 " :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
-
 nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 
+" Colorshceme settings
 if s:HasPlugin('vim-hybrid')
   function! s:MyDefineHighlight()
     highlight clear SpellBad
@@ -1413,11 +1395,28 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
   endfunction
-  autocmd vimrc ColorScheme * :call <SID>MyDefineHighlight()
+  autocmd vimrc ColorScheme hybrid :call <SID>MyDefineHighlight()
   colorscheme hybrid
 else
-  colorscheme default " Caution: 実行しないと全角ハイライトがされない
+  colorscheme default " Caution: 明示実行しないと全角ハイライトがされない
 endif
+
+" FileType settings - ファイルタイプごとの設定 Caution: filetype on以降に実施しないといけない Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
+
+" 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
+autocmd vimrc FileType * setlocal textwidth=0 formatoptions-=o
+" Enable spell on markdown file, To hard tab.
+autocmd vimrc FileType markdown highlight! def link markdownItalic LineNr | setlocal spell noexpandtab
+" To hard tab
+autocmd vimrc FileType java setlocal noexpandtab
+if executable('python')
+  autocmd vimrc FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
+endif
+if executable('xmllint')
+  autocmd vimrc FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
+endif
+
+" }}}
 
 " }}}1
 

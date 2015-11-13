@@ -836,10 +836,6 @@ if s:HasPlugin('operator-camelize') " {{{
   map <SID>[camelize] <Plug>(operator-camelize-toggle)
 endif " }}}
 
-if s:HasPlugin('operator-replace') " {{{
-  map <SID>[replace] <Plug>(operator-replace)
-endif " }}}
-
 if s:HasPlugin('previm') " {{{
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
@@ -1089,6 +1085,30 @@ if s:HasPlugin('vim-migemo') " {{{
   else
     nnoremap <SID>[migemo] :<C-u>Migemo<Space>
   endif
+endif " }}}
+
+if s:HasPlugin('vim-operator-replace') " {{{
+  map <SID>[replace] <Plug>(operator-replace)
+
+  if s:HasPlugin('vim-textobj-anyblock') " {{{
+    nmap <silent><SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-between') " {{{
+    nmap <silent><SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-line') " {{{
+    nmap <silent><SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-parameter') " {{{
+    nmap <silent><SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-url') " {{{
+    nmap <silent><SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
+  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{

@@ -1387,7 +1387,8 @@ cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " Don't (re)highlighting the last search pattern on reloading.
 nohlsearch
 
-" Colorshceme settings
+" Colorshceme settings {{{
+
 if s:HasPlugin('vim-hybrid')
   function! s:MyDefineHighlight()
     highlight clear SpellBad
@@ -1404,6 +1405,8 @@ if s:HasPlugin('vim-hybrid')
 else
   colorscheme default " Caution: 明示実行しないと全角ハイライトがされない
 endif
+
+" }}}
 
 " FileType settings - ファイルタイプごとの設定 Caution: filetype on以降に実施しないといけない Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
 

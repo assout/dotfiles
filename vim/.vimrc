@@ -37,6 +37,7 @@
 "
 " * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
 " * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
+" * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
 "
 " ## TODOs
 "
@@ -402,10 +403,9 @@ noremap <silent>       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
-" caution: <silent>つけないで<expr>だけだとvrapperが有効にならない
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
-nnoremap <silent><expr> <SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
+nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
 endif
@@ -532,7 +532,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   endif
   NeoBundle     'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle     'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
-  NeoBundle     'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない
+  NeoBundle     'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
   NeoBundle     'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   NeoBundle     'mattn/excitetranslate-vim', {'depends' : ['mattn/webapi-vim']}
   NeoBundle     'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
@@ -609,9 +609,9 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
   " MSYS2 Plugin settings {{{
+  " TODO watchdogsのautoload遅い(+300ms)
   " TODO slows
         " \  'vim-easytags',
-        " \  'vim-watchdogs',
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'memolist.vim',
@@ -648,6 +648,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-textobj-parameter',
         \  'vim-textobj-url',
         \  'vim-textobj-user',
+        \  'vim-watchdogs',
         \  'vimfiler.vim',
         \  'yankround.vim',
         \  'yankround.vim/after',
@@ -980,11 +981,11 @@ if s:HasPlugin('unite') " {{{
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
 
-    noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
-    noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
-    nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
-    nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
-    nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
+    noremap         <SID>[todo]a :UniteTodoAddSimple -memo<CR>
+    noremap         <SID>[todo]q :UniteTodoAddSimple<CR>
+    nnoremap        <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
+    nnoremap        <SID>[todo]L :Unite todo -buffer-name=todo<CR>
+    nnoremap <expr> <SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
   endif " }}}
 endif " }}}
 

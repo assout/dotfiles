@@ -496,6 +496,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   call g:neobundle#begin(expand(s:bundlePath))
 
   " TODO dependsはパフォーマンス悪いかも
+  " General {{{
   NeoBundle     'AndrewRadev/switch.vim'
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle     'KazuakiM/vim-qfsigns' " for watchdogs.
@@ -573,6 +574,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'xolox/vim-easytags', {'depends' : ['xolox/vim-misc', 'xolox/vim-shell']}
   NeoBundle     'xolox/vim-misc' " for easytags.
   NeoBundle     'xolox/vim-shell' " for easytags.
+  " }}}
 
   " User Operators {{{
   NeoBundle     'kana/vim-operator-user'
@@ -607,8 +609,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   " filetype plugin indent on " Required! 最後にまとめてやる
   " Caution: NeoBundleCheckはやらない（パフォーマンス）
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
-  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す(lazyにする?)
   " MSYS2 Plugin settings {{{
+  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogsのautoload遅い(+300ms)
   " TODO slows
         " \  'vim-easytags',
@@ -1380,9 +1382,10 @@ endif " }}}
 filetype plugin indent on " Caution: Required for NeoBundle
 syntax on
 
-" :qで誤って終了してしまうのを防ぐためcloseに置き換える。caution: Vrapperでエラーになる
+" :qで誤って終了してしまうのを防ぐためcloseに置き換える
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
-nohlsearch " Don't (re)highlighting the last search pattern on reloading.
+" Don't (re)highlighting the last search pattern on reloading.
+nohlsearch
 
 " Colorshceme settings
 if s:HasPlugin('vim-hybrid')

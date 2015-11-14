@@ -38,6 +38,7 @@
 " * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
 " * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
 " * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
+" * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮)
 "
 " ## TODOs
 "
@@ -46,7 +47,6 @@
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO 推奨: Vimの設定ファイルは全て $HOME/.vim/ ディレクトリ(MS-Windowsでは$HOME/vimfiles/)に置くこと。そうすれば設定ファイルを別のシステムにコピーするのが容易になる。 Refs. <:h vimrc>
 " * TODO Add performance test for travisci
 " }}}1
 
@@ -689,6 +689,7 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
+  nmap <SID>[plugin]O       <SID>[Open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
@@ -822,8 +823,10 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
-  nmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
-  vmap <SID>[open-browser] <Plug>(openbrowser-smart-search)
+  nmap     <SID>[open-browser]  <Plug>(openbrowser-smart-search)
+  vmap     <SID>[open-browser]  <Plug>(openbrowser-smart-search)
+  nnoremap <SID>[Open-browser]  :<C-u>OpenBrowserSearch -
+
   if has('win32unix')
     let g:openbrowser_browser_commands = [{
           \  'name': 'rundll32',

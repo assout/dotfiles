@@ -63,13 +63,12 @@ alias cd='cdls'
 
 # Vim
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if [ -e "${here}/.vimrc" ] ; then
-  alias v='vim -S ${here}/.vimrc'
-  alias vi='vim -S ${here}/.vimrc --noplugin'
+if  ! isHome  &&  ! isOffice  && [ -e "${here}/.vimrc" ] ; then
+  alias v='vim -u ${here}/.vimrc'
 else
   alias v='vim'
-  alias vi='vim --noplugin'
 fi
+alias vi='v --noplugin'
 
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then

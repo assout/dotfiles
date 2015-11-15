@@ -1,8 +1,8 @@
 language: ruby
 sudo: false
-# cache:
+cache:
 #   apt: true
-#   pip: true
+  pip: true
 addons:
   apt_packages:
     - devscripts

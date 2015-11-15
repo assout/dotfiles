@@ -6,13 +6,14 @@ addons:
   apt_packages:
     - devscripts
     - shellcheck
+    - python-pip
 
 # before_install:
   # - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
   # - sudo apt-get update -qq
 
 install:
-  - pip install -r requirements.txt
+  # - pip install -r requirements.txt
   # - apt-get -qq install devscripts
   # - sudo apt-get -qq install shellcheck
   - pip install vim-vint

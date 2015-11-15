@@ -5,12 +5,12 @@ sudo: false
 addons:
   apt:
     sources:
-      - dev
-      - http://archive.ubuntu.com/ubuntu/
-      - trusty-backports
-      - restricted
-      - main
       - universe
+      # - dev
+      # - http://archive.ubuntu.com/ubuntu/
+      # - trusty-backports
+      # - restricted
+      # - main
     packages:
       - devscripts
       - shellcheck
@@ -18,7 +18,6 @@ addons:
 
 # before_install:
   # - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
-  # - add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"
   # - sudo apt-get update -qq
 
 install:

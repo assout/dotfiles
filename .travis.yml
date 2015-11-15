@@ -1,3 +1,4 @@
+# TODO To container base. shellcheckが入れられない
 language: ruby
 cache:
   apt: true

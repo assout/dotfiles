@@ -79,7 +79,6 @@ function! s:HasPlugin(plugin) " pluginが存在するか返す
   return !empty(matchstr(&runtimepath, a:plugin)) && &loadplugins
 endfunction
 
-" TODO autocmdで呼んであげてない？(けどカーソル位置復元してるっポイ？)
 function! s:RestoreCursorPosition()
   let l:ignore_filetypes = ['gitcommit']
   if index(l:ignore_filetypes, &l:filetype) >= 0
@@ -222,8 +221,9 @@ augroup vimrc
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setfiletype html.ftl
+  " Restore cusor position
+  autocmd BufWinEnter * call s:RestoreCursorPosition()
 
-  " }}}
 augroup END
 
 " }}}1

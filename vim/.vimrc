@@ -89,20 +89,6 @@ function! s:RestoreCursorPosition()
   endif
 endfunction
 
-" TODO 消す(caputure.vimに一本化-> ただクリップボードに入れたいについて要検討)
-" TODO 実行が遅い(silent で描画しないようにしても遅い)(特にwindows)
-" TODO オプションなどでbufferに出力もしたい
-function! s:MyCapture(command) " command 実行結果をキャプチャ
-  if has('clipboard')
-    redir @+>
-  else
-    redir @">
-  endif
-  execute a:command
-  redir END
-endfunction
-command! -nargs=1 -complete=command MyCapture call <SID>MyCapture(<q-args>)
-
 " TODO undoしても&expandtabの値は戻らないので注意
 function! s:MyToggleExpandTab()
   setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)

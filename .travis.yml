@@ -16,8 +16,8 @@ install:
   # - pip install -r requirements.txt
   # - apt-get -qq install devscripts
   # - sudo apt-get -qq install shellcheck
-  - pip install vim-vint
-  - pip install bashate
+  - pip install --user vim-vint
+  - pip install --user bashate
 
 script:
   - vim --cmd version --cmd quit

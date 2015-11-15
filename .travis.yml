@@ -3,10 +3,11 @@ sudo: false
 # cache: pip
 # #   apt: true
 addons:
-  apt_packages:
-    - devscripts
-    - shellcheck
-    - python-pip
+  apt:
+    packages:
+      - devscripts
+      - shellcheck
+      - python-pip
 
 # before_install:
   # - sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ trusty-backports restricted main universe"

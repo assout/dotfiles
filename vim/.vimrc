@@ -1091,9 +1091,10 @@ if s:HasPlugin('vim-operator-replace') " {{{
     nmap <silent><SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   endif " }}}
 
-  if s:HasPlugin('vim-textobj-parameter') " {{{
-    nmap <silent><SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
-  endif " }}}
+  " Caution: aは<Space>paeとかできなくなるのでやらない
+  " if s:HasPlugin('vim-textobj-parameter') " {{{
+  "   nmap <silent><SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
+  " endif " }}}
 
   if s:HasPlugin('vim-textobj-url') " {{{
     nmap <silent><SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
@@ -1128,6 +1129,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <silent><SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
   endif " }}}
 
+  " Caution: aはsaawとかできなくなることに注意
   if s:HasPlugin('vim-textobj-parameter') " {{{
     nmap <silent><SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
     nmap <silent><SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)

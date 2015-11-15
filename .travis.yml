@@ -1,8 +1,7 @@
 language: ruby
 sudo: false
-cache:
-#   apt: true
-  pip: true
+# cache: pip
+# #   apt: true
 addons:
   apt_packages:
     - devscripts
@@ -13,6 +12,7 @@ addons:
   # - sudo apt-get update -qq
 
 install:
+  - pip install -r requirements.txt
   # - apt-get -qq install devscripts
   # - sudo apt-get -qq install shellcheck
   - pip install vim-vint

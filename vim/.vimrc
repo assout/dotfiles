@@ -599,7 +599,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogsのautoload遅い(+300ms)
   " TODO slows
-        " \  'vim-easytags',
+  " \  'vim-easytags',
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'memolist.vim',
@@ -679,14 +679,14 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
-  " TODO <SID>つけれない("[s"と入力した時にキー入力待ちが発生してしまう)
+  " TODO <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
   nmap <SID>[plugin]s       [switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
   nmap <SID>[plugin]W       <SID>[Watchdogs]
   nmap <SID>[plugin]/       <SID>[migemo]
-  " TODO <SID>つけれない("[s"と入力した時にキー入力待ちが発生してしまう)
+  " TODO <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
 

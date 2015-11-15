@@ -5,7 +5,7 @@ sudo: false
 addons:
   apt:
     sources:
-      - universe
+      - r-packages-trusty
       # - dev
       # - http://archive.ubuntu.com/ubuntu/
       # - trusty-backports

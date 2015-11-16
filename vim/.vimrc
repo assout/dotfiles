@@ -220,7 +220,7 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si)
+" Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si) TODO cindnetにしても移動しなくなってしまった
 set cindent
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
@@ -324,8 +324,6 @@ endif
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
 " Normal, Visual mode basic mappings {{{
-noremap  /    /\v
-noremap  ?    ?\v
 nnoremap j    gj
 nnoremap k    gk
 nnoremap gj   j
@@ -343,8 +341,8 @@ vnoremap y    y`>
 noremap  gs               s
 map      s                <SID>[shortcut]
 noremap  <SID>[shortcut]  <Nop>
-noremap  <SID>[shortcut]? ?
-noremap  <SID>[shortcut]/ /
+noremap  <SID>[shortcut]/ /\v
+noremap  <SID>[shortcut]? ?\v
 noremap  <SID>[shortcut]a <Nop>
 nnoremap <SID>[shortcut]c <C-w>c
 noremap  <SID>[shortcut]d <Nop>

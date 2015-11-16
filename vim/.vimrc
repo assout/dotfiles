@@ -390,8 +390,8 @@ noremap <silent>      <SID>[insert]l  :MySuffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
 " TODO windowsのとき$MYVIMRCの展開だと対象にならない(シンボリックリンクを解決できない？)
-let b:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
-nnoremap <expr><SID>[open]v ':<C-u>edit ' . b:myvimrcPath . '<CR>'
+let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
+nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
 endif
@@ -521,7 +521,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle     'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
   NeoBundle     'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-  NeoBundle     'mattn/excitetranslate-vim', {'depends' : ['mattn/webapi-vim']}
   NeoBundle     'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle     'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
@@ -667,7 +666,6 @@ if s:IsPluginEnabled()
 
   xmap <SID>[plugin]a       <SID>[alignta]
   map  <SID>[plugin]c       <SID>[camelize]
-  nmap <SID>[plugin]e       <SID>[excite]
   nmap <SID>[plugin]f       <SID>[fugitive]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
@@ -676,7 +674,7 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
-  nmap <SID>[plugin]O       <SID>[Open-browser]
+  map  <SID>[plugin]O       <SID>[Open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
@@ -711,11 +709,6 @@ endif
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = s:IsHome() ? 1 : 0
   let g:calendar_google_task = s:IsHome() ? 1 : 0
-endif " }}}
-
-if s:HasPlugin('excitetranslate-vim') " {{{
-  noremap  <SID>[excite] :<C-u>ExciteTranslate<CR>
-  xnoremap <SID>[excite] :ExciteTranslate<CR>
 endif " }}}
 
 if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
@@ -810,9 +803,35 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
-  nmap     <SID>[open-browser]  <Plug>(openbrowser-smart-search)
-  vmap     <SID>[open-browser]  <Plug>(openbrowser-smart-search)
-  nnoremap <SID>[Open-browser]  :<C-u>OpenBrowserSearch -
+  " TODO defaultが消えてしまう
+  " let g:openbrowser_search_engines = {
+  "       \  'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
+  "       \  'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
+  "       \}
+
+  " TODO nnoramapもこれを呼び出し未選択だったらcwordとする
+  function! s:SearchSelectedValue(engine) " <http://nanasi.jp/articles/code/screen/visual.html>
+    let tmp = @@
+    silent normal gvy
+    let selected = @@
+    let @@ = tmp
+    execute ':OpenBrowserSearch -' . a:engine . ' ' . selected
+  endfunction
+
+  nmap     <SID>[Open-browser]   <Plug>(openbrowser-smart-search)
+  vmap     <SID>[Open-browser]   <Plug>(openbrowser-smart-search)
+
+  nnoremap <expr><SID>[open-browser]a  ':<C-u>OpenBrowserSearch -alc<Space> ' . expand('<cword>') . '<CR>'
+  nnoremap <expr><SID>[open-browser]d  ':<C-u>OpenBrowserSearch -devdocs<Space>' . expand('<cword>') . '<CR>'
+  nnoremap <expr><SID>[open-browser]s  ':<C-u>OpenBrowserSearch -stackoverflow<Space>' . expand('<cword>') . '<CR>'
+  nnoremap <expr><SID>[open-browser]t  ':<C-u>OpenBrowserSearch -translate<Space>' . expand('<cword>') . '<CR>'
+  nnoremap <expr><SID>[open-browser]w  ':<C-u>OpenBrowserSearch -wikipedia-ja<Space>' . expand('<cword>') . '<CR>'
+
+  vnoremap <SID>[open-browser]a  :call <SID>SearchSelectedValue('alc')<CR>
+  vnoremap <SID>[open-browser]d  :call <SID>SearchSelectedValue('devdocs')<CR>
+  vnoremap <SID>[open-browser]s  :call <SID>SearchSelectedValue('stackoverflow')<CR>
+  vnoremap <SID>[open-browser]t  :call <SID>SearchSelectedValue('translate')<CR>
+  vnoremap <SID>[open-browser]w  :call <SID>SearchSelectedValue('wikipedia-ja')<CR>
 
   if has('win32unix')
     let g:openbrowser_browser_commands = [{

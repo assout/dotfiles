@@ -47,7 +47,7 @@
 " * TODO setなどの末尾にコメント入れるとvrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO Add performance test for travisci
+" * TODO Add performance test for travisci (per plugin actual)
 " }}}1
 
 " # Begin {{{1
@@ -389,9 +389,9 @@ noremap <silent>      <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
-" TODO windowsのとき$MYVIMRCの展開だと対象にならない
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
-nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
+" TODO windowsのとき$MYVIMRCの展開だと対象にならない(シンボリックリンクを解決できない？)
+let b:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
+nnoremap <expr><SID>[open]v ':<C-u>edit ' . b:myvimrcPath . '<CR>'
 if s:IsOffice()
   nnoremap <SID>[open]i :<C-u>edit ~/Tools/ChatAndMessenger/logs/どなどな.log<CR>
 endif
@@ -617,6 +617,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-alignta',
         \  'vim-hybrid',
         \  'vim-javascript',
+        \  'vim-markdown',
         \  'vim-maximizer',
         \  'vim-misc',
         \  'vim-operator-replace',

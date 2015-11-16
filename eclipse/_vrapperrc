@@ -1,9 +1,6 @@
-" Section; Introduction {{{1
+" # Introduction {{{1
 "
-" caution: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
-" TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
-" TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
-
+" ## Prelude
 " vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
 " 詳細は <http://vrapper.sourceforge.net/documentation>
 " eclipse のデフォルトキーバインドを <Alt-hoge> のバインドに退避することとする.(メニューへのショートカットができなくなるがまあ良い)
@@ -32,18 +29,27 @@
 " Ctrl + w - Close,Close Rendering
 " Ctrl + x - Cut
 " Ctrl + y - Redo
+"
+" ## Caution
+" * CopyをAlt + Cに退避するが他のCopyバインドも合わせて調整しないとうまくBindされない
+"
+" ## TODOs
+" * TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
+" * TODO コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
+" * TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
+
 " }}}1
 
-" Section; Begin {{{1
+" # Begin {{{1
 source .vrapperrc.environment
 " }}}1
 	
-" Section; Vim Settings {{{1
+" # Vim Settings {{{1
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
 " }}}1
 
-" Section; Vrapper Settings {{{1
+" # Vrapper Settings {{{1
 " インサートモードを抜けたらIMEオフ.
 set imdisable
 " コンテンツアシストで<C-p>,<C-n>を有効にする.
@@ -56,7 +62,7 @@ set visualmouse
 set regexsearch
 " }}}1
 
-" Section; Key-mappings {{{1
+" # Key-mappings {{{1
 " vimrcでのマッピングを解除.
 unmap  /
 unmap  ?
@@ -74,7 +80,7 @@ nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
-" cautioin: noremapではinser mode時タブが挿入されてしまうのでだめ
+" cautioin: noremapではinsert mode時タブが挿入されてしまうのでだめ
 nnoremap sm :maximize<CR>
 inoremap sm <C-o>:maximize<CR>i
 nnoremap sn :nohlsearch<CR>
@@ -87,19 +93,20 @@ nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
 
 " Alt key mappings
-" Caution: <M-h>はシステムが利用するのでマッピング不可.Eclipseの設定で変える.
-" nnoremap <M-h>  <C-w>gT
-nnoremap <M-l>  <C-w>gt
-" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが、Eclipseではあまりつかわないので定義しない.
-" nnoremap <M-t>  :tabedit<CR>
-" nnoremap <M-c>  :bdelete<CR>
+" Caution: <M-h>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
+" nnoremap <M-h> <C-w>gT
+nnoremap <M-l> <C-w>gt
+" Caution: 他と合わせると<M-t>はタブ作成だが、Eclipseではあまりつかわないので定義しない.
+" nnoremap <M-t> :tabedit<CR>
+" Caution: <M-c>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
+" nnoremap <M-c> :q<CR>
 
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
-inoremap <C-a>  <C-o>^
-inoremap <C-e>  <C-o>$
-inoremap <C-d>  <C-o>x
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$
+inoremap <C-d> <C-o>x
 
-" eclipse action 基本<Space>prefix {{{
+" Eclipse action 基本<Space>prefix {{{
 " navigate
 nnoremap <Space>s :OpenSuperImplementation<CR>
 nnoremap <Space>i :OpenImplementation<CR>
@@ -108,15 +115,15 @@ nnoremap )        :GotoNextMember<CR>
 " }}}
 " }}}1
 
-" Section; Define commands {{{1
-" edit {{{
+" # Define commands {{{1
+" Edit {{{
 " definition ID of the edit -> go to next member action.
 eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
 " definition id of the edit -> go to previous member action.
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
 " }}}
 
-" navigate {{{ TODO いまいち効かない
+" Navigate {{{ TODO いまいち効かない
 "definition ID of the navigate -> open type hierarchy action 
 eclipseaction OpenTypeHierarchy org.eclipse.jdt.ui.edit.text.java.org.eclipse.jdt.ui.edit.text.java.open.type.hierarchy
 "definition ID of the navigate -> open call hierarchy action 

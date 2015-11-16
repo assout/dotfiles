@@ -93,12 +93,11 @@ nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
 
 " Alt key mappings
+nnoremap <M-l> <C-w>gt
 " Caution: <M-h>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
 " nnoremap <M-h> <C-w>gT
-nnoremap <M-l> <C-w>gt
-" Caution: 他と合わせると<M-t>はタブ作成だが、Eclipseではあまりつかわないので定義しない.
+" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが、Eclipseではあまり使わないので定義しない(もともとのCtrl+t,cを退避している).
 " nnoremap <M-t> :tabedit<CR>
-" Caution: <M-c>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
 " nnoremap <M-c> :q<CR>
 
 " TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.

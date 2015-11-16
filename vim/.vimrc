@@ -1,5 +1,4 @@
 " # Index {{{1
-"
 " * Introduction
 " * Begin
 " * Functions and Commands
@@ -9,13 +8,11 @@
 " * Key-mappings
 " * Plug-ins
 " * After
-"
 " }}}1
 
 " # Introduction {{{1
 "
 " ## Principles
-"
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)

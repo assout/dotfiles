@@ -14,14 +14,20 @@
 
 " # Introduction {{{1
 "
-" ## Principles/Points
+" ## Principles
 "
 " * Keep it short and simple, stupid! (500step以下に留めたい)
 " * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
+" * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
+"
+" ## Caution point
 " * executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
-" * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
+" * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
+" * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
+" * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
+" * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
 "
 " ## References
 "
@@ -32,13 +38,6 @@
 " * [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
 " * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
-"
-" ## Caution
-"
-" * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
-" * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
-" * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
-" * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮)
 "
 " ## TODOs
 "
@@ -177,13 +176,13 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 " # Let defines {{{1
 
+let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
+let g:loaded_matchparen = 1 " Refs. <:help matchparen>
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 " Caution: windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
 let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : expand('~/.vim/bundle/')
-let g:is_bash = 1 " shellのハイライトをbash基準にする
-let g:loaded_matchparen = 1
-let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-if has('unix') && ! s:IsHome() " For mintty, office dev.
+if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -194,7 +193,7 @@ endif
 
 " # Auto-commands {{{1
 
-augroup vimrc
+augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定義する
   autocmd!
 
   " Double byte space highlight
@@ -1446,7 +1445,7 @@ endif
 
 " }}}
 
-" FileType settings - ファイルタイプごとの設定 Caution: filetype on以降に実施しないといけない Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
+" FileType autocmds - ファイルタイプごとの設定 Caution: filetype on以降に実施しないといけないためここで定義。Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
 
 " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
 autocmd vimrc FileType * setlocal textwidth=0 formatoptions-=o

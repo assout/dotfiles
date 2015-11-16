@@ -873,6 +873,7 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
         \  ['public', 'protected', 'private', ],
+        \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
         \]
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}

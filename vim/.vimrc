@@ -804,37 +804,33 @@ if s:HasPlugin('open-browser') " {{{
         \  },
         \  'keep'
         \)
+  let s:engines = {
+        \  'a' : 'alc',
+        \  'd' : 'devdocs',
+        \  's' : 'stackoverflow',
+        \  't' : 'translate',
+        \  'w' : 'wikipedia-ja',
+        \}
 
-  " TODO nnoramapもこれを呼び出し未選択だったらcwordとする
-  function! s:SearchSelectedValue(engine) " <http://nanasi.jp/articles/code/screen/visual.html>
-    let tmp = @@
-    silent normal gvy
-    let selected = @@
-    let @@ = tmp
-    execute ':OpenBrowserSearch -' . a:engine . ' ' . selected
+  function! s:SearchSelectedValue(engine, mode) " <http://nanasi.jp/articles/code/screen/visual.html>
+    if a:mode ==# 'n'
+      let s:word = expand('<cword>')
+    else
+      let s:tmp = @@
+      silent normal! gvy
+      let s:word = @@
+      let @@ = s:tmp
+    endif
+    execute ':OpenBrowserSearch -' . a:engine . ' ' . s:word
   endfunction
 
-  nmap     <SID>[Open-browser]   <Plug>(openbrowser-smart-search)
-  vmap     <SID>[Open-browser]   <Plug>(openbrowser-smart-search)
+  nmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)
+  vmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)
 
-  nnoremap <expr><SID>[open-browser]a  ':<C-u>OpenBrowserSearch -alc<Space> ' . expand('<cword>') . '<CR>'
-  nnoremap <expr><SID>[open-browser]d  ':<C-u>OpenBrowserSearch -devdocs<Space>' . expand('<cword>') . '<CR>'
-  nnoremap <expr><SID>[open-browser]s  ':<C-u>OpenBrowserSearch -stackoverflow<Space>' . expand('<cword>') . '<CR>'
-  nnoremap <expr><SID>[open-browser]t  ':<C-u>OpenBrowserSearch -translate<Space>' . expand('<cword>') . '<CR>'
-  nnoremap <expr><SID>[open-browser]w  ':<C-u>OpenBrowserSearch -wikipedia-ja<Space>' . expand('<cword>') . '<CR>'
-
-  vnoremap <SID>[open-browser]a  :call <SID>SearchSelectedValue('alc')<CR>
-  vnoremap <SID>[open-browser]d  :call <SID>SearchSelectedValue('devdocs')<CR>
-  vnoremap <SID>[open-browser]s  :call <SID>SearchSelectedValue('stackoverflow')<CR>
-  vnoremap <SID>[open-browser]t  :call <SID>SearchSelectedValue('translate')<CR>
-  vnoremap <SID>[open-browser]w  :call <SID>SearchSelectedValue('wikipedia-ja')<CR>
-
-  if has('win32unix')
-    let g:openbrowser_browser_commands = [{
-          \  'name': 'rundll32',
-          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}',
-          \}]
-  endif
+  for s:key in keys(s:engines)
+    execute 'nnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelectedValue("' . s:engines[s:key] . '", "n")<CR>'
+    execute 'vnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelectedValue("' . s:engines[s:key] . '", "v")<CR>'
+  endfor
 endif " }}}
 
 if s:HasPlugin('operator-camelize') " {{{

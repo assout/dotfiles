@@ -1077,7 +1077,8 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-replace') " {{{
-  map <SID>[replace] <Plug>(operator-replace)
+  map  <SID>[replace]  <Plug>(operator-replace)
+  nmap <SID>[replace]w <Plug>(operator-replace)iw
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
@@ -1091,14 +1092,14 @@ if s:HasPlugin('vim-operator-replace') " {{{
     nmap <silent><SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   endif " }}}
 
+  if s:HasPlugin('vim-textobj-url') " {{{
+    nmap <silent><SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
+  endif " }}}
+
   " Caution: aは<Space>paeとかできなくなるのでやらない
   " if s:HasPlugin('vim-textobj-parameter') " {{{
   "   nmap <silent><SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
   " endif " }}}
-
-  if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <silent><SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
-  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
@@ -1110,6 +1111,10 @@ if s:HasPlugin('vim-operator-surround') " {{{
   map <silent> <SID>[surround-a] <Plug>(operator-surround-append)
   map <silent> <SID>[surround-d] <Plug>(operator-surround-delete)
   map <silent> <SID>[surround-r] <Plug>(operator-surround-replace)
+
+  nmap <silent><SID>[surround-a]w <Plug>(operator-surround-append)aw
+  nmap <silent><SID>[surround-d]w <Plug>(operator-surround-delete)aw
+  nmap <silent><SID>[surround-r]w <Plug>(operator-surround-replace)aw
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
@@ -1129,13 +1134,6 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <silent><SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
   endif " }}}
 
-  " Caution: aはsaawとかできなくなることに注意
-  if s:HasPlugin('vim-textobj-parameter') " {{{
-    nmap <silent><SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
-    nmap <silent><SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
-    nmap <silent><SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
-  endif " }}}
-
   if s:HasPlugin('vim-textobj-url') " {{{
     nmap <silent><SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
     " TODO no block matches to the region となる
@@ -1143,6 +1141,13 @@ if s:HasPlugin('vim-operator-surround') " {{{
     " TODO appendの動きになってしまう
     nmap <silent><SID>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
   endif " }}}
+
+  " Caution: aはsaawとかできなくなるのでやらない
+  " if s:HasPlugin('vim-textobj-parameter') " {{{
+  "   nmap <silent><SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
+  "   nmap <silent><SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
+  "   nmap <silent><SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
+  " endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{

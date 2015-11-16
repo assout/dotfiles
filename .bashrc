@@ -9,7 +9,8 @@
 # * After
 #
 # TODOs
-# * shellcheck disable=SC1091を一括で無効にしたい
+# * TODO shellcheck disable=SC1091を一括で無効にしたい
+# * TODO Performance test on travisCI
 #
 # }}}1
 

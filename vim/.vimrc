@@ -235,7 +235,7 @@ if has('folding')
 endif
 " フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-" TODO Windowsで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
+" TODO Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " keywordprgで日本語優先にしたいため

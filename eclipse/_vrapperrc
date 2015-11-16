@@ -64,8 +64,6 @@ set regexsearch
 
 " # Key-mappings {{{1
 " vimrcでのマッピングを解除.
-unmap  /
-unmap  ?
 nunmap j
 nunmap k
 unmap  s

@@ -63,8 +63,8 @@ alias cd='cdls'
 
 # Vim
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if  ! isHome  &&  ! isOffice  && [ -e "${here}/.vimrc" ] ; then
-  alias v='vim -u ${here}/.vimrc'
+if ! isHome && ! isOffice && [ -e "${here}/.vimrc" ] ; then
+  alias v='vim -S ${here}/.vimrc'
 else
   alias v='vim'
 fi

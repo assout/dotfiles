@@ -803,11 +803,15 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
-  " TODO defaultが消えてしまう
-  " let g:openbrowser_search_engines = {
-  "       \  'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
-  "       \  'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
-  "       \}
+  " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
+  let g:openbrowser_search_engines = extend(
+        \  get(g:, 'openbrowser_search_engines', {}),
+        \  {
+        \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
+        \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
+        \  },
+        \  'keep'
+        \)
 
   " TODO nnoramapもこれを呼び出し未選択だったらcwordとする
   function! s:SearchSelectedValue(engine) " <http://nanasi.jp/articles/code/screen/visual.html>

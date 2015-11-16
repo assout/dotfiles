@@ -1363,7 +1363,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
     if &shell =~# '.*cmd.exe'
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
     else
-      " FIXME Window + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
+      " FIXME Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 > /dev/null; %c %o %s:p"'
     endif
   endif

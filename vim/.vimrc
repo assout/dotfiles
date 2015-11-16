@@ -837,7 +837,6 @@ if s:HasPlugin('qiita-vim') " {{{
   nnoremap <SID>[qiita]d    :<C-u>Qiita -d<CR>
 endif " }}}
 
-" TODO Restart時にカーソル位置復元したい
 if s:HasPlugin('restart.vim') " {{{
   command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}

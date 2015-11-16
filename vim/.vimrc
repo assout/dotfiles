@@ -1102,6 +1102,7 @@ endif " }}}
 if s:HasPlugin('vim-operator-replace') " {{{
   map  <SID>[replace]  <Plug>(operator-replace)
   nmap <SID>[replace]w <Plug>(operator-replace)iw
+  nmap <SID>[replace]W <Plug>(operator-replace)iW
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)

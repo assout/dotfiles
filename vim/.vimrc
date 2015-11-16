@@ -183,7 +183,7 @@ let g:is_bash = 1 " shellのハイライトをbash基準にする
 let g:loaded_matchparen = 1
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-if has('win32unix') " for mintty.
+if has('unix') && ! s:IsHome() " For mintty, office dev.
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -1099,8 +1099,6 @@ endif " }}}
 
 if s:HasPlugin('vim-operator-replace') " {{{
   map  <SID>[replace]  <Plug>(operator-replace)
-  nmap <SID>[replace]w <Plug>(operator-replace)iw
-  nmap <SID>[replace]W <Plug>(operator-replace)iW
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
@@ -1133,10 +1131,6 @@ if s:HasPlugin('vim-operator-surround') " {{{
   map <silent> <SID>[surround-a] <Plug>(operator-surround-append)
   map <silent> <SID>[surround-d] <Plug>(operator-surround-delete)
   map <silent> <SID>[surround-r] <Plug>(operator-surround-replace)
-
-  nmap <silent><SID>[surround-a]w <Plug>(operator-surround-append)aw
-  nmap <silent><SID>[surround-d]w <Plug>(operator-surround-delete)aw
-  nmap <silent><SID>[surround-r]w <Plug>(operator-surround-replace)aw
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <silent><SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)

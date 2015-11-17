@@ -797,8 +797,7 @@ endif " }}}
 if s:HasPlugin('open-browser') " {{{
   " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする TODO やりたいこととあってる？
   let g:openbrowser_search_engines = extend(
-        \  get(g:, 'openbrowser_search_engines', {}),
-        \  {
+        \  get(g:, 'openbrowser_search_engines', {}), {
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
         \  },

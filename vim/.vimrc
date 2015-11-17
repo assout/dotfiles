@@ -475,7 +475,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 
   " TODO dependsはパフォーマンス悪いかも
   " General {{{
-  NeoBundle     'AndrewRadev/switch.vim'
+  NeoBundle     'AndrewRadev/switch.vim' " TODO 削除(他に乗り換え) -> increment, decrementできるやつにする
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle     'KazuakiM/vim-qfsigns' " for watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator' , { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
@@ -534,7 +534,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'tpope/vim-abolish'
   NeoBundle     'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle     'tpope/vim-repeat'
-  NeoBundle     'tpope/vim-speeddating'
+  NeoBundle     'tpope/vim-speeddating' " TODO 日付以外にも対応した奴に乗り換える(switch.vimと統合するイメージ)
   NeoBundle     'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle     'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'tyru/capture.vim'
@@ -818,6 +818,7 @@ if s:HasPlugin('open-browser') " {{{
           \}]
   endif
 
+  " TODO Naming
   function! s:SearchSelectedValue(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
       let l:word = expand('<cword>')
@@ -827,7 +828,9 @@ if s:HasPlugin('open-browser') " {{{
       let l:word = @@
       let @@ = l:tmp
     endif
-    execute ':OpenBrowserSearch -' . a:engine . ' ' . l:word
+    let l:cmd = 'OpenBrowserSearch -' . a:engine . ' ' . l:word
+    call histadd('cmd', l:cmd)
+    execute l:cmd
   endfunction
 
   nmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)

@@ -47,6 +47,8 @@ source .vrapperrc.environment
 " # Vim Settings {{{1
 " ヤンク、ペーストをクリップボードに.
 set clipboard=unnamed
+" ハードタブ
+set noexpandtab
 " }}}1
 
 " # Vrapper Settings {{{1

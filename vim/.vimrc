@@ -807,6 +807,7 @@ if s:HasPlugin('open-browser') " {{{
   let s:engines = {
         \  'a' : 'alc',
         \  'd' : 'devdocs',
+        \  'g' : 'google',
         \  's' : 'stackoverflow',
         \  't' : 'translate',
         \  'w' : 'wikipedia-ja',

@@ -795,7 +795,7 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser') " {{{
-  " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
+  " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする TODO やりたいこととあってる？
   let g:openbrowser_search_engines = extend(
         \  get(g:, 'openbrowser_search_engines', {}),
         \  {
@@ -811,6 +811,12 @@ if s:HasPlugin('open-browser') " {{{
         \  't' : 'translate',
         \  'w' : 'wikipedia-ja',
         \}
+  if has('win32unix')
+    let g:openbrowser_browser_commands = [{
+          \  'name': 'rundll32',
+          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}',
+          \}]
+  endif
 
   function! s:SearchSelectedValue(engine, mode) " <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'

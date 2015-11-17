@@ -859,11 +859,6 @@ if s:HasPlugin('restart.vim') " {{{
   command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
 
-if s:HasPlugin('singleton') && has('gui_running') " {{{
-  let g:singleton#opener = 'vsplit'
-  call g:singleton#enable()
-endif " }}}
-
 if s:HasPlugin('switch.vim') " {{{
   let g:switch_mapping = '[switch]'
   let g:switch_custom_definitions = [
@@ -1212,6 +1207,11 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO コマンド履歴に残したい
   " TODO 和英ができない
   " TODO キャッシュ化されている？
+endif " }}}
+
+if s:HasPlugin('vim-singleton') && has('gui_running') " {{{
+  let g:singleton#opener = 'vsplit'
+  call g:singleton#enable()
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)

@@ -820,14 +820,14 @@ if s:HasPlugin('open-browser') " {{{
 
   function! s:SearchSelectedValue(engine, mode) " <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
-      let s:word = expand('<cword>')
+      let l:word = expand('<cword>')
     else
-      let s:tmp = @@
+      let l:tmp = @@
       silent normal! gvy
-      let s:word = @@
-      let @@ = s:tmp
+      let l:word = @@
+      let @@ = l:tmp
     endif
-    execute ':OpenBrowserSearch -' . a:engine . ' ' . s:word
+    execute ':OpenBrowserSearch -' . a:engine . ' ' . l:word
   endfunction
 
   nmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)

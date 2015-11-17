@@ -818,7 +818,7 @@ if s:HasPlugin('open-browser') " {{{
           \}]
   endif
 
-  function! s:SearchSelectedValue(engine, mode) range " <http://nanasi.jp/articles/code/screen/visual.html>
+  function! s:SearchSelectedValue(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
       let l:word = expand('<cword>')
     else

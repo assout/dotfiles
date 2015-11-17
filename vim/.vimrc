@@ -529,7 +529,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'thinca/vim-qfreplace' " grepした結果を置換.
   NeoBundle     'thinca/vim-quickrun'
   NeoBundle     'thinca/vim-ref'
-  NeoBundle     'thinca/vim-singleton', {'disabled' : !has('clientserver')}
+  NeoBundle     'thinca/vim-singleton', {'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
   NeoBundle     'tomtom/tcomment_vim'
   NeoBundle     'tpope/vim-abolish'
   NeoBundle     'tpope/vim-fugitive', {'disabled' : !executable('git')}
@@ -1210,6 +1210,7 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-singleton') && has('gui_running') " {{{
+  let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
   let g:singleton#opener = 'vsplit'
   call g:singleton#enable()
 endif " }}}

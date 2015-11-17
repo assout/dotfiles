@@ -38,7 +38,7 @@
 " ## TODOs
 " * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO neocompleteでたまに日本語入力が変になる
-" * TODO setなどの末尾にコメント入れるとvrapperで適用されない
+" * TODO setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO Add performance test for travisci (per plugin actual)
@@ -1066,9 +1066,7 @@ endif " }}}
 if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_folding_disabled = 1
 
-  " TODO Refinement
-  " Refs. <:help restore-position>
-  function! s:MyVimMarkdownKeymappings()
+  function! s:MyVimMarkdownKeymappings() " Refs. <:help restore-position>
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
@@ -1283,7 +1281,7 @@ if s:HasPlugin('vim-textmanip') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-between') " {{{
-  " textobj-functionとかぶるので変更(textobj-functionのマッピングはvrapperと合わせたいのでこちらを変える)
+  " textobj-functionとかぶるので変更(textobj-functionのマッピングはVrapperと合わせたいのでこちらを変える)
   let g:textobj_between_no_default_key_mappings = 1 " 'd'istanceに変える。。
   omap id <Plug>(textobj-between-i)
   omap ad <Plug>(textobj-between-a)
@@ -1299,7 +1297,7 @@ if s:HasPlugin('vim-textobj-entire') " {{{
   nmap =ie =ie``
 endif " }}}
 
-if s:HasPlugin('vim-textobj-parameter') " {{{ vrapper textobj-argsと合わせる('a'rguments)
+if s:HasPlugin('vim-textobj-parameter') " {{{ Vrapper textobj-argsと合わせる('a'rguments)
   let g:textobj_parameter_no_default_key_mappings = 1
   omap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
@@ -1312,7 +1310,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
 
   let g:watchdogs_check_BufWritePost_enable = 1
-
   " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
   let g:quickrun_config = {

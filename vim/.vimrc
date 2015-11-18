@@ -85,7 +85,7 @@ endfunction
 
 " TODO undoしても&expandtabの値は戻らないので注意
 function! s:MyToggleExpandTab()
-  setlocal expandtab! | retab " caution: retab! は使わない(意図しない空白も置換されてしまうため)
+  setlocal expandtab! | retab " Caution: retab! は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs. <:help restore-position>
     normal! msHmt
@@ -119,7 +119,7 @@ command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-
 function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが和英したいため
   let l:word = a:0 == 0 ? expand('<cword>') : a:1
   call histadd('cmd', 'MyTranslate '  . l:word)
-  if l:word ==# '' " caution if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
+  if l:word ==# '' " Caution: if-endifをパイプで一行で書くと特定環境(office)でvimrcが無効になる
     return
   endif
   let l:gene_path = s:IsHome() ? '~/.vim/dict/gene.txt' : '~/vimfiles/dict/gene95/GENE.TXT'
@@ -138,7 +138,7 @@ function! s:MyTranslate(...) " required gene.txt, kaoriya/dicwin.vimで良いが
   while search('\c^' . l:word . '$', 'Wc') > 0
     silent execute line('.') - l:jpn_to_eng . 'delete Z 2'
   endwhile
-  if @z !=# '' " caution 特定環境(office)でput zのエラーが出るため
+  if @z !=# '' " Caution: 特定環境(office)でput zのエラーが出るため
     silent 0put z
   endif
   let @z = l:esc
@@ -361,8 +361,8 @@ nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
-" TODO to plugin
-noremap <SID>[insert]        <Nop>
+" TODO To plugin or function
+noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]*  :MyPrefix * <CR>
 noremap       <SID>[insert]1  :MyPrefix # <CR>A
@@ -743,7 +743,7 @@ if s:HasPlugin('im_control') " {{{
       if a:cmd ==? 'On'
         let l:res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
       elseif a:cmd ==? 'Off'
-        let l:res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
+        let l:res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " Caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
       elseif a:cmd ==? 'Toggle'
         let l:res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
       endif
@@ -833,8 +833,8 @@ if s:HasPlugin('open-browser') " {{{
     execute l:cmd
   endfunction
 
-  nmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)
-  vmap     <SID>[Open-browser] <Plug>(openbrowser-smart-search)
+  nmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
+  vmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
 
   for s:key in keys(s:engines)
     execute 'nnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelectedValue("' . s:engines[s:key] . '", "n")<CR>'
@@ -1083,7 +1083,7 @@ endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
   if has('migemo')
-    if has('vim_starting') | call g:migemo#SearchChar(0) | endif " caution: probably slow
+    if has('vim_starting') | call g:migemo#SearchChar(0) | endif " Caution: probably slow
     nnoremap <SID>[migemo] g/
   else
     nnoremap <SID>[migemo] :<C-u>Migemo<Space>
@@ -1091,7 +1091,7 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-replace') " {{{
-  map  <SID>[replace]  <Plug>(operator-replace)
+  map <SID>[replace]  <Plug>(operator-replace)
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
     nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)

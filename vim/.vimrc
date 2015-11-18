@@ -163,7 +163,6 @@ endfunction
 command! MyHere call <SID>MyHere()
 
 command! -bang MyBufClear %bdelete<bang>
-" TODO <:help restore-position>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
@@ -174,7 +173,7 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
 let g:loaded_matchparen = 1 " Refs. <:help matchparen>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-" Caution: windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
+" Caution: Windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
 let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : expand('~/.vim/bundle/')
 
 if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
@@ -381,7 +380,7 @@ noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
-" TODO windowsのとき$MYVIMRCの展開だと対象にならない(シンボリックリンクを解決できない？)
+" TODO Windowsのとき$MYVIMRCの展開だと対象にならない(シンボリックリンクを解決できない？)
 let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 if s:IsOffice()
@@ -475,7 +474,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 
   " TODO dependsはパフォーマンス悪いかも
   " General {{{
-  NeoBundle     'AndrewRadev/switch.vim' " TODO 削除(他に乗り換え) -> increment, decrementできるやつにする
+  NeoBundle     'AndrewRadev/switch.vim' " TODO 削除(他に乗り換え) -> increment, decrementできるやつにする(+filetypeごとにカスタム設定できてmarkdownのヘッダレベル変更もしたい)
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle     'KazuakiM/vim-qfsigns' " for watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator' , { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
@@ -486,7 +485,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'Shougo/unite-outline', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/vimfiler.vim', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle     'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
+  NeoBundle     'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   NeoBundle     'TKNGUE/hateblo.vim', {'depends' : ['mattn/webapi-vim', 'Shougo/unite.vim'], 'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   NeoBundle     'aklt/plantuml-syntax'
   NeoBundle     'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
@@ -507,7 +506,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   if s:IsHome()
     NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim']}
   else
-    NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく) TODO ファイルによって表示されない(memolist windowsとか)
+    NeoBundle 'kannokanno/previm', {'depends' : ['tyru/open-browser.vim'], 'rev' : '1.3' } " TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく) TODO ファイルによって表示されない(memolist Windowsとか)
   endif
   NeoBundle     'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle     'lambdalisue/vim-gista', {'depends' : ['Shougo/unite.vim', 'tyru/open-browser.vim'], 'disabled' : !executable('curl') && !executable('wget')}
@@ -519,14 +518,14 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle     'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle     'pangloss/vim-javascript' " for indent only
-  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level, and other functions. TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう)
+  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう) TODO いろいろ不都合有るので消したい(やりたいのはヘッダのレベル変更だけ(switch.vim的なやつでいけるのでは)
   NeoBundle     'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']} " TODO 辞書提供なくなったぽっいので古いかも
   NeoBundle     'schickling/vim-bufonly'
   " NeoBundle     'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
   NeoBundle     'szw/vim-maximizer' " windowの最大化・復元
   NeoBundle     't9md/vim-textmanip'
   NeoBundle     'thinca/vim-localrc'
-  NeoBundle     'thinca/vim-qfreplace' " grepした結果を置換.
+  NeoBundle     'thinca/vim-qfreplace' " grepした結果を置換
   NeoBundle     'thinca/vim-quickrun'
   NeoBundle     'thinca/vim-ref'
   NeoBundle     'thinca/vim-singleton', {'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
@@ -542,7 +541,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   if s:IsHome()
     NeoBundle 'tyru/restart.vim'
   else
-    NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はwindowsで異常終了する
+    NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はWindowsで異常終了する
   endif
   NeoBundle     'ujihisa/unite-colorscheme', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'vim-jp/vimdoc-ja' " TODO msys2で有効にならない(runtimeに手動追加しても)
@@ -583,7 +582,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   " }}}
 
   call g:neobundle#end()
-  " filetype plugin indent on " Required! 最後にまとめてやる
+  " filetype plugin indent on " Required! Caution: 最後にまとめてやる
   " Caution: NeoBundleCheckはやらない（パフォーマンス）
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " MSYS2 Plugin settings {{{
@@ -703,7 +702,7 @@ if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_task = s:IsHome() ? 1 : 0
 endif " }}}
 
-if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
@@ -1181,7 +1180,7 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
   " TODO デフォルトに一括追加の指定方法(現状は上書き)
   " TODO msys2 vimでmarkdownのgene開けない
-  " TODO windows gvimでshのman開けない
+  " TODO Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
         \  'sh' : 'man',
@@ -1444,7 +1443,7 @@ endif
 
 " }}}
 
-" FileType autocmds - ファイルタイプごとの設定 Caution: filetype on以降に実施しないといけないためここで定義。Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
+" FileType autocmds. Caution: filetype on以降に実施しないといけないためここで定義。Refs. <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420> {{{
 
 " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
 autocmd vimrc FileType * setlocal textwidth=0 formatoptions-=o

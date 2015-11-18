@@ -194,7 +194,7 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  " QuickFixを自動で開く " TODO grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
@@ -362,22 +362,22 @@ nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO to plugin
-noremap <SID>[insert]  <Nop>
-noremap <silent><expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
-noremap <silent>      <SID>[insert]*  :MyPrefix * <CR>
-noremap <silent>      <SID>[insert]1  :MyPrefix # <CR>A
-noremap <silent>      <SID>[insert]2  :MyPrefix ## <CR>A
-noremap <silent>      <SID>[insert]3  :MyPrefix ### <CR>A
-noremap <silent>      <SID>[insert]4  :MyPrefix #### <CR>A
-noremap <silent>      <SID>[insert]>  :MyPrefix > <CR>
-noremap <silent>      <SID>[insert]T  :MyPrefix TODO <CR>
-noremap <silent>      <SID>[insert]f  :MyPrefix file://<CR>
-noremap <silent><expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
-noremap <silent><expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <silent><expr><SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <silent><expr><SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <silent><expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
-noremap <silent>      <SID>[insert]l  :MySuffix \<Space>\ <CR>
+noremap <SID>[insert]        <Nop>
+noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
+noremap       <SID>[insert]*  :MyPrefix * <CR>
+noremap       <SID>[insert]1  :MyPrefix # <CR>A
+noremap       <SID>[insert]2  :MyPrefix ## <CR>A
+noremap       <SID>[insert]3  :MyPrefix ### <CR>A
+noremap       <SID>[insert]4  :MyPrefix #### <CR>A
+noremap       <SID>[insert]>  :MyPrefix > <CR>
+noremap       <SID>[insert]T  :MyPrefix TODO <CR>
+noremap       <SID>[insert]f  :MyPrefix file://<CR>
+noremap <expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
+noremap <expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <expr><SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <expr><SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
+noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " resolveしなくても開けるがfugitiveで対象とするため
@@ -588,9 +588,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " MSYS2 Plugin settings {{{
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
-  " TODO watchdogsのautoload遅い(+300ms)
-  " TODO slows
-  " \  'vim-easytags',
+  " TODO watchdogs遅い(+300ms)
+  " TODO easytags遅い
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'memolist.vim',
@@ -606,6 +605,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'unite-todo',
         \  'unite.vim',
         \  'vim-alignta',
+        \  'vim-easytags',
         \  'vim-hybrid',
         \  'vim-javascript',
         \  'vim-markdown',
@@ -1094,24 +1094,24 @@ if s:HasPlugin('vim-operator-replace') " {{{
   map  <SID>[replace]  <Plug>(operator-replace)
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
-    nmap <silent><SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
+    nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-between') " {{{
-    nmap <silent><SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
+    nmap <SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-line') " {{{
-    nmap <silent><SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
+    nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <silent><SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
+    nmap <SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
   endif " }}}
 
   " Caution: aは<Space>paeとかできなくなるのでやらない
   " if s:HasPlugin('vim-textobj-parameter') " {{{
-  "   nmap <silent><SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
+  "   nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
   " endif " }}}
 endif " }}}
 
@@ -1121,41 +1121,41 @@ if s:HasPlugin('vim-operator-surround') " {{{
   let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
   call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
-  map <silent> <SID>[surround-a] <Plug>(operator-surround-append)
-  map <silent> <SID>[surround-d] <Plug>(operator-surround-delete)
-  map <silent> <SID>[surround-r] <Plug>(operator-surround-replace)
+  map <SID>[surround-a] <Plug>(operator-surround-append)
+  map <SID>[surround-d] <Plug>(operator-surround-delete)
+  map <SID>[surround-r] <Plug>(operator-surround-replace)
 
   if s:HasPlugin('vim-textobj-anyblock') " {{{
-    nmap <silent><SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
-    nmap <silent><SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-    nmap <silent><SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
+    nmap <SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
+    nmap <SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
+    nmap <SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-between') " {{{
-    nmap <silent><SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
-    nmap <silent><SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
-    nmap <silent><SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
+    nmap <SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
+    nmap <SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+    nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-line') " {{{
-    nmap <silent><SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
-    nmap <silent><SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
-    nmap <silent><SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
+    nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
+    nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
+    nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <silent><SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+    nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
     " TODO no block matches to the region となる
-    nmap <silent><SID>[surround-d]u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
+    nmap <SID>[surround-d]u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
     " TODO appendの動きになってしまう
-    nmap <silent><SID>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
+    nmap <SID>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
   endif " }}}
 
   " Caution: aはsaawとかできなくなるのでやらない
   " if s:HasPlugin('vim-textobj-parameter') " {{{
-  "   nmap <silent><SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
-  "   nmap <silent><SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
-  "   nmap <silent><SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
+  "   nmap <SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
+  "   nmap <SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
+  "   nmap <SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
   " endif " }}}
 endif " }}}
 

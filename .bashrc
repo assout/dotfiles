@@ -114,7 +114,7 @@ alias drun="docker run"
 alias g="git"
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
-alias grep='grep --color=auto --binary-files=without-match --line-number'
+alias grep='grep --color=auto --binary-files=without-match'
 
 if isOffice ; then
   alias l.='ls -d .* --color=auto --show-control-chars'

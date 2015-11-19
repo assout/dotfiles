@@ -476,7 +476,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   " General {{{
   NeoBundle     'AndrewRadev/switch.vim' " TODO 削除(他に乗り換え) -> increment, decrementできるやつにする(+filetypeごとにカスタム設定できてmarkdownのヘッダレベル変更もしたい)
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
-  NeoBundle     'KazuakiM/vim-qfsigns' " for watchdogs.
+  NeoBundle     'KazuakiM/vim-qfsigns' " For watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator' , { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
   NeoBundle     'LeafCage/yankround.vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'Shougo/neobundle.vim', {'depends' : ['Shougo/unite.vim'], 'disabled' : !executable('git')}
@@ -490,11 +490,11 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'aklt/plantuml-syntax'
   NeoBundle     'assout/unite-todo', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'chaquotay/ftl-vim-syntax'
-  NeoBundle     'dannyob/quickfixstatus' " for watchdogs. TODO syntasticと競合するっぽい
-  NeoBundle     'elzr/vim-json' " for json filetype
+  NeoBundle     'dannyob/quickfixstatus' " For watchdogs. TODO syntasticと競合するっぽい
+  NeoBundle     'elzr/vim-json' " For json filetype
   NeoBundle     'fuenor/im_control.vim'
   NeoBundle     'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle     'godlygeek/tabular'
+  NeoBundle     'godlygeek/tabular' " For vim-markdown
   NeoBundle     'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle     'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
@@ -514,16 +514,16 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   NeoBundle     'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
-  NeoBundle     'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  NeoBundle     'medihack/sh.vim' " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   NeoBundle     'nathanaelkane/vim-indent-guides'
-  NeoBundle     'osyo-manga/shabadou.vim' " for watchdogs.
+  NeoBundle     'osyo-manga/shabadou.vim' " For watchdogs.
   NeoBundle     'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
-  NeoBundle     'pangloss/vim-javascript' " for indent only
-  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう) TODO いろいろ不都合有るので消したい(やりたいのはヘッダのレベル変更だけ(switch.vim的なやつでいけるのでは)
+  NeoBundle     'pangloss/vim-javascript' " For indent only
+  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう) TODO いろいろ不都合有るので消したい(やりたいのはヘッダのレベル変更とテーブル整形だけ(前者はswitch.vim的なやつで、後者はtabularでいけるのでは)
   NeoBundle     'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']} " TODO 辞書提供なくなったぽっいので古いかも
   NeoBundle     'schickling/vim-bufonly'
   " NeoBundle     'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
-  NeoBundle     'szw/vim-maximizer' " windowの最大化・復元
+  NeoBundle     'szw/vim-maximizer' " Windowの最大化・復元
   NeoBundle     't9md/vim-textmanip'
   NeoBundle     'thinca/vim-localrc'
   NeoBundle     'thinca/vim-qfreplace' " grepした結果を置換
@@ -549,8 +549,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle     'vim-scripts/HybridText'
   NeoBundle     'xolox/vim-easytags', {'depends' : ['xolox/vim-misc', 'xolox/vim-shell']}
-  NeoBundle     'xolox/vim-misc' " for easytags.
-  NeoBundle     'xolox/vim-shell' " for easytags.
+  NeoBundle     'xolox/vim-misc' " For easytags.
+  NeoBundle     'xolox/vim-shell' " For easytags.
   " }}}
 
   " User Operators {{{

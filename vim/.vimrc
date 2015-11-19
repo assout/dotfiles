@@ -515,6 +515,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'mattn/qiita-vim', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'mattn/webapi-vim', {'disabled' : !executable('curl') && !executable('wget')}
   NeoBundle     'medihack/sh.vim' " for function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  NeoBundle     'nathanaelkane/vim-indent-guides'
   NeoBundle     'osyo-manga/shabadou.vim' " for watchdogs.
   NeoBundle     'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle     'pangloss/vim-javascript' " for indent only
@@ -591,6 +592,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " TODO easytags遅い
   let s:plugins = [
         \  'benchvimrc-vim',
+        \  'capture.vim',
         \  'memolist.vim',
         \  'neomru.vim',
         \  'open-browser.vim',
@@ -606,6 +608,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-alignta',
         \  'vim-easytags',
         \  'vim-hybrid',
+        \  'vim-indent-guides',
         \  'vim-javascript',
         \  'vim-markdown',
         \  'vim-maximizer',
@@ -1315,6 +1318,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:watchdogs_check_BufWritePost_enable = 1
   " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
   " TODO checkbashisms, bashate, js-yamlの動作未確認
+  " TODO xmllint
   let g:quickrun_config = {
         \  'watchdogs_checker/_' : {
         \    'outputter/quickfix/open_cmd' : '',
@@ -1421,6 +1425,8 @@ syntax on
 cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " Don't (re)highlighting the last search pattern on reloading.
 nohlsearch
+" Enable matchit
+source $VIMRUNTIME/macros/matchit.vim
 
 " Colorshceme settings {{{
 

@@ -144,8 +144,6 @@ export LESS='-R'
 
 if isHome ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
-elif isOffice ; then
-  export _JAVA_OPTIONS="-Dfile.encoding=UTF-8"
 fi
 
 if isHome || isOffice ; then

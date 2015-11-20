@@ -351,10 +351,10 @@ nmap     <SID>[shortcut]o <SID>[open]
 nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
-if has('gui_running')
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<CR>
+if has('gui_running') " Caution: autocmd FileTypeイベントを発効する
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>:filetype detect<CR>
 else
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<CR>
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:filetype detect<CR>
 endif
 nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>

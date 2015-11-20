@@ -200,6 +200,8 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setfiletype html.ftl
+  " Set markdown filetype TODO 最新のvimでは不要
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setfiletype markdown
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
@@ -268,7 +270,6 @@ if has('win32')
   " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
   " Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
   "  * TODO Windowsでgxでエクスプローラ開けなくなる
-  "  * TODO vim-markdownのgxでリンク開けなくなる
   set shellslash
 endif
 set shiftwidth=2
@@ -494,7 +495,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'elzr/vim-json' " For json filetype
   NeoBundle     'fuenor/im_control.vim'
   NeoBundle     'glidenote/memolist.vim', {'depends' : ['Shougo/unite.vim']}
-  NeoBundle     'godlygeek/tabular' " For vim-markdown
+  NeoBundle     'godlygeek/tabular' " For taburize markdown table
   NeoBundle     'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle     'h1mesuke/vim-alignta', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
@@ -660,10 +661,6 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]c       <SID>[camelize]
   nmap <SID>[plugin]f       <SID>[fugitive]
   map  <SID>[plugin]g       <SID>[gista]
-  map  <SID>[plugin]h       <SID>[markdown_h]
-  nmap <SID>[plugin]H       <SID>[markdown_H]
-  map  <SID>[plugin]l       <SID>[markdown_l]
-  nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
   map  <SID>[plugin]O       <SID>[Open-browser]

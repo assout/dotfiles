@@ -519,7 +519,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'osyo-manga/shabadou.vim' " For watchdogs.
   NeoBundle     'osyo-manga/vim-watchdogs', {'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun']}
   NeoBundle     'pangloss/vim-javascript' " For indent only
-  NeoBundle     'plasticboy/vim-markdown', {'depends' : ['godlygeek/tabular']} " For change header level TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい(Workaroundで直接syntaxを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう(Workaroundで直接indent内を書き換えちゃう) TODO いろいろ不都合有るので消したい(やりたいのはヘッダのレベル変更とテーブル整形だけ(前者はswitch.vim的なやつで、後者はtabularでいけるのでは)
   NeoBundle     'rhysd/unite-codic.vim', {'depends' : ['Shougo/unite.vim', 'koron/codic-vim']} " TODO 辞書提供なくなったぽっいので古いかも
   NeoBundle     'schickling/vim-bufonly'
   " NeoBundle     'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
@@ -610,7 +609,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-hybrid',
         \  'vim-indent-guides',
         \  'vim-javascript',
-        \  'vim-markdown',
         \  'vim-maximizer',
         \  'vim-misc',
         \  'vim-operator-replace',
@@ -1063,21 +1061,6 @@ if s:HasPlugin('vim-localrc') " {{{
   let g:localrc_filename = '.vimrc.development'
 endif " }}}
 
-if s:HasPlugin('vim-markdown') " {{{
-  let g:vim_markdown_folding_disabled = 1
-
-  function! s:MyVimMarkdownKeymappings() " Refs. <:help restore-position>
-    nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
-    vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
-    nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
-
-    nnoremap <buffer><SID>[markdown_h]     :.HeaderDecrease<CR>
-    vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
-    nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
-  endfunction
-  autocmd vimrc FileType markdown call s:MyVimMarkdownKeymappings()
-endif " }}}
-
 if s:HasPlugin('vim-maximizer') " {{{
   let g:maximizer_set_default_mapping = 0
   noremap <SID>[maximizer] :<C-u>MaximizerToggle<CR>
@@ -1453,7 +1436,7 @@ endif
 
 " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
 autocmd vimrc FileType * setlocal textwidth=0 formatoptions-=o
-" Enable spell on markdown file, To hard tab.
+" Enable spell on markdown file, To hard tab. TODO suでsourceしたときには呼ばれないのでexpandtabになってしまう
 autocmd vimrc FileType markdown highlight! def link markdownItalic LineNr | setlocal spell noexpandtab
 " To hard tab
 autocmd vimrc FileType java setlocal noexpandtab

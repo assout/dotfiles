@@ -215,8 +215,8 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si) TODO cindnetにしても移動しなくなってしまった
-set cindent
+" Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si) TODO cindnetにしても移動しなくなってしまったので暫定コメントアウト
+" set cindent
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 if has('patch-7.4.399')

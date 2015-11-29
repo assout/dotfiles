@@ -473,7 +473,6 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 
   " TODO dependsはパフォーマンス悪いかも
   " General {{{
-  NeoBundle     'AndrewRadev/switch.vim' " TODO 削除(他に乗り換え) -> increment, decrementできるやつにする(+filetypeごとにカスタム設定できてmarkdownのヘッダレベル変更もしたい)
   NeoBundle     'Jagua/vim-ref-gene', {'depends' : ['thinca/vim-ref', 'Shougo/unite.vim']}
   NeoBundle     'KazuakiM/vim-qfsigns' " For watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator' , { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
@@ -532,7 +531,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'tpope/vim-abolish'
   NeoBundle     'tpope/vim-fugitive', {'disabled' : !executable('git')}
   NeoBundle     'tpope/vim-repeat'
-  NeoBundle     'tpope/vim-speeddating' " TODO 日付以外にも対応した奴に乗り換える(switch.vimと統合するイメージ)
+  NeoBundle     'tpope/vim-speeddating'
   NeoBundle     'tpope/vim-unimpaired', {'depends': ['tpope/vim-repeat']}
   NeoBundle     'tsukkee/unite-tag', {'depends' : ['Shougo/unite.vim']}
   NeoBundle     'tyru/capture.vim'
@@ -665,8 +664,6 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
-  " TODO <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
-  nmap <SID>[plugin]s       [switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -855,17 +852,6 @@ endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
   command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
-endif " }}}
-
-if s:HasPlugin('switch.vim') " {{{
-  let g:switch_mapping = '[switch]'
-  let g:switch_custom_definitions = [
-        \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
-        \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
-        \  ['public', 'protected', 'private', ],
-        \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
-        \]
-  " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{

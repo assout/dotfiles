@@ -11,9 +11,5 @@
       ]
     },
     "spellcheck-tech-word": true
-  },
-  "z_comments": [
-    "failed jtf-style-plugin",
-    " vim:set ft=json:"
-  ]
+  }
 }

@@ -1,6 +1,0 @@
-{
-    "extends": "google",
-    "z_comments": [
-        " vim:set ft=json:"
-    ]
-}

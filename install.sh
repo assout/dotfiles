@@ -20,7 +20,7 @@ ln -sf ~/Development/dotfiles/eclipse/_vrapperrc ~/.vrapperrc
 ln -sf ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.environment
 ln -sf ~/Development/dotfiles/lint/.mdlrc ~/
 ln -sf ~/Development/dotfiles/lint/.mdlrc.style.rb ~/
-ln -sf ~/Development/dotfiles/lint/.eslintrc ~/
+ln -sf ~/Development/dotfiles/lint/.eslintrc.json ~/
 ln -sf ~/Development/dotfiles/lint/.textlintrc ~/
 ln -sf ~/Development/dotfiles/lint/.textstatrc ~/
 ln -sf ~/Development/dotfiles/vim/.gvimrc ~/

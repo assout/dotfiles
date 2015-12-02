@@ -62,14 +62,15 @@ function cdls {
 }
 alias cd='cdls'
 
-# Vim
-here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if ! isHome && ! isOffice && [ -e "${here}/.vimrc" ] ; then
-  alias v='vim -S ${here}/.vimrc'
-else
-  alias v='vim'
+# Vim TODO Refactor
+if [ "$(which vim 2> /dev/null)" ] ; then
+  alias vi='vim'
 fi
-alias vi='v --noplugin'
+if ! isHome && ! isOffice && [ -e "${here}/.vimrc" ] ; then
+  here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+  alias v='vi -s ${here}/.vimrc'
+fi
+alias vil='vi --noplugin'
 
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
@@ -104,6 +105,7 @@ function manJapanese {
 alias jan='manJapanese'
 
 # Docker
+alias d="docker"
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"

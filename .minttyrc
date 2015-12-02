@@ -31,3 +31,6 @@ BoldMagenta=133,103,143
 Magenta=178,148,187
 BoldCyan=94,141,135
 Cyan=138,190,183
+ClicksPlaceCursor=no
+ClicksTargetApp=yes
+MiddleClickAction=enter

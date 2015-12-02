@@ -42,6 +42,7 @@
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO Add performance test for travisci (per plugin actual)
+" * TODO Switch, Cycle 系のpluginで"[true, false], [public, private, ...], [#, ##, ...], [foo, bar, ...] あたりを入れる(speeddatingとコンフリクトに注意)
 " }}}1
 
 " # Begin {{{1
@@ -587,6 +588,9 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogs遅い(+300ms)
   " TODO easytags遅い
+        " \  'vim-watchdogs',
+        " \  'vim-easytags',
+        " \  'vim-shell',
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'capture.vim',
@@ -603,7 +607,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'unite-todo',
         \  'unite.vim',
         \  'vim-alignta',
-        \  'vim-easytags',
         \  'vim-hybrid',
         \  'vim-indent-guides',
         \  'vim-javascript',
@@ -617,7 +620,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-ref',
         \  'vim-ref-gene',
         \  'vim-repeat',
-        \  'vim-shell',
         \  'vim-submode',
         \  'vim-textobj-anyblock',
         \  'vim-textobj-between',
@@ -626,7 +628,6 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-textobj-parameter',
         \  'vim-textobj-url',
         \  'vim-textobj-user',
-        \  'vim-watchdogs',
         \  'vimfiler.vim',
         \  'yankround.vim',
         \  'yankround.vim/after',

@@ -594,6 +594,7 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
   let s:plugins = [
         \  'benchvimrc-vim',
         \  'capture.vim',
+        \  'im_control.vim',
         \  'memolist.vim',
         \  'neomru.vim',
         \  'open-browser.vim',
@@ -728,8 +729,8 @@ endif " }}}
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setlocal filetype=hybrid
 endif " }}}
-
-if s:HasPlugin('im_control') " {{{
+if s:HasPlugin('im_control.vim') " {{{
+  " TODO msys2でだめ
   let g:IM_CtrlMode = s:IsHome() ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
   if s:IsHome()
     function! g:IMCtrl(cmd)

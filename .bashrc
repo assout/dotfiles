@@ -76,6 +76,8 @@ alias vil='vi --noplugin'
 if [ "$(which peco 2> /dev/null)" ] ; then
   # ls & cd
   function pecoLscd {
+    # TODO Workaround
+    # shellcheck disable=SC2033
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
   if [ ! -z "$dir" ] ; then
     cd "$dir" || exit 1
@@ -105,12 +107,13 @@ function manJapanese {
 alias jan='manJapanese'
 
 # Docker
-alias d="docker"
+# TODO Workaroud
+# shellcheck disable=SC2032
+alias d='docker'
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
-alias dps="docker ps"
-alias drun="docker run"
+alias dpl='docker ps -lq'
 
 # Other
 alias g="git"

@@ -476,7 +476,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   " General {{{
   NeoBundle     'Jagua/vim-ref-gene'
   NeoBundle     'KazuakiM/vim-qfsigns' " For watchdogs.
-  NeoBundleLazy 'LeafCage/vimhelpgenerator' , { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
+  NeoBundleLazy 'LeafCage/vimhelpgenerator', { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
   NeoBundle     'LeafCage/yankround.vim'
   NeoBundle     'Shougo/neobundle.vim', {'disabled' : !executable('git')}
   NeoBundle     'Shougo/neocomplete', {'disabled' : !has('lua')}
@@ -546,7 +546,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'vim-jp/vimdoc-ja' " TODO msys2で有効にならない(runtimeに手動追加しても)
   NeoBundle     'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle     'vim-scripts/HybridText'
-  NeoBundle     'xolox/vim-easytags'
+  NeoBundleLazy 'xolox/vim-easytags', { 'autoload' : { 'filetypes' : ['vim', 'sh'], }, }
   NeoBundle     'xolox/vim-misc' " For easytags.
   NeoBundle     'xolox/vim-shell' " For easytags.
   " }}}

@@ -727,7 +727,7 @@ if s:HasPlugin('hateblo') " {{{
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
-  autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setlocal filetype=hybrid
+  autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
 endif " }}}
 if s:HasPlugin('im_control.vim') " {{{
   " TODO msys2でだめ

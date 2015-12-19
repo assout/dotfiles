@@ -66,6 +66,10 @@ function! s:IsOffice()
   return $USERNAME ==# 'admin'
 endfunction
 
+function! s:IsJenkins()
+  return exists('$BUILD_NUMBER')
+endfunction
+
 function! s:IsPluginEnabled() " pluginが有効か返す
   return isdirectory(s:bundlePath) && &loadplugins
 endfunction
@@ -174,8 +178,14 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
 let g:loaded_matchparen = 1 " Refs. <:help matchparen>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-" Caution: Windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
-let s:bundlePath = has('win32') || has('win32unix') ? expand('~/vimfiles/bundle/') : expand('~/.vim/bundle/')
+
+if s:IsJenkins()
+  let s:bundlePath = expand('$WORKSPACE/target/bundle/')
+elseif s:IsOffice()
+  let s:bundlePath = expand('~/vimfiles/bundle/') " Caution: Windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
+else
+  let s:bundlePath = expand('~/.vim/bundle/')
+endif
 
 if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
@@ -465,7 +475,6 @@ cnoremap <M-f> <S-Right>
 " }}}1
 
 " # Plug-ins {{{1
-
 if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
   if has('vim_starting')
     let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neobundle.vim/'
@@ -477,15 +486,15 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'Jagua/vim-ref-gene'
   NeoBundle     'KazuakiM/vim-qfsigns' " For watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator', { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
-  NeoBundle     'LeafCage/yankround.vim'
+  NeoBundle     'LeafCage/yankround.vim', {'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle     'Shougo/neobundle.vim', {'disabled' : !executable('git')}
   NeoBundle     'Shougo/neocomplete', {'disabled' : !has('lua')}
-  NeoBundle     'Shougo/neomru.vim'
+  NeoBundle     'Shougo/neomru.vim', {'disabled' : has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle     'Shougo/unite-outline'
   NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/vimfiler.vim'
   NeoBundle     'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
-  NeoBundle     'TKNGUE/hateblo.vim', {'disabled' : has('win32')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+  NeoBundle     'TKNGUE/hateblo.vim', {'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   NeoBundle     'aklt/plantuml-syntax'
   NeoBundle     'assout/unite-todo'
   NeoBundle     'chaquotay/ftl-vim-syntax'
@@ -631,22 +640,11 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-textobj-user',
         \  'vimfiler.vim',
         \  'yankround.vim',
-        \  'yankround.vim/after',
         \]
 
   for s:plugin in s:plugins
     let &runtimepath = &runtimepath . ',' . s:bundlePath . s:plugin
   endfor
-  let &runtimepath = &runtimepath . ',' . s:bundlePath . 'vimproc'
-
-  " " slow!
-  " for s:path in split(glob('~/vimfiles/bundle/*'), '\n')
-  "   let &runtimepath = &runtimepath . ',' . s:path
-  " endfor
-  " " slow
-  " for s:path in split(globpath('~/vimfiles/bundle/','*'), '\n')
-  "   let &runtimepath = &runtimepath . ',' . s:path
-  " endfor
 
   " }}}
 endif
@@ -991,7 +989,7 @@ if s:HasPlugin('vim-alignta') " {{{
   xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
 endif " }}}
 
-if s:HasPlugin('vim-easytags') " {{{
+if s:HasPlugin('vim-easytags') || 1 " {{{
   let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
 endif " }}}

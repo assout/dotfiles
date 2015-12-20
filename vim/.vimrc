@@ -489,7 +489,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'LeafCage/yankround.vim', {'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle     'Shougo/neobundle.vim', {'disabled' : !executable('git')}
   NeoBundle     'Shougo/neocomplete', {'disabled' : !has('lua')}
-  NeoBundle     'Shougo/neomru.vim', {'disabled' : has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
+  NeoBundle     'Shougo/neomru.vim', {'disabled' : !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle     'Shougo/unite-outline'
   NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/vimfiler.vim'

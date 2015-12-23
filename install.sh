@@ -25,4 +25,4 @@ ln -sf ~/Development/dotfiles/lint/.textlintrc ~/
 ln -sf ~/Development/dotfiles/lint/.textstatrc ~/
 ln -sf ~/Development/dotfiles/vim/.gvimrc ~/
 ln -sf ~/Development/dotfiles/vim/.vimrc ~/
-ln -sf ~/Development/dotfiles/vim/.vimrc.devlopment ~/Development/vim-plugins
+ln -sf ~/Development/dotfiles/vim/.vimrc.development ~/Development/vim-plugins

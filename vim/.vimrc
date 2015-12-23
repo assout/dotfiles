@@ -1281,7 +1281,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
 
   let g:watchdogs_check_BufWritePost_enable = 1
   " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
-  " TODO checkbashisms, bashate, js-yamlの動作未確認
   " TODO xmllint
   let g:quickrun_config = {
         \  'watchdogs_checker/_' : {
@@ -1306,17 +1305,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \      : executable('sh') ? 'watchdogs_checker/sh'
         \      : '',
         \    },
-        \  'watchdogs_checker/shellcheck' : {
-        \    'command' : 'shellcheck',
-        \    'cmdopt'  : '-f gcc',
-        \  },
-        \  'watchdogs_checker/bashate' : {
-        \    'command' : 'bashate',
-        \  },
-        \  'watchdogs_checker/checkbashisms' : {
-        \    'command' : 'checkbashisms',
-        \    'cmdopt'  : '-f',
-        \  },
         \})
   if s:IsOffice()
     if &shell =~# '.*cmd.exe'
@@ -1336,40 +1324,12 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
         \      : '',
         \   },
-        \  'watchdogs_checker/mdl' : {
-        \    'command' : 'mdl',
-        \  },
-        \  'watchdogs_checker/textlint' : {
-        \    'command'     : 'textlint',
-        \    'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
-        \    'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \  },
         \  'watchdogs_checker/redpen' : {
         \    'command' : 'redpen',
         \    'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
         \    'exec'    : '%c %o %s:p 2> /dev/null',
         \  },
-        \  'watchdogs_checker/eslint-md' : {
-        \   'command'     : 'eslint-md',
-        \   'exec'        : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
-        \   'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \  },
         \})
-
-  call extend(g:quickrun_config, {
-        \  'yaml/watchdogs_checker': {
-        \    'type': executable('js-yaml') ? 'watchdogs_checker/js-yaml' : '',
-        \  },
-        \  'watchdogs_checker/js-yaml' : {
-        \    'command' : 'js-yaml',
-        \  },
-        \})
-
-  let g:quickrun_config['watchdogs_checker/eslint'] = {
-        \  'command' : 'eslint',
-        \  'exec'    : '%c -f compact %o %s:p | sed -e "/problems\$/d" -e "/^\$/d"',
-        \  'errorformat' : '%E%f: line %l\, col %c\, Error - %m, %W%f: line %l\, col %c\, Warning - %m',
-        \}
 
   call g:watchdogs#setup(g:quickrun_config)
 endif " }}}

@@ -217,6 +217,12 @@ elif isOffice ; then
   # shellcheck disable=SC1091
   source /usr/share/git/completion/git-prompt.sh
 fi
+
+if isHome ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
+  source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
+  __git_complete g __git_main
+fi
+
 if isHome || isOffice ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
   [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'

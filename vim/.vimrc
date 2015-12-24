@@ -41,7 +41,6 @@
 " * TODO setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO Add performance test for travisci (per plugin actual)
 " * TODO Switch, Cycle 系のpluginで"[true, false], [public, private, ...], [#, ##, ...], [foo, bar, ...] あたりを入れる(speeddatingとコンフリクトに注意)
 " }}}1
 

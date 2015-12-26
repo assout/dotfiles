@@ -507,6 +507,9 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'Shougo/neobundle.vim', {'disabled' : !executable('git')}
   NeoBundle     'Shougo/neocomplete', {'disabled' : !has('lua')}
   NeoBundle     'Shougo/neomru.vim', {'disabled' : !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
+  " NeoBundle     'Shougo/neomru.vim', {'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901' } " Commits on Aug 18, 2015
+  " NeoBundle     'Shougo/neomru.vim', {'rev' : '8655b3ba4e33a9e9d2f77c26365458c1702bdb16' } " Commits on Jul 26, 2015
+  " NeoBundle     'Shougo/neomru.vim', {'rev' : '24f9185ca019f3b8f4896929c6bf5148f982f344' } " Commits on Mar 20, 2015
   NeoBundle     'Shougo/unite-outline'
   NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/vimfiler.vim'
@@ -517,9 +520,8 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'chaquotay/ftl-vim-syntax'
   NeoBundle     'dannyob/quickfixstatus' " For watchdogs. TODO syntasticと競合するっぽい
   NeoBundle     'elzr/vim-json' " For json filetype
-  NeoBundle     'fuenor/im_control.vim'
+  NeoBundle     'fuenor/im_control.vim', {'disabled' : has('unix')}
   NeoBundle     'glidenote/memolist.vim'
-  NeoBundle     'godlygeek/tabular' " For taburize markdown table
   NeoBundle     'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle     'h1mesuke/vim-alignta'
   NeoBundle     'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
@@ -569,7 +571,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
     NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はWindowsで異常終了する
   endif
   NeoBundle     'ujihisa/unite-colorscheme'
-  NeoBundle     'vim-jp/vimdoc-ja' " TODO msys2で有効にならない(runtimeに手動追加しても)
+  NeoBundle     'vim-jp/vimdoc-ja'
   NeoBundle     'vim-scripts/DirDiff.vim' " TODO 文字化けする
   NeoBundle     'vim-scripts/HybridText'
   NeoBundleLazy 'xolox/vim-easytags', { 'autoload' : { 'filetypes' : ['vim', 'sh'], }, }
@@ -609,31 +611,44 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   call g:neobundle#end()
   " filetype plugin indent on " Required! Caution: 最後にまとめてやる
   " Caution: NeoBundleCheckはやらない（パフォーマンス）
+
+  if s:IsOffice()
+    " TODO Workaround. msys2からgvim起動したとき入らないため
+    let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc'
+  endif
+
 elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
   " MSYS2 Plugin settings {{{
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogs遅い(+300ms)
+  " \  'vim-watchdogs',
+  " \  'shabadou.vim',
+  " \  'vim-qfsigns',
   " TODO easytags遅い
-        " \  'vim-watchdogs',
-        " \  'vim-easytags',
-        " \  'vim-shell',
+  " \  'vim-easytags',
+  " \  'vim-shell',
+  " TODO vim-refはFileType refの処理が遅い
+  " \  'vim-ref',
+  " \  'vim-ref-gene',
+  " Caution: documentのために".neobundle"を追加
   let s:plugins = [
+        \  '.neobundle',
         \  'benchvimrc-vim',
         \  'capture.vim',
-        \  'im_control.vim',
+        \  'emmet-vim',
         \  'memolist.vim',
-        \  'neomru.vim',
+        \  'neomru.vim*',
         \  'open-browser.vim',
         \  'previm',
         \  'quickfixstatus',
         \  'sh.vim',
-        \  'shabadou.vim',
         \  'tcomment_vim',
         \  'unite-outline',
         \  'unite-tag',
         \  'unite-todo',
         \  'unite.vim',
         \  'vim-alignta',
+        \  'vim-bufonly',
         \  'vim-hybrid',
         \  'vim-indent-guides',
         \  'vim-javascript',
@@ -642,12 +657,10 @@ elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')
         \  'vim-operator-replace',
         \  'vim-operator-surround',
         \  'vim-operator-user',
-        \  'vim-qfsigns',
         \  'vim-quickrun',
-        \  'vim-ref',
-        \  'vim-ref-gene',
         \  'vim-repeat',
         \  'vim-submode',
+        \  'vim-textmanip',
         \  'vim-textobj-anyblock',
         \  'vim-textobj-between',
         \  'vim-textobj-entire',
@@ -744,21 +757,9 @@ endif " }}}
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
 endif " }}}
-if s:HasPlugin('im_control.vim') " {{{
-  " TODO msys2でだめ
-  let g:IM_CtrlMode = s:IsHome() ? 1 : 4 " caution: linuxのときは設定しなくても期待した挙動になるけど一応
-  if s:IsHome()
-    function! g:IMCtrl(cmd)
-      if a:cmd ==? 'On'
-        let l:res = system('xvkbd -text "\[Henkan_Mode]\" > /dev/null 2>&1')
-      elseif a:cmd ==? 'Off'
-        let l:res = system('xvkbd -text "\[Muhenkan]" > /dev/null 2>&1') " Caution: なぜかmozcの設定でCtrl+MuhenkanをIMEオフに割り当てないといけない。(Ctrl+Shif+Deleteだと<C-o>とかが使えなくなる)
-      elseif a:cmd ==? 'Toggle'
-        let l:res = system('xvkbd -text "\[Zenkaku_Hankaku]" > /dev/null 2>&1')
-      endif
-      return ''
-    endfunction
-  endif
+
+if s:HasPlugin('im_control.vim') " {{{ Caution: msys2では効かないのでAutoHoyKeyでやる。Linuxではmozcでやる。
+  let g:IM_CtrlMode = 4
 endif " }}}
 
 if has('kaoriya') " {{{
@@ -1006,7 +1007,8 @@ if s:HasPlugin('vim-alignta') " {{{
   xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
 endif " }}}
 
-if s:HasPlugin('vim-easytags') || 1 " {{{
+if s:HasPlugin('vim-easytags') || 1 " {{{ TODO NeoBundleLazyにしてるからHasPluginがfalseになっちゃう
+  " TODO WindowsでGvimで作ったタグがmsys2で読み込めない
   let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
 endif " }}}
@@ -1293,6 +1295,7 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ Vrapper textobj-argsと合わせ�
 endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
+  " TODO msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
 
@@ -1323,7 +1326,15 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \      : '',
         \    },
         \})
+
   if s:IsOffice()
+    call extend(g:quickrun_config, {
+          \  'watchdogs_checker/shellcheck' : {
+          \    'command' : 'shellcheck',
+          \    'cmdopt'  : '-f gcc',
+          \  },
+          \})
+
     if &shell =~# '.*cmd.exe'
       let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
     else

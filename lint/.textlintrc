@@ -1,15 +1,20 @@
-{
-  "rules": {
-    "max-number-of-lines": true,
-    "max-ten": true,
-    "no-mix-dearu-desumasu": true,
-    "no-start-duplicated-conjunction": true,
-    "no-todo": true,
-    "prh": {
-      "rulePaths": [
-        "/home/oji/dotfiles/lint/prh.yml"
-      ]
-    },
-    "spellcheck-tech-word": true
-  }
-}
+---
+  rules:
+    # ja-yahoo-kousei: true
+    max-appearence-count-of-words: true
+    max-number-of-lines: true
+    max-ten: true
+    # max-length-of-title: true
+    # no-doubled-joshi: true
+    # no-double-negative-ja: true
+    # no-dropping-the-ra: true
+    no-mix-dearu-desumasu: true
+    no-start-duplicated-conjunction: true
+    no-todo: true
+    prh:
+      rulePaths:
+        - "/home/oji/dotfiles/lint/prh.yml"
+    sentence-length: true
+    spellcheck-tech-word: true
+
+# vim:ft=yaml

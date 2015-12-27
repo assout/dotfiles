@@ -881,7 +881,7 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
         \  ['public', 'protected', 'private', ],
         \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
-        \  ['#', '##', '###', '####'],
+        \  ['# ', '## ', '### ', '#### ', '##### '],
         \  ['pick', 'reword', 'edit', 'squash', 'fixup', 'exec' ],
         \  {
         \     '"\(.\{-\}\)"': '''\1''',

@@ -41,7 +41,6 @@
 " * TODO setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
 " * TODO filetype syntax on, off関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO Switch, Cycle 系のpluginで"[true, false], [public, private, ...], [#, ##, ...], [foo, bar, ...] あたりを入れる(speeddatingとコンフリクトに注意)
 " }}}1
 
 " # Begin {{{1
@@ -500,6 +499,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
 
   " Caution: dependsはパフォーマンス悪いかもしれないから使わない
   " General {{{
+  NeoBundle     'AndrewRadev/switch.vim' " TODO Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   NeoBundle     'Jagua/vim-ref-gene'
   NeoBundle     'KazuakiM/vim-qfsigns' " For watchdogs.
   NeoBundleLazy 'LeafCage/vimhelpgenerator', { 'autoload' : { 'commands' : ['VimHelpGenerator','VimHelpGeneratorVirtual'], }, }
@@ -694,6 +694,8 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
+  nmap <SID>[plugin]s       <SID>[switch]
+  nmap <SID>[plugin]S       <SID>[Switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -870,6 +872,25 @@ endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
   command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
+endif " }}}
+
+if s:HasPlugin('switch.vim') " {{{
+  " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
+  let g:switch_custom_definitions = [
+        \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
+        \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
+        \  ['public', 'protected', 'private', ],
+        \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
+        \  ['#', '##', '###', '####'],
+        \  ['pick', 'reword', 'edit', 'squash', 'fixup', 'exec' ],
+        \  {
+        \     '"\(\k\+\%([?!]\)\=\)"':                '''\1''',
+        \     '''\(\k\+\%([?!]\)\=\)''':              '"\1"',
+        \  },
+        \]
+
+  nnoremap <SID>[switch] :<C-u>Switch<CR>
+  nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
 endif " }}}
 
 if s:HasPlugin('syntastic') " {{{

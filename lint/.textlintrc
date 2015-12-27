@@ -1,7 +1,8 @@
+# TODO コメントアウトしてるプラグインはエラーになる
 ---
   rules:
     # ja-yahoo-kousei: true
-    max-appearence-count-of-words: true
+    # max-appearence-count-of-words: true
     max-number-of-lines: true
     max-ten: true
     # max-length-of-title: true

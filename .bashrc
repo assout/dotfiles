@@ -22,6 +22,10 @@ if [ -f /etc/bashrc ] ; then
   . /etc/bashrc
 fi
 
+if [ -f ~/.bashrc.local ] ; then
+  . ~/.bashrc.local
+fi
+
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
 
@@ -64,13 +68,12 @@ alias cd='cdls'
 
 # Vim TODO Refactor
 if [ "$(which vim 2> /dev/null)" ] ; then
-  alias vi='vim'
+  alias vi='vim --noplugin'
 fi
 if ! isHome && ! isOffice && [ -e "${here}/.vimrc" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-  alias v='vi -s ${here}/.vimrc'
+  alias vi='vi -s ${here}/.vimrc'
 fi
-alias vil='vi --noplugin'
 
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
@@ -114,6 +117,7 @@ alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
+alias dc='docker-compose'
 
 # Other
 alias g="git"
@@ -152,7 +156,13 @@ if isHome ; then
 fi
 
 if isHome || isOffice ; then
+  # TODO スマートに
   PATH="${PATH}:${HOME}/Development/scripts"
+  PATH="${PATH}:${HOME}/Development/scripts/local/bash"
+fi
+
+if isOffice ; then
+  export EDITOR="vim --noplugin" # For less +v
 fi
 
 # }}}1
@@ -220,6 +230,9 @@ fi
 
 if isHome ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
   source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
+  __git_complete g __git_main
+elif isOffice ; then
+  source /usr/share/git/completion/git-completion.bash
   __git_complete g __git_main
 fi
 

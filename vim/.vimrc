@@ -72,6 +72,7 @@ function! s:IsPluginEnabled() " pluginが有効か返す
   return isdirectory(s:bundlePath) && &loadplugins
 endfunction
 
+" FIXME NeoBundleが一度も使われてない場合runtimepathに存在しないことがある
 function! s:HasPlugin(plugin) " pluginが存在するか返す
   return !empty(matchstr(&runtimepath, a:plugin)) && &loadplugins
 endfunction
@@ -1036,17 +1037,13 @@ endif " }}}
 
 if s:HasPlugin('vim-fakeclip') " {{{
   if (! has('gui_running')) && s:IsHome() " Caution: office msys2(tmux) では不要(出来ている)
-    " TODO pasteは効くがyank, deleteは効かない, TODO 矩形モードのコピペがちょっと変になる
-    " map y  <Plug>(fakeclip-y)
-    " map yy <Plug>(fakeclip-Y)
-    " map p  <Plug>(fakeclip-p)
-    " map dd <Plug>(fakeclip-dd)
-    " map y  <Plug>(fakeclip-screen-y)
-    " map yy <Plug>(fakeclip-screen-Y)
-    " map p  <Plug>(fakeclip-screen-p)
-    " map P  <Plug>(fakeclip-screen-P)
-    " map dd <Plug>(fakeclip-screen-dd)
-    " map D  <Plug>(fakeclip-screen-D)
+    " TODO 矩形モードのコピペがちょっと変になる
+    map y  <Plug>(fakeclip-screen-y)
+    map yy <Plug>(fakeclip-screen-Y)
+    map p  <Plug>(fakeclip-screen-p)
+    map P  <Plug>(fakeclip-screen-P)
+    map dd <Plug>(fakeclip-screen-dd)
+    map D  <Plug>(fakeclip-screen-D)
   endif
 endif " }}}
 

@@ -25,7 +25,7 @@
 " * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
 " * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
 " * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
-" * IME offはLinuxはmozcで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
+" * IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
 "
 " ## References
 " * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
@@ -520,6 +520,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
   NeoBundle     'chaquotay/ftl-vim-syntax'
   NeoBundle     'dannyob/quickfixstatus' " For watchdogs. TODO syntasticと競合するっぽい
   NeoBundle     'elzr/vim-json' " For json filetype
+  NeoBundle     'fuenor/im_control.vim', {'disabled' : !has('unix')}
   NeoBundle     'glidenote/memolist.vim'
   NeoBundle     'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
   NeoBundle     'h1mesuke/vim-alignta'

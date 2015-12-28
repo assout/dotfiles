@@ -539,7 +539,6 @@ if s:IsNeobundleEnabled()
   NeoBundle     'haya14busa/vim-migemo', {'disabled' : !executable('cmigemo')}
   NeoBundle     'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya')} " TODO homeでエラーメッセージ出るっポイ(これが原因か不明だが)
   NeoBundle     'itchyny/calendar.vim'
-  NeoBundle     'kana/vim-fakeclip'
   NeoBundle     'kana/vim-gf-user'
   NeoBundle     'kana/vim-submode'
   if s:IsHome()
@@ -727,15 +726,6 @@ if s:IsPluginEnabled()
   nmap P                <Plug>(yankround-P)
   nmap <C-p>            <Plug>(yankround-prev)
   nmap <C-n>            <Plug>(yankround-next)
-
-  " TODO yankroundと競合
-  " map y  <Plug>(fakeclip-screen-y)
-  " map yy <Plug>(fakeclip-screen-Y)
-  " map p  <Plug>(fakeclip-screen-p)
-  " map P  <Plug>(fakeclip-screen-P)
-  " map dd <Plug>(fakeclip-screen-dd)
-  " map D  <Plug>(fakeclip-screen-D)
-
   map  <SID>[shortcut]a <SID>[surround-a]
   map  <SID>[shortcut]d <SID>[surround-d]
   map  <SID>[shortcut]r <SID>[surround-r]
@@ -1054,12 +1044,6 @@ if s:HasPlugin('vim-easytags') || 1 " {{{ TODO NeoBundleLazyにしてるからHa
   " TODO WindowsでGvimで作ったタグがmsys2で読み込めない
   let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
-endif " }}}
-
-if s:HasPlugin('vim-fakeclip') " {{{
-  if (! has('gui_running')) && s:IsHome() " Caution: office msys2(tmux) では不要(出来ている)
-    " TODO 矩形モードのコピペがちょっと変になる
-  endif
 endif " }}}
 
 if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)

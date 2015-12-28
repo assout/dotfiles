@@ -517,8 +517,11 @@ if s:IsNeobundleEnabled()
   NeoBundle     'LeafCage/yankround.vim', {'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle     'Shougo/neobundle.vim', {'disabled' : !executable('git')}
   NeoBundle     'Shougo/neocomplete', {'disabled' : !has('lua')}
-  NeoBundle     'Shougo/neomru.vim', {'disabled' : has('win32') || !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
-  NeoBundle     'Shougo/neomru.vim', {'disabled' : has('unix'), 'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901' }   " Commits on Aug 18, 2015
+  if s:IsHome()
+    NeoBundle     'Shougo/neomru.vim', {'disable' : !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
+  else
+    NeoBundle     'Shougo/neomru.vim', {'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901'}   " Commits on Aug 18, 2015
+  endif
   NeoBundle     'Shougo/unite-outline'
   NeoBundle     'Shougo/unite.vim'
   NeoBundle     'Shougo/vimfiler.vim'

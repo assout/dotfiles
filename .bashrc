@@ -66,7 +66,12 @@ function cdls {
 }
 alias cd='cdls'
 
-# Vim TODO Refactor
+# Vim
+if [ "$(which vimx 2> /dev/null)" ] ; then
+  alias vi='vimx --noplugin'
+  alias vim='vimx'
+fi
+
 if [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi

@@ -2,6 +2,8 @@ REM TODO 既存リンク上書き
 
 mklink /J "%HOME%\dotfiles" "%HOME%\Development\dotfiles"
 
+mklink "%HOME%\Documents\AutoHotkey.ahk" "%HOME%\Development\dotfiles\AutoHotkey.ahk"
+
 mklink "%HOME%\.bashrc" "%HOME%\Development\dotfiles\.bashrc"
 mklink "%HOME%\.ctags" "%HOME%\Development\dotfiles\.ctags"
 mklink "%HOME%\.gitconfig" "%HOME%\Development\dotfiles\.gitconfig"

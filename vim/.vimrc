@@ -73,7 +73,10 @@ function! s:IsPluginEnabled() " pluginが有効か返す
   return isdirectory(s:bundlePath) && &loadplugins
 endfunction
 
-" FIXME NeoBundleが一度も使われてない場合runtimepathに存在しないことがある
+function! s:IsNeobundleEnabled()
+  return s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
+endfunction
+
 function! s:HasPlugin(plugin) " pluginが存在するか返す
   return !empty(matchstr(&runtimepath, a:plugin)) && &loadplugins
 endfunction
@@ -493,10 +496,16 @@ cnoremap <M-f> <S-Right>
 " }}}1
 
 " # Plug-ins {{{1
-if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
+if s:IsNeobundleEnabled()
   if has('vim_starting')
     let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neobundle.vim/'
   endif
+
+  " Caution: 関数再定義。一度も使われてない場合runtimepathに存在しないことがあるため。
+  function! s:HasPlugin(plugin) " pluginが存在するか返す
+    return g:neobundle#is_installed(a:plugin)
+  endfunction
+
   call g:neobundle#begin(expand(s:bundlePath))
 
   " Caution: dependsはパフォーマンス悪いかもしれないから使わない
@@ -617,7 +626,7 @@ if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) &&
     let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc'
   endif
 
-elseif s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && has('win32unix')
+elseif s:IsPluginEnabled() && has('win32unix')
   " MSYS2 Plugin settings {{{
   " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogs遅い(+300ms)
@@ -736,18 +745,7 @@ if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_task = s:IsHome() ? 1 : 0
 endif " }}}
 
-if s:HasPlugin('fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
-  nnoremap <SID>[fugitive]<CR>   :Git<Space>
-  nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
-  nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
-  nnoremap <SID>[fugitive]cma    :Gcommit -a<CR>
-  nnoremap <SID>[fugitive]d      :Gdiff<CR>
-  nnoremap <SID>[fugitive]l      :Glog<CR>
-  nnoremap <SID>[fugitive]p      :Gpush<CR>
-  nnoremap <SID>[fugitive]s      :Gstatus<CR>
-endif " }}}
-
-if s:HasPlugin('hateblo') " {{{
+if s:HasPlugin('hateblo.vim') " {{{
   let g:hateblo_vim = {
         \  'user': 'assout',
         \  'api_key': g:hateblo_api_key,
@@ -776,7 +774,7 @@ else
   command! -nargs=0 CdCurrent cd %:p:h
 endif " }}}
 
-if s:HasPlugin('memolist') " {{{
+if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
   let g:memolist_path = s:IsHome() ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
@@ -788,7 +786,8 @@ if s:HasPlugin('memolist') " {{{
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
   nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
-  if s:HasPlugin('unite') " {{{
+
+  if s:HasPlugin('unite.vim') " {{{
     let g:unite_source_alias_aliases = {
           \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
           \  'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
@@ -811,7 +810,7 @@ if s:HasPlugin('neocomplete') " {{{
   let g:neocomplete#enable_at_startup = has('lua') && s:IsHome() ? 1 : 0 " 若干負荷あるので最低限有効
 endif " }}}
 
-if s:HasPlugin('open-browser') " {{{
+if s:HasPlugin('open-browser.vim') " {{{
   " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする TODO やりたいこととあってる？
   let g:openbrowser_search_engines = extend(
         \  get(g:, 'openbrowser_search_engines', {}), {
@@ -859,7 +858,7 @@ if s:HasPlugin('open-browser') " {{{
   endfor
 endif " }}}
 
-if s:HasPlugin('operator-camelize') " {{{
+if s:HasPlugin('operator-camelize.vim') " {{{
   map <SID>[camelize] <Plug>(operator-camelize-toggle)
 endif " }}}
 
@@ -933,7 +932,7 @@ if s:HasPlugin('tcomment_vim') " {{{
   call g:tcomment#DefineType('java', '// %s')
 endif " }}}
 
-if s:HasPlugin('unite') " {{{
+if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
   let g:unite_source_grep_max_candidates = 200
@@ -992,13 +991,13 @@ if s:HasPlugin('unite') " {{{
   if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   endif " }}}
-  if s:HasPlugin('yankround') " {{{
+  if s:HasPlugin('yankround.vim') " {{{
     nnoremap <SID>[unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
   else " }}}
     nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
   endif
 
-  if s:HasPlugin('neomru') " {{{
+  if s:HasPlugin('neomru.vim') " {{{
     let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0
     let g:neomru#file_mru_limit = 500
@@ -1009,7 +1008,7 @@ if s:HasPlugin('unite') " {{{
     nnoremap <SID>[neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
   endif " }}}
 
-  if s:HasPlugin('unite-codic') " {{{ TODO Ignorecase (or Smartcase)
+  if s:HasPlugin('unite-codic.vim') " {{{ TODO Ignorecase (or Smartcase)
     nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
     nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
   endif " }}}
@@ -1032,7 +1031,7 @@ if s:HasPlugin('unite') " {{{
   endif " }}}
 endif " }}}
 
-if s:HasPlugin('vimfiler') " {{{
+if s:HasPlugin('vimfiler.vim') " {{{
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
   let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
@@ -1058,6 +1057,17 @@ if s:HasPlugin('vim-fakeclip') " {{{
   if (! has('gui_running')) && s:IsHome() " Caution: office msys2(tmux) では不要(出来ている)
     " TODO 矩形モードのコピペがちょっと変になる
   endif
+endif " }}}
+
+if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+  nnoremap <SID>[fugitive]<CR>   :Git<Space>
+  nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
+  nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
+  nnoremap <SID>[fugitive]cma    :Gcommit -a<CR>
+  nnoremap <SID>[fugitive]d      :Gdiff<CR>
+  nnoremap <SID>[fugitive]l      :Glog<CR>
+  nnoremap <SID>[fugitive]p      :Gpush<CR>
+  nnoremap <SID>[fugitive]s      :Gstatus<CR>
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
@@ -1393,7 +1403,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   call g:watchdogs#setup(g:quickrun_config)
 endif " }}}
 
-if s:HasPlugin('yankround') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
+if s:HasPlugin('yankround.vim') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>
   let g:yankround_dir = '~/.cache/yankround'
 endif " }}}
 

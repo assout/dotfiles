@@ -628,9 +628,9 @@ if s:IsNeobundleEnabled()
     let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc'
   endif
 
-elseif s:IsPluginEnabled() && has('win32unix')
+elseif s:IsPluginEnabled() && !s:IsNeobundleEnabled()
   " MSYS2 Plugin settings {{{
-  " TODO すべてだと遅いので必要最小限のもののみ個別にパス通す
+  " Caution: すべてだと遅いので必要最小限のもののみ個別にパス通す
   " TODO watchdogs遅い(+300ms)
   " \  'vim-watchdogs',
   " \  'shabadou.vim',
@@ -705,8 +705,6 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
-  nmap <SID>[plugin]s       <SID>[switch]
-  nmap <SID>[plugin]S       <SID>[Switch]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -726,6 +724,8 @@ if s:IsPluginEnabled()
   nmap P                <Plug>(yankround-P)
   nmap <C-p>            <Plug>(yankround-prev)
   nmap <C-n>            <Plug>(yankround-next)
+  nmap +                <SID>[switch]
+  nmap -                <SID>[Switch]
   map  <SID>[shortcut]a <SID>[surround-a]
   map  <SID>[shortcut]d <SID>[surround-d]
   map  <SID>[shortcut]r <SID>[surround-r]
@@ -873,6 +873,7 @@ endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
+  " TODO dictionary定義はSwitchReverse効かない
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
@@ -895,12 +896,7 @@ if s:HasPlugin('switch.vim') " {{{
         \     '\v【(.{-})】' : '「\1」',
         \  },
         \]
-        " \     '<\(.\{-\}\)>': '[\1]',
 
-        " \  {
-        " \     '"\(.\{-\}\)"': '''\1''',
-        " \     '''\(.\{-\}\)''': '"\1"',
-        " \  },
   nnoremap <SID>[switch] :<C-u>Switch<CR>
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
 endif " }}}

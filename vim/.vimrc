@@ -465,6 +465,9 @@ nnoremap [w     :wincmd W<CR>
 nnoremap ]w     :wincmd w<CR>
 nnoremap [W     :wincmd t<CR>
 nnoremap ]W     :wincmd b<CR>
+" Caution: uはunite用に確保
+nnoremap [u     <Nop>
+nnoremap ]u     <Nop>
 " }}}
 
 " Insert mode mappings {{{
@@ -827,8 +830,7 @@ if s:HasPlugin('open-browser.vim') " {{{
           \}]
   endif
 
-  " TODO Naming
-  function! s:SearchSelectedValue(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
+  function! s:SearchSelected(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
       let l:word = expand('<cword>')
     else
@@ -846,8 +848,8 @@ if s:HasPlugin('open-browser.vim') " {{{
   vmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
 
   for s:key in keys(s:engines)
-    execute 'nnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelectedValue("' . s:engines[s:key] . '", "n")<CR>'
-    execute 'vnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelectedValue("' . s:engines[s:key] . '", "v")<CR>'
+    execute 'nnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelected("' . s:engines[s:key] . '", "n")<CR>'
+    execute 'vnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelected("' . s:engines[s:key] . '", "v")<CR>'
   endfor
 endif " }}}
 
@@ -939,7 +941,7 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
 
   function! s:MyUniteKeymappings()
-    " TODO sort. ↓じゃダメ。
+    " TODO sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
@@ -962,6 +964,7 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+  nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
@@ -985,6 +988,9 @@ if s:HasPlugin('unite.vim') " {{{
   else " }}}
     nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
   endif
+
+  nnoremap [u :UnitePrevious<CR>
+  nnoremap ]u :UniteNext<CR>
 
   if s:HasPlugin('neomru.vim') " {{{
     let g:neomru#directory_mru_limit = 500

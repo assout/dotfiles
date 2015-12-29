@@ -554,7 +554,7 @@ if s:IsNeobundleEnabled()
   NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
   NeoBundle 'lambdalisue/vim-gista', {'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
   NeoBundle 'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
-  NeoBundle 'mattn/emmet-vim' " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
+  NeoBundle 'mattn/emmet-vim', {'on_ft' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   NeoBundle 'mattn/qiita-vim'
   NeoBundle 'mattn/webapi-vim', {'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
   NeoBundle 'medihack/sh.vim' " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
@@ -566,7 +566,7 @@ if s:IsNeobundleEnabled()
   NeoBundle 'schickling/vim-bufonly'
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
   NeoBundle 'szw/vim-maximizer' " Windowの最大化・復元
-  NeoBundle 't9md/vim-textmanip'
+  NeoBundle 't9md/vim-textmanip' " TODO Lazy化できない
   NeoBundle 'thinca/vim-localrc'
   NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
   NeoBundle 'thinca/vim-quickrun'
@@ -574,7 +574,7 @@ if s:IsNeobundleEnabled()
   NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
   NeoBundle 'tomtom/tcomment_vim', {'on_map' : ['gc', 'g<', 'g>']}
   NeoBundle 'tpope/vim-abolish'
-  NeoBundle 'tpope/vim-fugitive', {'external_commands' : 'git'} " TODO Lazyがうまく行かない(augroup指定しても有効にならない)
+  NeoBundle 'tpope/vim-fugitive', {'augroup' : 'fugitive', 'external_commands' : 'git'} " TODO Lazyがうまく行かない(augroup指定しても有効にならない)
   NeoBundle 'tpope/vim-repeat'
   NeoBundle 'tpope/vim-speeddating'
   NeoBundle 'tpope/vim-unimpaired', {'on_map' : ['[', ']']}
@@ -605,9 +605,9 @@ if s:IsNeobundleEnabled()
 
   " User Textobjects {{{
   NeoBundle 'kana/vim-textobj-user'
-  NeoBundle 'kana/vim-textobj-entire', {'on_map' : ['yae', 'yie', '=ae', '=ie', 'vae', 'vie', 'dae', 'die', 'gcae', 'gcie']}
-  NeoBundle 'kana/vim-textobj-function', {'on_map' : '<Plug>(textobj-function-'} " TODO 動かない
-  NeoBundle 'kana/vim-textobj-indent', {'on_map' : '<Plug>(textobj-indent-'} " TODO 動かない
+  NeoBundle 'kana/vim-textobj-entire', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'kana/vim-textobj-function', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'kana/vim-textobj-indent', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
   NeoBundle 'kana/vim-textobj-line'
   NeoBundle 'mattn/vim-textobj-url'
   NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
@@ -1309,16 +1309,39 @@ if s:HasPlugin('vim-textobj-between') " {{{
   let g:textobj_between_no_default_key_mappings = 1 " 'd'istanceに変える。。
   omap id <Plug>(textobj-between-i)
   omap ad <Plug>(textobj-between-a)
-  vmap id <Plug>(textobj-between-i)
-  vmap ad <Plug>(textobj-between-a)
+  xmap id <Plug>(textobj-between-i)
+  xmap ad <Plug>(textobj-between-a)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
+  " TODO 定義不要だがLazy化するために必要
+  omap ie <Plug>(textobj-entire-i)
+  omap ae <Plug>(textobj-entire-a)
+  xmap ie <Plug>(textobj-entire-i)
+  xmap ae <Plug>(textobj-entire-a)
+
   " TODO カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
+  " Caution: NeoBunleLazy化したら呼ばれてないっぽい
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
   nmap =ie =ie``
+endif " }}}
+
+if s:HasPlugin('vim-textobj-function') " {{{
+  " TODO 定義不要だがLazy化するために必要
+  omap if <Plug>(textobj-function-i)
+  omap af <Plug>(textobj-function-a)
+  xmap if <Plug>(textobj-function-i)
+  xmap af <Plug>(textobj-function-a)
+endif " }}}
+
+if s:HasPlugin('vim-textobj-indent') " {{{
+  " TODO 定義不要だがLazy化するために必要
+  omap ii <Plug>(textobj-indent-i)
+  omap ai <Plug>(textobj-indent-a)
+  xmap ii <Plug>(textobj-indent-i)
+  xmap ai <Plug>(textobj-indent-a)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{ Vrapper textobj-argsと合わせる('a'rguments)

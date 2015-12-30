@@ -500,120 +500,108 @@ cnoremap <M-f> <S-Right>
 
 " # Plug-ins {{{1
 if s:IsNeobundleEnabled()
+  " Caution: 関数再定義。一度も使われてない場合runtimepathに存在しないことがあるため。
+  function! s:HasPlugin(plugin) " pluginが存在するか返す
+    return g:neobundle#tap(a:plugin)
+  endfunction
+
   if has('vim_starting')
     let &runtimepath = &runtimepath . ',' . s:bundlePath . 'neobundle.vim/'
   endif
-
-  " Caution: 関数再定義。一度も使われてない場合runtimepathに存在しないことがあるため。
-  function! s:HasPlugin(plugin) " pluginが存在するか返す
-    return g:neobundle#is_installed(a:plugin)
-  endfunction
-
   call g:neobundle#begin(expand(s:bundlePath))
 
-  " Caution: dependsはパフォーマンス悪いかもしれないから使わない
-  " TODO on_mapするとNeoBundle用のmapがされるためキー入力待ちが発生することがある(e.g. yae)
+  let g:neobundle#default_options._ = {'lazy' : 1}
   " General {{{
   NeoBundle 'AndrewRadev/switch.vim' " TODO Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   NeoBundle 'Jagua/vim-ref-gene'
-  NeoBundle 'KazuakiM/vim-qfsigns' " For watchdogs.
   NeoBundle 'LeafCage/vimhelpgenerator', {'on_cmd' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  NeoBundle 'LeafCage/yankround.vim', {'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
-  NeoBundle 'Shougo/neobundle.vim', {'external_commands' : 'git'}
-  NeoBundle 'Shougo/neocomplete', {'disabled' : !has('lua')}
+  NeoBundle 'LeafCage/yankround.vim', {'on_map' : '<Plug>', 'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
+  NeoBundle 'Shougo/neobundle.vim', {'fetch' : 1, 'external_commands' : 'git'}
+  NeoBundle 'Shougo/neocomplete', {'on_i' : 1, 'disabled' : !has('lua')}
   if s:IsHome()
-    NeoBundle 'Shougo/neomru.vim', {'disable' : !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
+    NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all', 'disable' : !has('lua') || exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   else
-    NeoBundle 'Shougo/neomru.vim', {'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901'}   " Commits on Aug 18, 2015
+    NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all', 'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901'}   " Commits on Aug 18, 2015
   endif
   NeoBundle 'Shougo/unite-outline'
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'Shougo/vimfiler.vim'
-  NeoBundle 'Shougo/vimproc', {'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
-  NeoBundle 'TKNGUE/hateblo.vim', {'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
-  NeoBundle 'aklt/plantuml-syntax'
+  NeoBundle 'Shougo/unite.vim', {'on_cmd' : {'name' : 'Unite', 'complete' : 'customlist,vimfiler#complete'}, 'depends' : 'Shougo/neomru.vim'}
+  NeoBundle 'Shougo/vimfiler.vim', {'on_map' : '<Plug>', 'on_path' : '.*', 'on_cmd' : {'name' : 'VimFiler', 'complete' : 'customlist,vimfiler#complete'}, 'depends' : 'Shougo/unite.vim'}
+  NeoBundle 'Shougo/vimproc', {'lazy' : 0, 'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
+  NeoBundle 'TKNGUE/hateblo.vim', {'pre_cmd' : 'Hateblo', 'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
+  NeoBundle 'aklt/plantuml-syntax', {'lazy' : 0} " TODO ftdetctがLazy読み込みできない
   NeoBundle 'assout/unite-todo'
-  NeoBundle 'chaquotay/ftl-vim-syntax'
-  NeoBundle 'dannyob/quickfixstatus' " For watchdogs. TODO syntasticと競合するっぽい
-  NeoBundle 'elzr/vim-json' " For json filetype
-  NeoBundle 'fuenor/im_control.vim', {'disabled' : !has('unix')}
-  NeoBundle 'glidenote/memolist.vim'
-  NeoBundle 'gregsexton/VimCalc', {'disabled' : !has('python2')} " TODO msys2のpythonだと有効にならない
+  NeoBundle 'chaquotay/ftl-vim-syntax' " TODO 効いてる？
+  NeoBundle 'elzr/vim-json', {'lazy' : 0} " For json filetype. TODO ftdetctがLazy読み込みできない
+  NeoBundle 'fuenor/im_control.vim', {'on_i' : 1, 'disabled' : !has('unix')}
+  NeoBundle 'glidenote/memolist.vim', {'pre_cmd' : 'Memo', 'on_unite' : ['memolist', 'memolist_reading'], 'depends' : 'Shougo/unite.vim'}
   NeoBundle 'h1mesuke/vim-alignta'
   NeoBundle 'haya14busa/vim-migemo', {'external_commands' : 'cmigemo'}
-  NeoBundle 'hyiltiz/vim-plugins-profile'
-  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya')} " TODO homeでエラーメッセージ出るっポイ(これが原因か不明だが)
-  NeoBundle 'itchyny/calendar.vim'
-  NeoBundle 'kana/vim-gf-user'
-  NeoBundle 'kana/vim-submode'
+  NeoBundle 'hyiltiz/vim-plugins-profile', {'fetch' : 1}
+  NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya'), 'on_cmd' : ['Hankaku', 'Zenkaku', 'ToggleHZ']} " TODO homeでエラーメッセージ出るっポイ(これが原因か不明だが)
+  NeoBundle 'itchyny/calendar.vim', {'on_cmd' : 'Calendar'}
+  NeoBundle 'kana/vim-gf-user', {'on_map' : ['gf', 'gF']}
+  NeoBundle 'kana/vim-submode', {'lazy' : 0}
   if s:IsHome()
-    NeoBundle 'kannokanno/previm'
+    NeoBundle 'kannokanno/previm', {'on_ft' : 'markdown', 'depends' : 'tyru/open-browser.vim'}
   else
-    NeoBundle 'kannokanno/previm', {'rev' : '1.3' } " TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく) TODO ファイルによって表示されない(memolist Windowsとか)
+    NeoBundle 'kannokanno/previm', {'on_ft' : 'markdown', 'depends' : 'tyru/open-browser.vim', 'rev' : '1.3' } " TODO 最新版だとIE Tabで表示されない(印刷プレビュー使いたい) TODO このバージョンはCSS指定できないので大元のcssを編集しちゃう(h1~6のフォントサイズを小さく) TODO ファイルによって表示されない(memolist Windowsとか)
   endif
-  NeoBundle 'koron/codic-vim' " TODO vimprocなどで非同期化されてる？
-  NeoBundle 'lambdalisue/vim-gista', {'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
-  NeoBundle 'mattn/benchvimrc-vim' " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
+  NeoBundle 'koron/codic-vim', {'on_cmd' : 'Codic'} " TODO vimprocなどで非同期化されてる？
+  NeoBundle 'lambdalisue/vim-gista', {'on_cmd' : 'Gista', 'on_map' : '<Plug>', 'on_unite' : 'gista', 'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
+  NeoBundle 'mattn/benchvimrc-vim', {'on_cmd' : 'BenchVimrc'} " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
   NeoBundle 'mattn/emmet-vim', {'on_ft' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-  NeoBundle 'mattn/qiita-vim'
-  NeoBundle 'mattn/webapi-vim', {'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
-  NeoBundle 'medihack/sh.vim' " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
-  NeoBundle 'nathanaelkane/vim-indent-guides'
-  NeoBundle 'osyo-manga/shabadou.vim' " For watchdogs.
-  NeoBundle 'osyo-manga/vim-watchdogs'
-  NeoBundle 'pangloss/vim-javascript' " For indent only
+  NeoBundle 'mattn/qiita-vim', {'on_cmd' : 'Qiita'}
+  NeoBundle 'medihack/sh.vim', {'on_ft' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  NeoBundle 'nathanaelkane/vim-indent-guides', {'on_cmd' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
+  NeoBundle 'osyo-manga/vim-watchdogs', {'on_cmd' : 'WatchdogsRun', 'on_i' : 1, 'augroup' : 'watchdogs-plugin', 'depends' : ['osyo-manga/shabadou.vim', 'thinca/vim-quickrun', 'dannyob/quickfixstatus', 'KazuakiM/vim-qfsigns']}
+  NeoBundle 'pangloss/vim-javascript', {'on_ft' : 'javascript'} " For indent only
   NeoBundle 'rhysd/unite-codic.vim' " TODO 辞書提供なくなったぽっいので古いかも
-  NeoBundle 'schickling/vim-bufonly'
+  NeoBundle 'schickling/vim-bufonly', {'on_cmd' : ['BufOnly', 'BOnly']}
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
   NeoBundle 'szw/vim-maximizer' " Windowの最大化・復元
-  NeoBundle 't9md/vim-textmanip' " TODO Lazy化できない
-  NeoBundle 'thinca/vim-localrc'
-  NeoBundle 'thinca/vim-qfreplace' " grepした結果を置換
-  NeoBundle 'thinca/vim-quickrun'
-  NeoBundle 'thinca/vim-ref'
-  NeoBundle 'thinca/vim-singleton', {'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
+  NeoBundle 't9md/vim-textmanip', {'lazy' : 0} " TODO Lazy化できない
+  NeoBundle 'thinca/vim-localrc', {'on_ft' : 'vim'}
+  NeoBundle 'thinca/vim-qfreplace', {'on_cmd' : 'Qfreplace'} " grepした結果を置換
+  NeoBundle 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
+  NeoBundle 'thinca/vim-ref', {'on_cmd' : {'name' : 'Ref', 'complete' : 'customlist,ref#complete'}}
+  NeoBundle 'thinca/vim-singleton', {'lazy' : 0, 'gui' : 1, 'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
   NeoBundle 'tomtom/tcomment_vim', {'on_map' : ['gc', 'g<', 'g>']}
-  NeoBundle 'tpope/vim-abolish'
-  NeoBundle 'tpope/vim-fugitive', {'augroup' : 'fugitive', 'external_commands' : 'git'} " TODO Lazyがうまく行かない(augroup指定しても有効にならない)
-  NeoBundle 'tpope/vim-repeat'
-  NeoBundle 'tpope/vim-speeddating'
-  NeoBundle 'tpope/vim-unimpaired', {'on_map' : ['[', ']']}
+  NeoBundle 'tpope/vim-fugitive', {'lazy' : 0, 'external_commands' : 'git'} " TODO Lazyがうまく行かない(augroup指定しても有効にならない)
+  NeoBundle 'tpope/vim-speeddating', {'on_map' : ['<C-a>', '<C-x>'], 'depends' : 'tpope/vim-repeat'}
+  NeoBundle 'tpope/vim-unimpaired', {'on_map' : ['[', ']'], 'depends' : 'tpope/vim-repeat'}
   NeoBundle 'tsukkee/unite-tag'
-  NeoBundle 'tyru/capture.vim'
-  NeoBundle 'tyru/open-browser.vim' " TODO シングルクォートで囲まれたURLが開けない@office(gui, cui)(e.g. 'http://hoge')
+  NeoBundle 'tyru/capture.vim', {'on_cmd' : {'name' : 'Capture', 'complete' : 'command'}}
+  NeoBundle 'tyru/open-browser.vim', {'on_map' : ['<Plug>', '<Plug>(openbrowser-smart-search)']} " TODO シングルクォートで囲まれたURLが開けない@office(gui, cui)(e.g. 'http://hoge')
   if s:IsHome()
-    NeoBundle 'tyru/restart.vim'
+    NeoBundle 'tyru/restart.vim', {'gui' : 1, 'on_cmd' : 'Restart'}
   else
-    NeoBundle 'tyru/restart.vim', {'rev' : 'v0.0.8' } " TODO 最新版はWindowsで異常終了する
+    NeoBundle 'tyru/restart.vim', {'gui' : 1, 'on_cmd' : 'Restart', 'rev' : 'v0.0.8' } " TODO 最新版はWindowsで異常終了する
   endif
   NeoBundle 'ujihisa/unite-colorscheme'
-  NeoBundle 'vim-jp/vimdoc-ja'
-  NeoBundle 'vim-scripts/DirDiff.vim' " TODO 文字化けする
-  NeoBundle 'vim-scripts/HybridText'
-  NeoBundle 'xolox/vim-easytags', {'on_ft' : ['vim', 'sh']}
-  NeoBundle 'xolox/vim-misc' " For easytags.
-  NeoBundle 'xolox/vim-shell' " For easytags.
+  NeoBundle 'vim-jp/vimdoc-ja', {'on_ft' : 'help'}
+  NeoBundle 'vim-scripts/DirDiff.vim', {'on_cmd' : {'name' : 'DirDiff', 'complete' : 'dir'}} " TODO 文字化けする
+  NeoBundle 'vim-scripts/HybridText', {'on_ft' : 'hybrid'}
+  NeoBundle 'xolox/vim-easytags', {'on_ft' : ['vim', 'sh'], 'depends' : ['xolox/vim-shell']}
+  NeoBundle 'xolox/vim-shell', {'on_ft' : ['vim', 'sh'], 'depends' : ['xolox/vim-misc']}
   " }}}
 
   " User Operators {{{
-  NeoBundle 'kana/vim-operator-user'
-  NeoBundle 'kana/vim-operator-replace'
-  NeoBundle 'rhysd/vim-operator-surround' " life changing. sdb, sab.
-  NeoBundle 'syngan/vim-operator-inserttext'
-  NeoBundle 'tyru/operator-camelize.vim'
+  NeoBundle 'kana/vim-operator-replace', {'depends' : 'kana/vim-operator-user', 'on_map' : [['nx', '<Plug>']]}
+  NeoBundle 'rhysd/vim-operator-surround', {'depends' : 'kana/vim-operator-user', 'on_map' : [['nx', '<Plug>']]}
+  NeoBundle 'syngan/vim-operator-inserttext', {'depends' : 'kana/vim-operator-user', 'on_map' : [['nx', '<Plug>']]}
+  NeoBundle 'tyru/operator-camelize.vim', {'depends' : 'kana/vim-operator-user', 'on_map' : [['nx', '<Plug>']]}
   " }}}
 
   " User Textobjects {{{
-  NeoBundle 'kana/vim-textobj-user'
-  NeoBundle 'kana/vim-textobj-entire', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
-  NeoBundle 'kana/vim-textobj-function', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
-  NeoBundle 'kana/vim-textobj-indent', {'on_map' : '<Plug>'} " Caution: 明示的にPlugマッピングしないと効かない
-  NeoBundle 'kana/vim-textobj-line'
-  NeoBundle 'mattn/vim-textobj-url'
-  NeoBundle 'rhysd/vim-textobj-anyblock' " life changing. dib, dab.
-  NeoBundle 'sgur/vim-textobj-parameter'
-  NeoBundle 'thinca/vim-textobj-between'
-  NeoBundle 'thinca/vim-textobj-comment'
+  NeoBundle 'kana/vim-textobj-entire', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'kana/vim-textobj-function', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'kana/vim-textobj-indent', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'kana/vim-textobj-line', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'mattn/vim-textobj-url', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'rhysd/vim-textobj-anyblock', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'sgur/vim-textobj-parameter', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'thinca/vim-textobj-between', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
+  NeoBundle 'thinca/vim-textobj-comment', {'depends' : 'kana/vim-textobj-user', 'on_map' : [['ox', '<Plug>']]} " Caution: 明示的にPlugマッピングしないと効かない
   " }}}
 
   " Colorschemes {{{
@@ -621,12 +609,17 @@ if s:IsNeobundleEnabled()
   NeoBundle 'chriskempson/vim-tomorrow-theme'
   NeoBundle 'sickill/vim-monokai'
   NeoBundle 'tomasr/molokai'
-  NeoBundle 'w0ng/vim-hybrid'
+  NeoBundle 'w0ng/vim-hybrid', {'lazy' : 0}
   " }}}
 
   call g:neobundle#end()
   " filetype plugin indent on " Required! Caution: 最後にまとめてやる
   " Caution: NeoBundleCheckはやらない（パフォーマンス）
+
+  if !has('vim_starting')
+    " Call on_source hook when reloading .vimrc.
+    call g:neobundle#call_hook('on_source')
+  endif
 
   if s:IsOffice()
     " TODO Workaround. msys2からgvim起動したとき入らないため
@@ -784,25 +777,23 @@ if s:HasPlugin('memolist.vim') " {{{
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
-  nnoremap <SID>[memolist]a :<C-u>MemoNew<CR>
+  nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
+  nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
+  nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
+  nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
 
-  if s:HasPlugin('unite.vim') " {{{
+  function! g:neobundle#hooks.on_post_source(bundle) abort
     let g:unite_source_alias_aliases = {
           \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
           \  'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
           \}
-    call g:unite#custom_source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-    call g:unite#custom_source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
+    call g:unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+    call g:unite#custom#source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
     call g:unite#custom#source('memolist', 'ignore_pattern', 'exercises\|reading\|_book\|\(png\|gif\|jpeg\|jpg\)$')
-    call g:unite#custom_source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-    call g:unite#custom_source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
+    call g:unite#custom#source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+    call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
     call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
-    nnoremap <SID>[memolist]l :<C-u>Unite memolist -buffer-name=memolist<CR>
-    nnoremap <SID>[memolist]L :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
-  else " }}}
-    nnoremap <SID>[memolist]l :<C-u>MemoList<CR>
-  endif
-  nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
+  endfunction
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -923,8 +914,10 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
   let g:tcommentTextObjectInlineComment = 'iC'
-  " TODO Lazy化したらここで呼べない
-  " call g:tcomment#DefineType('java', '// %s')
+
+  function! g:neobundle#hooks.on_source(bundle) abort
+    call g:tcomment#DefineType('java', '// %s')
+  endfunction
 endif " }}}
 
 if s:HasPlugin('unite.vim') " {{{
@@ -955,12 +948,14 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
   autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
-  call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove)
-  call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
-  call g:unite#custom#default_action('directory', 'vimfiler')
-  call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-  call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-  call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+  function! g:neobundle#hooks.on_source(bundle) abort
+    call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove)
+    call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
+    call g:unite#custom#default_action('directory', 'vimfiler')
+    call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+    call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+    call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+  endfunction
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -993,7 +988,7 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
   endif
 
-  " TODO `]uu`がunimpairedと競合
+  " Caution: unimpairedの`]u`系を無効にする必要がある
   nnoremap [u :UnitePrevious<CR>
   nnoremap ]u :UniteNext<CR>
 
@@ -1077,7 +1072,9 @@ if s:HasPlugin('vim-gf-user') " {{{
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
-  call g:gf#user#extend('GfFile', 1000)
+  function! g:neobundle#hooks.on_source(bundle) abort
+    call g:gf#user#extend('GfFile', 1000)
+  endfunction
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
@@ -1136,10 +1133,12 @@ if s:HasPlugin('vim-operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
-  " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
-  " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
-  let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-  call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
+  function! g:neobundle#hooks.on_source(bundle) abort
+    " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
+    " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
+    let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
+    call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
+  endfunction
 
   map <SID>[surround-a] <Plug>(operator-surround-append)
   map <SID>[surround-d] <Plug>(operator-surround-delete)
@@ -1232,10 +1231,12 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO キャッシュ化されている？
 endif " }}}
 
-if s:HasPlugin('vim-singleton') && has('gui_running') " {{{
-  let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
-  let g:singleton#opener = 'vsplit'
-  call g:singleton#enable()
+if s:HasPlugin('vim-singleton') " {{{
+  function! g:neobundle#hooks.on_source(bundle) abort
+    let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
+    let g:singleton#opener = 'vsplit'
+    call g:singleton#enable()
+  endfunction
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
@@ -1321,7 +1322,6 @@ if s:HasPlugin('vim-textobj-entire') " {{{
   xmap ae <Plug>(textobj-entire-a)
 
   " TODO カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
-  " Caution: NeoBunleLazy化したら呼ばれてないっぽい
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
@@ -1352,72 +1352,84 @@ if s:HasPlugin('vim-textobj-parameter') " {{{ Vrapper textobj-argsと合わせ�
   vmap aa <Plug>(textobj-parameter-a)
 endif " }}}
 
+if s:HasPlugin('vim-unimpaired') " {{{
+  function! g:neobundle#hooks.on_post_source(bundle) abort
+    nunmap [u
+    nunmap [uu
+    nunmap ]u
+    nunmap ]uu
+  endfunction
+endif " }}}
+
 if s:HasPlugin('vim-watchdogs') " {{{
   " TODO msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun<CR>
 
-  let g:watchdogs_check_BufWritePost_enable = 1
-  " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
-  " TODO xmllint
-  let g:quickrun_config = {
-        \  'watchdogs_checker/_' : {
-        \    'outputter/quickfix/open_cmd' : '',
-        \    'runner/vimproc/updatetime' : 30,
-        \    'hook/echo/enable' : 1,
-        \    'hook/echo/output_success' : 'No Errors Found.',
-        \    'hook/echo/output_failure' : 'Errors Found!',
-        \    'hook/qfsigns_update/enable_exit': 1,
-        \  },
-        \}
-  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
-  let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
+  function! g:neobundle#hooks.on_source(bundle) abort
 
-  " TODO extendはパフォーマンス悪いかも
-  call extend(g:quickrun_config, {
-        \  'sh/watchdogs_checker' : {
-        \    'type'
-        \      : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
-        \      : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
-        \      : executable('bashate') ? 'watchdogs_checker/bashate'
-        \      : executable('sh') ? 'watchdogs_checker/sh'
-        \      : '',
-        \    },
-        \})
+    " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
+    " TODO xmllint
+    let g:quickrun_config = {
+          \  'watchdogs_checker/_' : {
+          \    'outputter/quickfix/open_cmd' : '',
+          \    'runner/vimproc/updatetime' : 30,
+          \    'hook/echo/enable' : 1,
+          \    'hook/echo/output_success' : 'No Errors Found.',
+          \    'hook/echo/output_failure' : 'Errors Found!',
+          \    'hook/qfsigns_update/enable_exit': 1,
+          \  },
+          \}
+    " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
+    let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
 
-  if s:IsOffice()
+    " TODO extendはパフォーマンス悪いかも
     call extend(g:quickrun_config, {
-          \  'watchdogs_checker/shellcheck' : {
-          \    'command' : 'shellcheck',
-          \    'cmdopt'  : '-f gcc',
+          \  'sh/watchdogs_checker' : {
+          \    'type'
+          \      : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
+          \      : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
+          \      : executable('bashate') ? 'watchdogs_checker/bashate'
+          \      : executable('sh') ? 'watchdogs_checker/sh'
+          \      : '',
+          \    },
+          \})
+
+    if s:IsOffice()
+      call extend(g:quickrun_config, {
+            \  'watchdogs_checker/shellcheck' : {
+            \    'command' : 'shellcheck',
+            \    'cmdopt'  : '-f gcc',
+            \  },
+            \})
+
+      if &shell =~# '.*cmd.exe'
+        let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
+      else
+        " FIXME Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
+        let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 > /dev/null; %c %o %s:p"'
+      endif
+    endif
+
+    call extend(g:quickrun_config, {
+          \  'markdown/watchdogs_checker': {
+          \    'type'
+          \      : executable('mdl') ? 'watchdogs_checker/mdl'
+          \      : executable('textlint') ? 'watchdogs_checker/textlint'
+          \      : executable('redpen') ? 'watchdogs_checker/redpen'
+          \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
+          \      : '',
+          \   },
+          \  'watchdogs_checker/redpen' : {
+          \    'command' : 'redpen',
+          \    'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
+          \    'exec'    : '%c %o %s:p 2> /dev/null',
           \  },
           \})
 
-    if &shell =~# '.*cmd.exe'
-      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
-    else
-      " FIXME Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
-      let g:quickrun_config['watchdogs_checker/shellcheck']['exec'] = 'bash -c "chcp.com 65001 > /dev/null; %c %o %s:p"'
-    endif
-  endif
-
-  call extend(g:quickrun_config, {
-        \  'markdown/watchdogs_checker': {
-        \    'type'
-        \      : executable('mdl') ? 'watchdogs_checker/mdl'
-        \      : executable('textlint') ? 'watchdogs_checker/textlint'
-        \      : executable('redpen') ? 'watchdogs_checker/redpen'
-        \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
-        \      : '',
-        \   },
-        \  'watchdogs_checker/redpen' : {
-        \    'command' : 'redpen',
-        \    'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
-        \    'exec'    : '%c %o %s:p 2> /dev/null',
-        \  },
-        \})
-
-  call g:watchdogs#setup(g:quickrun_config)
+    let g:watchdogs_check_BufWritePost_enable = 1
+    call g:watchdogs#setup(g:quickrun_config)
+  endfunction
 endif " }}}
 
 if s:HasPlugin('yankround.vim') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>

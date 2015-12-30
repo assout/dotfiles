@@ -74,7 +74,12 @@ function! s:IsPluginEnabled() " pluginが有効か返す
 endfunction
 
 function! s:IsNeobundleEnabled()
-  return s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
+  if s:IsPluginEnabled() && isdirectory(expand(s:bundlePath . 'neobundle.vim')) && ! has('win32unix')
+    return 1
+  else
+    let g:neobundle#hooks = {} " TODO Workaround
+    return 0
+  endif
 endfunction
 
 function! s:HasPlugin(plugin) " pluginが存在するか返す

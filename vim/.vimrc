@@ -262,7 +262,8 @@ set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 if has('patch-7.4.399')
-  set cryptmethod=blowfish2
+  " TODO Comment out for performance
+  " set cryptmethod=blowfish2
 endif
 set diffopt& diffopt+=vertical
 set expandtab

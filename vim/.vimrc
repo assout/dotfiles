@@ -45,6 +45,8 @@
 " }}}1
 
 " # Begin {{{1
+" vint: -ProhibitSetNoCompatible
+set nocompatible " Caution: vim -uで起動した時エラーとならないようにする
 
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
@@ -94,10 +96,13 @@ function! s:CallIfDisableNeobundle()
 endfunction
 
 function! s:HasPlugin(plugin)
+  if ! &loadplugins
+    return 0
+  endif
   if s:IsNeobundleEnabled()
     return g:neobundle#tap(a:plugin)
   else
-    return !empty(matchstr(&runtimepath, a:plugin)) && &loadplugins
+    return !empty(matchstr(&runtimepath, a:plugin))
   endif
 endfunction
 

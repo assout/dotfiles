@@ -54,11 +54,11 @@ readonly target_dir="${WORKSPACE:-.}/target"
 mkdir -p "${target_dir}"
 
 readonly SAMPLE_FILE_PREFIX=sample
-readonly MYVIMRC="${WORKSPACE:-~}/vim/.vimrc"
+readonly MYVIMRC="${WORKSPACE:-~/dotfiles}/vim/.vimrc"
 readonly FILE_TYPES=('boot' 'markdown' 'sh')
 
 readonly HEADERS=('default' 'noplugin' 'none')
-readonly VIM_OPTIONS=("-S ${MYVIMRC}" "-S ${MYVIMRC} --noplugin" "-u NONE")
+readonly VIM_OPTIONS=("-u ${MYVIMRC}" "-u ${MYVIMRC} --noplugin" "-u NONE")
 
 for filetype in "${FILE_TYPES[@]}" ; do
   result_file="${target_dir}"/${filetype}.csv

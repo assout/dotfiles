@@ -535,7 +535,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   NeoBundle 'Shougo/vimproc', {'lazy' : 0, 'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   NeoBundle 'TKNGUE/hateblo.vim', {'pre_cmd' : 'Hateblo', 'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   NeoBundle 'aklt/plantuml-syntax', {'lazy' : 0} " TODO ftdetctがLazy読み込みできない
-  NeoBundle 'assout/benchvimrc-vim', {'on_cmd' : 'BenchVimrc'} " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
+  NeoBundle 'assout/benchvimrc-vim', {'on_cmd' : 'BenchVimrc'}
   NeoBundle 'assout/unite-todo'
   NeoBundle 'chaquotay/ftl-vim-syntax' " TODO 効いてる？
   NeoBundle 'elzr/vim-json', {'lazy' : 0} " For json filetype. TODO ftdetctがLazy読み込みできない
@@ -876,6 +876,7 @@ endif " }}}
 if s:HasPlugin('switch.vim') " {{{
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
   " TODO dictionary定義はSwitchReverse効かない
+  " TODO 優先順位指定したい(`${}`のswitchを優先したい)
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],

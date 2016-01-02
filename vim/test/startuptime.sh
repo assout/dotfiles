@@ -4,24 +4,30 @@
 
 # Write Header.
 # Globals(Used and modified):
-#   HEADERS
 #   result_file
+#   result_details_file
 #   filetype
 # Arguments:
 #   None
 # Returns:
 #   None
 function add_header {
-  for header in "${HEADERS[@]}" ; do
-    echo -n "${filetype}(${header})," >> "${result_file}" # Jenkins Plot Pluginの都合で全ファイルタイプでユニークにしておいたほうがよい
+  for header in 'default' 'noplugin' 'none' ; do # Jenkins Plot Pluginの都合で全ファイルタイプでユニークにしておいたほうがよい
+    echo -n "${filetype}(${header})," >> "${result_file}"
   done
+
+  for header in 'source_vimrc' 'other' ; do
+    echo -n "${filetype}(${header})," >> "${result_details_file}"
+  done
+
   sed -i -e 's/,$//' "${result_file}"
+  sed -i -e 's/,$//' "${result_details_file}"
   echo "" >> "${result_file}"
+  echo "" >> "${result_details_file}"
 }
 
 # Write mesure
 # Globals(Used and modified):
-#   VIM_OPTIONS
 #   filetype
 #   result_file
 # Arguments:
@@ -29,25 +35,30 @@ function add_header {
 # Returns:
 #   None
 function mesure {
-  for option in "${VIM_OPTIONS[@]}" ; do
+  readonly OPTIONS=("-u ${MYVIMRC}" "-u ${MYVIMRC} --noplugin" "-u NONE")
+  for option in "${OPTIONS[@]}" ; do
     if [ "${filetype}" != 'boot' ] ; then
       local openfile=${SAMPLE_FILE_PREFIX}.${filetype}
     fi
     temp=$(mktemp)
+    # shellcheck disable=SC2086
+    vim ${option} --startuptime ${temp} -e -c 'visual | quit' ${openfile}
+    time="$(tail -1 "${temp}" | cut -d ' ' -f 1)"
+    echo -n "${time}," >> "${result_file}"
 
-    min=999999999
-    for _ in $(seq 0 2) ; do
-      # shellcheck disable=SC2086
-      vim ${option} --startuptime ${temp} -e -c 'visual | quit' ${openfile}
-      time="$(tail -1 "${temp}" | cut -d ' ' -f 1)"
-      if [[ "${time}" < "${min}" ]] ; then
-        min=${time}
-      fi
-    done
-    echo -n "${min}," >> "${result_file}"
+    if [ "${option}" == "${OPTIONS[0]}" ] ; then
+      vimrc_time="$(grep "sourcing.*vimrc$" "${temp}" | cut -d ' ' -f 3)"
+      echo -n "${vimrc_time}," >> "${result_details_file}"
+
+      other_time=$(echo "${time}" - "${vimrc_time}" | bc)
+      echo -n "${other_time}," >> "${result_details_file}"
+    fi
   done
+
   sed -i -e 's/,$//' "${result_file}"
+  sed -i -e 's/,$//' "${result_details_file}"
   echo "" >> "${result_file}"
+  echo "" >> "${result_details_file}"
 }
 
 readonly target_dir="${WORKSPACE:-.}/target"
@@ -57,16 +68,17 @@ readonly SAMPLE_FILE_PREFIX=sample
 readonly MYVIMRC="${WORKSPACE:-~/dotfiles}/vim/.vimrc"
 readonly FILE_TYPES=('boot' 'markdown' 'sh')
 
-readonly HEADERS=('default' 'noplugin' 'none')
-readonly VIM_OPTIONS=("-u ${MYVIMRC}" "-u ${MYVIMRC} --noplugin" "-u NONE")
-
 for filetype in "${FILE_TYPES[@]}" ; do
   result_file="${target_dir}"/${filetype}.csv
+  result_details_file="${target_dir}"/${filetype}_details.csv
   echo -n "" > "${result_file}"
+  echo -n "" > "${result_details_file}"
 
   add_header
   mesure
 
   cat "${result_file}"
+  cat "${result_details_file}"
+  echo ""
 done
 

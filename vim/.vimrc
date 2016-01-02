@@ -530,8 +530,8 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
     NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all', 'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901'}   " Commits on Aug 18, 2015
   endif
   NeoBundle 'Shougo/unite-outline'
-  NeoBundle 'Shougo/unite.vim', {'on_cmd' : {'name' : 'Unite', 'complete' : 'customlist,vimfiler#complete'}, 'depends' : 'Shougo/neomru.vim'}
-  NeoBundle 'Shougo/vimfiler.vim', {'on_map' : '<Plug>', 'on_path' : '.*', 'on_cmd' : {'name' : 'VimFiler', 'complete' : 'customlist,vimfiler#complete'}, 'depends' : 'Shougo/unite.vim'}
+  NeoBundle 'Shougo/unite.vim', {'on_cmd' : 'Unite', 'depends' : 'Shougo/neomru.vim'}
+  NeoBundle 'Shougo/vimfiler.vim', {'on_map' : '<Plug>', 'on_path' : '.*', 'on_cmd' : 'VimFiler', 'depends' : 'Shougo/unite.vim'}
   NeoBundle 'Shougo/vimproc', {'lazy' : 0, 'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   NeoBundle 'TKNGUE/hateblo.vim', {'pre_cmd' : 'Hateblo', 'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   NeoBundle 'aklt/plantuml-syntax', {'lazy' : 0} " TODO ftdetctがLazy読み込みできない
@@ -569,14 +569,14 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   NeoBundle 'thinca/vim-localrc', {'on_ft' : 'vim'}
   NeoBundle 'thinca/vim-qfreplace', {'on_cmd' : 'Qfreplace'} " grepした結果を置換
   NeoBundle 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
-  NeoBundle 'thinca/vim-ref', {'on_cmd' : {'name' : 'Ref', 'complete' : 'customlist,ref#complete'}}
+  NeoBundle 'thinca/vim-ref', {'on_cmd' : 'Ref'}
   NeoBundle 'thinca/vim-singleton', {'lazy' : 0, 'gui' : 1, 'disabled' : !has('clientserver')} " Caution: 引数無しで起動すると二重起動される
   NeoBundle 'tomtom/tcomment_vim', {'on_map' : ['gc', 'g<', 'g>', '<Plug>']}
   NeoBundle 'tpope/vim-fugitive', {'lazy' : 0, 'external_commands' : 'git'} " TODO Lazyがうまく行かない(augroup指定しても有効にならない)
   NeoBundle 'tpope/vim-speeddating', {'on_map' : ['<C-a>', '<C-x>'], 'depends' : 'tpope/vim-repeat'}
   NeoBundle 'tpope/vim-unimpaired', {'on_map' : ['[', ']'], 'depends' : 'tpope/vim-repeat'}
   NeoBundle 'tsukkee/unite-tag'
-  NeoBundle 'tyru/capture.vim', {'on_cmd' : {'name' : 'Capture', 'complete' : 'command'}}
+  NeoBundle 'tyru/capture.vim', {'on_cmd' : 'Capture'}
   NeoBundle 'tyru/open-browser.vim', {'on_map' : ['<Plug>', '<Plug>(openbrowser-smart-search)']} " TODO シングルクォートで囲まれたURLが開けない@office(gui, cui)(e.g. 'http://hoge')
   if s:IsHome()
     NeoBundle 'tyru/restart.vim', {'gui' : 1, 'on_cmd' : 'Restart'}
@@ -585,7 +585,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   endif
   NeoBundle 'ujihisa/unite-colorscheme'
   NeoBundle 'vim-jp/vimdoc-ja', {'on_ft' : 'help'}
-  NeoBundle 'vim-scripts/DirDiff.vim', {'on_cmd' : {'name' : 'DirDiff', 'complete' : 'dir'}} " TODO 文字化けする
+  NeoBundle 'vim-scripts/DirDiff.vim', {'on_cmd' : 'DirDiff'} " TODO 文字化けする
   NeoBundle 'vim-scripts/HybridText', {'on_ft' : 'hybrid'}
   NeoBundle 'xolox/vim-easytags', {'on_ft' : ['vim', 'sh'], 'depends' : ['xolox/vim-shell']}
   NeoBundle 'xolox/vim-shell', {'on_ft' : ['vim', 'sh'], 'depends' : ['xolox/vim-misc']}

@@ -42,7 +42,7 @@ function mesure {
     fi
     temp=$(mktemp)
     # shellcheck disable=SC2086
-    vim ${option} --startuptime ${temp} -e -c 'visual | quit' ${openfile}
+    vim ${option} --startuptime ${temp} -e -c 'quit' ${openfile}
     time="$(tail -1 "${temp}" | cut -d ' ' -f 1)"
     echo -n "${time}," >> "${result_file}"
 

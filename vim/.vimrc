@@ -535,6 +535,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   NeoBundle 'Shougo/vimproc', {'lazy' : 0, 'disabled' : has('kaoriya'), 'build' : { 'Windows' : 'make -f make_mingw32.mak', 'cygwin' : 'make -f make_cygwin.mak', 'mac' : 'make -f make_mac.mak', 'unix' : 'make -f make_unix.mak', }, }
   NeoBundle 'TKNGUE/hateblo.vim', {'pre_cmd' : 'Hateblo', 'disabled' : has('win32') || exists('$BUILD_NUMBER')} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   NeoBundle 'aklt/plantuml-syntax', {'lazy' : 0} " TODO ftdetctがLazy読み込みできない
+  NeoBundle 'assout/benchvimrc-vim', {'on_cmd' : 'BenchVimrc'} " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
   NeoBundle 'assout/unite-todo'
   NeoBundle 'chaquotay/ftl-vim-syntax' " TODO 効いてる？
   NeoBundle 'elzr/vim-json', {'lazy' : 0} " For json filetype. TODO ftdetctがLazy読み込みできない
@@ -554,7 +555,6 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   endif
   NeoBundle 'koron/codic-vim', {'on_cmd' : 'Codic'} " TODO vimprocなどで非同期化されてる？
   NeoBundle 'lambdalisue/vim-gista', {'on_cmd' : 'Gista', 'on_map' : '<Plug>', 'on_unite' : 'gista', 'external_commands' : ['curl', 'wget']} " TODO external_commandsは本来はor条件
-  NeoBundle 'mattn/benchvimrc-vim', {'on_cmd' : 'BenchVimrc'} " TODO msys2 vimだと_vimrc見てくれない(暫定で書き換えちゃう)
   NeoBundle 'mattn/emmet-vim', {'on_ft' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   NeoBundle 'mattn/qiita-vim', {'on_cmd' : 'Qiita'}
   NeoBundle 'medihack/sh.vim', {'on_ft' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
@@ -566,7 +566,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   " NeoBundle 'scrooloose/syntastic' " TODO quickfixstatusと競合するっぽい
   NeoBundle 'szw/vim-maximizer' " Windowの最大化・復元
   NeoBundle 't9md/vim-textmanip', {'lazy' : 0} " TODO Lazy化できない
-  NeoBundle 'thinca/vim-localrc', {'on_ft' : 'vim'}
+  NeoBundle 'thinca/vim-localrc', {'lazy' : 0}
   NeoBundle 'thinca/vim-qfreplace', {'on_cmd' : 'Qfreplace'} " grepした結果を置換
   NeoBundle 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
   NeoBundle 'thinca/vim-ref', {'on_cmd' : 'Ref'}
@@ -896,6 +896,11 @@ if s:HasPlugin('switch.vim') " {{{
         \  {
         \     '\v「(.{-})」' : '【\1】',
         \     '\v【(.{-})】' : '「\1」',
+        \  },
+        \  {
+        \     '\v\$\{(.{-})\}' : '"${\1}"',
+        \     '\v"\$\{(.{-})\}"' : '''${\1}''',
+        \     '\v''\$\{(.{-})\}''' : '${\1}',
         \  },
         \]
 

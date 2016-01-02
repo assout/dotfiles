@@ -29,7 +29,7 @@ echo "${temp_proc}"
 
 echo "1, 2, 3, 4, 5, 6, 7, 8, 9, 10" > "${result_file}"
 paste -d ',' -s "${temp_time}" >> "${result_file}"
-# paste -d ',' -s "${temp_proc}" "${temp_time}" > "${result_file}"
 
+# paste -d ',' -s "${temp_proc}" "${temp_time}" > "${result_file}"
 # echo "time, proc" > "${result_file}"
 # paste -d ',' "${temp_time}" "${temp_proc}" >> "${result_file}"

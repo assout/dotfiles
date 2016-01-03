@@ -778,7 +778,7 @@ if s:HasPlugin('memolist.vim') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path
+    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
@@ -1028,7 +1028,7 @@ if s:HasPlugin('unite.vim') " {{{
 
     function! s:MyTodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
+      execute ':silent grep "' . a:word . '" ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
 

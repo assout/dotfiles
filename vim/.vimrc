@@ -333,7 +333,7 @@ set softtabstop=0
 set splitbelow
 set splitright
 " スペルチェックで日本語は除外する
-set spelllang& spelllang+=cjk
+set spelllang=en,cjk
 if has('path_extra')
   set tags& tags=./.tags;
 else
@@ -524,11 +524,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   NeoBundle 'LeafCage/yankround.vim', {'on_map' : '<Plug>', 'disabled' : exists('$BUILD_NUMBER')} " TODO Jenkinsだとエラー
   NeoBundle 'Shougo/neobundle.vim', {'fetch' : 1, 'external_commands' : 'git'}
   NeoBundle 'Shougo/neocomplete', {'on_i' : 1, 'disabled' : !has('lua')}
-  if s:IsHome()
-    NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all'}
-  else
-    NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all', 'rev' : 'a52b644475156d397117b2e7920849fb9f1c8901'}   " Commits on Aug 18, 2015
-  endif
+  NeoBundle 'Shougo/neomru.vim', {'on_ft' : 'all'}
   NeoBundle 'Shougo/unite-outline'
   NeoBundle 'Shougo/unite.vim', {'on_cmd' : 'Unite', 'depends' : 'Shougo/neomru.vim'}
   NeoBundle 'Shougo/vimfiler.vim', {'on_map' : '<Plug>', 'on_path' : '.*', 'on_cmd' : 'VimFiler', 'depends' : 'Shougo/unite.vim'}
@@ -542,7 +538,7 @@ if s:IsPluginEnabled() && s:IsNeobundleEnabled()
   NeoBundle 'fuenor/im_control.vim', {'on_i' : 1, 'disabled' : !has('unix')}
   NeoBundle 'glidenote/memolist.vim', {'pre_cmd' : 'Memo', 'on_unite' : ['memolist', 'memolist_reading'], 'depends' : 'Shougo/unite.vim'}
   NeoBundle 'h1mesuke/vim-alignta'
-  NeoBundle 'haya14busa/vim-migemo', {'external_commands' : 'cmigemo'}
+  NeoBundle 'haya14busa/vim-migemo', {'on_map' : ['g/', '<SID>[migemo]', '<Space>/'], 'external_commands' : 'cmigemo'}
   NeoBundle 'hyiltiz/vim-plugins-profile', {'fetch' : 1}
   NeoBundle 'https://raw.githubusercontent.com/mrichie/vimfiles/master/plugin/hz_ja.vim', {'script_type' : 'plugin', 'disabled' : has('kaoriya'), 'on_cmd' : ['Hankaku', 'Zenkaku', 'ToggleHZ']} " TODO homeでエラーメッセージ出るっポイ(これが原因か不明だが)
   NeoBundle 'itchyny/calendar.vim', {'on_cmd' : 'Calendar'}
@@ -652,7 +648,7 @@ elseif s:IsPluginEnabled() && !s:IsNeobundleEnabled()
         \  'capture.vim',
         \  'emmet-vim',
         \  'memolist.vim',
-        \  'neomru.vim*',
+        \  'neomru.vim',
         \  'open-browser.vim',
         \  'previm',
         \  'quickfixstatus',
@@ -675,6 +671,7 @@ elseif s:IsPluginEnabled() && !s:IsNeobundleEnabled()
         \  'vim-operator-user',
         \  'vim-quickrun',
         \  'vim-repeat',
+        \  'vim-speeddating',
         \  'vim-submode',
         \  'vim-textmanip',
         \  'vim-textobj-anyblock',
@@ -803,7 +800,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = has('lua') && s:IsHome() ? 1 : 0 " 若干負荷あるので最低限有効
+  let g:neocomplete#enable_at_startup = 1
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{
@@ -877,6 +874,7 @@ if s:HasPlugin('switch.vim') " {{{
   " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
   " TODO dictionary定義はSwitchReverse効かない
   " TODO 優先順位指定したい(`${}`のswitchを優先したい)
+  " TODO 入れ子のときおかしくなる(e.g. [foo[bar]] )
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
@@ -1114,8 +1112,14 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
+  function! g:neobundle#hooks.on_source(bundle) abort
+    if has('migemo')
+      call g:migemo#SearchChar(0) " Caution: probably slow
+    else
+  endfunction
+  call s:CallIfDisableNeobundle()
+
   if has('migemo')
-    if has('vim_starting') | call g:migemo#SearchChar(0) | endif " Caution: probably slow
     nnoremap <SID>[migemo] g/
   else
     nnoremap <SID>[migemo] :<C-u>Migemo<Space>

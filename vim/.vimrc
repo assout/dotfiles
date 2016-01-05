@@ -450,20 +450,19 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
-  Plug 'Shougo/unite.vim', {'on' : 'Unite'}
-        \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : ['Unite'], 'for' : '*'}
-        \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
-        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler']}
-        \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
-        \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
-        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']} " TODO 辞書提供なくなったぽっいので古いかも
-        \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
-        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
+  Plug 'Shougo/unite.vim', {'on' : 'Unite'} |
+        \ Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : ['Unite'], 'for' : '*'} |
+        \ Plug 'Shougo/unite-outline', {'on' : ['Unite']} |
+        \ Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler']} |
+        \ Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']} |
+        \ Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']} |
+        \ Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']} |
+        \ Plug 'tsukkee/unite-tag', {'on' : ['Unite']} |
+        \ Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']} |
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
-  " Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
-  Plug 'assout/benchvimrc-vim'
+  Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
@@ -473,7 +472,7 @@ if s:IsPluginEnabled()
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home.'/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'kana/vim-gf-user', {}
-  Plug 'kana/vim-submode', {}
+  Plug 'kana/vim-submode', {'for' : '*'}
   Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'koron/codic-vim', {'on' : 'Codic'} " TODO vimprocなどで非同期化されてる？
   Plug 'lambdalisue/vim-gista', {'on' : ['Gista', '<Plug>(gista-']}
@@ -488,11 +487,11 @@ if s:IsPluginEnabled()
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
   Plug 'thinca/vim-localrc', g:is_office ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
-  Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'}
-        \ | Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'}
-        \ | Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'}
-        \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
+  Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']} |
+        \ Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'} |
+        \ Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'} |
+        \ Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'} |
+        \ Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'} |
   Plug 'thinca/vim-ref', {'on' : 'Ref'}
   Plug 'thinca/vim-singleton', {} " Caution: 引数無しで起動すると二重起動される TODO cui時は無効で良い
   Plug 'tomtom/tcomment_vim', {'for' : '*'}
@@ -506,29 +505,29 @@ if s:IsPluginEnabled()
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
-  Plug 'xolox/vim-misc', {'for' : ['vim', 'sh']}
-        \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh']}
-        \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh']}
+  Plug 'xolox/vim-misc', {'for' : ['vim', 'sh']} |
+        \ Plug 'xolox/vim-shell', {'for' : ['vim', 'sh']} |
+        \ Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh']} |
   " }}}
 
   " User Operators {{{
-  Plug 'kana/vim-operator-user', {'for' : '*'}
-        \ | Plug 'kana/vim-operator-replace', {'for' : '*'}
-        \ | Plug 'rhysd/vim-operator-surround', {'for' : '*'}
-        \ | Plug 'tyru/operator-camelize.vim', {'for' : '*'}
+  Plug 'kana/vim-operator-user', {'for' : '*'} |
+        \ Plug 'kana/vim-operator-replace', {'for' : '*'} |
+        \ Plug 'rhysd/vim-operator-surround', {'for' : '*'} |
+        \ Plug 'tyru/operator-camelize.vim', {'for' : '*'} |
   " }}}
 
   " User Textobjects {{{
-  Plug 'kana/vim-textobj-user', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-entire', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-function', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-indent', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-line', {'for' : '*'}
-        \ | Plug 'mattn/vim-textobj-url', {'for' : '*'}
-        \ | Plug 'rhysd/vim-textobj-anyblock', {'for' : '*'}
-        \ | Plug 'sgur/vim-textobj-parameter', {'for' : '*'}
-        \ | Plug 'thinca/vim-textobj-between', {'for' : '*'}
-        \ | Plug 'thinca/vim-textobj-comment', {'for' : '*'}
+  Plug 'kana/vim-textobj-user', {'for' : '*'} |
+        \ Plug 'kana/vim-textobj-entire', {'for' : '*'} |
+        \ Plug 'kana/vim-textobj-function', {'for' : '*'} |
+        \ Plug 'kana/vim-textobj-indent', {'for' : '*'} |
+        \ Plug 'kana/vim-textobj-line', {'for' : '*'} |
+        \ Plug 'mattn/vim-textobj-url', {'for' : '*'} |
+        \ Plug 'rhysd/vim-textobj-anyblock', {'for' : '*'} |
+        \ Plug 'sgur/vim-textobj-parameter', {'for' : '*'} |
+        \ Plug 'thinca/vim-textobj-between', {'for' : '*'} |
+        \ Plug 'thinca/vim-textobj-comment', {'for' : '*'} |
   " }}}
 
   " Colorschemes {{{
@@ -846,6 +845,7 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
   nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
+  nnoremap <SID>[unite]p    :<C-u>Unite runtimepath -buffer-name=runtimepath<CR>
   nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
   nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
   nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
@@ -1108,62 +1108,60 @@ if s:HasPlugin('vim-singleton') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-  call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
-  call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
-  call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
-  call g:submode#enter_with('winsize', 'n', '', '<C-w>+', '5<C-w>+')
-  call g:submode#map('winsize', 'n', '', '<', '5<C-w><')
-  call g:submode#map('winsize', 'n', '', '>', '5<C-w>>')
-  call g:submode#map('winsize', 'n', '', '-', '5<C-w>-')
-  call g:submode#map('winsize', 'n', '', '+', '5<C-w>+')
-
-  call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
-  call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')
-  call g:submode#map('scroll', 'n', '', 'h', 'zh')
-  call g:submode#map('scroll', 'n', '', 'l', 'zl')
-  call g:submode#map('scroll', 'n', '', 'H', '10zh')
-  call g:submode#map('scroll', 'n', '', 'L', '10zl')
-
-  call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>')
-  call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>')
-  call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
-  call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
-  call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
-  call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
-
-  " TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
-  call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>')
-  call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>')
-  call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
-  call g:submode#map('args', 'n', '', 'j', ':next<CR>')
-  call g:submode#map('args', 'n', '', 'K', ':first<CR>')
-  call g:submode#map('args', 'n', '', 'J', ':last<CR>')
-
-  " TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
-  call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>')
-  call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>')
-  call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
-  call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
-  call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
-  call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
-  call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>')
-  call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>')
-
-  " TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
-  call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>')
-  call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>')
-  call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
-  call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
-  call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
-  call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>')
-  call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>')
-  call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>')
-
-  " TODO 先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
-  call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c')
-  call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
-  call g:submode#map('diff', 'n', '', 'k', '[c')
-  call g:submode#map('diff', 'n', '', 'j', ']c')
+  autocmd vimrc User vim-submode
+        \ call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><') |
+        \ call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>') |
+        \ call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-') |
+        \ call g:submode#enter_with('winsize', 'n', '', '<C-w>+', '5<C-w>+') |
+        \ call g:submode#map('winsize', 'n', '', '<', '5<C-w><') |
+        \ call g:submode#map('winsize', 'n', '', '>', '5<C-w>>') |
+        \ call g:submode#map('winsize', 'n', '', '-', '5<C-w>-') |
+        \ call g:submode#map('winsize', 'n', '', '+', '5<C-w>+') |
+        \
+        \ call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh') |
+        \ call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl') |
+        \ call g:submode#map('scroll', 'n', '', 'h', 'zh') |
+        \ call g:submode#map('scroll', 'n', '', 'l', 'zl') |
+        \ call g:submode#map('scroll', 'n', '', 'H', '10zh') |
+        \ call g:submode#map('scroll', 'n', '', 'L', '10zl') |
+        \
+        \ call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>') |
+        \ call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>') |
+        \ call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>') |
+        \ call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>') |
+        \ call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>') |
+        \ call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>') |
+        \
+        \ call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>') |
+        \ call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>') |
+        \ call g:submode#map('args', 'n', '', 'k', ':previous<CR>') |
+        \ call g:submode#map('args', 'n', '', 'j', ':next<CR>') |
+        \ call g:submode#map('args', 'n', '', 'K', ':first<CR>') |
+        \ call g:submode#map('args', 'n', '', 'J', ':last<CR>') |
+        \
+        \ call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>') |
+        \ call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>') |
+        \ call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>') |
+        \
+        \ call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>') |
+        \ call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>') |
+        \ call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>') |
+        \ call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>') |
+        \ call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>') |
+        \ call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>') |
+        \ call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>') |
+        \ call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>') |
+        \
+        \ call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c') |
+        \ call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c') |
+        \ call g:submode#map('diff', 'n', '', 'k', '[c') |
+        \ call g:submode#map('diff', 'n', '', 'j', ']c') |
+        \ " TODO args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?) |
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

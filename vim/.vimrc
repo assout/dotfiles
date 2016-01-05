@@ -77,8 +77,7 @@ function! s:RestoreCursorPosition()
   endif
 endfunction
 
-" TODO undoしても&expandtabの値は戻らないので注意
-function! s:MyToggleExpandTab()
+function! s:MyToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
   setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs. <:help restore-position>
@@ -88,7 +87,7 @@ function! s:MyToggleExpandTab()
 endfunction
 command! MyToggleExpandTab call <SID>MyToggleExpandTab()
 
-function! s:MyChangeTabstep(size) " TODO undoしても&tabstopの値は戻らないので注意
+function! s:MyChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
     " Refs. <:help restore-position>
     normal! msHmt
@@ -493,7 +492,7 @@ if s:IsPluginEnabled()
         \ Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'} |
         \ Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'} |
   Plug 'thinca/vim-ref', {'on' : 'Ref'}
-  Plug 'thinca/vim-singleton', {} " Caution: 引数無しで起動すると二重起動される TODO cui時は無効で良い
+  Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'}
   Plug 'tpope/vim-fugitive', g:is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
   Plug 'tpope/vim-repeat'
@@ -540,10 +539,8 @@ if s:IsPluginEnabled()
 
   call g:plug#end()
 
-  if g:is_office_gui
-    " TODO Workaround. msys2からgvim起動したとき入らないため
-    let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc'
-  endif
+  " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
+  if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
@@ -1091,14 +1088,6 @@ if s:HasPlugin('vim-ref') " {{{
     nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
     nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
   endif
-
-  " TODOs for ref-gene
-  " TODO 選択範囲の単語で検索
-  " TODO unite-actioinでyank
-  " TODO unite重い
-  " TODO コマンド履歴に残したい
-  " TODO 和英ができない
-  " TODO キャッシュ化されている？
 endif " }}}
 
 if s:HasPlugin('vim-singleton') " {{{

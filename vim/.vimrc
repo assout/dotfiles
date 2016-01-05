@@ -450,10 +450,10 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
-  Plug 'Shougo/unite.vim', {'on' : 'Unite'} |
-        \ Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : ['Unite'], 'for' : '*'} |
-        \ Plug 'Shougo/unite-outline', {'on' : ['Unite']} |
-        \ Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler']} |
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler']} |
+        \ Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : ['Unite neomru'], 'for' : '*'} |
+        \ Plug 'Shougo/unite-outline', {'on' : 'Unite'} |
+        \ Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']} |
         \ Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']} |
         \ Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']} |
         \ Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']} |

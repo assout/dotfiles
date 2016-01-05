@@ -14,7 +14,7 @@
 "
 " ## Principles
 " * Keep it short and simple, stupid! (500step以下に留めたい)
-" * To portable! (e.g. office/home, vim/gvim/vrapper, development/server)
+" * To portable! (e.g. office/home/jenkins, vim/gvim/vrapper, development/server)
 " * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
 " * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
 "
@@ -45,9 +45,9 @@
 " }}}1
 
 " # Begin {{{1
+
 " vint: -ProhibitSetNoCompatible
 set nocompatible " Caution: vim -uで起動した時エラーとならないようにする
-
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 
@@ -64,7 +64,7 @@ function! s:IsPluginEnabled()
 endfunction
 
 function! s:HasPlugin(plugin)
-  return isdirectory(expand(s:plugged_path . a:plugin)) && &loadplugins
+  return isdirectory(expand(s:plugged_path . '/' . a:plugin)) && &loadplugins
 endfunction
 
 function! s:RestoreCursorPosition()
@@ -79,7 +79,7 @@ endfunction
 
 " TODO undoしても&expandtabの値は戻らないので注意
 function! s:MyToggleExpandTab()
-  setlocal expandtab! | retab " Caution: retab! は使わない(意図しない空白も置換されてしまうため)
+  setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs. <:help restore-position>
     normal! msHmt
@@ -105,8 +105,9 @@ endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
+" TODO windowsで開けない(常にマイドキュメントが開く)
 function! s:MyHere()
-  if b:is_office
+  if g:is_office
     " Caution: Windowsで set shellslashしているときうまく開かないため設定。
     " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
     setlocal noshellslash
@@ -126,18 +127,20 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " }}}1
 
 " # Let defines {{{1
+
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
 let g:loaded_matchparen = 1 " Refs. <:help matchparen>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-" Caution: Vim-Plugなど別スクリプトに渡す可能性を考慮しbuffer scopeとする
-let b:is_home = $USERNAME ==# 'oji'
-let b:is_office = $USERNAME ==# 'admin'
-let b:is_jenkins = exists('$BUILD_NUMBER')
+" Caution: Vim-Plugなど別スクリプトに渡す可能性を考慮しbuffer scopeとする-> TODO 独自commandから呼ぶ独自function内で参照できないためいったんglobalにする(スコープ見直し or 名前空間付与)
+let g:is_home = $USERNAME ==# 'oji'
+let g:is_office = $USERNAME ==# 'admin'
+let g:is_office_gui = g:is_office && has('gui_running')
+let g:is_office_cui = g:is_office && !has('gui_running')
+let g:is_jenkins = exists('$BUILD_NUMBER')
 
-" Caution: Windowsだとデフォルトで~/.vimにruntimepath通さないのでvimfilesにする(migemo pluginがデフォルトでruntimepathとしてにいってくれたりする)
-let s:dotvim_path = b:is_home ? expand('~/.vim/') : b:is_office ? expand('~/vimfiles/') : b:is_jenkins ? expand('$WORKSPACE/.vim/') : ''
-let s:plugged_path = s:dotvim_path . 'plugged/'
+let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
+let s:plugged_path = s:dotvim_path . '/plugged'
 
 if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
@@ -250,7 +253,7 @@ set showtabline=1
 set shortmess& shortmess+=atTO
 set sidescrolloff=5
 set smartcase
-if b:is_home
+if g:is_home
   set spellfile=~/Dropbox/spell/en.utf-8.add
 else
   set spellfile=~/Documents/spell/en.utf-8.add
@@ -437,16 +440,18 @@ cnoremap <M-f> <S-Right>
 
 " # Plug-ins {{{1
 if s:IsPluginEnabled()
-  let &runtimepath = has('vim_starting') && b:is_jenkins ? &runtimepath . ',' . s:dotvim_path : &runtimepath
+  if has('vim_starting')
+    let &runtimepath = g:is_office_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
+  endif
   call g:plug#begin(s:plugged_path)
 
   " General {{{
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
-  Plug 'Shougo/neocomplete', {}
+  Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
   Plug 'Shougo/unite.vim', {'on' : 'Unite'}
-        \ | Plug 'Shougo/neomru.vim', b:is_jenkins ? {'on' : []} : {}
+        \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : ['Unite'], 'for' : '*'}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler']}
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
@@ -454,14 +459,14 @@ if s:IsPluginEnabled()
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']} " TODO 辞書提供なくなったぽっいので古いかも
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  Plug 'Shougo/vimproc', b:is_jenkins ? {'on' : []} : {'do' : 'make -f make_unix.mak'}
-  Plug 'TKNGUE/hateblo.vim', b:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
+  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
+  Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim') TODO Jenkinsだとエラー
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   " Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'assout/benchvimrc-vim'
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-  Plug 'fuenor/im_control.vim', has('win32') ? {'on' : []} : {}
+  Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
   Plug 'haya14busa/vim-migemo', {}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
@@ -481,7 +486,7 @@ if s:IsPluginEnabled()
   Plug 'scrooloose/syntastic', {'on' : []} " TODO quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
-  Plug 'thinca/vim-localrc', {'for' : 'vim'}
+  Plug 'thinca/vim-localrc', g:is_office ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
   Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
         \ | Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'}
@@ -490,11 +495,11 @@ if s:IsPluginEnabled()
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
   Plug 'thinca/vim-ref', {'on' : 'Ref'}
   Plug 'thinca/vim-singleton', {} " Caution: 引数無しで起動すると二重起動される TODO cui時は無効で良い
-  Plug 'tomtom/tcomment_vim' " TODO On demand不可
-  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
+  Plug 'tomtom/tcomment_vim', {'for' : '*'}
+  Plug 'tpope/vim-fugitive', g:is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-speeddating', {}
-  Plug 'tpope/vim-unimpaired', {}
+  Plug 'tpope/vim-speeddating', {'for' : '*'}
+  Plug 'tpope/vim-unimpaired', {'for' : '*'}
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {} " TODO シングルクォートで囲まれたURLが開けない@office(gui, cui)(e.g. 'http://hoge')
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
@@ -507,23 +512,23 @@ if s:IsPluginEnabled()
   " }}}
 
   " User Operators {{{
-  Plug 'kana/vim-operator-user', {}
-        \ | Plug 'kana/vim-operator-replace', {}
-        \ | Plug 'rhysd/vim-operator-surround', {}
-        \ | Plug 'tyru/operator-camelize.vim', {}
+  Plug 'kana/vim-operator-user', {'for' : '*'}
+        \ | Plug 'kana/vim-operator-replace', {'for' : '*'}
+        \ | Plug 'rhysd/vim-operator-surround', {'for' : '*'}
+        \ | Plug 'tyru/operator-camelize.vim', {'for' : '*'}
   " }}}
 
   " User Textobjects {{{
-  Plug 'kana/vim-textobj-user', {}
-        \ | Plug 'kana/vim-textobj-entire', {}
-        \ | Plug 'kana/vim-textobj-function', {}
-        \ | Plug 'kana/vim-textobj-indent', {}
-        \ | Plug 'kana/vim-textobj-line', {}
-        \ | Plug 'mattn/vim-textobj-url', {}
-        \ | Plug 'rhysd/vim-textobj-anyblock', {}
-        \ | Plug 'sgur/vim-textobj-parameter', {}
-        \ | Plug 'thinca/vim-textobj-between', {}
-        \ | Plug 'thinca/vim-textobj-comment', {}
+  Plug 'kana/vim-textobj-user', {'for' : '*'}
+        \ | Plug 'kana/vim-textobj-entire', {'for' : '*'}
+        \ | Plug 'kana/vim-textobj-function', {'for' : '*'}
+        \ | Plug 'kana/vim-textobj-indent', {'for' : '*'}
+        \ | Plug 'kana/vim-textobj-line', {'for' : '*'}
+        \ | Plug 'mattn/vim-textobj-url', {'for' : '*'}
+        \ | Plug 'rhysd/vim-textobj-anyblock', {'for' : '*'}
+        \ | Plug 'sgur/vim-textobj-parameter', {'for' : '*'}
+        \ | Plug 'thinca/vim-textobj-between', {'for' : '*'}
+        \ | Plug 'thinca/vim-textobj-comment', {'for' : '*'}
   " }}}
 
   " Colorschemes {{{
@@ -536,7 +541,7 @@ if s:IsPluginEnabled()
 
   call g:plug#end()
 
-  if b:is_office
+  if g:is_office_gui
     " TODO Workaround. msys2からgvim起動したとき入らないため
     let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc'
   endif
@@ -583,8 +588,8 @@ if s:IsPluginEnabled()
 endif
 
 if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = b:is_home ? 1 : 0
-  let g:calendar_google_task = b:is_home ? 1 : 0
+  let g:calendar_google_calendar = g:is_home ? 1 : 0
+  let g:calendar_google_task = g:is_home ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('hateblo.vim') " {{{
@@ -618,31 +623,47 @@ endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = b:is_home ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
+  let g:memolist_path = g:is_home ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
+  let s:memolist_wiki_path = expand('~/Development/gitlab/global-wiki.wiki')
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path
+    if g:is_home
+      execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path
+    elseif g:is_office " TODO 冗長
+      execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path s:memolist_wiki_path
+    endif
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
-  autocmd! User memolist.vim
+  " TODO 冗長
+  autocmd vimrc User memolist.vim
         \ let g:unite_source_alias_aliases = {
         \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
         \  'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
-        \} |
+        \ } |
         \ call g:unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse']) |
         \ call g:unite#custom#source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files']) |
         \ call g:unite#custom#source('memolist', 'ignore_pattern', 'exercises\|reading\|_book\|\(png\|gif\|jpeg\|jpg\)$') |
         \ call g:unite#custom#source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse']) |
         \ call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files']) |
-        \ call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
+        \ call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$') |
+        \ if g:is_office |
+        \   call extend(g:unite_source_alias_aliases, { 'memolist_wiki' : { 'source' : 'file', 'args' : s:memolist_wiki_path }}) |
+        \   call g:unite#custom#source('memolist_wiki', 'sorters', ['sorter_ftime', 'sorter_reverse']) |
+        \   call g:unite#custom#source('memolist_wiki', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files']) |
+        \   call g:unite#custom#source('memolist_wiki', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$') |
+        \ endif
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
-  nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
+  if g:is_home
+    nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
+  elseif g:is_office
+    nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_wiki -buffer-name=memolist_wiki<CR>
+  endif
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -771,14 +792,14 @@ endif " }}}
 if s:HasPlugin('tcomment_vim') " {{{
   let g:tcommentTextObjectInlineComment = 'iC'
 
-  autocmd! User tcomment_vim call g:tcomment#DefineType('java', '// %s')
+  autocmd vimrc User tcomment_vim call g:tcomment#DefineType('java', '// %s')
 endif " }}}
 
 if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
   let g:unite_source_grep_max_candidates = 200
-  if has('win32')
+  if g:is_office_gui
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
   let s:MyRelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
@@ -802,13 +823,16 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
   autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
-  autocmd! User unite.vim
+  " Caution: mapはunimpairedの`]u`系を無効にしたあと設定する必要がある FIXME vim起動後最初に開くのがunite,memolistだと順序性でだめ
+  autocmd vimrc User unite.vim
         \ call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove) |
         \ call g:unite#custom#alias('file', 'delete', 'vimfiler__delete') |
         \ call g:unite#custom#default_action('directory', 'vimfiler') |
         \ call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse']) |
         \ call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$') |
-        \ call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+        \ call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$') |
+        \ execute 'nnoremap [u :UnitePrevious<CR>' |
+        \ execute 'nnoremap ]u :UniteNext<CR>' |
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -841,10 +865,6 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
   endif
 
-  " Caution: unimpairedの`]u`系を無効にする必要がある
-  nnoremap [u :UnitePrevious<CR>
-  nnoremap ]u :UniteNext<CR>
-
   if s:HasPlugin('neomru.vim') " {{{
     let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0
@@ -863,7 +883,7 @@ if s:HasPlugin('unite.vim') " {{{
 
   if s:HasPlugin('unite-todo') " {{{
     let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = b:is_home ? '~/Dropbox' : expand('~/Documents')
+    let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
 
     function! s:MyTodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
@@ -925,7 +945,7 @@ if s:HasPlugin('vim-gf-user') " {{{
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
-  autocmd! User vim-gf-user call g:gf#user#extend('GfFile', 1000)
+  autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
@@ -950,9 +970,8 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
-  autocmd! User vim-migemo \ if has('migemo') | call g:migemo#SearchChar(0) | endif " Caution: probably slow
-
   if has('migemo')
+    call g:migemo#SearchChar(0) " Caution: probably slow
     nnoremap <SID>[migemo] g/
   else
     nnoremap <SID>[migemo] :<C-u>Migemo<Space>
@@ -987,7 +1006,7 @@ endif " }}}
 if s:HasPlugin('vim-operator-surround') " {{{
   " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
   " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
-  autocmd! User vim-operator-surround
+  autocmd vimrc User vim-operator-surround
         \ let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks) |
         \ call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
@@ -1059,7 +1078,7 @@ if s:HasPlugin('vim-ref') " {{{
 
   autocmd vimrc FileType ref resize 5
 
-  if executable('elinks') || executable('w3m') || executable('links')|| executable('lynx')
+  if 1 || executable('elinks') || executable('w3m') || executable('links')|| executable('lynx') " TODO 遅いので常にtrue
     let g:ref_source_webdict_sites = {
           \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
           \  'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
@@ -1085,10 +1104,10 @@ endif " }}}
 if s:HasPlugin('vim-singleton') " {{{
   let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
   let g:singleton#opener = 'vsplit'
-  autocmd! User vim-singleton call g:singleton#enable()
+  autocmd vimrc User vim-singleton call g:singleton#enable()
 endif " }}}
 
-if 0 && s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
+if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
   call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
   call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
   call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
@@ -1165,10 +1184,10 @@ endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
   " TODO カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
-  " nmap yae yae``
-  " nmap yie yie``
-  " nmap =ae =ae``
-  " nmap =ie =ie``
+  nmap yae yae``
+  nmap yie yie``
+  nmap =ae =ae``
+  nmap =ie =ie``
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{
@@ -1181,11 +1200,11 @@ if s:HasPlugin('vim-textobj-parameter') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-unimpaired') " {{{
-  autocmd! User vim-unimpaired \
+  autocmd vimrc User vim-unimpaired
         \ execute 'nunmap [u' |
         \ execute 'nunmap [uu' |
         \ execute 'nunmap ]u' |
-        \ execute 'nunmap ]uu'
+        \ execute 'nunmap ]uu' |
 endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
@@ -1220,7 +1239,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    },
         \})
 
-  if b:is_office
+  if g:is_office_gui
     " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
     call extend(g:quickrun_config, {
           \  'watchdogs_checker/shellcheck' : {
@@ -1247,7 +1266,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \  },
         \})
 
-  autocmd! User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
+  autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
 endif " }}}
 
 if s:HasPlugin('yankround.vim') " {{{ TODO 未保存のバッファでpするとエラーがでる(Could not get security context security...) <http://lingr.com/room/vim/archives/2014/04/13>

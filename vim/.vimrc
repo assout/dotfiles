@@ -502,7 +502,8 @@ if s:IsPluginEnabled()
         \ | Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'}
         \ | Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'}
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
-  Plug 'thinca/vim-ref', {'on' : 'Ref'}
+  Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
+        \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'}
   Plug 'tpope/vim-fugitive', g:is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
@@ -655,11 +656,11 @@ if s:HasPlugin('memolist.vim') " {{{
         \ | call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
         \ | call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
         \ | if g:is_office
-        \ |   call extend(g:unite_source_alias_aliases, { 'memolist_wiki' : { 'source' : 'file', 'args' : s:memolist_wiki_path }})
-        \ |   call g:unite#custom#source('memolist_wiki', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-        \ |   call g:unite#custom#source('memolist_wiki', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-        \ |   call g:unite#custom#source('memolist_wiki', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-        \ | endif
+          \ |   call extend(g:unite_source_alias_aliases, { 'memolist_wiki' : { 'source' : 'file', 'args' : s:memolist_wiki_path }})
+          \ |   call g:unite#custom#source('memolist_wiki', 'sorters', ['sorter_ftime', 'sorter_reverse'])
+          \ |   call g:unite#custom#source('memolist_wiki', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
+          \ |   call g:unite#custom#source('memolist_wiki', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
+          \ | endif
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
@@ -979,8 +980,8 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
- " Caution: probably slow
-  autocmd vimrc User vim-migemo if has('migemo') | call g:migemo#SearchChar(0) | else
+  " Caution: probably slow
+  autocmd vimrc User vim-migemo if has('migemo') | call g:migemo#SearchChar(0) | endif
   nnoremap <SID>[migemo] :<C-u>Migemo<Space>
 endif " }}}
 
@@ -1039,10 +1040,6 @@ if s:HasPlugin('vim-operator-surround') " {{{
 
   if s:HasPlugin('vim-textobj-url') " {{{
     nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
-    " TODO no block matches to the region となる
-    nmap <SID>[surround-d]u <Plug>(operator-surround-delete)<Plug>(textobj-url-a)
-    " TODO appendの動きになってしまう
-    nmap <SID>[surround-r]u <Plug>(operator-surround-replace)<Plug>(textobj-url-a)
   endif " }}}
 
   " Caution: aはsaawとかできなくなるのでやらない
@@ -1083,19 +1080,28 @@ if s:HasPlugin('vim-ref') " {{{
 
   autocmd vimrc FileType ref resize 5
 
-  if 1 || executable('elinks') || executable('w3m') || executable('links')|| executable('lynx') " TODO 遅いので常にtrue
-    let g:ref_source_webdict_sites = {
-          \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
-          \  'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
-          \  'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23},
-          \}
-    let g:ref_source_webdict_sites.default = 'ej'
-    let g:ref_source_webdict_use_cache = 1
+  let g:ref_source_webdict_sites = {
+        \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
+        \  'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
+        \  'wiki': { 'url': 'http://ja.wikipedia.org/wiki/%s', 'line': 23},
+        \}
+  let g:ref_source_webdict_sites.default = 'ej'
+  let g:ref_source_webdict_use_cache = 1
 
-    nnoremap <SID>[ref]w<CR> :<C-u>Ref webdict<Space>
-    nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
-    nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
-  endif
+  nnoremap <SID>[ref]w<CR> :<C-u>Ref webdict<Space>
+  nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
+  nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
+
+  " TODO 選択範囲の単語で検索
+  " TODO unite-actioinでyank
+  " TODO unite重い
+  " TODO コマンド履歴に残したい
+  " TODO 和英ができない
+  " TODO キャッシュ化されている？
+  if s:HasPlugin('vim-ref-gene') " {{{
+    nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
+    nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
+  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-singleton') " {{{

@@ -632,11 +632,7 @@ if s:HasPlugin('memolist.vim') " {{{
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    if g:is_home
-      execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path
-    elseif g:is_office " TODO 冗長
-      execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path s:memolist_wiki_path
-    endif
+    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 

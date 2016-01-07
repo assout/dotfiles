@@ -103,7 +103,8 @@ endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO windowsで開けない(常にマイドキュメントが開く)
+" TODO msys2で開けない場合がある(マイドキュメントが開く) -> /d/admin/hogeとなっちゃってるっぽい
+" TODO 引数でパス受けるようにしたほうが使い勝手よい
 function! s:MyHere()
   if g:is_office
     " Caution: Windowsで set shellslashしているときうまく開かないため設定。
@@ -1228,17 +1229,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    },
         \})
 
-  if g:is_office_gui
-    " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
-    call extend(g:quickrun_config, {
-          \  'watchdogs_checker/shellcheck' : {
-          \    'command' : 'shellcheck',
-          \    'cmdopt'  : '-f gcc',
-          \    'exec'    : 'cmd /c "chcp.com 65001 | %c %o %s:p"',
-          \  },
-          \})
-  endif
-
   call extend(g:quickrun_config, {
         \  'markdown/watchdogs_checker': {
         \    'type'
@@ -1248,12 +1238,15 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
         \      : '',
         \   },
-        \  'watchdogs_checker/redpen' : {
-        \    'command' : 'redpen',
-        \    'cmdopt'  : '-c ~/dotfiles/redpen-conf-en.xml',
-        \    'exec'    : '%c %o %s:p 2> /dev/null',
-        \  },
         \})
+
+  if g:is_office_gui " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
+    call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
+    call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
+  elseif g:is_office_cui
+    call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
+    call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
+  endif
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
 endif " }}}

@@ -9,9 +9,9 @@ temp_sorted=$(mktemp)
 sed -e '/^        .*/d' "${temp_raw}" | sort -r > "${temp_sorted}"
 
 readonly target_dir="${WORKSPACE:-.}/target"
-mkdir -p "${target_dir}"
+mkdir -p "${target_dir}/html"
 readonly here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-cat "${here}"/html/header.html "${temp_sorted}" "${here}"/html/footer.html > "${target_dir}"/index.html
+cat "${here}"/html/header.html "${temp_sorted}" "${here}"/html/footer.html > "${target_dir}"/html/index.html
 
 temp_filterd=$(mktemp)
 head -10 "${temp_sorted}" > "${temp_filterd}"

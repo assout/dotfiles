@@ -500,7 +500,6 @@ if s:IsPluginEnabled()
         \ | Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'}
         \ | Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'}
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
-  " TODO ロードされるまでKが使えない
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
@@ -579,6 +578,8 @@ if s:IsPluginEnabled()
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
+  " Caution: Kは定義不要だがプラグインの遅延ロードのため定義している
+  nmap K                <Plug>(ref-keyword)
   map  y                <Plug>(operator-flashy)
   nmap Y                <Plug>(operator-flashy)$
   nmap p                <Plug>(yankround-p)

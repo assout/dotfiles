@@ -460,12 +460,13 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew']}
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Unite'}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
+        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
@@ -484,7 +485,6 @@ if s:IsPluginEnabled()
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode', {'for' : '*'}
   Plug 'koron/codic-vim', {'on' : 'Codic'}
-  Plug 'lambdalisue/vim-gista', {'on' : ['Gista', '<Plug>(gista-']}
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1

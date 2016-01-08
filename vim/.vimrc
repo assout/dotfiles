@@ -848,6 +848,8 @@ if s:HasPlugin('unite.vim') " {{{
         \ | call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
         \ | execute 'nnoremap [u :silent UnitePrevious<CR>'
         \ | execute 'nnoremap ]u :silent UniteNext<CR>'
+        \ | execute 'nnoremap [U :silent UniteFirst<CR>'
+        \ | execute 'nnoremap ]U :silent UniteLast<CR>'
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>

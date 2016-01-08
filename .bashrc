@@ -31,24 +31,42 @@ fi
 
 # }}}1
 
+# [Define, Export variables] {{{1
+
+readonly is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
+readonly is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
+
+# History settings
+HISTSIZE=5000
+HISTFILESIZE=5000
+# 重複を排除
+HISTCONTROL=ignoredups
+# コマンド実行時刻を記録する
+HISTTIMEFORMAT='%F %T '
+
+export GOPATH=$HOME/.go
+export LANG=en_US.UTF-8
+export LESS='-R'
+
+if [ "${is_home}" ] ; then
+  export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
+fi
+
+if [ "${is_home}" -o "${is_office}" ] ; then
+  # TODO スマートに
+  PATH="${PATH}:${HOME}/Development/scripts"
+  PATH="${PATH}:${HOME}/Development/scripts/local/bash"
+fi
+
+if [ "${is_office}" ] ; then
+  export EDITOR="vim --noplugin" # For less +v
+fi
+
+# }}}1
+
 # [Functions & Aliases] {{{1
 
 # General
-function isHome {
-  if [ "${USER}" = oji ] ; then
-    return 0
-  else
-    return 1
-  fi
-}
-
-function isOffice {
-  if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then
-    return 0
-  else
-    return 1
-  fi
-}
 
 function cdParent {
   local to=${1:-1}
@@ -75,7 +93,7 @@ fi
 if [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi
-if ! isHome && ! isOffice && [ -e "${here}/.vimrc" ] ; then
+if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   alias vi='vi -s ${here}/.vimrc'
 fi
@@ -130,44 +148,14 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
-if isOffice ; then
+if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
   alias e='explorer'
   alias git='winpty git'
-elif isHome ; then
+elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
-fi
-
-# }}}1
-
-# [Define, Export variables] {{{1
-
-# History settings
-HISTSIZE=5000
-HISTFILESIZE=5000
-# 重複を排除
-HISTCONTROL=ignoredups
-# コマンド実行時刻を記録する
-HISTTIMEFORMAT='%F %T '
-
-export GOPATH=$HOME/.go
-export LANG=en_US.UTF-8
-export LESS='-R'
-
-if isHome ; then
-  export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
-fi
-
-if isHome || isOffice ; then
-  # TODO スマートに
-  PATH="${PATH}:${HOME}/Development/scripts"
-  PATH="${PATH}:${HOME}/Development/scripts/local/bash"
-fi
-
-if isOffice ; then
-  export EDITOR="vim --noplugin" # For less +v
 fi
 
 # }}}1
@@ -180,13 +168,13 @@ if [ "$(which stty 2> /dev/null)" ] ; then
 fi
 
 # Create Today backup directory. TODO dirty
-if isHome ; then
+if [ "${is_home}" ] ; then
   todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
   if [ ! -d "${todayBackupPath}" ] ; then
     mkdir -p "${todayBackupPath}"
     ln -sfn "${todayBackupPath}" "${HOME}/Today"
   fi
-elif isOffice ; then
+elif [ "${is_office}" ] ; then
   # cmd実行時のため、Windows形式のHOMEパス取得
   _home=$(cmd //c echo %HOME%)
   todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
@@ -220,7 +208,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # shellcheck disable=SC1091
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
-if isHome ; then
+if [ "${is_home}" ] ; then
   # shellcheck disable=SC1091
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # TODO Officeだと遅い
@@ -228,20 +216,20 @@ if isHome ; then
   export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
-elif isOffice ; then
+elif [ "${is_office}" ] ; then
   # shellcheck disable=SC1091
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if isHome ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
+if [ "${is_home}" ] ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
   source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
   __git_complete g __git_main
-elif isOffice ; then
+elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-completion.bash
   __git_complete g __git_main
 fi
 
-if isHome || isOffice ; then
+if [ "${is_home}" -o "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
   [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
 fi

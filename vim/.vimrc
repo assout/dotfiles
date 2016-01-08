@@ -460,6 +460,7 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
+  " TODO vim起動時に引数で渡されたファイルをmru対象にしてほしい
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Unite'}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
@@ -776,6 +777,11 @@ if s:HasPlugin('switch.vim') " {{{
         \     '\v\$\{(.{-})\}' : '"${\1}"',
         \     '\v"\$\{(.{-})\}"' : '''${\1}''',
         \     '\v''\$\{(.{-})\}''' : '${\1}',
+        \  },
+        \  {
+        \     '\v\$\((.{-})\)' : '"$(\1)"',
+        \     '\v"\$\((.{-})\)"' : '''$(\1)''',
+        \     '\v''\$\((.{-})\)''' : '$(\1)',
         \  },
         \]
 

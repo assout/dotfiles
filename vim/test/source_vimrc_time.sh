@@ -15,7 +15,7 @@ sed -e '/^        .*/d' "${temp_raw}" | sort -r > "${temp_sorted}"
 
 cat "${temp_sorted}"
 
-cat html/header.html "${temp_sorted}" html/footer.html > "${target_dir}"/html/index.html
+cat html/header.html "${temp_sorted}" html/footer.html > "${target_dir}"/index.html
 
 temp_filterd=$(mktemp)
 head -10 "${temp_sorted}" > "${temp_filterd}"

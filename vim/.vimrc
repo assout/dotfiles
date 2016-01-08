@@ -502,6 +502,7 @@ if s:IsPluginEnabled()
         \ | Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'}
         \ | Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'}
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
+  " TODO ロードされるまでKが使えない
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
@@ -985,6 +986,12 @@ if s:HasPlugin('vim-migemo') " {{{
   nnoremap <SID>[migemo] :<C-u>Migemo<Space>
 endif " }}}
 
+if s:HasPlugin('vim-operator-flashy') " {{{
+  if g:is_office_cui " TODO workaround
+    autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
+  endif
+endif
+
 if s:HasPlugin('vim-operator-replace') " {{{
   map <SID>[replace] <Plug>(operator-replace)
 
@@ -1013,7 +1020,8 @@ endif " }}}
 if s:HasPlugin('vim-operator-surround') " {{{
   " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
   " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
-  autocmd vimrc User vim-operator-surround let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
+  autocmd vimrc User vim-operator-surround
+        \   let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
         \ | call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
   map <SID>[surround-a] <Plug>(operator-surround-append)
@@ -1196,8 +1204,8 @@ if s:HasPlugin('vim-textobj-parameter') " {{{
   let g:textobj_parameter_no_default_key_mappings = 1
   omap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)
-  vmap ia <Plug>(textobj-parameter-i)
-  vmap aa <Plug>(textobj-parameter-a)
+  xmap ia <Plug>(textobj-parameter-i)
+  xmap aa <Plug>(textobj-parameter-a)
 endif " }}}
 
 if s:HasPlugin('vim-unimpaired') " {{{

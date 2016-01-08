@@ -180,8 +180,8 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
 
   " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
-  " Enable spell on markdown file, To hard tab. " TODO ソフトタブのほうがよさそう(WebUIでeditするときなど考えると)(その場合空白2じゃだめそう)
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell noexpandtab
+  " Enable spell on markdown file, To hard tab.
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   " To hard tab
   autocmd FileType java setlocal noexpandtab
   if executable('python')

@@ -1,9 +1,4 @@
 #!/bin/bash
-
-readonly target_dir="${WORKSPACE:-.}/target"
-mkdir -p "${target_dir}"
-result_file=${target_dir}/result_source.csv
-
 readonly MYVIMRC="${WORKSPACE:-~/dotfiles}/vim/.vimrc"
 
 temp_raw=$(mktemp)
@@ -13,9 +8,10 @@ vim -u "${MYVIMRC}" -e -c "BenchVimrc ${MYVIMRC} ${temp_raw}" -c "qa!"
 temp_sorted=$(mktemp)
 sed -e '/^        .*/d' "${temp_raw}" | sort -r > "${temp_sorted}"
 
-cat "${temp_sorted}"
-
-cat html/header.html "${temp_sorted}" html/footer.html > "${target_dir}"/index.html
+readonly target_dir="${WORKSPACE:-.}/target"
+mkdir -p "${target_dir}"
+readonly here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+cat "${here}"/html/header.html "${temp_sorted}" "${here}"/html/footer.html > "${target_dir}"/index.html
 
 temp_filterd=$(mktemp)
 head -10 "${temp_sorted}" > "${temp_filterd}"
@@ -26,6 +22,7 @@ temp_proc=$(mktemp)
 cut "${temp_filterd}" -c 3-11 > "${temp_time}"
 cut "${temp_filterd}" -c 19- | sed -e 's/,/、/g' > "${temp_proc}"
 
+result_file=${target_dir}/result_source.csv
 echo "1, 2, 3, 4, 5, 6, 7, 8, 9, 10" > "${result_file}"
 paste -d ',' -s "${temp_time}" >> "${result_file}"
 

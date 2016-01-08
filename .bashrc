@@ -53,7 +53,6 @@ if [ "${is_home}" ] ; then
 fi
 
 if [ "${is_home}" -o "${is_office}" ] ; then
-  # TODO スマートに
   PATH="${PATH}:${HOME}/Development/scripts"
   PATH="${PATH}:${HOME}/Development/scripts/local/bash"
 fi
@@ -68,7 +67,7 @@ fi
 
 # General
 
-function cdParent {
+function cd_parent {
   local to=${1:-1}
   local toStr="";
   for _ in $(seq 1 "${to}") ; do
@@ -76,7 +75,7 @@ function cdParent {
   done
   cdls ${toStr}
 }
-alias ..='cdParent'
+alias ..='cd_parent'
 
 function cdls {
   command cd "$1"; # エスケープしないと循環しちゃう
@@ -101,7 +100,7 @@ fi
 # Peco
 if [ "$(which peco 2> /dev/null)" ] ; then
   # ls & cd
-  function pecoLscd {
+  function peco_lscd {
     # TODO Workaround
     # shellcheck disable=SC2033
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
@@ -109,10 +108,10 @@ if [ "$(which peco 2> /dev/null)" ] ; then
     cd "$dir" || exit 1
   fi
 }
-alias pcd='pecoLscd'
+alias pcd='peco_lscd'
 
 # history
-function pecoHist {
+function peco_hist {
   time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
   column=$(( time_column + 3))
   cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
@@ -124,13 +123,13 @@ function pecoHist {
 fi
 
 # Man
-function manJapanese {
+function man_japanese {
   LANG_ESCAPE=$LANG
   LANG=ja_JP.UTF-8
   man "$*"
   LANG=$LANG_ESCAPE
 }
-alias jan='manJapanese'
+alias jan='man_japanese'
 
 # Docker
 # TODO Workaroud
@@ -152,7 +151,7 @@ if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
-  alias e='explorer'
+  alias e='explorer' # TODO windowsでパス区切り文字が/だと開けない？(/,\のどちらでもいけるはずでは？)
   alias git='winpty git'
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>

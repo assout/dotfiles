@@ -2,7 +2,7 @@ dotfiles
 ========
 
 travis-ci: [![Build Status](https://travis-ci.org/assout/dotfiles.svg)](https://travis-ci.org/assout/dotfiles)
-jenkins: [![Build Status](https://jenkins-assout.rhcloud.com/buildStatus/icon?job=vim-dotfiles-performance)](https://jenkins-assout.rhcloud.com/job/vim-dotfiles-performance/)
+jenkins: [![Build Status](https://jenkins-assout.rhcloud.com/buildStatus/icon?job=dotfiles-statistics)](https://jenkins-assout.rhcloud.com/job/dotfiles-statistics/)
 
 Configuration files for editors and other UNIX tools. This is to make it easier to setup programming environment for me.
 

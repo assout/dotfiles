@@ -104,20 +104,20 @@ command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO msys2で開けない場合がある(マイドキュメントが開く) -> /d/admin/hogeとなっちゃってるっぽい
-" TODO 引数でパス受けるようにしたほうが使い勝手よい
-function! s:MyHere()
-  if g:is_office
+function! s:MyHere(...)
+  let l:path = expand(a:0 == 0 ? '%:h' : a:1)
+  if s_is_office
     " Caution: Windowsで set shellslashしているときうまく開かないため設定。
     " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
     setlocal noshellslash
-    !start explorer.exe "%:h"
+    execute '!start explorer.exe ' . l:path
     " TODO エスケープした値を復元するように直す
     setlocal shellslash
   else
-    !nautilus %:h &
+    execute '!nautilus ' . l:path . '&'
   endif
 endfunction
-command! MyHere call <SID>MyHere()
+command! -nargs=? -complete=dir MyHere call <SID>MyHere(<f-args>)
 
 command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
@@ -127,7 +127,7 @@ command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 
 " # Let defines {{{1
 
-let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
+let s_is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
 " Disable unused built-in plugins {{{ Caution: netrwは非プラグイン環境で必要(VimFiler使えない環境)
@@ -143,14 +143,12 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-" Caution: Vim-Plugなど別スクリプトに渡す可能性を考慮しbuffer scopeとする-> TODO 独自commandから呼ぶ独自function内で参照できないためいったんglobalにする(スコープ見直し or 名前空間付与)
-let g:is_home = $USERNAME ==# 'oji'
-let g:is_office = $USERNAME ==# 'admin'
-let g:is_office_gui = g:is_office && has('gui_running')
-let g:is_office_cui = g:is_office && !has('gui_running')
-let g:is_jenkins = exists('$BUILD_NUMBER')
-
-let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
+let s_is_home = $USERNAME ==# 'oji'
+let s_is_office = $USERNAME ==# 'admin'
+let s_is_office_gui = s_is_office && has('gui_running')
+let s_is_office_cui = s_is_office && !has('gui_running')
+let s_is_jenkins = exists('$BUILD_NUMBER')
+let s:dotvim_path = s_is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
 if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
@@ -191,7 +189,7 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
     autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
   endif
 
-  if g:is_office
+  if s_is_office
     " Double byte space highlight
     autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
     autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
@@ -263,7 +261,7 @@ set showtabline=1
 set shortmess& shortmess+=atTO
 set sidescrolloff=5
 set smartcase
-if g:is_home
+if s_is_home
   set spellfile=~/Dropbox/spell/en.utf-8.add
 else
   set spellfile=~/Documents/spell/en.utf-8.add
@@ -451,7 +449,7 @@ cnoremap <M-f> <S-Right>
 " # Plug-ins {{{1
 if s:IsPluginEnabled()
   if has('vim_starting')
-    let &runtimepath = g:is_office_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
+    let &runtimepath = s_is_office_gui || s_is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
   endif
   call g:plug#begin(s:plugged_path)
 
@@ -462,7 +460,7 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   " TODO vim起動時に引数で渡されたファイルをmru対象にしてほしい
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Unite'}
+        \ | Plug 'Shougo/neomru.vim', s_is_jenkins ? {'on' : []} : {'on' : 'Unite'}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
@@ -471,13 +469,13 @@ if s:IsPluginEnabled()
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
-  Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
+  Plug 'Shougo/vimproc', s_is_jenkins ? {'on' : []} : s_is_office_gui ? {'on' : []} : s_is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
+  Plug 'TKNGUE/hateblo.vim', s_is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-  Plug 'fuenor/im_control.vim', g:is_home ? {'for' : '*'} : {'on' : []}
+  Plug 'fuenor/im_control.vim', s_is_home ? {'for' : '*'} : {'on' : []}
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
@@ -495,7 +493,7 @@ if s:IsPluginEnabled()
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
-  Plug 'thinca/vim-localrc', g:is_office ? {'on' :[]} : {'for' : 'vim'}
+  Plug 'thinca/vim-localrc', s_is_office ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
   Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
         \ | Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'}
@@ -507,7 +505,7 @@ if s:IsPluginEnabled()
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'}
-  Plug 'tpope/vim-fugitive', g:is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
+  Plug 'tpope/vim-fugitive', s_is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
@@ -551,7 +549,7 @@ if s:IsPluginEnabled()
   call g:plug#end()
 
   " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
-  if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc' | endif
+  if s_is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
@@ -600,8 +598,8 @@ else " Vim-Plug有効の場合勝手にされる
 endif
 
 if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = g:is_home ? 1 : 0
-  let g:calendar_google_task = g:is_home ? 1 : 0
+  let g:calendar_google_calendar = s_is_home ? 1 : 0
+  let g:calendar_google_task = s_is_home ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('hateblo.vim') " {{{
@@ -635,13 +633,13 @@ endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = g:is_home ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
+  let g:memolist_path = s_is_home ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
   let s:memolist_wiki_path = expand('~/Development/gitlab/global-wiki.wiki')
 
   function! s:MyMemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
+    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path s_is_office ? s:memolist_wiki_path : ''
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
 
@@ -657,7 +655,7 @@ if s:HasPlugin('memolist.vim') " {{{
         \ | call g:unite#custom#source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
         \ | call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
-        \ | if g:is_office
+        \ | if s_is_office
           \ |   call extend(g:unite_source_alias_aliases, { 'memolist_wiki' : { 'source' : 'file', 'args' : s:memolist_wiki_path }})
           \ |   call g:unite#custom#source('memolist_wiki', 'sorters', ['sorter_ftime', 'sorter_reverse'])
           \ |   call g:unite#custom#source('memolist_wiki', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
@@ -667,9 +665,9 @@ if s:HasPlugin('memolist.vim') " {{{
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
-  if g:is_home
+  if s_is_home
     nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
-  elseif g:is_office
+  elseif s_is_office
     nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_wiki -buffer-name=memolist_wiki<CR>
   endif
 endif " }}}
@@ -814,7 +812,7 @@ if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
   let g:unite_source_grep_max_candidates = 200
-  if g:is_office_gui
+  if s_is_office_gui
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
   let s:MyRelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
@@ -900,7 +898,7 @@ if s:HasPlugin('unite.vim') " {{{
 
   if s:HasPlugin('unite-todo') " {{{
     let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
+    let g:unite_todo_data_directory = s_is_home ? '~/Dropbox' : expand('~/Documents')
 
     function! s:MyTodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
@@ -994,7 +992,7 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-flashy') " {{{
-  if g:is_office_cui " TODO workaround
+  if s_is_office_cui " TODO workaround
     autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
   endif
 endif
@@ -1266,10 +1264,10 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   },
         \})
 
-  if g:is_office_gui " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
+  if s_is_office_gui " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
-  elseif g:is_office_cui
+  elseif s_is_office_cui
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
   endif
@@ -1307,7 +1305,7 @@ if s:HasPlugin('vim-hybrid')
   autocmd vimrc ColorScheme hybrid :call <SID>MyDefineHighlight()
   colorscheme hybrid
 else
-  if g:is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
+  if s_is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
 

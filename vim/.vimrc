@@ -839,6 +839,7 @@ if s:HasPlugin('unite.vim') " {{{
   autocmd vimrc FileType unite call s:MyUniteKeymappings()
 
   " Caution: mapはunimpairedの`]u`系を無効にしないといけない
+  " Caution: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim 
         \   call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -846,8 +847,8 @@ if s:HasPlugin('unite.vim') " {{{
         \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
         \ | call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-        \ | execute 'nnoremap [u :UnitePrevious<CR>'
-        \ | execute 'nnoremap ]u :UniteNext<CR>'
+        \ | execute 'nnoremap [u :silent UnitePrevious<CR>'
+        \ | execute 'nnoremap ]u :silent UniteNext<CR>'
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>

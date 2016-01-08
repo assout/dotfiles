@@ -483,7 +483,6 @@ if s:IsPluginEnabled()
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode', {'for' : '*'}
-  Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'koron/codic-vim', {'on' : 'Codic'}
   Plug 'lambdalisue/vim-gista', {'on' : ['Gista', '<Plug>(gista-']}
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -512,7 +511,8 @@ if s:IsPluginEnabled()
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
-  Plug 'tyru/open-browser.vim', {'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch']}
+  Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+        \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO 文字化けする

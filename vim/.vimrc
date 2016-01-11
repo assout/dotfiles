@@ -110,7 +110,7 @@ function! s:MyExplorer(...)
     " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
     let l:usr_ss_opt = &l:shellslash
     setlocal noshellslash
-    execute '!start explorer.exe ' . fnamemodidy(l:path)
+    execute '!start explorer.exe ' . fnamemodify(l:path)
     let &l:shellslash = l:usr_ss_opt
   else
     execute '!nautilus ' . l:path . '&'

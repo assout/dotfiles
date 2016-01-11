@@ -883,12 +883,11 @@ if s:HasPlugin('unite.vim') " {{{
     let g:neomru#do_validate = 0
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
+    let g:neomru#follow_links = 1
 
     nmap     <SID>[unite]n  <SID>[neomru]
     nnoremap <SID>[neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
     nnoremap <SID>[neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
-
-    autocmd vimrc VimEnter * nested NeoMRUSave
   endif " }}}
 
   if s:HasPlugin('unite-codic.vim') " {{{ TODO Ignorecase (or Smartcase)

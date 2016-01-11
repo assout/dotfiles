@@ -104,7 +104,7 @@ command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 " TODO msys2で開けない場合がある(マイドキュメントが開く) -> /d/admin/hogeとなっちゃってるっぽい
-function! s:MyHere(...)
+function! s:MyExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
   if g:is_office " Caution: Windowsで set shellslashしているときうまく開かないため設定。
     " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
@@ -116,7 +116,7 @@ function! s:MyHere(...)
     execute '!nautilus ' . l:path . '&'
   endif
 endfunction
-command! -nargs=? -complete=dir MyHere call <SID>MyHere(<f-args>)
+command! -nargs=? -complete=dir MyExplorer call <SID>MyExplorer(<f-args>)
 
 command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``

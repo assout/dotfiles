@@ -510,8 +510,10 @@ if s:IsPluginEnabled()
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
-  Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+  Plug 'tyru/open-browser.vim'
         \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
+  " Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+  "       \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO 文字化けする
@@ -679,14 +681,13 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{
-  " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする TODO やりたいこととあってる？
-  let g:openbrowser_search_engines = extend(
-        \  get(g:, 'openbrowser_search_engines', {}), {
+  let g:openbrowser_search_engines = extend(get(g:, 'openbrowser_search_engines', {}), {
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
-        \  },
-        \  'keep'
-        \)
+        \  }) " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
+  if has('win32unix')
+    let g:openbrowser_browser_commands = [{'name' : 'rundll32', 'args' : 'rundll32 url.dll,FileProtocolHandler {uri}'}]
+  endif
   let s:engines = {
         \  'a' : 'alc',
         \  'd' : 'devdocs',
@@ -695,12 +696,6 @@ if s:HasPlugin('open-browser.vim') " {{{
         \  't' : 'translate',
         \  'w' : 'wikipedia-ja',
         \}
-  if has('win32unix')
-    let g:openbrowser_browser_commands = [{
-          \  'name': 'rundll32',
-          \  'args': 'rundll32 url.dll,FileProtocolHandler {uri}',
-          \}]
-  endif
 
   function! s:SearchSelected(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
@@ -716,13 +711,13 @@ if s:HasPlugin('open-browser.vim') " {{{
     execute l:cmd
   endfunction
 
-  nmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
-  vmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
-
   for s:key in keys(s:engines)
     execute 'nnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelected("' . s:engines[s:key] . '", "n")<CR>'
     execute 'vnoremap <SID>[open-browser]' . s:key . ' :call <SID>SearchSelected("' . s:engines[s:key] . '", "v")<CR>'
   endfor
+
+  nmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
+  vmap <SID>[Open-browser] <Plug>(openbrowser-smart-search)
 endif " }}}
 
 if s:HasPlugin('operator-camelize.vim') " {{{

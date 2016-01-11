@@ -4,7 +4,7 @@
     # ja-yahoo-kousei: true
     # max-appearence-count-of-words: true
     max-number-of-lines: true
-    max-ten: true
+    # max-ten: true
     # max-length-of-title: true
     # no-doubled-joshi: true
     # no-double-negative-ja: true
@@ -12,6 +12,8 @@
     no-mix-dearu-desumasu: true
     no-start-duplicated-conjunction: true
     no-todo: true
+    # preset:
+    #   preset-jtf-style: true
     prh:
       rulePaths:
         - "/home/oji/dotfiles/lint/prh.yml"

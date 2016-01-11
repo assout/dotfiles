@@ -1,1 +1,1 @@
-Go to index.html	./target/index.html	.jenkins/disco-ball.png
+Go to index.html	./target/index.html	./.jenkins/disco-ball.png

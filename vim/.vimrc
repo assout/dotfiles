@@ -459,9 +459,8 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
-  " TODO vim起動時に引数で渡されたファイルをmru対象にしてほしい
+  Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Unite'}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
@@ -888,6 +887,8 @@ if s:HasPlugin('unite.vim') " {{{
     nmap     <SID>[unite]n  <SID>[neomru]
     nnoremap <SID>[neomru]f :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
     nnoremap <SID>[neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
+
+    autocmd vimrc VimEnter * nested NeoMRUSave
   endif " }}}
 
   if s:HasPlugin('unite-codic.vim') " {{{ TODO Ignorecase (or Smartcase)
@@ -1213,7 +1214,7 @@ if s:HasPlugin('vim-textobj-parameter') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-unimpaired') " {{{
-  autocmd vimrc VimEnter *
+  autocmd vimrc VimEnter * nested
         \   execute 'nunmap [u'
         \ | execute 'nunmap [uu'
         \ | execute 'nunmap ]u'

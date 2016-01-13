@@ -41,6 +41,7 @@
 " * TODO neocompleteでたまに日本語入力が変になる
 " * TODO setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
 " }}}1
 
 " # Begin {{{1
@@ -76,7 +77,7 @@ function! s:RestoreCursorPosition()
   endif
 endfunction
 
-function! s:MyToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
+function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
   setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs. <:help restore-position>
@@ -84,9 +85,9 @@ function! s:MyToggleExpandTab() " Caution: undoしても&expandtabの値は戻�
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
-command! MyToggleExpandTab call <SID>MyToggleExpandTab()
+command! MyToggleExpandTab call <SID>ToggleExpandTab()
 
-function! s:MyChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
+function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
     " Refs. <:help restore-position>
     normal! msHmt
@@ -95,7 +96,7 @@ function! s:MyChangeTabstep(size) " Caution: undoしても&tabstopの値は戻�
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
 endfunction
-command! -nargs=1 MyChangeTabstep call <SID>MyChangeTabstep(<q-args>)
+command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
 function! s:InsertString(pos, str) range " Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs. <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
@@ -103,20 +104,15 @@ endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-" TODO msys2で開けない場合がある(マイドキュメントが開く) -> /d/admin/hogeとなっちゃってるっぽい
-function! s:MyExplorer(...)
+function! s:Explorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
-  if g:is_office " Caution: Windowsで set shellslashしているときうまく開かないため設定。
-    " Caution: |(<BAR>)で一行で書くこともできるが外部コマンド実行時は<BAR>は使えない。-> <NL>を使えば可能だが(Refs. :help :bar)、NULL文字扱いされちゃうらしく当ファイルがGitでバイナリファイル扱いされてしまう。
-    let l:usr_ss_opt = &l:shellslash
-    setlocal noshellslash
-    execute '!start explorer.exe ' . fnamemodify(l:path)
-    let &l:shellslash = l:usr_ss_opt
+  if g:is_office
+    execute '!start explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
   else
     execute '!nautilus ' . l:path . '&'
   endif
 endfunction
-command! -nargs=? -complete=dir MyExplorer call <SID>MyExplorer(<f-args>)
+command! -nargs=? -complete=dir MyExplorer call <SID>Explorer(<f-args>)
 
 command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
@@ -152,7 +148,7 @@ let g:is_jenkins = exists('$BUILD_NUMBER')
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
-if has('win32unix') " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
+if g:is_office_cui " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -190,7 +186,7 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
     autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
   endif
 
-  if g:is_office
+  if g:is_office " homeではRicty font使うので不要
     " Double byte space highlight
     autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
     autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
@@ -212,14 +208,13 @@ set cmdheight=1
 set diffopt& diffopt+=vertical
 set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
-if has('folding')
-  set foldlevelstart=0
-  set foldmethod=marker
-endif
+let &foldlevelstart = has('folding') ? 0 : &foldlevelstart
+let &foldmethod = has('folding') ? 'marker' : &foldmethod
 " フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
 " TODO Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
-" Caution: Windowsで"hoge\*"という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
+" Caution: Windowsで
+" 'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " keywordprgで日本語優先にしたいため
 set helplang=ja,en
@@ -238,61 +233,41 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
-if !has('folding') " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
-  set modelines=0
-endif
+let &modelines = !has('folding') ? 0 : &modelines " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
 set number
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-if has('win32')
-  " Caution: 関係するオプション(shellcmdflag等)の設定も必要かも -> 自動設定されるっポイ
-  " TODO 副作用ありのためコメントアウト (watchdogsでcmd.exeに依存したチェックをしている箇所が動かなくなる など)
-  " set shell=bash.exe
-
-  " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
-  " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
-  " Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
-  "  * TODO Windowsでgxでエクスプローラ開けなくなる
-  set shellslash
-endif
+" Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
+" Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
+" Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
+" TODO Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
+let &shellslash = g:is_office_gui ? 1 : &shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1
 set shortmess& shortmess+=atTO
 set sidescrolloff=5
 set smartcase
-if g:is_home
-  set spellfile=~/Dropbox/spell/en.utf-8.add
-else
-  set spellfile=~/Documents/spell/en.utf-8.add
-endif
 set softtabstop=0
-set splitbelow
-set splitright
+let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
 " スペルチェックで日本語は除外する
 set spelllang=en,cjk
-if has('path_extra')
-  set tags& tags=./.tags;
-else
-  set tags& tags=./.tags
-endif
+set splitbelow
+set splitright
+" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
+let &swapfile = g:is_office ? 0 : &swapfile
+let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 " 自動改行をなくす
 set textwidth=0
 set title
 set ttimeoutlen=0
-if has('persistent_undo')
-  set noundofile
-endif
+let &undofile = has('persistent_undo') ? 0 : &undofile
 set wildmenu
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
 set nowrapscan
-if has('win32')
-  " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
-  set noswapfile
-endif
 
 " }}}1
 
@@ -364,9 +339,9 @@ noremap <expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
 noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
-" resolveしなくても開けるがfugitiveで対象とするため
-" TODO Windowsのとき$MYVIMRCの展開だと対象にならない(シンボリックリンクを解決できない？)
-let g:myvimrcPath = has('unix') ? resolve(expand($MYVIMRC)) : '~/Development/dotfiles/vim/.vimrc'
+" Caution resolveしなくても開けるがfugitiveで対象とするため
+" Caution Windows GUIのときシンボリックリンクを解決できない
+let g:myvimrcPath = resolve(expand($MYVIMRC))
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 " }}}
 
@@ -504,15 +479,13 @@ if s:IsPluginEnabled()
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'}
-  Plug 'tpope/vim-fugitive', g:is_home ? {} : {'on' : []} " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
+  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
-  Plug 'tyru/open-browser.vim'
+  Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
         \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
-  " Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-  "       \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO 文字化けする
@@ -636,15 +609,15 @@ endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = g:is_home ? '~/Dropbox/memolist' : expand('~/Documents/memolist')
+  let g:memolist_path = expand(g:is_home ? '~/Dropbox/memolist' : '~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
   let s:memolist_wiki_path = expand('~/Development/gitlab/global-wiki.wiki')
 
-  function! s:MyMemoGrep(word)
+  function! s:MemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
     execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
   endfunction
-  command! -nargs=1 -complete=command MyMemoGrep call <SID>MyMemoGrep(<q-args>)
+  command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
 
   " TODO 冗長
   autocmd vimrc User memolist.vim
@@ -684,7 +657,7 @@ if s:HasPlugin('open-browser.vim') " {{{
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
         \  }) " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
-  if has('win32unix')
+  if g:is_office_cui
     let g:openbrowser_browser_commands = [{'name' : 'rundll32', 'args' : 'rundll32 url.dll,FileProtocolHandler {uri}'}]
   endif
   let s:engines = {
@@ -746,11 +719,13 @@ if s:HasPlugin('switch.vim') " {{{
   " TODO 入れ子のときおかしくなる(e.g. [foo[bar]] )
   " TODO #はカーソル位置にかかわらず効いてほしい
   " TODO undoするとカーソル位置が行頭になっちゃう
+  " TODO `([<【`はあんま使わないし、`${},"${}"`のパターンの阻害になるから消そうか
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
         \  ['public', 'protected', 'private', ],
         \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
+        \  ['日', '月', '火', '水', '木', '金', '土'],
         \  ['# ', '## ', '### ', '#### ', '##### '],
         \  ['pick', 'reword', 'edit', 'squash', 'fixup', 'exec' ],
         \  {
@@ -811,9 +786,9 @@ if s:HasPlugin('unite.vim') " {{{
   if g:is_office_gui
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
-  let s:MyRelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
+  let s:RelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
 
-  function! s:MyRelativeMove.func(candidates) " move先を相対パスで指定するaction
+  function! s:RelativeMove.func(candidates) " move先を相対パスで指定するaction
     let l:candidate = a:candidates[0]
     let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
     execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
@@ -821,7 +796,7 @@ if s:HasPlugin('unite.vim') " {{{
     call g:unite#force_redraw() " 呼ばないと表示更新されない
   endfunction
 
-  function! s:MyUniteKeymappings()
+  function! s:UniteKeymappings()
     " TODO sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
@@ -830,12 +805,12 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
     nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('start'))
   endfunction
-  autocmd vimrc FileType unite call s:MyUniteKeymappings()
+  autocmd vimrc FileType unite call s:UniteKeymappings()
 
   " Caution: mapはunimpairedの`]u`系を無効にしないといけない
   " Caution: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim 
-        \   call g:unite#custom#action('file,directory', 'relative_move', s:MyRelativeMove)
+        \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
         \ | call g:unite#custom#default_action('directory', 'vimfiler')
         \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
@@ -869,6 +844,9 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
   endif
+  if s:HasPlugin('vim-ref-gene') " {{{
+    nnoremap <SID>[unite]G :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
+  endif " }}}
   if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   endif " }}}
@@ -899,11 +877,11 @@ if s:HasPlugin('unite.vim') " {{{
     let g:unite_todo_note_suffix = 'md'
     let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
 
-    function! s:MyTodoGrep(word)
+    function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
       execute ':silent grep "' . a:word . '" ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
-    command! -nargs=1 -complete=command MyTodoGrep call <SID>MyTodoGrep(<q-args>)
+    command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 
     noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
     noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
@@ -948,7 +926,7 @@ if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッ
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
-  function! g:GfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+  function! g:MyGfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
     let l:path = expand('<cfile>')
     let l:line = 0
     if l:path =~# ':\d\+:\?$'
@@ -960,7 +938,7 @@ if s:HasPlugin('vim-gf-user') " {{{
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
-  autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
+  autocmd vimrc User vim-gf-user call g:gf#user#extend('MyGfFile', 1000)
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
@@ -1011,14 +989,13 @@ if s:HasPlugin('vim-operator-replace') " {{{
     nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   endif " }}}
 
+  " if s:HasPlugin('vim-textobj-parameter') " {{{  Caution: aは<Space>paeとかできなくなるのでやらない
+  "   nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
+  " endif " }}}
+
   if s:HasPlugin('vim-textobj-url') " {{{
     nmap <SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
   endif " }}}
-
-  " Caution: aは<Space>paeとかできなくなるのでやらない
-  " if s:HasPlugin('vim-textobj-parameter') " {{{
-  "   nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
-  " endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
@@ -1050,16 +1027,15 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
   endif " }}}
 
-  if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
-  endif " }}}
-
-  " Caution: aはsaawとかできなくなるのでやらない
-  " if s:HasPlugin('vim-textobj-parameter') " {{{
+  " if s:HasPlugin('vim-textobj-parameter') " {{{ Caution: aはsaawとかできなくなるのでやらない
   "   nmap <SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
   "   nmap <SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
   "   nmap <SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
   " endif " }}}
+
+  if s:HasPlugin('vim-textobj-url') " {{{
+    nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
@@ -1083,7 +1059,6 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_noenter = 1
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
   " TODO デフォルトに一括追加の指定方法(現状は上書き)
-  " TODO msys2 vimでmarkdownのgene開けない
   " TODO Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
@@ -1092,6 +1067,7 @@ if s:HasPlugin('vim-ref') " {{{
 
   autocmd vimrc FileType ref resize 5
 
+  " Webdict settings {{{
   let g:ref_source_webdict_sites = {
         \  'je'  : { 'url': 'http://dictionary.infoseek.ne.jp/jeword/%s', 'line': 15},
         \  'ej'  : { 'url': 'http://dictionary.infoseek.ne.jp/ejword/%s', 'line': 15},
@@ -1103,6 +1079,7 @@ if s:HasPlugin('vim-ref') " {{{
   nnoremap <SID>[ref]w<CR> :<C-u>Ref webdict<Space>
   nnoremap <SID>[ref]wj    :<C-u>Ref webdict je<Space>
   nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
+  " }}}
 
   " TODO 選択範囲の単語で検索
   " TODO unite-actioinでyank
@@ -1110,6 +1087,8 @@ if s:HasPlugin('vim-ref') " {{{
   " TODO コマンド履歴に残したい
   " TODO 和英ができない
   " TODO キャッシュ化されている？
+  " TODO あいまい検索的なことがしたい(z=でスペル候補表示するみたいなのを楽に)
+  " TODO Uniteソースのほうに統一したほうがよい？
   if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
     nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
@@ -1263,7 +1242,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \   },
         \})
 
-  if g:is_office_gui " TODO Windows + GVim + set shell=bashのときうまく動かない(msys2 vimは問題なし)
+  if g:is_office_gui
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
   elseif g:is_office_cui
@@ -1291,7 +1270,7 @@ source $VIMRUNTIME/macros/matchit.vim
 
 " Colorshceme settings {{{
 if s:HasPlugin('vim-hybrid')
-  function! s:MyDefineHighlight()
+  function! s:DefineHighlight()
     highlight clear SpellBad
     highlight clear SpellCap
     highlight clear SpellRare
@@ -1301,7 +1280,7 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
   endfunction
-  autocmd vimrc ColorScheme hybrid :call <SID>MyDefineHighlight()
+  autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid
 else
   if g:is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない

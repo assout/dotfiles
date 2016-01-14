@@ -1,12 +1,10 @@
 all
-# TODO MD007は無効化したくないがハードタブだとエラーになってしまうっぽい
-exclude_rule 'MD007'
-exclude_rule 'MD010'
-exclude_rule 'MD013'
-exclude_rule 'MD024'
-exclude_rule 'MD029'
-exclude_rule 'MD033'
-exclude_rule 'MD040'
 
-rule 'MD009', :br_spaces => 2
-rule 'MD026', :punctuation => ",;:"
+exclude_rule 'MD013' # Line length
+exclude_rule 'MD029' # Ordered list item prefix
+exclude_rule 'MD033' # Inline HTML
+exclude_rule 'MD040' # Fenced code blocks should have a language specified
+
+rule 'MD007', :indent => 4 # Unordered list indentation
+rule 'MD009', :br_spaces => 2 # Trailing spaces
+rule 'MD026', :punctuation => ",;:" # Trailing punctuation in header

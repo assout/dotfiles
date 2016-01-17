@@ -213,8 +213,7 @@ let &foldmethod = has('folding') ? 'marker' : &foldmethod
 " フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
 " TODO Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
-" Caution: Windowsで
-" 'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
+" Caution: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " keywordprgで日本語優先にしたいため
 set helplang=ja,en
@@ -390,8 +389,6 @@ nnoremap ]w     :wincmd w<CR>
 nnoremap [W     :wincmd t<CR>
 nnoremap ]W     :wincmd b<CR>
 " Caution: uはunite用に確保
-nnoremap [u     <Nop>
-nnoremap ]u     <Nop>
 " }}}
 
 " Insert mode mappings {{{

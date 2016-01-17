@@ -616,7 +616,6 @@ if s:HasPlugin('memolist.vim') " {{{
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
 
-  " TODO 冗長
   autocmd vimrc User memolist.vim
         \ let g:unite_source_alias_aliases = {
         \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },

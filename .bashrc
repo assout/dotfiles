@@ -87,11 +87,10 @@ alias cd='cdls'
 if [ "$(which vimx 2> /dev/null)" ] ; then
   alias vi='vimx --noplugin'
   alias vim='vimx'
-fi
-
-if [ "$(which vim 2> /dev/null)" ] ; then
+elif [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi
+
 if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   alias vi='vi -s ${here}/.vimrc'

@@ -24,6 +24,6 @@ set guioptions-=m
 set guioptions-=T
 " 背景色 TODO kaoriya版の場合vimrcに定義していても再定義が必要
 set background=light
-" カラースキーム TODO kaoriya版の場合vimrcに定義していても再定義が必要
+" カラースキーム TODO kaoriya版の場合vimrcに定義していても再定義が必要 TODO プラグイン無効環境でエラー出る
 colorscheme hybrid
 

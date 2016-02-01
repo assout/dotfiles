@@ -126,7 +126,7 @@ let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
 " Disable unused built-in plugins {{{ Caution: netrwは非プラグイン環境で必要(VimFiler使えない環境)
-let g:loaded_2html_plugin    = 1 " Refs. <:help 2html>
+" let g:loaded_2html_plugin    = 1 " Refs. <:help 2html> Caution: ちょいちょい使う
 let g:loaded_getscriptPlugin = 1
 " let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
 let g:loaded_matchparen      = 1 " Refs. <:help matchparen>
@@ -176,7 +176,7 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
   " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
   " Enable spell on markdown file, To hard tab.
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   " To hard tab
   autocmd FileType java setlocal noexpandtab
   if executable('python')
@@ -432,6 +432,7 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
+  " TODO たまに"E464: Ambiguous use of user-defined command"となってしまう
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
@@ -475,7 +476,7 @@ if s:IsPluginEnabled()
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
-  Plug 'tomtom/tcomment_vim', {'for' : '*'}
+  Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
@@ -693,6 +694,7 @@ if s:HasPlugin('operator-camelize.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
+  " FIXME Office gvimで開かない
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
@@ -922,7 +924,7 @@ if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッ
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
-  function! g:MyGfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+  function! g:GfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
     let l:path = expand('<cfile>')
     let l:line = 0
     if l:path =~# ':\d\+:\?$'
@@ -934,7 +936,7 @@ if s:HasPlugin('vim-gf-user') " {{{
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
-  autocmd vimrc User vim-gf-user call g:gf#user#extend('MyGfFile', 1000)
+  autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
 endif " }}}
 
 if s:HasPlugin('vim-gista') " {{{
@@ -995,6 +997,7 @@ if s:HasPlugin('vim-operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
+  " TODO 空白区切りがしたい(なぜか今でも2スペースならできる)
   " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
   " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
   autocmd vimrc User vim-operator-surround
@@ -1017,7 +1020,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
   endif " }}}
 
-  if s:HasPlugin('vim-textobj-line') " {{{
+  if s:HasPlugin('vim-textobj-line') " {{{ TODO lを潰したくない
     nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
     nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
     nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)

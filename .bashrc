@@ -151,7 +151,6 @@ if [ "${is_office}" ] ; then
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
   alias e='explorer' # TODO windowsでパス区切り文字が/だと開けない？(/,\のどちらでもいけるはずでは？)
-  alias git='winpty git'
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
@@ -225,6 +224,7 @@ if [ "${is_home}" ] ; then # Caution: sourceしなくても補完効くが"g" al
 elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-completion.bash
   __git_complete g __git_main
+  :
 fi
 
 if [ "${is_home}" -o "${is_office}" ] ; then

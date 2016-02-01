@@ -60,6 +60,7 @@ endif
 " # Functions and Commands {{{1
 
 function! s:IsPluginEnabled()
+  " TODO pluggedディレクトリを見たほうが良いのでは
   return isdirectory(expand(s:dotvim_path)) && &loadplugins
 endfunction
 

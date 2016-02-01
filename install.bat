@@ -1,4 +1,6 @@
-﻿REM TODO 既存リンク上書き
+REM TODO 既存リンク上書き
+REM TODO 改行コードをdosにする
+REM TODO %HOME%未定義のとき考慮
 
 mklink /J "%HOME%\dotfiles" "%HOME%\Development\dotfiles"
 

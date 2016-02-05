@@ -462,6 +462,8 @@ if s:IsPluginEnabled()
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   Plug 'pangloss/vim-javascript', {'for' : 'javascript'} " For indent only
+  Plug 'godlygeek/tabular', {'for' : 'markdown'}
+        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい TODO 箇条書きでo, Oすると2タブインデントされてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
@@ -529,6 +531,10 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]c       <SID>[camelize]
   nmap <SID>[plugin]f       <SID>[fugitive]
   map  <SID>[plugin]g       <SID>[gista]
+  map  <SID>[plugin]h       <SID>[markdown_h]
+  nmap <SID>[plugin]H       <SID>[markdown_H]
+  map  <SID>[plugin]l       <SID>[markdown_l]
+  nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
   map  <SID>[plugin]o       <SID>[open-browser]
   map  <SID>[plugin]O       <SID>[Open-browser]
@@ -955,6 +961,22 @@ endif " }}}
 
 if s:HasPlugin('vim-localrc') " {{{
   let g:localrc_filename = '.vimrc.development'
+endif " }}}
+
+if s:HasPlugin('vim-markdown') " {{{
+  let g:vim_markdown_folding_disabled = 1
+  let g:vim_markdown_emphasis_multiline = 0
+
+  function! s:MyVimMarkdownKeymappings() " Refs: <:help restore-position>
+    nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
+    vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
+    nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
+
+    nnoremap <buffer><SID>[markdown_h]     :.HeaderDecrease<CR>
+    vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
+    nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
+  endfunction
+  autocmd vimrc FileType markdown call s:MyVimMarkdownKeymappings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{

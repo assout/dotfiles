@@ -27,7 +27,7 @@
 " * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
 " * IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
 "
-" ## References
+" ## Refs:
 " * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
 " * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
 " * [Vimスクリプトリファレンス &mdash; 名無しのvim使い](http://nanasi.jp/code.html)
@@ -61,7 +61,7 @@ endif
 
 function! s:IsPluginEnabled()
   " TODO pluggedディレクトリを見たほうが良いのでは
-  return isdirectory(expand(s:dotvim_path)) && &loadplugins
+  return isdirectory(expand(s:plugged_path)) && &loadplugins
 endfunction
 
 function! s:HasPlugin(plugin)
@@ -81,7 +81,7 @@ endfunction
 function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
   setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
-    " Refs. <:help restore-position>
+    " Refs: <:help restore-position>
     normal! msHmt
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
@@ -90,7 +90,7 @@ command! MyToggleExpandTab call <SID>ToggleExpandTab()
 
 function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
-    " Refs. <:help restore-position>
+    " Refs: <:help restore-position>
     normal! msHmt
     execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! 'tzt`s
   endif
@@ -99,7 +99,7 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
-function! s:InsertString(pos, str) range " Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs. <:help f-args>
+function! s:InsertString(pos, str) range " Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
@@ -118,19 +118,20 @@ command! -nargs=? -complete=dir MyExplorer call <SID>Explorer(<f-args>)
 command! -bang MyBufClear %bdelete<bang>
 command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
-
+" Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
+command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " }}}1
 
 " # Let defines {{{1
 
-let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs. <:help sh.vim>
+let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
 " Disable unused built-in plugins {{{ Caution: netrwは非プラグイン環境で必要(VimFiler使えない環境)
-" let g:loaded_2html_plugin    = 1 " Refs. <:help 2html> Caution: ちょいちょい使う
+" let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
 let g:loaded_getscriptPlugin = 1
 " let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
-let g:loaded_matchparen      = 1 " Refs. <:help matchparen>
+let g:loaded_matchparen      = 1 " Refs: <:help matchparen>
 let g:loaded_tar             = 1
 let g:loaded_tarPlugin       = 1
 let g:loaded_vimball         = 1
@@ -176,9 +177,7 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
 
   " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
-  " Enable spell on markdown file, To hard tab.
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
-  " To hard tab
   autocmd FileType java setlocal noexpandtab
   if executable('python')
     autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
@@ -202,7 +201,7 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs. :help si) TODO cindnetにしても移動しなくなってしまったので暫定コメントアウトする
+" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO cindnetにしても移動しなくなってしまったので暫定コメントアウトする
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 " set cryptmethod=blowfish2 " Caution: Comment out for performance
@@ -234,19 +233,19 @@ set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
 let &modelines = !has('folding') ? 0 : &modelines " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
-set number
+set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
-" Caution: 副作用があることに注意(Refs. <https://github.com/vim-jp/issues/issues/43>)
+" Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
 " TODO Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
 let &shellslash = g:is_office_gui ? 1 : &shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1
-set shortmess& shortmess+=atTO
+set shortmess& shortmess+=atTOI
 set sidescrolloff=5
 set smartcase
 set softtabstop=0
@@ -478,7 +477,7 @@ if s:IsPluginEnabled()
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
-  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs. https://github.com/junegunn/vim-plug/issues/164
+  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
@@ -614,7 +613,8 @@ if s:HasPlugin('memolist.vim') " {{{
 
   function! s:MemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    execute ':silent grep -r --exclude-dir=_book "' . a:word . '" ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
+    " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
+    execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
 
@@ -667,7 +667,7 @@ if s:HasPlugin('open-browser.vim') " {{{
         \  'w' : 'wikipedia-ja',
         \}
 
-  function! s:SearchSelected(engine, mode) range " Refs. <http://nanasi.jp/articles/code/screen/visual.html>
+  function! s:SearchSelected(engine, mode) range " Refs: <http://nanasi.jp/articles/code/screen/visual.html>
     if a:mode ==# 'n'
       let l:word = expand('<cword>')
     else
@@ -712,7 +712,7 @@ if s:HasPlugin('restart.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
-  " Refs. <http://www.puni.net/~mimori/rfc/rfc3092.txt>
+  " Refs: <http://www.puni.net/~mimori/rfc/rfc3092.txt>
   " TODO dictionary定義はSwitchReverse効かない
   " TODO 優先順位指定したい(`${}`のswitchを優先したい)
   " TODO 入れ子のときおかしくなる(e.g. [foo[bar]] )
@@ -878,7 +878,8 @@ if s:HasPlugin('unite.vim') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      execute ':silent grep "' . a:word . '" ' . g:unite_todo_data_directory . '/todo/note/*.md'
+      " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
+      execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 
@@ -925,7 +926,7 @@ if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッ
 endif " }}}
 
 if s:HasPlugin('vim-gf-user') " {{{
-  function! g:GfFile() " Refs. <http://d.hatena.ne.jp/thinca/20140324/1395590910>
+  function! g:GfFile() " Refs: <http://d.hatena.ne.jp/thinca/20140324/1395590910>
     let l:path = expand('<cfile>')
     let l:line = 0
     if l:path =~# ':\d\+:\?$'
@@ -999,8 +1000,8 @@ endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
   " TODO 空白区切りがしたい(なぜか今でも2スペースならできる)
-  " Refs. <http://d.hatena.ne.jp/syngan/20140301/1393676442>
-  " Refs. <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
+  " Refs: <http://d.hatena.ne.jp/syngan/20140301/1393676442>
+  " Refs: <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
   autocmd vimrc User vim-operator-surround
         \   let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
         \ | call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )

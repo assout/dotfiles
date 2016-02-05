@@ -34,9 +34,9 @@
 " * CopyをAlt + Cに退避するが他のCopyバインドも合わせて調整しないとうまくBindされない
 "
 " ## TODOs
-" * TODO 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
-" * TODO コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
-" * TODO linuxでnoremapがコマンドラインモードでも有効になってしまう
+" * TODO: 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
+" * TODO: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
+" * TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
 
 " }}}1
 
@@ -100,7 +100,7 @@ nnoremap <M-l> <C-w>gt
 " nnoremap <M-t> :tabedit<CR>
 " nnoremap <M-c> :q<CR>
 
-" TODO 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
+" TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$
 inoremap <C-d> <C-o>x
@@ -122,12 +122,12 @@ eclipseaction GotoNextMember org.eclipse.jdt.ui.edit.text.java.goto.next.member
 eclipseaction GotoPreviousMember org.eclipse.jdt.ui.edit.text.java.goto.previous.member
 " }}}
 
-" Navigate {{{ TODO いまいち効かない
+" Navigate {{{ TODO: いまいち効かない
 "definition ID of the navigate -> open type hierarchy action 
 eclipseaction OpenTypeHierarchy org.eclipse.jdt.ui.edit.text.java.org.eclipse.jdt.ui.edit.text.java.open.type.hierarchy
 "definition ID of the navigate -> open call hierarchy action 
 eclipseaction OpenCallHierarchy org.eclipse.jdt.ui.edit.text.java.org.eclipse.jdt.ui.edit.text.java.open.call.hierarchy
-"definition ID of the navigate -> open super implementation action TODO いけたけどポップアップが一瞬で閉じちゃうので使えない
+"definition ID of the navigate -> open super implementation action TODO: いけたけどポップアップが一瞬で閉じちゃうので使えない
 eclipseaction OpenImplementation org.eclipse.jdt.ui.edit.text.java.open.implementation
 "definition ID of the navigate -> open super implementation action 
 eclipseaction OpenSuperImplementation org.eclipse.jdt.ui.edit.text.java.open.super.implementation

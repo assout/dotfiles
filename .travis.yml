@@ -1,4 +1,4 @@
-# TODO To container base. shellcheckが入れられない
+# TODO: To container base. shellcheckが入れられない
 language: ruby
 cache:
   apt: true
@@ -20,7 +20,7 @@ script:
   - vint --version
   - vint vim/.vimrc
   - vint vim/.gvimrc
-  # TODO vlmlparser通らないっぽいからダメ - vint eclipse/_vrapperrc
+  # TODO: vlmlparser通らないっぽいからダメ - vint eclipse/_vrapperrc
 
   - bashate -i E002,E003 .bashrc $(find -name "*.sh")
   - shellcheck .bashrc $(find -name "*.sh")

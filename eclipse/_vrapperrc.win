@@ -1,9 +1,9 @@
-" TODO HOME直書き
+" TODO: HOME直書き
 source D:/admin/_vimrc
 
 " path to gvim executable.
-" TODO PATH通ってるとこから探してくれないか
-" TODO HOME直書き
+" TODO: PATH通ってるとこから探してくれないか
+" TODO: HOME直書き
 set gvimpath=D:/admin/Tools/vim74-kaoriya-win64/gvim.exe
 
 " vim: filetype=vim nofoldenable:

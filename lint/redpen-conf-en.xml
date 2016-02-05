@@ -18,7 +18,7 @@
     </validators>
     <symbols>
       <symbol name="FULL_STOP" value="。" />
-      <!-- TODO 効かない -->
+      <!-- TODO: 効かない -->
       <symbol name="SPACE" value=" " invalidChars="　" />
       <symbol name="COMMA" value="、" />
       <symbol name="HYPHEN_SIGN" value="ー" />

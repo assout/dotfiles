@@ -37,11 +37,11 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 "
 " ## TODOs
-" * TODO たまにIMで変換候補確定後に先頭の一文字消えることがある @win
-" * TODO neocompleteでたまに日本語入力が変になる
-" * TODO setなどの末尾にコメント入れるとVrapperで適用されない
-" * TODO autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
+" * TODO: たまにIMで変換候補確定後に先頭の一文字消えることがある @win
+" * TODO: neocompleteでたまに日本語入力が変になる
+" * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
+" * TODO: autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO: msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
 " }}}1
 
 " # Begin {{{1
@@ -60,7 +60,7 @@ endif
 " # Functions and Commands {{{1
 
 function! s:IsPluginEnabled()
-  " TODO pluggedディレクトリを見たほうが良いのでは
+  " TODO: pluggedディレクトリを見たほうが良いのでは
   return isdirectory(expand(s:plugged_path)) && &loadplugins
 endfunction
 
@@ -167,10 +167,10 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR> " TODO quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR> " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Catuion: setfiletypeだとuniteから開いた時に有効にならない
-  " Set markdown filetype TODO 最新のvimでは不要
+  " Set markdown filetype TODO: 最新のvimでは不要
   autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setlocal filetype=markdown " Catuion: setfiletypeだとuniteから開いた時に有効にならない
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
@@ -201,7 +201,7 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO cindnetにしても移動しなくなってしまったので暫定コメントアウトする
+" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO: cindnetにしても移動しなくなってしまったので暫定コメントアウトする
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 " set cryptmethod=blowfish2 " Caution: Comment out for performance
@@ -212,7 +212,7 @@ let &foldlevelstart = has('folding') ? 0 : &foldlevelstart
 let &foldmethod = has('folding') ? 'marker' : &foldmethod
 " フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
-" TODO Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
+" TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " keywordprgで日本語優先にしたいため
@@ -222,7 +222,7 @@ set history=200
 set hlsearch
 set ignorecase
 set incsearch
-" set iskeyword-=_ " TODO やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
+" set iskeyword-=_ " TODO: やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
 " <<,>>で#をインデントできるようにする
 set indentkeys-=0#
 " vim-refとの兼ね合いでここではhelp
@@ -232,7 +232,7 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
-let &modelines = !has('folding') ? 0 : &modelines " TODO workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
+let &modelines = !has('folding') ? 0 : &modelines " TODO: workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
 set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
@@ -240,7 +240,7 @@ set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
-" TODO Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
+" TODO: Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
 let &shellslash = g:is_office_gui ? 1 : &shellslash
 set shiftwidth=2
 set showcmd
@@ -319,7 +319,7 @@ nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
-" TODO To plugin or function
+" TODO: To plugin or function
 noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]*  :MyPrefix * <CR>
@@ -328,7 +328,7 @@ noremap       <SID>[insert]2  :MyPrefix ## <CR>A
 noremap       <SID>[insert]3  :MyPrefix ### <CR>A
 noremap       <SID>[insert]4  :MyPrefix #### <CR>A
 noremap       <SID>[insert]>  :MyPrefix > <CR>
-noremap       <SID>[insert]T  :MyPrefix TODO <CR>
+noremap       <SID>[insert]T  :MyPrefix TODO: <CR>
 noremap       <SID>[insert]f  :MyPrefix file://<CR>
 noremap <expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
 noremap <expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
@@ -401,11 +401,11 @@ inoremap <C-k> <C-o>D
 inoremap <M-b> <S-Left>
 inoremap <M-f> <S-Right>
 inoremap <M-d> <C-o>dw
-" TODO <C-M-h>での一単語Backspace(<C-w>はできている)
+" TODO: <C-M-h>での一単語Backspace(<C-w>はできている)
 " }}}
 
 " Command-line mode mappings {{{
-" TODO 一単語Delete
+" TODO: 一単語Delete
 cnoremap <C-a> <Home>
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
@@ -432,7 +432,7 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/yankround.vim', {'on' : '<Plug>(yankround-'} "
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
-  " TODO たまに"E464: Ambiguous use of user-defined command"となってしまう
+  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
@@ -476,7 +476,7 @@ if s:IsPluginEnabled()
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
-  Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
+  Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
@@ -486,7 +486,7 @@ if s:IsPluginEnabled()
         \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
   Plug 'vim-jp/vimdoc-ja', {}
-  Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO 文字化けする
+  Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
   Plug 'xolox/vim-misc', {'for' : ['vim', 'sh']}
         \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh']}
@@ -540,14 +540,14 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]w       <SID>[watchdogs]
   nmap <SID>[plugin]W       <SID>[Watchdogs]
   nmap <SID>[plugin]/       <SID>[migemo]
-  " TODO <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
+  " TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
 
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   nmap <SID>[sub_plugin]q   <SID>[qiita]
-  " TODO 押しづらい
+  " TODO: 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
@@ -713,12 +713,12 @@ endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
   " Refs: <http://www.puni.net/~mimori/rfc/rfc3092.txt>
-  " TODO dictionary定義はSwitchReverse効かない
-  " TODO 優先順位指定したい(`${}`のswitchを優先したい)
-  " TODO 入れ子のときおかしくなる(e.g. [foo[bar]] )
-  " TODO #はカーソル位置にかかわらず効いてほしい
-  " TODO undoするとカーソル位置が行頭になっちゃう
-  " TODO `([<【`はあんま使わないし、`${},"${}"`のパターンの阻害になるから消そうか
+  " TODO: dictionary定義はSwitchReverse効かない
+  " TODO: 優先順位指定したい(`${}`のswitchを優先したい)
+  " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] )
+  " TODO: #はカーソル位置にかかわらず効いてほしい
+  " TODO: undoするとカーソル位置が行頭になっちゃう
+  " TODO: `([<【`はあんま使わないし、`${},"${}"`のパターンの阻害になるから消そうか
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
@@ -796,7 +796,7 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
 
   function! s:UniteKeymappings()
-    " TODO sortしたい。↓じゃダメ。
+    " TODO: sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
@@ -867,7 +867,7 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[neomru]d :<C-u>Unite neomru/directory -buffer-name=neomru/directory<CR>
   endif " }}}
 
-  if s:HasPlugin('unite-codic.vim') " {{{ TODO Ignorecase (or Smartcase)
+  if s:HasPlugin('unite-codic.vim') " {{{ TODO: Ignorecase (or Smartcase)
     nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
     nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
   endif " }}}
@@ -893,7 +893,7 @@ endif " }}}
 
 if s:HasPlugin('vimfiler.vim') " {{{
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
-  " TODO 遅延ロードしてるから明示的に有効にしてからじゃないと効かない
+  " TODO: 遅延ロードしてるから明示的に有効にしてからじゃないと効かない
   let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 
@@ -909,12 +909,12 @@ if s:HasPlugin('vim-alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
-  " TODO WindowsでGvimで作ったタグがmsys2で読み込めない
+  " TODO: WindowsでGvimで作ったタグがmsys2で読み込めない
   let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
 endif " }}}
 
-if s:HasPlugin('vim-fugitive') " {{{ TODO fugitiveが有効なときのみマッピングしたい TODO Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+if s:HasPlugin('vim-fugitive') " {{{ TODO: fugitiveが有効なときのみマッピングしたい TODO: Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
@@ -969,7 +969,7 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-flashy') " {{{
-  if g:is_office_cui " TODO workaround
+  if g:is_office_cui " TODO: workaround
     autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
   endif
 endif
@@ -999,7 +999,7 @@ if s:HasPlugin('vim-operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
-  " TODO 空白区切りがしたい(なぜか今でも2スペースならできる)
+  " TODO: 空白区切りがしたい(なぜか今でも2スペースならできる)
   " Refs: <http://d.hatena.ne.jp/syngan/20140301/1393676442>
   " Refs: <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
   autocmd vimrc User vim-operator-surround
@@ -1022,7 +1022,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
   endif " }}}
 
-  if s:HasPlugin('vim-textobj-line') " {{{ TODO lを潰したくない
+  if s:HasPlugin('vim-textobj-line') " {{{ TODO: lを潰したくない
     nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
     nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
     nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
@@ -1040,7 +1040,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
-  " TODO プレビューウィンドウで開けないか(szで閉じやすいので)
+  " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
   let g:quickrun_config = {
         \  'plantuml' :{
@@ -1055,12 +1055,12 @@ if s:HasPlugin('vim-quickrun') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
-  " TODO プレビューウィンドウで開けないか(szで閉じやすいので)
+  " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
-  " TODO デフォルトに一括追加の指定方法(現状は上書き)
-  " TODO Windows gvimでshのman開けない
+  " TODO: デフォルトに一括追加の指定方法(現状は上書き)
+  " TODO: Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
         \  'sh' : 'man',
@@ -1082,14 +1082,14 @@ if s:HasPlugin('vim-ref') " {{{
   nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
   " }}}
 
-  " TODO 選択範囲の単語で検索
-  " TODO unite-actioinでyank
-  " TODO unite重い
-  " TODO コマンド履歴に残したい
-  " TODO 和英ができない
-  " TODO キャッシュ化されている？
-  " TODO あいまい検索的なことがしたい(z=でスペル候補表示するみたいなのを楽に)
-  " TODO Uniteソースのほうに統一したほうがよい？
+  " TODO: 選択範囲の単語で検索
+  " TODO: unite-actioinでyank
+  " TODO: unite重い
+  " TODO: コマンド履歴に残したい
+  " TODO: 和英ができない
+  " TODO: キャッシュ化されている？
+  " TODO: あいまい検索的なことがしたい(z=でスペル候補表示するみたいなのを楽に)
+  " TODO: Uniteソースのほうに統一したほうがよい？
   if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
     nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
@@ -1156,7 +1156,7 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
         \ | call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
         \ | call g:submode#map('diff', 'n', '', 'k', '[c')
         \ | call g:submode#map('diff', 'n', '', 'j', ']c')
-        \ " TODO args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+        \ " TODO: args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{
@@ -1176,7 +1176,7 @@ if s:HasPlugin('vim-textobj-between') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
-  " TODO カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
+  " TODO: カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
@@ -1201,13 +1201,13 @@ if s:HasPlugin('vim-unimpaired') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
-  " TODO msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
+  " TODO: msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
 
   let g:watchdogs_check_BufWritePost_enable = 1
-  " TODO quickfix開くとhookが動かない。暫定で開かないようにしている
-  " TODO xmllint
+  " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている
+  " TODO: xmllint
   let g:quickrun_config = {
         \  'watchdogs_checker/_' : {
         \    'outputter/quickfix/open_cmd' : '',
@@ -1218,7 +1218,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    'hook/qfsigns_update/enable_exit': 1,
         \  },
         \}
-  " TODO 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
+  " TODO: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
   let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
 
   call extend(g:quickrun_config, {

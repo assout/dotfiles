@@ -9,8 +9,8 @@
 # * After
 #
 # TODOs
-# * TODO shellcheck disable=SC1091を一括で無効にしたい
-# * TODO Performance test on travisCI
+# * TODO: shellcheck disable=SC1091を一括で無効にしたい
+# * TODO: Performance test on travisCI
 #
 # }}}1
 
@@ -100,7 +100,7 @@ fi
 if [ "$(which peco 2> /dev/null)" ] ; then
   # ls & cd
   function peco_lscd {
-    # TODO Workaround
+    # TODO: Workaround
     # shellcheck disable=SC2033
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
   if [ ! -z "$dir" ] ; then
@@ -117,7 +117,7 @@ function peco_hist {
   history -s "$cmd"
   eval "$cmd"
 }
-# TODO なんかC-pとかが遅くなるので一旦無効
+# TODO: なんかC-pとかが遅くなるので一旦無効
 # bind '"\C-p\C-r":"peco-hist\n"'
 fi
 
@@ -131,7 +131,7 @@ function man_japanese {
 alias jan='man_japanese'
 
 # Docker
-# TODO Workaroud
+# TODO: Workaroud
 # shellcheck disable=SC2032
 alias d='docker'
 alias drm='docker rm $(docker ps -a -q)'
@@ -150,9 +150,9 @@ if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
-  alias e='explorer' # TODO windowsでパス区切り文字が/だと開けない？(/,\のどちらでもいけるはずでは？)
+  alias e='explorer' # TODO: windowsでパス区切り文字が/だと開けない？(/,\のどちらでもいけるはずでは？)
 elif [ "${is_home}" ] ; then
-  alias eclipse='eclipse --launcher.GTK_version 2' # TODO workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
 # }}}1
@@ -164,7 +164,7 @@ if [ "$(which stty 2> /dev/null)" ] ; then
   stty stop undef
 fi
 
-# Create Today backup directory. TODO dirty
+# Create Today backup directory. TODO: dirty
 if [ "${is_home}" ] ; then
   todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
   if [ ! -d "${todayBackupPath}" ] ; then
@@ -208,7 +208,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 if [ "${is_home}" ] ; then
   # shellcheck disable=SC1091
   source /usr/share/git-core/contrib/completion/git-prompt.sh
-  # TODO Officeだと遅い
+  # TODO: Officeだと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
   export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示

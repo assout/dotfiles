@@ -47,7 +47,7 @@
 " # Begin {{{1
 
 " vint: -ProhibitSetNoCompatible
-set nocompatible " Caution: vim -uで起動した時エラーとならないようにする
+set nocompatible " Warn: vim -uで起動した時エラーとならないようにする
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 
@@ -78,8 +78,8 @@ function! s:RestoreCursorPosition()
   endif
 endfunction
 
-function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
-  setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
+function! s:ToggleExpandTab() " Warn: undoしても&expandtabの値は戻らないので注意
+  setlocal expandtab! | retab " Warn: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs: <:help restore-position>
     normal! msHmt
@@ -88,7 +88,7 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
 endfunction
 command! MyToggleExpandTab call <SID>ToggleExpandTab()
 
-function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
+function! s:ChangeTabstep(size) " Warn: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
     " Refs: <:help restore-position>
     normal! msHmt
@@ -99,7 +99,7 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
-function! s:InsertString(pos, str) range " Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
+function! s:InsertString(pos, str) range " Warn: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
@@ -127,10 +127,10 @@ command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name"
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-" Disable unused built-in plugins {{{ Caution: netrwは非プラグイン環境で必要(VimFiler使えない環境)
-" let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
+" Disable unused built-in plugins {{{ Warn: netrwは非プラグイン環境で必要(VimFiler使えない環境)
+" let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Warn: ちょいちょい使う
 let g:loaded_getscriptPlugin = 1
-" let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
+" let g:loaded_gzip            = 1 " Warn: ヘルプが引けなくなることがあるのでコメントアウト
 let g:loaded_matchparen      = 1 " Refs: <:help matchparen>
 let g:loaded_tar             = 1
 let g:loaded_tarPlugin       = 1
@@ -140,7 +140,7 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-" Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
+" Warn: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
 let g:is_home = $USERNAME ==# 'oji'
 let g:is_office = $USERNAME ==# 'admin'
 let g:is_office_gui = g:is_office && has('gui_running')
@@ -150,7 +150,7 @@ let g:is_jenkins = exists('$BUILD_NUMBER')
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
-if g:is_office_cui " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
+if g:is_office_cui " For mintty. Warn: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -161,21 +161,21 @@ endif
 
 " # Auto-commands {{{1
 
-augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定義する
+augroup vimrc " Warn: FileType Eventのハンドリングは<# After>に定義する
   autocmd!
-  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  " QuickFixを自動で開く " Warn: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR> " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
-  autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Catuion: setfiletypeだとuniteから開いた時に有効にならない
+  autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Warn: setfiletypeだとuniteから開いた時に有効にならない
   " Set markdown filetype TODO: 最新のvimでは不要
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setlocal filetype=markdown " Catuion: setfiletypeだとuniteから開いた時に有効にならない
+  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setlocal filetype=markdown " Warn: setfiletypeだとuniteから開いた時に有効にならない
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
-  " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
+  " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Warn: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
   autocmd FileType * setlocal textwidth=0 formatoptions-=o
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   autocmd FileType java setlocal noexpandtab
@@ -201,10 +201,10 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO: cindnetにしても移動しなくなってしまったので暫定コメントアウトする
+" set cindent " Warn: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO: cindnetにしても移動しなくなってしまったので暫定コメントアウトする
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
-" set cryptmethod=blowfish2 " Caution: Comment out for performance
+" set cryptmethod=blowfish2 " Warn: Comment out for performance
 set diffopt& diffopt+=vertical
 set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
@@ -213,7 +213,7 @@ let &foldmethod = has('folding') ? 'marker' : &foldmethod
 " フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
 set formatoptions& formatoptions-=o
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
-" Caution: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
+" Warn: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 " keywordprgで日本語優先にしたいため
 set helplang=ja,en
@@ -237,9 +237,9 @@ set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set scrolloff=5
-" Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
-" Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
-" Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
+" Warn: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
+" Warn: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
+" Warn: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
 " TODO: Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
 let &shellslash = g:is_office_gui ? 1 : &shellslash
 set shiftwidth=2
@@ -264,7 +264,7 @@ set title
 set ttimeoutlen=0
 let &undofile = has('persistent_undo') ? 0 : &undofile
 set wildmenu
-" set wildmode=list:longest " Caution: 微妙なのでやめる
+" set wildmode=list:longest " Warn: 微妙なのでやめる
 set nowrap
 set nowrapscan
 
@@ -309,7 +309,7 @@ nmap     <SID>[shortcut]o <SID>[open]
 nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
-if has('gui_running') " Caution: autocmd FileTypeイベントを発効する
+if has('gui_running') " Warn: autocmd FileTypeイベントを発効する
   nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>:filetype detect<CR>
 else
   nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:filetype detect<CR>
@@ -350,7 +350,7 @@ nnoremap <M-l> gt
 nnoremap <M-t> :<C-u>tabedit<CR>
 nnoremap <M-c> :<C-u>tabclose<CR>
 
-" Use ':tjump' instead of ':tag'. -> Caution: 下記の設定はしない!(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
+" Use ':tjump' instead of ':tag'. -> Warn: 下記の設定はしない!(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
 " nnoremap <C-]> g<C-]>
 " }}}
 
@@ -388,7 +388,7 @@ nnoremap [w     :wincmd W<CR>
 nnoremap ]w     :wincmd w<CR>
 nnoremap [W     :wincmd t<CR>
 nnoremap ]W     :wincmd b<CR>
-" Caution: uはunite用に確保
+" Warn: uはunite用に確保
 " }}}
 
 " Insert mode mappings {{{
@@ -465,7 +465,7 @@ if s:IsPluginEnabled()
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい TODO 箇条書きでo, Oすると2タブインデントされてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
-  Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
+  Plug 'scrooloose/syntastic', {'on' : []} " Warn: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
   Plug 'thinca/vim-localrc', g:is_office ? {'on' :[]} : {'for' : 'vim'}
@@ -477,9 +477,9 @@ if s:IsPluginEnabled()
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
-  Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
+  Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Warn: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
-  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
+  Plug 'tpope/vim-fugitive' " Warn: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'
@@ -495,7 +495,7 @@ if s:IsPluginEnabled()
         \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh']}
   " }}}
 
-  " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
+  " User Operators {{{ Warn: 遅延ロードするといろいろ動かなくなる
   Plug 'kana/vim-operator-user'
         \ | Plug 'haya14busa/vim-operator-flashy'
         \ | Plug 'kana/vim-operator-replace'
@@ -522,7 +522,7 @@ if s:IsPluginEnabled()
 
   call g:plug#end()
 
-  " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
+  " Warn: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
   if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
@@ -557,7 +557,7 @@ if s:IsPluginEnabled()
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
-  " Caution: Kは定義不要だがプラグインの遅延ロードのため定義している
+  " Warn: Kは定義不要だがプラグインの遅延ロードのため定義している
   nmap K                <Plug>(ref-keyword)
   map  y                <Plug>(operator-flashy)
   nmap Y                <Plug>(operator-flashy)$
@@ -619,7 +619,7 @@ if s:HasPlugin('memolist.vim') " {{{
 
   function! s:MemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
-    " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
+    " Warn: a:wordはオプションが入ってくるかもなので""で囲まない
     execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
@@ -660,7 +660,7 @@ if s:HasPlugin('open-browser.vim') " {{{
   let g:openbrowser_search_engines = extend(get(g:, 'openbrowser_search_engines', {}), {
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
-        \  }) " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
+        \  }) " Warn: vimrcリロードでデフォルト値が消えてしまわないようにする
   if g:is_office_cui
     let g:openbrowser_browser_commands = [{'name' : 'rundll32', 'args' : 'rundll32 url.dll,FileProtocolHandler {uri}'}]
   endif
@@ -812,8 +812,8 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
   autocmd vimrc FileType unite call s:UniteKeymappings()
 
-  " Caution: mapはunimpairedの`]u`系を無効にしないといけない
-  " Caution: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
+  " Warn: mapはunimpairedの`]u`系を無効にしないといけない
+  " Warn: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim 
         \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -884,7 +884,7 @@ if s:HasPlugin('unite.vim') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
+      " Warn: a:wordはオプションが入ってくるかもなので""で囲まない
       execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
@@ -985,7 +985,7 @@ if s:HasPlugin('vim-maximizer') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-migemo') " {{{
-  " Caution: probably slow
+  " Warn: probably slow
   autocmd vimrc User vim-migemo if has('migemo') | call g:migemo#SearchChar(0) | endif
   nnoremap <SID>[migemo] :<C-u>Migemo<Space>
 endif " }}}
@@ -1011,7 +1011,7 @@ if s:HasPlugin('vim-operator-replace') " {{{
     nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   endif " }}}
 
-  " if s:HasPlugin('vim-textobj-parameter') " {{{  Caution: aは<Space>paeとかできなくなるのでやらない
+  " if s:HasPlugin('vim-textobj-parameter') " {{{  Warn: aは<Space>paeとかできなくなるのでやらない
   "   nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
   " endif " }}}
 
@@ -1050,7 +1050,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
   endif " }}}
 
-  " if s:HasPlugin('vim-textobj-parameter') " {{{ Caution: aはsaawとかできなくなるのでやらない
+  " if s:HasPlugin('vim-textobj-parameter') " {{{ Warn: aはsaawとかできなくなるのでやらない
   "   nmap <SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
   "   nmap <SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
   "   nmap <SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
@@ -1124,7 +1124,7 @@ if s:HasPlugin('vim-singleton') " {{{
   autocmd vimrc User vim-singleton call g:singleton#enable()
 endif " }}}
 
-if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
+if s:HasPlugin('vim-submode') " {{{ Warn: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
   autocmd vimrc User vim-submode
         \   call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
         \ | call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
@@ -1306,7 +1306,7 @@ if s:HasPlugin('vim-hybrid')
   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid
 else
-  if g:is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
+  if g:is_office | colorscheme default | endif " Warn: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
 

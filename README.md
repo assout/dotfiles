@@ -13,7 +13,7 @@ Linux
 curl -L https://raw.githubusercontent.com/assout/dotfiles/master/install.sh | bash
 ```
 
-Windows (CMD) (Caution: change repository git user config)
+Windows (CMD) (Warn: change repository git user config)
 
 ```
 mkdir D:\admin\Development\vim-plugins
@@ -23,7 +23,7 @@ cd .\dotfiles
 .\install.bat
 ```
 
-Windows(unix tool e.g. msysgit) (Caution: change repository git user config)
+Windows(unix tool e.g. msysgit) (Warn: change repository git user config)
 
 ```
 mkdir -p ~/Development/vim-plugins

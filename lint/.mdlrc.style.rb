@@ -8,4 +8,4 @@ exclude_rule 'MD040' # Fenced code blocks should have a language specified
 
 rule 'MD007', :indent => 4 # Unordered list indentation
 rule 'MD009', :br_spaces => 2 # Trailing spaces
-rule 'MD026', :punctuation => ",;:" # Trailing punctuation in header
+rule 'MD026', :punctuation => ",;" # Trailing punctuation in header

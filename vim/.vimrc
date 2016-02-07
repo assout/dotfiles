@@ -463,7 +463,7 @@ if s:IsPluginEnabled()
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   Plug 'pangloss/vim-javascript', {'for' : 'javascript'} " For indent only
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
-        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO code表記内に<があるとsyntaxが崩れるっぽい TODO 箇条書きでo, Oすると2タブインデントされてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい
+        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう？ TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO 箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Warn: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元

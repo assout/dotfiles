@@ -91,9 +91,9 @@ elif [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi
 
+here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
-  here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-  alias vi='vi -s ${here}/.vimrc'
+  alias vi='vi -u ${here}/.vimrc'
 fi
 
 # Peco

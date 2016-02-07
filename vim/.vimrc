@@ -262,7 +262,7 @@ set tabstop=2
 set textwidth=0
 set title
 set ttimeoutlen=0
-let &undofile = has('persistent_undo') ? 0 : &undofile
+if has('persistent_undo') | set noundofile | endif
 set wildmenu
 " set wildmode=list:longest " Warn: 微妙なのでやめる
 set nowrap

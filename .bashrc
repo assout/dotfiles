@@ -84,16 +84,18 @@ function cdls {
 alias cd='cdls'
 
 # Vim
+if [ "$(which vim 2> /dev/null)" ] ; then
+  alias vi='vim --noplugin'
+fi
+
 if [ "$(which vimx 2> /dev/null)" ] ; then
   alias vi='vimx --noplugin'
   alias vim='vimx'
-elif [ "$(which vim 2> /dev/null)" ] ; then
-  alias vi='vim --noplugin'
 fi
 
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
-  alias vi='vi -u ${here}/.vimrc'
+  alias vim='vi -u ${here}/.vimrc'
 fi
 
 # Peco

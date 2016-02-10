@@ -91,8 +91,8 @@ if [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi
 
-# カーソル
 if [ "$(which vimx 2> /dev/null)" ] ; then
+# クリップボード共有するため
   alias vi='vimx --noplugin'
   alias vim='vimx'
 fi

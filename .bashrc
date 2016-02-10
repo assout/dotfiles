@@ -2,15 +2,17 @@
 
 # [Index] {{{1
 #
-# * Begin
-# * Functions & Aliases
-# * Define, Export variables
-# * User process
-# * After
+# - Begin
+# - Functions & Aliases
+# - Define, Export variables
+# - User process
+# - After
 #
-# TODOs
-# * TODO: shellcheck disable=SC1091を一括で無効にしたい
-# * TODO: Performance test on travisCI
+# TODOs:
+#
+# - TODO: shellcheck disable=SC1091を一括で無効にしたい
+# - TODO: Performance test on travisCI
+# - TODO: .bash_profileに持っていけるやつはもってく(性能)
 #
 # }}}1
 
@@ -33,6 +35,7 @@ fi
 
 # [Define, Export variables] {{{1
 
+# TODO: .bash_profileでするべき？(その場合export必要になっちゃう？)
 readonly is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
 readonly is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 
@@ -88,6 +91,7 @@ if [ "$(which vim 2> /dev/null)" ] ; then
   alias vi='vim --noplugin'
 fi
 
+# カーソル
 if [ "$(which vimx 2> /dev/null)" ] ; then
   alias vi='vimx --noplugin'
   alias vim='vimx'
@@ -96,6 +100,7 @@ fi
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
   alias vim='vi -u ${here}/.vimrc'
+  alias vimdiff='vimdiff -u ${here}/.vimrc'
 fi
 
 # Peco

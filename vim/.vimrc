@@ -47,7 +47,7 @@
 " # Begin {{{1
 
 " vint: -ProhibitSetNoCompatible
-set nocompatible " Warn: vim -uで起動した時エラーとならないようにする
+set nocompatible " Note: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 
@@ -174,8 +174,8 @@ augroup vimrc " Warn: FileType Eventのハンドリングは<# After>に定義�
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
-  " 改行時の自動コメント継続をやめる(o, O コマンドでの改行時のみ)。 Warn: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
-  autocmd FileType * setlocal textwidth=0 formatoptions-=o
+  " Warn: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
+  autocmd FileType * setlocal textwidth=0
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   autocmd FileType java setlocal noexpandtab
   if executable('python')
@@ -209,8 +209,6 @@ set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
 let &foldlevelstart = has('folding') ? 0 : &foldlevelstart
 let &foldmethod = has('folding') ? 'marker' : &foldmethod
-" フォーマットオプション(-oでo, Oコマンドでの改行時のコメント継続をなくす)
-set formatoptions& formatoptions-=o
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Warn: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
@@ -721,7 +719,6 @@ if s:HasPlugin('switch.vim') " {{{
   " TODO: dictionary定義はSwitchReverse効かない
   " TODO: 優先順位指定したい(`${}`のswitchを優先したい)
   " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] )
-  " TODO: #はカーソル位置にかかわらず効いてほしい
   " TODO: undoするとカーソル位置が行頭になっちゃう
   " TODO: `([<【`はあんま使わないし、`${},"${}"`のパターンの阻害になるから消そうか
   let g:switch_custom_definitions = [
@@ -730,8 +727,6 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['public', 'protected', 'private', ],
         \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
         \  ['日', '月', '火', '水', '木', '金', '土'],
-        \  ['# ', '## ', '### ', '#### ', '##### '],
-        \  ['pick', 'reword', 'edit', 'squash', 'fixup', 'exec' ],
         \  {
         \     '\v"(.{-})"' : '''\1''',
         \     '\v''(.{-})''' : '"\1"',

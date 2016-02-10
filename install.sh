@@ -3,30 +3,34 @@
 # TODO: チェック処理リファクタ
 if [ "${OSTYPE}" = msys ] ; then echo "install.sh: It doesn't meet the prerequisites" >&2 && exit 1 ; fi
 
-mkdir -p ~/Development/vim-plugins
-cd ~/Development
+readonly INSTALL_DIR=~/Development
+readonly HERE="%{INSTALL_DIR}/dotfiles"
 
+mkdir -p ~/Development/vim-plugins
+
+cd "${INSTALL_DIR}"
 if [ ! -d "./dotfiles" ] ; then
-	git clone git@github.com:assout/dotfiles.git
+  git clone git@github.com:assout/dotfiles.git
 fi
 
-ln -sf ~/Development/dotfiles/ ~/
+ln -sf "${HERE}/" ~/
 
-ln -sf ~/Development/dotfiles/.bashrc ~/
-ln -sf ~/Development/dotfiles/.ctags ~/
-ln -sf ~/Development/dotfiles/.gitconfig ~/
-ln -sf ~/Development/dotfiles/.gitconfig.linux ~/.gitconfig.environment
-ln -sf ~/Development/dotfiles/.gitignore ~/
-ln -sf ~/Development/dotfiles/.gitattributes ~/
-ln -sf ~/Development/dotfiles/.inputrc ~/
-ln -sf ~/Development/dotfiles/.tmux.conf ~/
-ln -sf ~/Development/dotfiles/eclipse/_vrapperrc ~/.vrapperrc
-ln -sf ~/Development/dotfiles/eclipse/_vrapperrc.linux ~/.vrapperrc.environment
-ln -sf ~/Development/dotfiles/lint/.mdlrc ~/
-ln -sf ~/Development/dotfiles/lint/.mdlrc.style.rb ~/
-ln -sf ~/Development/dotfiles/lint/.eslintrc.json ~/
-ln -sf ~/Development/dotfiles/lint/.textlintrc ~/
-ln -sf ~/Development/dotfiles/lint/.textstatrc ~/
-ln -sf ~/Development/dotfiles/vim/.gvimrc ~/
-ln -sf ~/Development/dotfiles/vim/.vimrc ~/
-ln -sf ~/Development/dotfiles/vim/.vimrc.development ~/Development/vim-plugins
+ln -sf "${HERE}/.bashrc" ~/
+ln -sf "${HERE}/.ctags" ~/
+ln -sf "${HERE}/.gitconfig" ~/
+ln -sf "${HERE}/.gitconfig.linux" ~/.gitconfig.environment
+ln -sf "${HERE}/.gitignore" ~/
+ln -sf "${HERE}/.gitattributes" ~/
+ln -sf "${HERE}/.inputrc" ~/
+ln -sf "${HERE}/.tmux.conf" ~/
+ln -sf "${HERE}/eclipse/_vrapperrc" ~/.vrapperrc
+ln -sf "${HERE}/eclipse/_vrapperrc.linux" ~/.vrapperrc.environment
+ln -sf "${HERE}/lint/.mdlrc" ~/
+ln -sf "${HERE}/lint/.mdlrc.style.rb" ~/
+ln -sf "${HERE}/lint/.eslintrc.json" ~/
+ln -sf "${HERE}/lint/.textlintrc" ~/
+ln -sf "${HERE}/lint/.textstatrc" ~/
+ln -sf "${HERE}/vim/.gvimrc" ~/
+ln -sf "${HERE}/vim/.vimrc" ~/
+ln -sf "${HERE}/vim/.vimrc.development" ~/Development/vim-plugins
+

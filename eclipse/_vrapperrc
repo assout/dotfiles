@@ -94,9 +94,9 @@ nnoremap <C-w>o :only<CR>
 
 " Alt key mappings
 nnoremap <M-l> <C-w>gt
-" Warn: <M-h>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
+" Caution: <M-h>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
 " nnoremap <M-h> <C-w>gT
-" Warn: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
+" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
 " nnoremap <M-t> :tabedit<CR>
 " nnoremap <M-c> :q<CR>
 

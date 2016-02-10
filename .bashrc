@@ -225,7 +225,7 @@ elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if [ "${is_home}" ] ; then # Warn: sourceしなくても補完効くが"g" aliasでも効かしたいため
+if [ "${is_home}" ] ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
   source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
   __git_complete g __git_main
 elif [ "${is_office}" ] ; then

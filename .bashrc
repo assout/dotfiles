@@ -56,8 +56,8 @@ if [ "${is_home}" ] ; then
 fi
 
 if [ "${is_home}" -o "${is_office}" ] ; then
-  PATH="${PATH}:${HOME}/Development/scripts"
-  PATH="${PATH}:${HOME}/Development/scripts/local/bash"
+  PATH="${PATH}:${HOME}/scripts"
+  PATH="${PATH}:${HOME}/scripts/local/bash"
 fi
 
 if [ "${is_office}" ] ; then

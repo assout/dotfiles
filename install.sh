@@ -3,9 +3,6 @@
 # TODO: チェック処理リファクタ
 if [ "${OSTYPE}" = msys ] ; then echo "install.sh: It doesn't meet the prerequisites" >&2 && exit 1 ; fi
 
-echo dummy
-exit 255
-
 mkdir -p ~/Development/vim-plugins
 cd ~/Development
 

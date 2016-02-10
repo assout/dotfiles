@@ -856,9 +856,9 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    let g:neomru#directory_mru_limit = 500
+    let g:neomru#directory_mru_limit = 200
     let g:neomru#do_validate = 0
-    let g:neomru#file_mru_limit = 500
+    let g:neomru#file_mru_limit = 200
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
 

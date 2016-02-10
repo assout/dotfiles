@@ -1,1 +1,2 @@
+# configで`autocrlfj = input`としていてもmsys2環境の場合unix形式になってしまうため
 *.bat -crlf

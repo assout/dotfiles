@@ -169,8 +169,6 @@ augroup vimrc " Warn: FileType Eventのハンドリングは<# After>に定義�
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR> " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Warn: setfiletypeだとuniteから開いた時に有効にならない
-  " Set markdown filetype TODO: 最新のvimでは不要
-  autocmd BufNewFile,BufRead *.{md,mdwn,mkd,mkdn,mark*} setlocal filetype=markdown " Warn: setfiletypeだとuniteから開いた時に有効にならない
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 

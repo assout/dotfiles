@@ -231,6 +231,7 @@ let &modelines = !has('folding') ? 0 : &modelines " TODO: workaround. 当ファ�
 set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
+set ruler
 set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
@@ -912,7 +913,10 @@ if s:HasPlugin('vim-easytags') " {{{
   let g:easytags_dynamic_files = 2
 endif " }}}
 
-if s:HasPlugin('vim-fugitive') " {{{ TODO: fugitiveが有効なときのみマッピングしたい TODO: Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+if s:HasPlugin('vim-fugitive') " {{{ TODO: Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+  set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+
+  " TODO: fugitiveが有効なときのみマッピングしたい 
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>

@@ -225,8 +225,8 @@ set keywordprg=:help
 set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
-" Caution: 性能悪くなるがmsys2環境でredrawされないことがあるので無効
-set nolazyredraw
+" マクロなどを実行中は描画を中断
+set lazyredraw
 let &modelines = !has('folding') ? 0 : &modelines " TODO: workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
 set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う

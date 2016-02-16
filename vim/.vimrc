@@ -3,10 +3,10 @@
 " * Begin
 " * Functions and Commands
 " * Let defines
-" * Auto-commands
 " * Options
 " * Key-mappings
 " * Plug-ins
+" * Auto-commands
 " * After
 " }}}1
 

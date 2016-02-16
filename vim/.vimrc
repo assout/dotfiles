@@ -790,12 +790,13 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
     nnoremap <buffer><expr>p unite#smart_map('p', unite#do_action('split'))
     nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
+    " TODO: msys2で効かない(そもそも"start"アクションが効かない)
     nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('start'))
   endfunction
   autocmd vimrc FileType unite call s:UniteKeymappings()
 
-  " Caution: mapはunimpairedの`]u`系を無効にしないといけない
-  " Caution: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
+  " Note: mapはunimpairedの`]u`系を無効にしないといけない
+  " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim 
         \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -869,16 +870,23 @@ if s:HasPlugin('unite.vim') " {{{
 
     function! s:TodoGrep(word)
       call histadd('cmd', 'MyTodoGrep '  . a:word)
-      " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
+      " Note: a:wordはオプションが入ってくるかもなので""で囲まない
       execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
+
+    function! s:UniteTodoKeyMappings()
+      nnoremap <buffer><expr>t unite#smart_map('t', unite#do_action('toggle'))
+    endfunction
 
     noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
     noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
     nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
     nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
     nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
+
+    autocmd vimrc FileType unite if unite#get_current_unite().profile_name ==# 'todo' | call s:UniteTodoKeyMappings() | endif
+    autocmd vimrc User unite-todo call unite#custom#default_action('todo', 'open')
   endif " }}}
 endif " }}}
 

@@ -967,7 +967,9 @@ if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_folding_disabled = 1
   let g:vim_markdown_emphasis_multiline = 0
 
-  function! s:MyVimMarkdownKeymappings() " Refs: <:help restore-position>
+  function! s:MyVimMarkdownSettings() " Refs: <:help restore-position>
+    setlocal formatoptions+=o " Caution: plugin固有の設定でないのだがここじゃないとうまく適用されない(ftpluginとの関係性などから)
+
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
@@ -976,7 +978,7 @@ if s:HasPlugin('vim-markdown') " {{{
     vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
   endfunction
-  autocmd vimrc FileType markdown call s:MyVimMarkdownKeymappings()
+  autocmd vimrc FileType markdown call s:MyVimMarkdownSettings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{

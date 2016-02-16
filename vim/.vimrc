@@ -166,7 +166,8 @@ augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定�
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR> " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
   " Restore cusor position
@@ -318,7 +319,7 @@ nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 " TODO: To plugin or function
 noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
-noremap       <SID>[insert]*  :MyPrefix * <CR>
+noremap       <SID>[insert]-  :MyPrefix - <CR>
 noremap       <SID>[insert]1  :MyPrefix # <CR>A
 noremap       <SID>[insert]2  :MyPrefix ## <CR>A
 noremap       <SID>[insert]3  :MyPrefix ### <CR>A
@@ -445,6 +446,8 @@ if s:IsPluginEnabled()
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_home ? {'for' : '*'} : {'on' : []}
+  Plug 'godlygeek/tabular', {'for' : 'markdown'}
+        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう？ TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO 箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
@@ -453,13 +456,12 @@ if s:IsPluginEnabled()
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode', {'for' : '*'}
   Plug 'koron/codic-vim', {'on' : 'Codic'}
+  Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   Plug 'pangloss/vim-javascript', {'for' : 'javascript'} " For indent only
-  Plug 'godlygeek/tabular', {'for' : 'markdown'}
-        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう？ TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO 箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元

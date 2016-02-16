@@ -482,7 +482,7 @@ if s:IsPluginEnabled()
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
         \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
-  Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']}
+  Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}

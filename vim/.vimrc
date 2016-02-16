@@ -611,12 +611,11 @@ if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
   let g:memolist_path = expand(g:is_home ? '~/Dropbox/memolist' : '~/Documents/memolist')
   let g:memolist_template_dir_path = g:memolist_path
-  let s:memolist_wiki_path = expand('~/Development/gitlab/global-wiki.wiki')
 
   function! s:MemoGrep(word)
     call histadd('cmd', 'MyMemoGrep '  . a:word)
     " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
-    execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path g:is_office ? s:memolist_wiki_path : ''
+    execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path
   endfunction
   command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
 
@@ -631,21 +630,11 @@ if s:HasPlugin('memolist.vim') " {{{
         \ | call g:unite#custom#source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
         \ | call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
-        \ | if g:is_office
-          \ |   call extend(g:unite_source_alias_aliases, { 'memolist_wiki' : { 'source' : 'file', 'args' : s:memolist_wiki_path }})
-          \ |   call g:unite#custom#source('memolist_wiki', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-          \ |   call g:unite#custom#source('memolist_wiki', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-          \ |   call g:unite#custom#source('memolist_wiki', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-          \ | endif
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
-  if g:is_home
-    nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
-  elseif g:is_office
-    nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_wiki -buffer-name=memolist_wiki<CR>
-  endif
+  nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -855,9 +844,12 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    let g:neomru#directory_mru_limit = 200
+    " TODO: Windowsで、ネットワーク上のファイルか、Windows形式パス("D:\hoge,"D:\hoge")のファイルがあるとUnite候補表示時に遅くなるっポイ。とりあえず一時的にignoreしてみる。TODO: なぜかネットワーク上のファイルをignoreできなかった(`^\\\\`でダメ)
+    let g:neomru#file_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
+    let g:neomru#directory_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
+    let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0
-    let g:neomru#file_mru_limit = 200
+    let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
 
@@ -909,11 +901,13 @@ endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
   " TODO: WindowsでGvimで作ったタグがmsys2で読み込めない
-  let g:easytags_async = 1
+
+  " FIXME: msys2で非同期プロセスが大量にできちゃってるっぽいので一旦syncにする(`pgrep -fl vim`)
+  let g:easytags_async = g:is_office ? 0 : 1
   let g:easytags_dynamic_files = 2
 endif " }}}
 
-if s:HasPlugin('vim-fugitive') " {{{ TODO: Windows で fugitive バッファ側の保存時にエラー(:Gwはうまくいく)
+if s:HasPlugin('vim-fugitive') " {{{
   set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
   " TODO: fugitiveが有効なときのみマッピングしたい 
@@ -990,7 +984,7 @@ if s:HasPlugin('vim-operator-flashy') " {{{
   if g:is_office_cui " TODO: workaround
     autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
   endif
-endif
+endif " }}}
 
 if s:HasPlugin('vim-operator-replace') " {{{
   map <SID>[replace] <Plug>(operator-replace)

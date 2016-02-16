@@ -199,7 +199,6 @@ set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
-" set cindent " Caution: smartindent使わない(コマンド ">>" を使ったとき、'#' で始まる行は右に移動しないため。Refs: :help si) TODO: cindnetにしても移動しなくなってしまったので暫定コメントアウトする
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 " set cryptmethod=blowfish2 " Caution: Comment out for performance

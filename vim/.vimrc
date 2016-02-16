@@ -55,6 +55,10 @@ if filereadable(expand('~/.vimrc.local'))
   source ~/.vimrc.local
 endif
 
+augroup vimrc
+  autocmd!
+augroup END
+
 " }}}1
 
 " # Functions and Commands {{{1
@@ -158,41 +162,6 @@ endif
 
 " }}}1
 
-" # Auto-commands {{{1
-
-augroup vimrc " Caution: FileType Eventのハンドリングは<# After>に定義する
-  autocmd!
-  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
-  autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
-  autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
-  " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
-  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
-  " Set freemaker filetype
-  autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
-  " Restore cusor position
-  autocmd BufWinEnter * call s:RestoreCursorPosition()
-
-  " Caution: 当ファイルのsetでも設定しているがftpluginで上書きされてしまうためここで設定している
-  autocmd FileType * setlocal textwidth=0
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
-  autocmd FileType java setlocal noexpandtab
-  if executable('python')
-    autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
-  endif
-  if executable('xmllint')
-    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
-  endif
-
-  if g:is_office " homeではRicty font使うので不要
-    " Double byte space highlight
-    autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-    autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  endif
-augroup END
-
-" }}}1
-
 " # Options {{{1
 
 set autoindent
@@ -254,8 +223,6 @@ set splitright
 let &swapfile = g:is_office ? 0 : &swapfile
 let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
-" 自動改行をなくす
-set textwidth=0
 set title
 set ttimeoutlen=0
 if has('persistent_undo') | set noundofile | endif
@@ -967,8 +934,6 @@ if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_emphasis_multiline = 0
 
   function! s:MyVimMarkdownSettings() " Refs: <:help restore-position>
-    setlocal formatoptions+=o " Caution: plugin固有の設定でないのだがここじゃないとうまく適用されない(ftpluginとの関係性などから)
-
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_L] msHmt:HeaderIncrease<CR>'tzt`s
@@ -1280,6 +1245,41 @@ endif " }}}
 if s:HasPlugin('yankround.vim') " {{{
   let g:yankround_dir = '~/.cache/yankround'
 endif " }}}
+
+" }}}1
+
+" # Auto-commands {{{1
+" Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
+
+augroup vimrc
+  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
+  autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
+  " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
+  " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
+  " Set freemaker filetype
+  autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
+  " Restore cusor position
+  autocmd BufWinEnter * call s:RestoreCursorPosition()
+
+  " Note: ftpluginで上書きされてしまうことがあるためここで設定している
+  autocmd FileType * setlocal formatoptions-=c
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 formatoptions+=o
+  autocmd FileType java setlocal noexpandtab
+  if executable('python')
+    autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
+  endif
+  if executable('xmllint')
+    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
+  endif
+
+  if g:is_office " homeではRicty font使うので不要
+    " Double byte space highlight
+    autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+    autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+  endif
+augroup END
 
 " }}}1
 

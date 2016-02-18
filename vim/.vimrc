@@ -1273,8 +1273,8 @@ augroup vimrc
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している
-  " Note: formatoptionsにoいれるかどうかは難しい
-  autocmd FileType * setlocal formatoptions-=c formatoptions-=o
+  " Note: formatoptionsにo含むべきか難しい
+  autocmd FileType * setlocal formatoptions-=c
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   autocmd FileType java setlocal noexpandtab
   " Note: aws.json を考慮して*jsonとしている

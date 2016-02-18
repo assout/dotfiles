@@ -403,13 +403,14 @@ if s:IsPluginEnabled()
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
-        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['VimFiler']}
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
+  " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない
+  Plug 'Shougo/vimfiler.vim'
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
@@ -865,7 +866,6 @@ endif " }}}
 
 if s:HasPlugin('vimfiler.vim') " {{{
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
-  " TODO: 遅延ロードしてるから明示的に有効にしてからじゃないと効かない
   let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 

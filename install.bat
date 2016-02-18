@@ -19,12 +19,12 @@ mklink "%HOME%\.tmux.conf" "%here%\.tmux.conf"
 mklink "%HOME%\_gvimrc" "%here%\vim\.gvimrc"
 mklink "%HOME%\_vimrc" "%here%\vim\.vimrc"
 
-rem TODO: Eclipse Marsは%USERPROFILE%を見る。Keplerは%HOME%を見る。
-rem TODO: Eclipse Marsは.vrapperrcを見る。Keplerは_vrapperrcを見る。
-mklink "%HOME%\.vrapperrc.environment" "%here%\eclipse\_vrapperrc.win"
-mklink "%USERPROFILE%\.vrapperrc.environment" "%here%\eclipse\_vrapperrc.win"
-mklink "%HOME%\_vrapperrc" "%here%\eclipse\_vrapperrc"
+rem TODO: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
 mklink "%USERPROFILE%\.vrapperrc" "%here%\eclipse\_vrapperrc"
+mklink "%USERPROFILE%\.vrapperrc.environment" "%here%\eclipse\_vrapperrc.win"
+rem TODO: Eclipse Keplerは%HOME%の"_vrapperrc"を見る。
+mklink "%HOME%\_vrapperrc" "%here%\eclipse\_vrapperrc"
+mklink "%HOME%\.vrapperrc.environment" "%here%\eclipse\_vrapperrc.win"
 
 mklink "%HOME%\.mdlrc" "%here%\lint\.mdlrc"
 mklink "%HOME%\.mdlrc.style.rb" "%here%\lint\.mdlrc.style.rb"

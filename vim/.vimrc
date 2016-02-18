@@ -37,18 +37,16 @@
 " * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 "
 " ## TODOs
-" * TODO: たまにIMで変換候補確定後に先頭の一文字消えることがある @win
+" * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO: neocompleteでたまに日本語入力が変になる
 " * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
-" * TODO: autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
-" * TODO: markdownの箇条書き行からのoしたときのautoindentがおかしい？(vim-markdownの影響？)
 " * TODO: msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
 " }}}1
 
 " # Begin {{{1
 
 " vint: -ProhibitSetNoCompatible
-set nocompatible " Note: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
+set nocompatible " Caution: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 
@@ -83,7 +81,7 @@ function! s:RestoreCursorPosition()
 endfunction
 
 function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻らないので注意
-  setlocal expandtab! | retab " Caution: retab!(Bang) は使わない(意図しない空白も置換されてしまうため)
+  setlocal expandtab! | retab " Note: 意図しない空白も置換されてしまうため、retab!(Bang) は使わない
   if ! &expandtab " <http://vim-jp.org/vim-users-jp/2010/04/30/Hack-143.html>
     " Refs: <:help restore-position>
     normal! msHmt
@@ -103,7 +101,7 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
 endfunction
 command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
-function! s:InsertString(pos, str) range " Caution: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
+function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
@@ -131,7 +129,7 @@ command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name"
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 
-" Disable unused built-in plugins {{{ Caution: netrwは非プラグイン環境で必要(VimFiler使えない環境)
+" Disable unused built-in plugins {{{ Note: netrwは非プラグイン環境で必要(VimFiler使えない環境)
 " let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
 let g:loaded_getscriptPlugin = 1
 " let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
@@ -165,7 +163,6 @@ endif
 
 " # Options {{{1
 
-set autoindent
 set background=dark
 set backspace=indent,eol,start
 set nobackup
@@ -214,6 +211,7 @@ set showtabline=1
 set shortmess& shortmess+=atTOI
 set sidescrolloff=5
 set smartcase
+set smartindent
 set softtabstop=0
 let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
 " スペルチェックで日本語は除外する
@@ -306,8 +304,8 @@ noremap <expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
 noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
-" Caution resolveしなくても開けるがfugitiveで対象とするため
-" Caution Windows GUIのときシンボリックリンクを解決できない
+" Note: fugitiveで対象とするためresolveしている
+" Caution: Windows GUIのときシンボリックリンクを解決できない
 let g:myvimrcPath = resolve(expand($MYVIMRC))
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 " }}}
@@ -356,7 +354,7 @@ nnoremap [w     :wincmd W<CR>
 nnoremap ]w     :wincmd w<CR>
 nnoremap [W     :wincmd t<CR>
 nnoremap ]W     :wincmd b<CR>
-" Caution: uはunite用に確保
+" Note: uはunite用に確保
 " }}}
 
 " Insert mode mappings {{{
@@ -419,8 +417,9 @@ if s:IsPluginEnabled()
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_home ? {'for' : '*'} : {'on' : []}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
-        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう(Workaroundで直接ftdectを書き換えちゃう) TODO 箇条書きでo, Oすると2タブインデントされてしまう？ TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO 箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
+        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
+  " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home.'/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
@@ -819,7 +818,7 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    " TODO: Windowsで、ネットワーク上のファイルか、Windows形式パス("D:\hoge,"D:\hoge")のファイルがあるとUnite候補表示時に遅くなるっポイ。とりあえず一時的にignoreしてみる。TODO: なぜかネットワーク上のファイルをignoreできなかった(`^\\\\`でダメ)
+    " TODO: Windows(msys2)で、ネットワーク上のファイルか、Windows形式パス("D:\hoge,"D:\hoge")のファイルがあるとUnite候補表示時に遅くなるっポイ。とりあえず一時的にignoreしてみる。TODO: なぜかネットワーク上のファイルをignoreできなかった(`^\\\\`でダメ)
     let g:neomru#file_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
     let g:neomru#directory_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
     let g:neomru#directory_mru_limit = 500
@@ -881,7 +880,7 @@ if s:HasPlugin('vim-alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
-  " TODO: WindowsでGvimで作ったタグがmsys2で読み込めない
+  " TODO: WindowsでGvimで作ったタグのパス形式がmsys2で読み込めない
 
   " FIXME: msys2で非同期プロセスが大量にできちゃってるっぽいので一旦syncにする(`pgrep -fl vim`)
   let g:easytags_async = g:is_office ? 0 : 1

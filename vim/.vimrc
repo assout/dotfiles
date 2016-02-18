@@ -41,6 +41,7 @@
 " * TODO: neocompleteでたまに日本語入力が変になる
 " * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO: autoindent, smartindent, cindent, indentkeys関係見直す(特に問題があるわけではないがあまりわかってない)
+" * TODO: markdownの箇条書き行からのoしたときのautoindentがおかしい？(vim-markdownの影響？)
 " * TODO: msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
 " }}}1
 
@@ -239,14 +240,16 @@ set nowrapscan
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
 " Normal, Visual mode basic mappings {{{
-nnoremap j    gj
-nnoremap k    gk
-nnoremap gj   j
-nnoremap gk   k
-nnoremap Y    y$
+nnoremap j gj
+nnoremap k gk
+nnoremap gj j
+nnoremap gk k
+nnoremap Y y$
 nnoremap <CR> i<CR><Esc>
+" Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
+nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
 " ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
-vnoremap y    y`>
+vnoremap y y`>
 " }}}
 
 " Shortcut key prefix mappings {{{
@@ -272,10 +275,12 @@ nmap     <SID>[shortcut]o <SID>[open]
 nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
-if has('gui_running') " Caution: autocmd FileTypeイベントを発効する
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>:filetype detect<CR>
+" Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
+if has('gui_running')
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 else
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:filetype detect<CR>
+  " TODO: DRY
+  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
 nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
@@ -1264,11 +1269,14 @@ augroup vimrc
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している
-  autocmd FileType * setlocal formatoptions-=c
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 formatoptions+=o
+  " Note: formatoptionsにoいれるかどうかは難しい
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=o
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
   autocmd FileType java setlocal noexpandtab
+  " Note: aws.json を考慮して*jsonとしている
+  autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
   if executable('python')
-    autocmd FileType json command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
+    autocmd FileType *json, command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
   endif
   if executable('xmllint')
     autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null

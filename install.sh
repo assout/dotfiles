@@ -10,7 +10,7 @@ readonly HERE="%{INSTALL_DIR}/dotfiles"
 
 mkdir -p ~/Development/vim-plugins
 
-cd "${INSTALL_DIR}"
+cd "${INSTALL_DIR}" || exit
 if [ ! -d "./dotfiles" ] ; then
   git clone git@github.com:assout/dotfiles.git
 fi

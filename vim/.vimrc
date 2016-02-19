@@ -398,6 +398,7 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
+  " TODO: everythingをmsys2で有効にしたい
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
@@ -405,6 +406,7 @@ if s:IsPluginEnabled()
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
+        \ | Plug 'sgur/unite-everything', {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
   " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない
@@ -786,6 +788,8 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
   nnoremap <SID>[unite]B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
   nnoremap <SID>[unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
+  " TODO: asyncのほう使いたいが日本語文字化けする
+  nnoremap <SID>[unite]e    :<C-u>Unite everything -buffer-name=everything<CR>
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
   nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>

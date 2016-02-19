@@ -275,10 +275,10 @@ noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+  nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 else
   " TODO: DRY
-  nnoremap <SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+  nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
 nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
 nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
@@ -818,9 +818,10 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    " TODO: Windows(msys2)で、ネットワーク上のファイルか、Windows形式パス("D:\hoge,"D:\hoge")のファイルがあるとUnite候補表示時に遅くなるっポイ。とりあえず一時的にignoreしてみる。TODO: なぜかネットワーク上のファイルをignoreできなかった(`^\\\\`でダメ)
-    let g:neomru#file_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
-    let g:neomru#directory_mru_ignore_pattern = '^\(C:\|D:\)' " Note: DeprecatedだがUnite未ロードの場合があるためこっちを使用
+    " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore
+    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨だがUnite未ロードの場合があるためこっちを使用)
+    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' 
+    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0
     let g:neomru#file_mru_limit = 500

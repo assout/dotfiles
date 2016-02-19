@@ -398,7 +398,6 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
-  " TODO: everythingをmsys2で有効にしたい
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
@@ -406,7 +405,7 @@ if s:IsPluginEnabled()
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
-        \ | Plug 'sgur/unite-everything', {'on' : ['Unite']}
+        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
   " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない

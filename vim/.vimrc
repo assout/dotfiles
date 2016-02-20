@@ -451,7 +451,7 @@ if s:IsPluginEnabled()
   Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-fugitive'
-    \ | Plug 'junegunn/gv.vim'
+        \ | Plug 'junegunn/gv.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'

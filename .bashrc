@@ -10,6 +10,7 @@
 #
 # TODOs:
 #
+# - Caution: which使うと遅い
 # - TODO: shellcheck disable=SC1091を一括で無効にしたい
 # - TODO: Performance test on travisCI
 # - TODO: .bash_profileに持っていけるやつはもってく(性能)
@@ -87,11 +88,7 @@ function cdls {
 alias cd='cdls'
 
 # Vim
-if [ "$(which vim 2> /dev/null)" ] ; then
-  alias vi='vim --noplugin'
-fi
-
-if [ "$(which vimx 2> /dev/null)" ] ; then
+if [ "${is_home}" ] ; then
 # クリップボード共有するため
   alias vi='vimx --noplugin'
   alias vim='vimx'
@@ -104,7 +101,7 @@ if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
 fi
 
 # Peco
-if [ "$(which peco 2> /dev/null)" ] ; then
+if [ "${is_home}" ] ; then
   # ls & cd
   function peco_lscd {
     # TODO: Workaround
@@ -167,9 +164,7 @@ fi
 # [User process] {{{1
 
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
-if [ "$(which stty 2> /dev/null)" ] ; then
-  stty stop undef
-fi
+stty stop undef 2> /dev/null
 
 # Create Today backup directory. TODO: dirty
 if [ "${is_home}" ] ; then

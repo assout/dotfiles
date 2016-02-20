@@ -12,8 +12,6 @@
 #
 # - Caution: which使うと遅い
 # - TODO: shellcheck disable=SC1091を一括で無効にしたい
-# - TODO: Performance test on travisCI
-# - TODO: .bash_profileに持っていけるやつはもってく(性能)
 #
 # }}}1
 

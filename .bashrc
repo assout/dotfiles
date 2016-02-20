@@ -36,9 +36,9 @@ fi
 
 # [Define, Export variables] {{{1
 
-# TODO: .bash_profileでするべき？(その場合export必要になっちゃう？)
-readonly is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
-readonly is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
+# Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
+is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
+is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 
 # History settings
 HISTSIZE=5000

@@ -449,7 +449,9 @@ if s:IsPluginEnabled()
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
   Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
-  Plug 'tpope/vim-fugitive' " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
+  " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
+  Plug 'tpope/vim-fugitive'
+    \ | Plug 'junegunn/gv.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating', {'for' : '*'}
   Plug 'tpope/vim-unimpaired'

@@ -54,7 +54,7 @@ if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 fi
 
-if [ "${is_home}" -o "${is_office}" ] ; then
+if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PATH="${PATH}:${HOME}/scripts"
   PATH="${PATH}:${HOME}/scripts/local/bash"
 fi
@@ -228,7 +228,7 @@ elif [ "${is_office}" ] ; then
   __git_complete g __git_main
 fi
 
-if [ "${is_home}" -o "${is_office}" ] ; then
+if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
   [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
 fi

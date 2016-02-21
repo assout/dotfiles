@@ -286,6 +286,7 @@ nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO: To plugin or function
+" TODO: .(dot) repeat
 noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]-  :MyPrefix - <CR>
@@ -1248,6 +1249,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
   elseif g:is_office_cui
+    " TODO: DRY
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
   endif

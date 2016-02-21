@@ -1,4 +1,6 @@
 #!/bin/bash
+# TODO テスト系スクリプトプロジェクトトップのtestにまとめる
+
 vim_dir=${WORKSPACE}/.vim
 
 curl -fLo "${vim_dir}"/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

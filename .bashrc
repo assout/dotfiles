@@ -12,6 +12,7 @@
 #
 # - Caution: which使うと遅い
 # - TODO: shellcheck disable=SC1091を一括で無効にしたい
+# - TODO: windows(msys2)でちょい遅い(200millisくらい)
 #
 # }}}1
 

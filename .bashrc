@@ -20,11 +20,11 @@
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
   # shellcheck disable=SC1091
-  . /etc/bashrc
+  source /etc/bashrc
 fi
 
 if [ -f ~/.bashrc.local ] ; then
-  . ~/.bashrc.local
+  source ~/.bashrc.local
 fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
@@ -87,7 +87,7 @@ alias cd='cdls'
 
 # Vim
 if [ "${is_home}" ] ; then
-# クリップボード共有するため
+  # クリップボード共有するため
   alias vi='vimx --noplugin'
   alias vim='vimx'
 fi
@@ -104,6 +104,7 @@ if [ "${is_home}" ] ; then
   function peco_lscd {
     # TODO: Workaround
     # shellcheck disable=SC2033
+    # TODO: vimで以降のインデント崩れる(;がはいってるからっぽい)
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
   if [ ! -z "$dir" ] ; then
     cd "$dir" || exit 1
@@ -172,10 +173,11 @@ if [ "${is_home}" ] ; then
     ln -sfn "${todayBackupPath}" "${HOME}/Today"
   fi
 elif [ "${is_office}" ] ; then
-  # cmd実行時のため、Windows形式のHOMEパス取得
-  _home=$(cmd //c echo %HOME%)
-  todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
+  todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
   if [ ! -d "${todayBackupPath}" ] ; then
+    # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅いためここで再取得している
+    _home=$(cmd //c echo %HOME%)
+    todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
     mkdir -p "${todayBackupPath}"
 
     todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
@@ -224,7 +226,6 @@ if [ "${is_home}" ] ; then # Caution: sourceしなくても補完効くが"g" al
 elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-completion.bash
   __git_complete g __git_main
-  :
 fi
 
 if [ "${is_home}" -o "${is_office}" ] ; then

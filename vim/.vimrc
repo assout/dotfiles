@@ -165,6 +165,7 @@ endif
 
 set background=dark
 set backspace=indent,eol,start
+set cindent
 set nobackup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
@@ -211,7 +212,6 @@ set showtabline=1
 set shortmess& shortmess+=atTOI
 set sidescrolloff=5
 set smartcase
-set smartindent
 set softtabstop=0
 let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
 " スペルチェックで日本語は除外する

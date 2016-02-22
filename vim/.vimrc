@@ -404,6 +404,7 @@ if s:IsPluginEnabled()
   " TODO: vimfilerが依存しているためオンデマンドにしてはいけない
   " TODO: Unite soucrceのみオンデマンドにしたいがinvalidとなってしまう
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
+  " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
@@ -950,7 +951,6 @@ if s:HasPlugin('vim-markdown') " {{{
 
   function! s:MyVimMarkdownSettings() " Refs: <:help restore-position>
     " Note: 不要な箇条書きのインデント補正を無効にする
-    setlocal comments=""
     setlocal indentexpr=""
 
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
@@ -1288,7 +1288,8 @@ augroup vimrc
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している
   " Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4
+  " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
+  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 cinkeys=""
   autocmd FileType java setlocal noexpandtab
   " Note: aws.json を考慮して*jsonとしている
   autocmd FileType *json setlocal foldmethod=syntax foldlevel=99

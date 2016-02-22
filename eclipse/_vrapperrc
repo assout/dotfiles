@@ -73,24 +73,31 @@ nunmap <C-]>
 unmap  <Space>
 
 " shortcut prefix mappings
-" caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
+" Caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
 noremap  s  <Nop>
-nnoremap sc :q<CR>
+
 nnoremap sh <C-w>h
 nnoremap sj <C-w>j
 nnoremap sk <C-w>k
 nnoremap sl <C-w>l
-" cautioin: noremapではinsert mode時タブが挿入されてしまうのでだめ
+
+" Cautioin: noremapではinsert mode時タブが挿入されてしまうのでだめ
+noremap  sp :split<CR>
+noremap  sv :vsplit<CR>
 nnoremap sm :maximize<CR>
 inoremap sm <C-o>:maximize<CR>i
+
+nnoremap sc :quit<CR>
+noremap  sx :quit<CR>
+
 nnoremap sn :nohlsearch<CR>
-noremap  sp :split<CR>
-noremap  sx :q<CR>
-noremap  sv :vsplit<CR>
 
 " Ctrl key mappings
 nnoremap <C-m>  i<CR><Esc>
 nnoremap <C-w>o :only<CR>
+
+nnoremap <C-h> <C-w>gT
+nnoremap <C-l> <C-w>gt
 
 " Alt key mappings
 nnoremap <M-l> <C-w>gt

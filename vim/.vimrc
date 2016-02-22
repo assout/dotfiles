@@ -281,7 +281,7 @@ nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
 if has('gui_running')
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 else
-  " TODO: DRY
+  " TODO: DRY(map内でif文意外とうまくいかない)
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
 nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
@@ -402,13 +402,12 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
-  " TODO: vimfilerが依存しているためオンデマンドにしてはいけない
-  " TODO: Unite soucrceのみオンデマンドにしたいがinvalidとなってしまう
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
   " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
-        \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
+        \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
+        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler'] }
         \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
@@ -416,8 +415,6 @@ if s:IsPluginEnabled()
         \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない
-  Plug 'Shougo/vimfiler.vim'
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
@@ -878,7 +875,8 @@ endif " }}}
 
 if s:HasPlugin('vimfiler.vim') " {{{
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
-  let g:vimfiler_as_default_explorer = 1 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
+  " Caution: Uniteをオンデマンドにしている関係上有効にするとエラーが出るケースが出てくる
+  let g:vimfiler_as_default_explorer = 0 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 
 if s:HasPlugin('vim-alignta') " {{{

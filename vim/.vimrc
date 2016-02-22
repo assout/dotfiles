@@ -950,8 +950,8 @@ if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_emphasis_multiline = 0
 
   function! s:MyVimMarkdownSettings() " Refs: <:help restore-position>
-    " Note: 不要な箇条書きのインデント補正を無効にする
-    setlocal indentexpr=""
+    " Note: commentsを空にして箇条書きの継続を無効、indentexprを空にして不要な箇条書きのインデント補正を無効にする
+    setlocal comments= indentexpr=
 
     nnoremap <buffer><SID>[markdown_l]     :.HeaderIncrease<CR>
     vnoremap <buffer><SID>[markdown_l]      :HeaderIncrease<CR>`<v`>

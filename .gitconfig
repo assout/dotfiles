@@ -1,27 +1,28 @@
 [push]
-	default = simple
+  default = simple
 # for gist.vim
 [github]
-	user = assout
+  user = assout
 [core]
-	excludesfile = ~/.gitignore
-	quotepath = false
-	autocrlf = input
-	attributesfile = ~/.gitattributes
+  excludesfile = ~/.gitignore
+  quotepath = false
+  autocrlf = input
+  attributesfile = ~/.gitattributes
 [alias]
-	br   = branch
-	cm   = commit
-	cma  = commit -a
-	cmm  = commit -m
-	cmq  = commit -a -m
-	co   = checkout
-	df   = diff
-	dfc  = diff --cached
-	dfh  = diff HEAD
-	lg   = log -p
-	st   = status
+  br  = branch
+  cm  = commit
+  cma = commit -a
+  cmm = commit -m
+  cmq = commit -a -m
+  co  = checkout
+  df  = diff
+  dfc = diff --cached
+  dfh = diff HEAD
+  lp  = log -p
+  lg  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  st  = status
 [color]
-	ui = true # 古いバージョンの場合defaultでないため
+  ui = true # 古いバージョンの場合defaultでないため
 [include] # user.name,user.email,proxy from local
-	path = .gitconfig.environment
-	path = .gitconfig.local
+  path = .gitconfig.environment
+  path = .gitconfig.local

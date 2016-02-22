@@ -404,16 +404,16 @@ if s:IsPluginEnabled()
   " TODO: vimfilerが依存しているためオンデマンドにしてはいけない
   " TODO: Unite soucrceのみオンデマンドにしたいがinvalidとなってしまう
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
-  Plug 'Shougo/unite.vim'
-        \ | Plug 'LeafCage/yankround.vim'
-        \ | Plug 'Shougo/unite-outline'
-        \ | Plug 'assout/unite-todo'
-        \ | Plug 'glidenote/memolist.vim'
-        \ | Plug 'lambdalisue/vim-gista'
-        \ | Plug 'rhysd/unite-codic.vim'
-        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {}
-        \ | Plug 'tsukkee/unite-tag'
-        \ | Plug 'ujihisa/unite-colorscheme'
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
+        \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
+        \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
+        \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
+        \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
+        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
+        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
+        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {'on' : ['Unite']}
+        \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
+        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
   " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない
   Plug 'Shougo/vimfiler.vim'
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
@@ -668,7 +668,7 @@ if s:HasPlugin('operator-camelize.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-  " FIXME Office gvimで開かない
+  " FIXME Office msys2で開かない(いつのまにか)
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 

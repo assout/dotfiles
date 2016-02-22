@@ -40,7 +40,6 @@
 " * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO: neocompleteでたまに日本語入力が変になる
 " * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
-" * TODO: msys2でgxまたはopenbrowserでディレクトリパスからエクスプローラ開きたい
 " }}}1
 
 " # Begin {{{1
@@ -126,8 +125,23 @@ command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name"
 
 " # Let defines {{{1
 
+" Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
+let g:is_home = $USERNAME ==# 'oji'
+let g:is_office = $USERNAME ==# 'admin'
+let g:is_office_gui = g:is_office && has('gui_running')
+let g:is_office_cui = g:is_office && !has('gui_running')
+let g:is_jenkins = exists('$BUILD_NUMBER')
+
+let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
+let s:plugged_path = s:dotvim_path . '/plugged'
+
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+" Note: msys2でリンク、ファイルパス開けるようにする
+" TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
+if g:is_office_cui
+  let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
+endif
 
 " Disable unused built-in plugins {{{ Note: netrwは非プラグイン環境で必要(VimFiler使えない環境)
 " let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
@@ -142,15 +156,6 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-" Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_home = $USERNAME ==# 'oji'
-let g:is_office = $USERNAME ==# 'admin'
-let g:is_office_gui = g:is_office && has('gui_running')
-let g:is_office_cui = g:is_office && !has('gui_running')
-let g:is_jenkins = exists('$BUILD_NUMBER')
-
-let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
-let s:plugged_path = s:dotvim_path . '/plugged'
 
 if g:is_office_cui " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
   let &t_ti .= "\e[1 q"
@@ -204,7 +209,6 @@ set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
-" TODO: Windows GUIでgxでエクスプローラ開けなくなる(msys2はどちらにせよ開けない)
 let &shellslash = g:is_office_gui ? 1 : &shellslash
 set shiftwidth=2
 set showcmd
@@ -397,17 +401,19 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
+  " TODO: vimfilerが依存しているためオンデマンドにしてはいけない
+  " TODO: Unite soucrceのみオンデマンドにしたいがinvalidとなってしまう
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
-        \ | Plug 'Shougo/unite-outline', {'on' : 'Unite'}
-        \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
-        \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
-        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
-        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {'on' : ['Unite']}
-        \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
-        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
+  Plug 'Shougo/unite.vim'
+        \ | Plug 'LeafCage/yankround.vim'
+        \ | Plug 'Shougo/unite-outline'
+        \ | Plug 'assout/unite-todo'
+        \ | Plug 'glidenote/memolist.vim'
+        \ | Plug 'lambdalisue/vim-gista'
+        \ | Plug 'rhysd/unite-codic.vim'
+        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {}
+        \ | Plug 'tsukkee/unite-tag'
+        \ | Plug 'ujihisa/unite-colorscheme'
   " Note: netrwの代替としているため:Explorerで開くことがあるためオンデマンドにできない
   Plug 'Shougo/vimfiler.vim'
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
@@ -955,6 +961,9 @@ if s:HasPlugin('vim-markdown') " {{{
     nnoremap <buffer><SID>[markdown_h]     :.HeaderDecrease<CR>
     vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
+
+    " ファイルパスを開けなくなるので無効化
+    unmap <buffer> gx
   endfunction
   autocmd vimrc FileType markdown call s:MyVimMarkdownSettings()
 endif " }}}
@@ -1244,6 +1253,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \      : '',
         \   },
         \})
+
   if g:is_office_gui
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})

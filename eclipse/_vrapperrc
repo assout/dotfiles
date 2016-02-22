@@ -87,8 +87,8 @@ noremap  sv :vsplit<CR>
 nnoremap sm :maximize<CR>
 inoremap sm <C-o>:maximize<CR>i
 
-nnoremap sc :quit<CR>
-noremap  sx :quit<CR>
+nnoremap sc :bdelete<CR>
+noremap  sx :bdelete<CR>
 
 nnoremap sn :nohlsearch<CR>
 

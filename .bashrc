@@ -105,24 +105,24 @@ if [ "${is_home}" ] ; then
   function peco_lscd {
     # TODO: Workaround
     # shellcheck disable=SC2033
-    # TODO: vimで以降のインデント崩れる(;がはいってるからっぽい)
-    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./;;' | sort | peco)"
-  if [ ! -z "$dir" ] ; then
-    cd "$dir" || exit 1
-  fi
-}
-alias pcd='peco_lscd'
+    # TODO: vimでインデント崩れる(;*2がはいってるからcase文の一部扱いされてるっぽい) -> workaroundで\してみる(おかしくなるかも)
+    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./\;\;' | sort | peco)"
+    if [ ! -z "$dir" ] ; then
+      cd "$dir" || exit 1
+    fi
+  }
+  alias pcd='peco_lscd'
 
-# history
-function peco_hist {
-  time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
-  column=$(( time_column + 3))
-  cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
-  history -s "$cmd"
-  eval "$cmd"
-}
-# TODO: なんかC-pとかが遅くなるので一旦無効
-# bind '"\C-p\C-r":"peco-hist\n"'
+  # history
+  function peco_hist {
+    time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
+    column=$(( time_column + 3))
+    cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
+    history -s "$cmd"
+    eval "$cmd"
+  }
+  # TODO: なんかC-pとかが遅くなるので一旦無効
+  # bind '"\C-p\C-r":"peco-hist\n"'
 fi
 
 # Man

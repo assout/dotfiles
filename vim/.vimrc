@@ -453,7 +453,7 @@ if s:IsPluginEnabled()
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
-  Plug 'tomtom/tcomment_vim', {'for' : '*'} " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
+  Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-fugitive'
         \ | Plug 'junegunn/gv.vim'
@@ -742,8 +742,7 @@ endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
   let g:tcommentTextObjectInlineComment = 'iC'
-
-  autocmd vimrc User tcomment_vim call g:tcomment#DefineType('java', '// %s')
+  call g:tcomment#DefineType('java', '// %s')
 endif " }}}
 
 if s:HasPlugin('unite.vim') " {{{

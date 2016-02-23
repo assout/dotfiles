@@ -462,7 +462,7 @@ if s:IsPluginEnabled()
   Plug 'tpope/vim-unimpaired'
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-        \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+        \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
@@ -888,7 +888,7 @@ if s:HasPlugin('vim-alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
-  " TODO: WindowsでGvimで作ったタグのパス形式がmsys2で読み込めない
+  " TODO: WindowsでGvimで作ったタグのパス形式がmsys2で読み込めない(当たり前)
 
   " FIXME: msys2で非同期プロセスが大量にできちゃってるっぽいので一旦syncにする(`pgrep -fl vim`)
   let g:easytags_async = g:is_office ? 0 : 1
@@ -1182,6 +1182,7 @@ endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
   " TODO: カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
+  " TODO: カーソル行が戻ったときメッセージが消えてしまう
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
@@ -1223,7 +1224,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
         \    'hook/qfsigns_update/enable_exit': 1,
         \  },
         \}
-  " TODO: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
+  " Note: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
   let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
 
   call extend(g:quickrun_config, {

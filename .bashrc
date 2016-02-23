@@ -13,7 +13,6 @@
 # - which使うと遅い
 #
 # TODOs:
-# - TODO: windows(msys2)でちょい遅い(150millisくらい)
 # - TODO: `explorer`実行時、windowsでパス区切り文字が/だと開けないっぽい(/,\のどちらでもいけるはずでは？)
 #
 # }}}1

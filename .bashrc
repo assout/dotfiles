@@ -9,14 +9,24 @@
 # - After
 #
 # Notes:
+# - 基本デフォルト厨とする(aliasとかもあんま作らない)
 # - which使うと遅い
 #
 # TODOs:
-# - TODO: windows(msys2)でちょい遅い(200millisくらい)
+# - TODO: windows(msys2)でちょい遅い(150millisくらい)
+# - TODO: `explorer`実行時、windowsでパス区切り文字が/だと開けないっぽい(/,\のどちらでもいけるはずでは？)
 #
 # }}}1
 
 # [Begin] {{{1
+
+# Start profile
+is_profile=$(if [ "${1}" = "-p" ] ; then echo 0; fi)
+if [ "${is_profile}" ] ; then
+  PS4='+ $(date "+%S.%3N")\011 '
+  exec 3>&2 2>/tmp/bashstart.$$.log
+  set -x
+fi
 
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
@@ -94,10 +104,12 @@ if [ "${is_home}" ] ; then
   alias vim='vimx'
 fi
 
-here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if [ -e "${here}/.vimrc" ] && ! ( [ "${is_home}" ] || [ "${is_office}" ] ) ; then
-  alias vim='vi -u ${here}/.vimrc'
-  alias vimdiff='vimdiff -u ${here}/.vimrc'
+if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
+  here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+  if [ -e "${here}/.vimrc" ] ; then
+    alias vim='vi -u ${here}/.vimrc'
+    alias vimdiff='vimdiff -u ${here}/.vimrc'
+  fi
 fi
 
 # Peco
@@ -135,17 +147,12 @@ function man_japanese {
 alias jan='man_japanese'
 
 # Docker
-# TODO: Workaroudでdisable. "d"というalias作ろうとすると警告される
-# shellcheck disable=SC2032
-alias d='docker'
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
-alias dc='docker-compose'
 
 # Other
-alias g="git"
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
@@ -154,7 +161,6 @@ if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
-  alias e='explorer' # TODO: windowsでパス区切り文字が/だと開けない？(/,\のどちらでもいけるはずでは？)
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
@@ -166,31 +172,27 @@ fi
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 stty stop undef 2> /dev/null
 
-# Create Today backup directory. TODO: dirty
+# Create Today backup directory
+todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 if [ "${is_home}" ] ; then
-  todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
   if [ ! -d "${todayBackupPath}" ] ; then
     mkdir -p "${todayBackupPath}"
     ln -sfn "${todayBackupPath}" "${HOME}/Today"
   fi
 elif [ "${is_office}" ] ; then
-  todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
   if [ ! -d "${todayBackupPath}" ] ; then
-    # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅いためここで再取得している
+    # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅く必要最小限の実行とするためここで再取得している
     _home=$(cmd //c echo %HOME%)
     todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
     mkdir -p "${todayBackupPath}"
 
-    todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
-    if [ -d "${todayBackupLinkPathDesktop}" ] ; then
-      rm -r "${todayBackupLinkPathDesktop}"
-    fi
     todayBackupLinkPathHome="${_home}\\Today"
     if [ -d "${todayBackupLinkPathHome}" ] ; then
       rm -r "${todayBackupLinkPathHome}"
     fi
-    cmd //c "mklink /D ${todayBackupLinkPathDesktop} ${todayBackupPath}" 2>&1 | nkf32.exe -w
     cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
+    todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
+    cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}"
   fi
 fi
 
@@ -209,7 +211,7 @@ export PATH="$HOME/.cabal/bin:$PATH"
 
 if [ "${is_home}" ] ; then
   source /usr/share/git-core/contrib/completion/git-prompt.sh
-  # TODO: Officeだと遅い
+  # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
   export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
@@ -218,17 +220,15 @@ elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if [ "${is_home}" ] ; then # Caution: sourceしなくても補完効くが"g" aliasでも効かしたいため
-  source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
-  __git_complete g __git_main
-elif [ "${is_office}" ] ; then
-  source /usr/share/git/completion/git-completion.bash
-  __git_complete g __git_main
-fi
-
 if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
   [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
+fi
+
+# End profile
+if [ "${is_profile}" ] ; then
+  set +x
+  exec 2>&3 3>&-
 fi
 
 # }}}1

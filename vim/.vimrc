@@ -740,11 +740,6 @@ if s:HasPlugin('syntastic') " {{{
   nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<CR>
 endif " }}}
 
-if s:HasPlugin('tcomment_vim') " {{{
-  let g:tcommentTextObjectInlineComment = 'iC'
-  call g:tcomment#DefineType('java', '// %s')
-endif " }}}
-
 if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1

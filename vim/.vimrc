@@ -178,8 +178,8 @@ set cmdheight=1
 set diffopt& diffopt+=vertical
 set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
-let &foldlevelstart = has('folding') ? 0 : &foldlevelstart
-let &foldmethod = has('folding') ? 'marker' : &foldmethod
+set foldlevelstart=0
+set foldmethod=marker
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
@@ -200,16 +200,15 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 " マクロなどを実行中は描画を中断
 set lazyredraw
-let &modelines = !has('folding') ? 0 : &modelines " TODO: workaround. 当ファイルのfoldenableが特定環境(office)でエラーが出る
 set nonumber
 " インクリメンタル/デクリメンタルを常に10進数として扱う
 set nrformats=""
 set ruler
 set scrolloff=5
-" Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定。
-" Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定。
+" Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
+" Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
-let &shellslash = g:is_office_gui ? 1 : &shellslash
+set shellslash
 set shiftwidth=2
 set showcmd
 set showtabline=1
@@ -222,7 +221,7 @@ let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Document
 set spelllang=en,cjk
 set splitbelow
 set splitright
-" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))
+" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
 let &swapfile = g:is_office ? 0 : &swapfile
 let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2

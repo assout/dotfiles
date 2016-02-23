@@ -770,7 +770,8 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
     nnoremap <buffer><expr>p unite#smart_map('p', unite#do_action('split'))
     nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
-    " TODO: msys2で効かない(そもそも"start"アクションが効かない)
+    " TODO: msys2で効かない(そもそも"start"アクションが効かない) -> uniteにモンキーパッチ当てたらうごいた(今cygstart呼ばれちゃってる)
+    " (cygstartをstartに変えたら/usr/hogeとかは開くが、/d/hogeやD:/hogeは開かない。FileHandlerにしたら両方いけるが実行後vim画面がredrawされない)
     nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('start'))
   endfunction
   autocmd vimrc FileType unite call s:UniteKeymappings()
@@ -874,6 +875,7 @@ if s:HasPlugin('unite.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('vimfiler.vim') " {{{
+  " TODO: msys2でxでのシステム関連付けが開かない(uniteの箇所にもコメントしているがcygstart呼ばれているのが原因)
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
   " Caution: Uniteをオンデマンドにしている関係上有効にするとエラーが出るケースが出てくる
   let g:vimfiler_as_default_explorer = 0 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
@@ -1256,7 +1258,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
   elseif g:is_office_cui
-    " TODO: DRY
     call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
     call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
   endif

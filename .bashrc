@@ -8,10 +8,10 @@
 # - User process
 # - After
 #
-# TODOs:
+# Notes:
+# - which使うと遅い
 #
-# - Caution: which使うと遅い
-# - TODO: shellcheck disable=SC1091を一括で無効にしたい
+# TODOs:
 # - TODO: windows(msys2)でちょい遅い(200millisくらい)
 #
 # }}}1
@@ -20,7 +20,6 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
-  # shellcheck disable=SC1091
   source /etc/bashrc
 fi
 
@@ -64,6 +63,8 @@ if [ "${is_office}" ] ; then
   export EDITOR="vim --noplugin" # For less +v
 fi
 
+export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
+
 # }}}1
 
 # [Functions & Aliases] {{{1
@@ -94,7 +95,7 @@ if [ "${is_home}" ] ; then
 fi
 
 here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-if [ -e "${here}/.vimrc" ] && ! [ "${is_home}" -o "${is_office}" ] ; then
+if [ -e "${here}/.vimrc" ] && ! ( [ "${is_home}" ] || [ "${is_office}" ] ) ; then
   alias vim='vi -u ${here}/.vimrc'
   alias vimdiff='vimdiff -u ${here}/.vimrc'
 fi
@@ -103,10 +104,9 @@ fi
 if [ "${is_home}" ] ; then
   # ls & cd
   function peco_lscd {
-    # TODO: Workaround
+    # TODO: Workaroudでdisable。やっぱり"d"が引っ掛かるっぽい
     # shellcheck disable=SC2033
-    # TODO: vimでインデント崩れる(;*2がはいってるからcase文の一部扱いされてるっぽい) -> workaroundで\してみる(おかしくなるかも)
-    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's;\./\;\;' | sort | peco)"
+    local -r dir="$(find . -maxdepth 1 -type c | sed -e 's?\./??' | sort | peco)"
     if [ ! -z "$dir" ] ; then
       cd "$dir" || exit 1
     fi
@@ -135,7 +135,7 @@ function man_japanese {
 alias jan='man_japanese'
 
 # Docker
-# TODO: Workaroud
+# TODO: Workaroudでdisable. "d"というalias作ろうとすると警告される
 # shellcheck disable=SC2032
 alias d='docker'
 alias drm='docker rm $(docker ps -a -q)'
@@ -205,11 +205,9 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
-# shellcheck disable=SC1091
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if [ "${is_home}" ] ; then
-  # shellcheck disable=SC1091
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # TODO: Officeだと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -217,7 +215,6 @@ if [ "${is_home}" ] ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif [ "${is_office}" ] ; then
-  # shellcheck disable=SC1091
   source /usr/share/git/completion/git-prompt.sh
 fi
 

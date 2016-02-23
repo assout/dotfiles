@@ -397,6 +397,7 @@ if s:IsPluginEnabled()
   endif
   call g:plug#begin(s:plugged_path)
 
+  " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
   " General {{{
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
@@ -421,7 +422,7 @@ if s:IsPluginEnabled()
   Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-  Plug 'fuenor/im_control.vim', g:is_home ? {'for' : '*'} : {'on' : []}
+  Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
@@ -431,7 +432,7 @@ if s:IsPluginEnabled()
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home.'/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
-  Plug 'kana/vim-submode', {'for' : '*'}
+  Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}
   Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -458,7 +459,7 @@ if s:IsPluginEnabled()
   Plug 'tpope/vim-fugitive'
         \ | Plug 'junegunn/gv.vim'
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-speeddating', {'for' : '*'}
+  Plug 'tpope/vim-speeddating'
   Plug 'tpope/vim-unimpaired'
   Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
@@ -481,16 +482,16 @@ if s:IsPluginEnabled()
   " }}}
 
   " User Textobjects {{{
-  Plug 'kana/vim-textobj-user', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-entire', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-function', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-indent', {'for' : '*'}
-        \ | Plug 'kana/vim-textobj-line', {'for' : '*'}
-        \ | Plug 'mattn/vim-textobj-url', {'for' : '*'}
-        \ | Plug 'rhysd/vim-textobj-anyblock', {'for' : '*'}
-        \ | Plug 'sgur/vim-textobj-parameter', {'for' : '*'}
-        \ | Plug 'thinca/vim-textobj-between', {'for' : '*'}
-        \ | Plug 'thinca/vim-textobj-comment', {'for' : '*'}
+  Plug 'kana/vim-textobj-user'
+        \ | Plug 'kana/vim-textobj-entire'
+        \ | Plug 'kana/vim-textobj-function'
+        \ | Plug 'kana/vim-textobj-indent'
+        \ | Plug 'kana/vim-textobj-line'
+        \ | Plug 'mattn/vim-textobj-url'
+        \ | Plug 'rhysd/vim-textobj-anyblock'
+        \ | Plug 'sgur/vim-textobj-parameter'
+        \ | Plug 'thinca/vim-textobj-between'
+        \ | Plug 'thinca/vim-textobj-comment'
   " }}}
 
   " Colorschemes {{{
@@ -778,7 +779,7 @@ if s:HasPlugin('unite.vim') " {{{
 
   " Note: mapはunimpairedの`]u`系を無効にしないといけない
   " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
-  autocmd vimrc User unite.vim 
+  autocmd vimrc User unite.vim
         \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
         \ | call g:unite#custom#default_action('directory', 'vimfiler')
@@ -830,7 +831,7 @@ if s:HasPlugin('unite.vim') " {{{
   if s:HasPlugin('neomru.vim') " {{{
     " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore
     " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨だがUnite未ロードの場合があるためこっちを使用)
-    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' 
+    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0 " Cautioin: 有効にするとvim終了時結構遅くなる
@@ -903,7 +904,7 @@ endif " }}}
 if s:HasPlugin('vim-fugitive') " {{{
   set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
 
-  " TODO: fugitiveが有効なときのみマッピングしたい 
+  " TODO: fugitiveが有効なときのみマッピングしたい
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
   nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
@@ -1114,60 +1115,59 @@ if s:HasPlugin('vim-singleton') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
-  autocmd vimrc User vim-submode
-        \   call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
-        \ | call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
-        \ | call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
-        \ | call g:submode#enter_with('winsize', 'n', '', '<C-w>+', '5<C-w>+')
-        \ | call g:submode#map('winsize', 'n', '', '<', '5<C-w><')
-        \ | call g:submode#map('winsize', 'n', '', '>', '5<C-w>>')
-        \ | call g:submode#map('winsize', 'n', '', '-', '5<C-w>-')
-        \ | call g:submode#map('winsize', 'n', '', '+', '5<C-w>+')
-        \
-        \ | call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
-        \ | call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')
-        \ | call g:submode#map('scroll', 'n', '', 'h', 'zh')
-        \ | call g:submode#map('scroll', 'n', '', 'l', 'zl')
-        \ | call g:submode#map('scroll', 'n', '', 'H', '10zh')
-        \ | call g:submode#map('scroll', 'n', '', 'L', '10zl')
-        \
-        \ | call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>')
-        \ | call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>')
-        \ | call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
-        \ | call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
-        \ | call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
-        \ | call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
-        \
-        \ | call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>')
-        \ | call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>')
-        \ | call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
-        \ | call g:submode#map('args', 'n', '', 'j', ':next<CR>')
-        \ | call g:submode#map('args', 'n', '', 'K', ':first<CR>')
-        \ | call g:submode#map('args', 'n', '', 'J', ':last<CR>')
-        \
-        \ | call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>')
-        \ | call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>')
-        \ | call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>')
-        \
-        \ | call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>')
-        \ | call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>')
-        \ | call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
-        \ | call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
-        \ | call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
-        \ | call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>')
-        \ | call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>')
-        \ | call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>')
-        \
-        \ | call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c')
-        \ | call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
-        \ | call g:submode#map('diff', 'n', '', 'k', '[c')
-        \ | call g:submode#map('diff', 'n', '', 'j', ']c')
-        \ " TODO: args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+  call g:submode#enter_with('winsize', 'n', '', '<C-w><', '5<C-w><')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>>', '5<C-w>>')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>-', '5<C-w>-')
+  call g:submode#enter_with('winsize', 'n', '', '<C-w>+', '5<C-w>+')
+  call g:submode#map('winsize', 'n', '', '<', '5<C-w><')
+  call g:submode#map('winsize', 'n', '', '>', '5<C-w>>')
+  call g:submode#map('winsize', 'n', '', '-', '5<C-w>-')
+  call g:submode#map('winsize', 'n', '', '+', '5<C-w>+')
+
+  call g:submode#enter_with('scroll', 'n', '', 'zh', 'zh')
+  call g:submode#enter_with('scroll', 'n', '', 'zl', 'zl')
+  call g:submode#map('scroll', 'n', '', 'h', 'zh')
+  call g:submode#map('scroll', 'n', '', 'l', 'zl')
+  call g:submode#map('scroll', 'n', '', 'H', '10zh')
+  call g:submode#map('scroll', 'n', '', 'L', '10zl')
+
+  call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>')
+  call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>')
+  call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
+  call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
+  call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
+  call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
+
+  " TODO: args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
+  call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>')
+  call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>')
+  call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
+  call g:submode#map('args', 'n', '', 'j', ':next<CR>')
+  call g:submode#map('args', 'n', '', 'K', ':first<CR>')
+  call g:submode#map('args', 'n', '', 'J', ':last<CR>')
+
+  call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>')
+  call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>')
+  call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
+  call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
+  call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
+  call g:submode#map('quickfix', 'n', '', 'J', ':clast<CR>')
+  call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>')
+  call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>')
+
+  call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>')
+  call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>')
+  call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
+  call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
+  call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
+  call g:submode#map('loclist', 'n', '', 'J', ':llast<CR>')
+  call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>')
+  call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>')
+
+  call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c')
+  call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
+  call g:submode#map('diff', 'n', '', 'k', '[c')
+  call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

@@ -91,22 +91,22 @@ function cd_parent {
 alias ..='cd_parent'
 
 function cdls {
-  command cd "$1"; # エスケープしないと循環しちゃう
+  command cd "$1"; # cdが循環しないようにcommand
   ls --color=auto --show-control-chars;
 }
 alias cd='cdls'
 
 # Vim
+alias vi=vim
 if [ "${is_home}" ] ; then
   # クリップボード共有するため
-  alias vi='vimx --noplugin'
   alias vim='vimx'
 fi
 
 if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   if [ -e "${here}/.vimrc" ] ; then
-    alias vim='vi -u ${here}/.vimrc'
+    alias vim='vim -u ${here}/.vimrc'
     alias vimdiff='vimdiff -u ${here}/.vimrc'
   fi
 fi

@@ -191,7 +191,7 @@ elif [ "${is_office}" ] ; then
     fi
     cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
     todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
-    cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}"
+    cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}" 2>&1 | nkf32.exe -w
   fi
 fi
 

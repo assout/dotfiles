@@ -121,6 +121,8 @@ command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal!
 command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
 command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
+" Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
+command! MyDiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 " }}}1
 
 " # Let defines {{{1

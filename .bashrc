@@ -114,7 +114,7 @@ fi
 if [ "${is_home}" ] ; then
   # ls & cd
   function peco_lscd {
-    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | sort | peco)"
+    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco)"
     if [ ! -z "$dir" ] ; then
       cd "$dir" || exit 1
     fi
@@ -122,15 +122,16 @@ if [ "${is_home}" ] ; then
   alias pcd='peco_lscd'
 
   # history
-  function peco_hist {
-    time_column="$(echo "${HISTTIMEFORMAT}" | awk '{printf("%s",NF)}')"
-    column=$(( time_column + 3))
-    cmd=$(history | tac | peco | sed -e 's/^ //' | sed -e 's/ +/ /g' | cut -d " " -f $column-)
-    history -s "$cmd"
-    eval "$cmd"
+  function peco_select_history() {
+    local l
+    local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
+    HISTTIMEFORMAT=
+    l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
+    READLINE_LINE="$l"
+    READLINE_POINT=${#l}
+    HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
   }
-  # TODO: なんかC-pとかが遅くなるので一旦無効
-  # bind '"\C-p\C-r":"peco-hist\n"'
+  bind -x '"\C-p\C-r": peco_select_history'
 fi
 
 # Man

@@ -403,7 +403,7 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim'
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  Plug 'Shougo/neocomplete', has('lua') ? {'for' : ['markdown', 'sh', 'vim']} : {'on' : []}
+  Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
   " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる

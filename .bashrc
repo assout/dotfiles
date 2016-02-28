@@ -131,7 +131,7 @@ if [ "${is_home}" ] ; then
     READLINE_POINT=${#l}
     HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
   }
-  bind -x '"\C-p\C-r": peco_select_history'
+  bind -x '"\e\C-r": peco_select_history'
 fi
 
 # Man

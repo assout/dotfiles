@@ -1284,6 +1284,18 @@ augroup vimrc
   " Restore cusor position
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
+  " Change cursor shape in different modes. Refs: <http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes>
+  if g:is_home
+    autocmd VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
+    autocmd InsertEnter,InsertChange *
+          \ if v:insertmode == 'i' |
+          \   silent execute '!echo -ne "\e[6 q"' | redraw! |
+          \ elseif v:insertmode == 'r' |
+          \   silent execute '!echo -ne "\e[4 q"' | redraw! |
+          \ endif
+    autocmd VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
+  endif
+
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している
   " Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c

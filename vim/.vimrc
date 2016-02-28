@@ -470,6 +470,7 @@ if s:IsPluginEnabled()
   Plug 'vim-jp/vimdoc-ja', {}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
+  Plug 'wellle/tmux-complete.vim'
   Plug 'xolox/vim-misc', {'for' : ['vim', 'sh']}
         \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh']}
         \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh']}

@@ -114,9 +114,7 @@ fi
 if [ "${is_home}" ] ; then
   # ls & cd
   function peco_lscd {
-    # TODO: Workaroudでdisable。やっぱり"d"が引っ掛かるっぽい
-    # shellcheck disable=SC2033
-    local -r dir="$(find . -maxdepth 1 -type c | sed -e 's?\./??' | sort | peco)"
+    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | sort | peco)"
     if [ ! -z "$dir" ] ; then
       cd "$dir" || exit 1
     fi

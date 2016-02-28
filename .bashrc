@@ -107,7 +107,6 @@ if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   if [ -e "${here}/.vimrc" ] ; then
     alias vim='vim -u ${here}/.vimrc'
-    alias vimdiff='vimdiff -u ${here}/.vimrc'
   fi
 fi
 

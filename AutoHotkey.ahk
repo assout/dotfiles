@@ -1,6 +1,26 @@
 ; Auto execute section is the region before any return/hotkey
 
 ;-----------------------------------------------------------
+; IMEの状態の取得
+;    対象： AHK v1.0.34以降
+;   WinTitle : 対象Window (省略時:アクティブウィンドウ)
+;   戻り値  1:ON 0:OFF
+;-----------------------------------------------------------
+IME_GET(WinTitle="")
+{
+    ifEqual WinTitle,,  SetEnv,WinTitle,A
+    WinGet,hWnd,ID,%WinTitle%
+    DefaultIMEWnd := DllCall("imm32\ImmGetDefaultIMEWnd", Uint,hWnd, Uint)
+
+    ;Message : WM_IME_CONTROL  wParam:IMC_GETOPENSTATUS
+    DetectSave := A_DetectHiddenWindows
+    DetectHiddenWindows,ON
+    SendMessage 0x283, 0x005,0,,ahk_id %DefaultIMEWnd%
+    DetectHiddenWindows,%DetectSave%
+    Return ErrorLevel
+}
+
+;-----------------------------------------------------------
 ; IMEの状態をセット
 ;   SetSts          1:ON / 0:OFF
 ;   WinTitle="A"    対象Window
@@ -24,16 +44,9 @@ IME_SET(SetSts, WinTitle="A")    {
 }
 
 ; For Terminal/Vim
-GroupAdd Terminal, ahk_class PuTTY
 GroupAdd Terminal, ahk_class mintty ; cygwin
 GroupAdd TerminalVim, ahk_group Terminal
 GroupAdd TerminalVim, ahk_class Vim
-
-; Include IME.hak
-; http://www6.atwiki.jp/eamat/pages/17.html
-; #Include  %A_ScriptDir%/IME.ahk
-
-Return
 
 ; ESC + IME
 #IfWInActive, ahk_group TerminalVim
@@ -47,3 +60,29 @@ Esc:: ; Just send Esc at converting.
   Return
 #IfWInActive
 
+;---
+; with 無変換キー、変換キー
+;---
+vk1Dsc07B:: ;無変換キー単独 = IMEオフ
+  IME_SET(0)
+  Return
+vk1Csc079:: ;変換キー単独 = IMEオン
+  IME_SET(1)
+  Return
+
+;---
+; CapsLockキーにCtrlキーの仕事をさせる
+; Caution: Windows7だと無理らしい(Windows8なら大丈夫らしい) Refs: http://syobochim.hatenablog.com/entry/2013/10/22/232444
+;---
+;Capslock::Ctrl
+;sc03a::Ctrl
+
+;---
+; other
+;---
+;^j:: ; Disable if IME ON
+;  getIMEMode := IME_GET()
+;  if (%getIMEMode% = 1)
+;  {
+;    Return
+;  }

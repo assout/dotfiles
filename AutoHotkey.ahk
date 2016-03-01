@@ -1,5 +1,15 @@
 ; Auto execute section is the region before any return/hotkey
 
+#InstallKeybdHook ;キーボードフックを有効にする(スクリプトが常駐する)
+#UseHook
+
+; For Terminal/Vim
+GroupAdd Terminal, ahk_class mintty ; cygwin
+GroupAdd TerminalVim, ahk_group Terminal
+GroupAdd TerminalVim, ahk_class Vim
+
+Return
+
 ;-----------------------------------------------------------
 ; IMEの状態の取得
 ;    対象： AHK v1.0.34以降
@@ -43,11 +53,6 @@ IME_SET(SetSts, WinTitle="A")    {
       ,  Int, SetSts) ;lParam  : 0 or 1
 }
 
-; For Terminal/Vim
-GroupAdd Terminal, ahk_class mintty ; cygwin
-GroupAdd TerminalVim, ahk_group Terminal
-GroupAdd TerminalVim, ahk_class Vim
-
 ; ESC + IME
 #IfWInActive, ahk_group TerminalVim
 Esc:: ; Just send Esc at converting.
@@ -72,7 +77,7 @@ vk1Csc079:: ;変換キー単独 = IMEオン
 
 ;---
 ; CapsLockキーにCtrlキーの仕事をさせる
-; Caution: Windows7だと無理らしい(Windows8なら大丈夫らしい) Refs: http://syobochim.hatenablog.com/entry/2013/10/22/232444
+; TODO: Windows7だと無理らしい(Windows8なら大丈夫らしい) Refs: http://syobochim.hatenablog.com/entry/2013/10/22/232444
 ;---
 ;Capslock::Ctrl
 ;sc03a::Ctrl
@@ -80,9 +85,9 @@ vk1Csc079:: ;変換キー単独 = IMEオン
 ;---
 ; other
 ;---
-;^j:: ; Disable if IME ON
-;  getIMEMode := IME_GET()
-;  if (%getIMEMode% = 1)
-;  {
-;    Return
-;  }
+^j:: ; Disable if IME ON
+  getIMEMode := IME_GET()
+  if (%getIMEMode% = 0) {
+    Send,^j
+  }
+  Return

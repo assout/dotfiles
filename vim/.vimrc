@@ -407,7 +407,8 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
   " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler']}
+  " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler'] }
@@ -693,7 +694,6 @@ if s:HasPlugin('switch.vim') " {{{
   " TODO: 優先順位指定したい(`${}`のswitchを優先したい)
   " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] )
   " TODO: undoするとカーソル位置が行頭になっちゃう
-  " TODO: `([<【`はあんま使わないし、`${},"${}"`のパターンの阻害になるから消そうか
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
@@ -703,12 +703,6 @@ if s:HasPlugin('switch.vim') " {{{
         \  {
         \     '\v"(.{-})"' : '''\1''',
         \     '\v''(.{-})''' : '"\1"',
-        \  },
-        \  {
-        \     '\v\((.{-})\)' : '[\1]',
-        \     '\v\[(.{-})\]' : '{\1}',
-        \     '\v\{(.{-})\}' : '<\1>',
-        \     '\v\<(.{-})\>' : '(\1)',
         \  },
         \  {
         \     '\v「(.{-})」' : '【\1】',

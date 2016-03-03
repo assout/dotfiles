@@ -158,6 +158,9 @@ if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
+
+  # TODO: セグる
+  # alias es='cygpath -u $(command es)'
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
@@ -220,6 +223,10 @@ fi
 if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
   [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
+fi
+
+if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ] ); then
+  exec tmux
 fi
 
 # End profile

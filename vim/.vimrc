@@ -887,10 +887,7 @@ if s:HasPlugin('vim-alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
-  " TODO: WindowsでGvimで作ったタグのパス形式がmsys2で読み込めない(当たり前)
-
-  " FIXME: msys2で非同期プロセスが大量にできちゃってるっぽいので一旦syncにする(`pgrep -fl vim`)
-  let g:easytags_async = g:is_office ? 0 : 1
+  let g:easytags_async = 1
   let g:easytags_dynamic_files = 2
 endif " }}}
 

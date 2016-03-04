@@ -74,11 +74,14 @@ fi
 
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
+export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
+
 # }}}1
 
 # [Functions & Aliases] {{{1
 
 # General
+
 
 function cd_parent {
   local to=${1:-1}

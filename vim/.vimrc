@@ -893,8 +893,6 @@ if s:HasPlugin('vim-easytags') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-fugitive') " {{{
-  set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
-
   " TODO: fugitiveが有効なときのみマッピングしたい
   nnoremap <SID>[fugitive]<CR>   :Git<Space>
   nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>

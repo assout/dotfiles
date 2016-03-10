@@ -233,6 +233,7 @@ if has('persistent_undo') | set noundofile | endif
 set wildmenu
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
+" TODO VRapperで有効にならない
 set nowrapscan
 
 " }}}1
@@ -1297,6 +1298,8 @@ augroup vimrc
   autocmd FileType java setlocal noexpandtab
   " Note: aws.json を考慮して*jsonとしている
   autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
+  " TODO: 折りたたまれない
+  autocmd FileType xml setlocal foldmethod=syntax foldlevel=99
   if executable('python')
     autocmd FileType *json, command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
   endif

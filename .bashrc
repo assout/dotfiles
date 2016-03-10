@@ -70,6 +70,7 @@ fi
 
 if [ "${is_office}" ] ; then
   export EDITOR="vim --noplugin" # For less +v
+  export NODE_PATH="/mingw64/lib/node_modules"
 fi
 
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'

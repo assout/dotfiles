@@ -138,6 +138,7 @@ let g:is_jenkins = exists('$BUILD_NUMBER')
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
+let g:xml_syntax_folding = 1
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 " Note: msys2でリンク、ファイルパス開けるようにする
@@ -159,8 +160,7 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-
-if g:is_office_cui " For mintty. Caution: Gnome terminalでは不可。office devはキーが不正になった。
+if g:is_office_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -474,7 +474,7 @@ if s:IsPluginEnabled()
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'ujihisa/neco-look'
   Plug 'vim-jp/vimdoc-ja', {}
-  Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'}
+  Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
   Plug 'wellle/tmux-complete.vim'
@@ -828,11 +828,11 @@ if s:HasPlugin('unite.vim') " {{{
 
   if s:HasPlugin('neomru.vim') " {{{
     " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore
-    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨だがUnite未ロードの場合があるためこっちを使用)
+    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
     let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_limit = 500
-    let g:neomru#do_validate = 0 " Cautioin: 有効にするとvim終了時結構遅くなる
+    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
@@ -974,7 +974,7 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-flashy') " {{{
-  if g:is_office_cui " TODO: workaround
+  if g:is_office_cui " TODO: workaround。なんかmsys2でエラー出る
     autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
   endif
 endif " }}}
@@ -1065,6 +1065,7 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_noenter = 1
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
   " TODO: デフォルトに一括追加の指定方法(現状は上書き)
+  " TODO: shがman呼ばれない
   " TODO: Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
@@ -1300,7 +1301,6 @@ augroup vimrc
   autocmd FileType java setlocal noexpandtab
   " Note: aws.json を考慮して*jsonとしている
   autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
-  " TODO: 折りたたまれない
   autocmd FileType xml setlocal foldmethod=syntax foldlevel=99
   if executable('python')
     autocmd FileType *json, command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool

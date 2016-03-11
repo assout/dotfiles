@@ -34,7 +34,12 @@
 " * CopyをAlt + Cに退避するが他のCopyバインドも合わせて調整しないとうまくBindされない
 "
 " ## TODOs
-" * TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
+" - TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
+" - TODO: Command modeで<C-m>で決定したものがヒストリーに入らない
+" - TODO: Split解除したときにフォーカスを失う Refs: https://github.com/vrapper/vrapper/issues/435
+" - TODO: 右、左のタブ閉じる
+" - TODO: タブの移動(CVimと合わせるなら<>)
+" - TODO: <C-a>のインクリメンタルを10進数にしたい(0埋めされているときダメ)(nrformatsが効かないか)
 
 " }}}1
 

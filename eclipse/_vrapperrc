@@ -34,7 +34,6 @@
 " * CopyをAlt + Cに退避するが他のCopyバインドも合わせて調整しないとうまくBindされない
 "
 " ## TODOs
-" * TODO: 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
 " * TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
 
 " }}}1
@@ -44,33 +43,26 @@ source .vrapperrc.environment
 " }}}1
 	
 " # Vim Settings {{{1
-" ヤンク、ペーストをクリップボードに.
-set clipboard=unnamed
-" ハードタブ
-set noexpandtab
+set clipboard=unnamed "" ヤンク、ペーストをクリップボードに.
+set noexpandtab " ハードタブ
 " }}}1
 
 " # Vrapper Settings {{{1
-" インサートモードを抜けたらIMEオフ.
-set imdisable
-" コンテンツアシストで<C-p>,<C-n>を有効にする.
-set contentassistmode
-" タブ移動したらNORMAL MODEに変更する.
-set startnormalmode
-" マウス選択時にビジュアルモードにする.
-set visualmouse
-" Search Regex
-set regexsearch
+set imdisable " インサートモードを抜けたらIMEオフ.
+set contentassistmode " コンテンツアシストで<C-p>,<C-n>を有効にする.
+set startnormalmode " タブ移動したらNORMAL MODEに変更する.
+set visualmouse " マウス選択時にビジュアルモードにする.
+set regexsearch " Search Regex
 " }}}1
 
 " # Key-mappings {{{1
+" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
+
 " vimrcでのマッピングを解除.
 nunmap j
 nunmap k
 nunmap l
 unmap  <Space>
-
-" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
 
 " Normal mode mappings "
 nnoremap <SID>[shortcut]m :maximize<CR>

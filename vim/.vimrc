@@ -39,7 +39,6 @@
 " ## TODOs
 " * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO: neocompleteでたまに日本語入力が変になる
-" * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
 " * TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
 " }}}1
 
@@ -186,26 +185,21 @@ set foldmethod=marker
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
 " Caution: Windowsで'hoge\*'という指定するとNo such file or directoryと表示される。('/'区切りの場合うまくいく)
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
-" keywordprgで日本語優先にしたいため
-set helplang=ja,en
+set helplang=ja,en " keywordprgで日本語優先にしたいため
 set hidden
 set history=200
 set hlsearch
 set ignorecase
 set incsearch
 " set iskeyword-=_ " TODO: やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
-" <<,>>で#をインデントできるようにする
-set indentkeys-=0#
-" vim-refとの兼ね合いでここではhelp
-set keywordprg=:help
+set indentkeys-=0# " <<,>>で#をインデントできるようにする
+set keywordprg=:help " vim-refとの兼ね合いでここではhelp
 set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
-" マクロなどを実行中は描画を中断
-set lazyredraw
+set lazyredraw " マクロなどを実行中は描画を中断
 set nonumber
-" インクリメンタル/デクリメンタルを常に10進数として扱う
-set nrformats=""
+set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set ruler
 set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
@@ -220,17 +214,14 @@ set sidescrolloff=5
 set smartcase
 set softtabstop=0
 let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
-" スペルチェックで日本語は除外する
-set spelllang=en,cjk
+set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
-" swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
-let &swapfile = g:is_office ? 0 : &swapfile
+let &swapfile = g:is_office ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
 let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title
 set ttimeoutlen=0
-set nowrapscan
 if has('persistent_undo')
   set noundofile
 endif

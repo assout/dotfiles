@@ -40,6 +40,7 @@
 " * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO: neocompleteでたまに日本語入力が変になる
 " * TODO: setなどの末尾にコメント入れるとVrapperで適用されない
+" * TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
 " }}}1
 
 " # Begin {{{1
@@ -229,11 +230,13 @@ let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title
 set ttimeoutlen=0
-if has('persistent_undo') | set noundofile | endif
+set nowrapscan
+if has('persistent_undo')
+  set noundofile
+endif
 set wildmenu
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
-" TODO VRapperで有効にならない
 set nowrapscan
 
 " }}}1
@@ -471,6 +474,7 @@ if s:IsPluginEnabled()
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'ujihisa/neco-look'
   Plug 'vim-jp/vimdoc-ja', {}
+  Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'}
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
   Plug 'wellle/tmux-complete.vim'
@@ -626,7 +630,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = 1
+  " let g:neocomplete#enable_at_startup = 1
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{
@@ -888,7 +892,7 @@ if s:HasPlugin('vim-alignta') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
-  let g:easytags_async = 1
+  let g:easytags_async = has('gui_running') ? 0 : 1 " TODO: GUIのときバックグラウンドプロセスがたまっていっちゃうっポイ
   let g:easytags_dynamic_files = 2
 endif " }}}
 
@@ -1301,8 +1305,8 @@ augroup vimrc
   if executable('python')
     autocmd FileType *json, command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
   endif
-  if executable('xmllint')
-    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --format --recover - 2>/dev/null
+  if executable('xmllint') " Note: Windowsのときencode指定しないとうまくいかないことがある
+    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   endif
 
   if g:is_office " homeではRicty font使うので不要

@@ -4,7 +4,7 @@
 " vrapper のキーバインドを有効にするには eclipse のデフォルトキーバインドを変更する必要がある.
 " 詳細は <http://vrapper.sourceforge.net/documentation>
 " eclipse のデフォルトキーバインドを <Alt-hoge> のバインドに退避することとする.(メニューへのショートカットができなくなるがまあ良い)
-" <Alt-hoge>のキーバインドが重複したら<C-S-A-hoge>にする。。
+" <Alt-hoge>のキーバインドが重複したら<C-S-A-hoge>にする。。(無いはず)
 " 以下に退避するキーバインドの一覧を示す.
 
 " Ctrl + a - Select All
@@ -35,7 +35,6 @@
 "
 " ## TODOs
 " * TODO: 行末に行コメント入れるとvrapperで解釈されない。workaroundとしてコメントは別行に書く
-" * TODO: コメント文のなかに「。」があったりすると設定が効かなかったことがあったような気がするので使わない
 " * TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
 
 " }}}1
@@ -68,49 +67,29 @@ set regexsearch
 " vimrcでのマッピングを解除.
 nunmap j
 nunmap k
-unmap  s
-nunmap <C-]>
+nunmap l
 unmap  <Space>
 
-" shortcut prefix mappings
-" Caution: vimrcでも設定してるがvrapperではマップの再展開がされないっぽいので再定義
-noremap  s  <Nop>
+" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
 
-nnoremap sh <C-w>h
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
-nnoremap sl <C-w>l
+" Normal mode mappings "
+nnoremap <SID>[shortcut]m :maximize<CR>
+nnoremap <SID>[shortcut]c :bdelete<CR>
 
-" Cautioin: noremapではinsert mode時タブが挿入されてしまうのでだめ
-noremap  sp :split<CR>
-noremap  sv :vsplit<CR>
-nnoremap sm :maximize<CR>
-inoremap sm <C-o>:maximize<CR>i
-
-nnoremap sc :bdelete<CR>
-noremap  sx :bdelete<CR>
-
-nnoremap sn :nohlsearch<CR>
-
-" Ctrl key mappings
-nnoremap <C-m>  i<CR><Esc>
-nnoremap <C-w>o :only<CR>
-
+" Note: 他と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
 nnoremap <C-h> <C-w>gT
 nnoremap <C-l> <C-w>gt
 
-" Alt key mappings
-nnoremap <M-l> <C-w>gt
-" Caution: <M-h>はシステムが利用するのでマッピング不可. Eclipseの設定で変える.
-" nnoremap <M-h> <C-w>gT
-" Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
-" nnoremap <M-t> :tabedit<CR>
-" nnoremap <M-c> :q<CR>
+nnoremap <C-m> i<CR><Esc>
 
+" Insert mode mappings "
 " TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$
 inoremap <C-d> <C-o>x
+
+" Command-line mode mappings
+cnoremap <C-e> <End>
 
 " Eclipse action 基本<Space>prefix {{{
 " navigate

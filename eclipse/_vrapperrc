@@ -43,12 +43,12 @@ source .vrapperrc.environment
 " }}}1
 	
 " # Vim Settings {{{1
-set clipboard=unnamed "" ヤンク、ペーストをクリップボードに.
-set noexpandtab " ハードタブ
+set clipboard=unnamed
+set noexpandtab
 " }}}1
 
 " # Vrapper Settings {{{1
-set imdisable " インサートモードを抜けたらIMEオフ.
+set imdisable
 set contentassistmode " コンテンツアシストで<C-p>,<C-n>を有効にする.
 set startnormalmode " タブ移動したらNORMAL MODEに変更する.
 set visualmouse " マウス選択時にビジュアルモードにする.

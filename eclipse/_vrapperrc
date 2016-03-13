@@ -34,12 +34,21 @@
 " * CopyをAlt + Cに退避するが他のCopyバインドも合わせて調整しないとうまくBindされない
 "
 " ## TODOs
+" - TODO: eclipseでキー無効/退避するのがめんどくさい
 " - TODO: linuxでnoremapがコマンドラインモードでも有効になってしまう
 " - TODO: Command modeで<C-m>で決定したものがヒストリーに入らない
 " - TODO: Split解除したときにフォーカスを失う Refs: https://github.com/vrapper/vrapper/issues/435
 " - TODO: 右、左のタブ閉じる
 " - TODO: タブの移動(CVimと合わせるなら<>)
 " - TODO: <C-a>のインクリメンタルを10進数にしたい(0埋めされているときダメ)(nrformatsが効かないか)
+" - TODO: 最近開いたファイルを開くのをやりやすいようにする
+" - TODO: vimrcでvrapperで解釈できない命令がエラー表示される(e.g. cabbrev) 一応動作には影響なさそう
+" - TODO: 名前変更リファクタリングのときのキー操作微妙 Refs: https://github.com/vrapper/vrapper/issues/517
+" - TODO: 呼び出すvimrcがエラーとなっているかチェックしたい(travisciとかで)
+" - TODO: Ctrl+n,pで上下にカーソル移動(Ctrl+1のダイアログのときの話。 Ctrl+Spaceのときはできている。)
+" - TODO: タブ補完が効かない？ Refs: https://github.com/vrapper/vrapper/issues/552
+" - TODO: ctrlキー押下しながらメソッド選択のとき旧caps lockきーのときちらつく(Linuxのみ)(左下のctrlキーなら大丈夫)
+" - TODO: Linuxでコマンドラインモードでの<C-m>が改行になっちゃう(いったんworkaroundでc-j使うようにする)
 
 " }}}1
 
@@ -64,8 +73,6 @@ set regexsearch " Search Regex
 " Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
 
 " vimrcでのマッピングを解除.
-nunmap j
-nunmap k
 nunmap l
 unmap  <Space>
 

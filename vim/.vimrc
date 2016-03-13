@@ -180,6 +180,7 @@ set cmdheight=1
 set diffopt& diffopt+=vertical
 set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
+set foldcolumn=2
 set foldlevelstart=0
 set foldmethod=marker
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
@@ -238,10 +239,6 @@ set nowrapscan
 " あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
 
 " Normal, Visual mode basic mappings {{{
-nnoremap j gj
-nnoremap k gk
-nnoremap gj j
-nnoremap gk k
 nnoremap Y y$
 nnoremap <CR> i<CR><Esc>
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
@@ -621,14 +618,14 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  " let g:neocomplete#enable_at_startup = 1
+  " let g:neocomplete#enable_at_startup = 1 " TODO: 重い時があるためいったん無効
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{
   let g:openbrowser_search_engines = extend(get(g:, 'openbrowser_search_engines', {}), {
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
-        \  }) " Caution: vimrcリロードでデフォルト値が消えてしまわないようにする
+        \  }) " Note: vimrcリロードでデフォルト値が消えてしまわないようにしている
   if g:is_office_cui
     let g:openbrowser_browser_commands = [{'name' : 'rundll32', 'args' : 'rundll32 url.dll,FileProtocolHandler {uri}'}]
   endif

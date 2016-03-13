@@ -47,10 +47,7 @@
 set nocompatible " Caution: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
-
-if filereadable(expand('~/.vimrc.local'))
-  source ~/.vimrc.local
-endif
+if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif
 
 augroup vimrc
   autocmd!
@@ -270,8 +267,7 @@ nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
-" TODO: To plugin or function
-" TODO: .(dot) repeat
+" TODO: To plugin or function " TODO: .(dot) repeat
 noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]-  :MyPrefix - <CR>
@@ -1030,9 +1026,7 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
-  " TODO: デフォルトに一括追加の指定方法(現状は上書き)
-  " TODO: shがman呼ばれない
-  " TODO: Windows gvimでshのman開けない
+  " TODO: デフォルトに一括追加の指定方法(現状は上書き) " TODO: shでman呼ばれない @msys2 " TODO: Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
         \  'sh' : 'man',
@@ -1054,14 +1048,7 @@ if s:HasPlugin('vim-ref') " {{{
   nnoremap <SID>[ref]we    :<C-u>Ref webdict ej<Space>
   " }}}
 
-  " TODO: 選択範囲の単語で検索
-  " TODO: unite-actioinでyank
-  " TODO: unite重い
-  " TODO: コマンド履歴に残したい
-  " TODO: 和英ができない
-  " TODO: キャッシュ化されている？
-  " TODO: あいまい検索的なことがしたい(z=でスペル候補表示するみたいなのを楽に)
-  " TODO: Uniteソースのほうに統一したほうがよい？
+  " TODO: 選択範囲の単語で検索 " TODO: unite-actioinでyank " TODO: unite重い " TODO: コマンド履歴に残したい " TODO: 和英ができない " TODO: キャッシュ化されている？ " TODO: あいまい検索的なことがしたい(z=でスペル候補表示するみたいなのを楽に) " TODO: Uniteソースのほうに統一したほうがよい？
   if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <expr> <SID>[ref]g ':<C-u>Ref gene<Space>' . expand('<cword>') . '<CR>'
     nnoremap <expr> <SID>[ref]G ':<C-u>Ref gene<Space>'
@@ -1147,8 +1134,7 @@ if s:HasPlugin('vim-textobj-between') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-entire') " {{{
-  " TODO: カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない
-  " TODO: カーソル行が戻ったときメッセージが消えてしまう
+  " TODO: カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない " TODO: カーソル行が戻ったときメッセージが消えてしまう
   nmap yae yae``
   nmap yie yie``
   nmap =ae =ae``
@@ -1178,8 +1164,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
 
   let g:watchdogs_check_BufWritePost_enable = 1
-  " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている
-  " TODO: xmllint
+  " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
   let g:quickrun_config = {
         \  'watchdogs_checker/_' : {
         \    'outputter/quickfix/open_cmd' : '',

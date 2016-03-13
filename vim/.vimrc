@@ -43,7 +43,6 @@
 " }}}1
 
 " # Begin {{{1
-
 " vint: -ProhibitSetNoCompatible
 set nocompatible " Caution: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
 set encoding=utf-8 " inner encoding(before the scriptencoding)
@@ -56,11 +55,9 @@ endif
 augroup vimrc
   autocmd!
 augroup END
-
 " }}}1
 
 " # Functions and Commands {{{1
-
 function! s:IsPluginEnabled()
   return isdirectory(expand(s:plugged_path)) && &loadplugins
 endfunction
@@ -126,7 +123,6 @@ command! MyDiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | win
 " }}}1
 
 " # Let defines {{{1
-
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
 let g:is_home = $USERNAME ==# 'oji'
 let g:is_office = $USERNAME ==# 'admin'
@@ -140,8 +136,7 @@ let s:plugged_path = s:dotvim_path . '/plugged'
 let g:xml_syntax_folding = 1
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-" Note: msys2でリンク、ファイルパス開けるようにする
-" TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
+" Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
 if g:is_office_cui
   let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
 endif
@@ -165,11 +160,9 @@ if g:is_office_cui " For mintty. Note: Gnome terminalでは不可なので別途
   let &t_EI .= "\e[1 q"
   let &t_te .= "\e[0 q"
 endif
-
 " }}}1
 
 " # Options {{{1
-
 set background=dark
 set backspace=indent,eol,start
 set cindent
@@ -230,14 +223,9 @@ set wildmenu
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
 set nowrapscan
-
 " }}}1
 
 " # Key-mappings {{{1
-
-" Note: 前は<C-j>を<Esc>に割り当ててたけどbashとかだとEnter扱いでややこしいからやめた
-" あとなにかのpluginでjk同時押しも試したけど合わなかった(visual modeだとできないし、jのあとキー入力待ちになるの気持ちわるい)
-
 " Normal, Visual mode basic mappings {{{
 nnoremap Y y$
 nnoremap <CR> i<CR><Esc>
@@ -302,8 +290,7 @@ noremap <expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
 noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
-" Note: fugitiveで対象とするためresolveしている
-" Caution: Windows GUIのときシンボリックリンクを解決できない
+" Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 let g:myvimrcPath = resolve(expand($MYVIMRC))
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
 " }}}
@@ -380,7 +367,6 @@ cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 " }}}
-
 " }}}1
 
 " # Plug-ins {{{1
@@ -397,9 +383,7 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
-  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
-  " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
-  " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
+  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'UniteTodoAddBuffer', 'UniteTodoAddSimple', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
@@ -682,11 +666,7 @@ if s:HasPlugin('restart.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('switch.vim') " {{{
-  " Refs: <http://www.puni.net/~mimori/rfc/rfc3092.txt>
-  " Note: 定義順は優先度を考慮する(範囲の広い定義は後ろに定義する)
-  " TODO: Dictionary定義はSwitchReverse効かない
-  " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] )
-  " TODO: undoするとカーソル位置が行頭になっちゃう
+  " Note: 定義順は優先度を考慮する(範囲の広い定義は後ろに定義する) " TODO: Dictionary定義はSwitchReverse効かない " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] ) " TODO: undoするとカーソル位置が行頭になっちゃう
   let g:switch_custom_definitions = [
         \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
         \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
@@ -762,8 +742,7 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
   autocmd vimrc FileType unite call s:UniteKeymappings()
 
-  " Note: mapはunimpairedの`]u`系を無効にしないといけない
-  " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
+  " Note: mapはunimpairedの`]u`系を無効にしないといけない " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim
         \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
@@ -815,8 +794,7 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore
-    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
+    " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
     let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
     let g:neomru#directory_mru_limit = 500
@@ -1251,12 +1229,10 @@ endif " }}}
 if s:HasPlugin('yankround.vim') " {{{
   let g:yankround_dir = '~/.cache/yankround'
 endif " }}}
-
 " }}}1
 
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
-
 augroup vimrc
   " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
@@ -1273,16 +1249,12 @@ augroup vimrc
   if g:is_home
     autocmd VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
     autocmd InsertEnter,InsertChange *
-          \ if v:insertmode == 'i' |
-          \   silent execute '!echo -ne "\e[6 q"' | redraw! |
-          \ elseif v:insertmode == 'r' |
-          \   silent execute '!echo -ne "\e[4 q"' | redraw! |
-          \ endif
+          \ if     v:insertmode == 'i' | silent execute '!echo -ne "\e[6 q"' | redraw! |
+          \ elseif v:insertmode == 'r' | silent execute '!echo -ne "\e[4 q"' | redraw! | endif
     autocmd VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
   endif
 
-  " Note: ftpluginで上書きされてしまうことがあるためここで設定している
-  " Note: formatoptionsにo含むべきか難しい
+  " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 cinkeys=""
@@ -1303,13 +1275,9 @@ augroup vimrc
     autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
   endif
 augroup END
-
 " }}}1
 
 " # After {{{1
-
-" :qで誤って終了してしまうのを防ぐためcloseに置き換える
-cabbrev q <C-r>=(getcmdtype()==':' && getcmdpos()==1 ? 'close' : 'q')<CR>
 " Don't (re)highlighting the last search pattern on reloading.
 nohlsearch
 " Enable matchit
@@ -1333,7 +1301,6 @@ else
   if g:is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
-
 " }}}1
 
 " vim:nofoldenable:

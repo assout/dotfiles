@@ -1245,10 +1245,8 @@ augroup END
 " }}}1
 
 " # After {{{1
-" Don't (re)highlighting the last search pattern on reloading.
-nohlsearch
-" Enable matchit
-source $VIMRUNTIME/macros/matchit.vim
+nohlsearch " Don't (re)highlighting the last search pattern on reloading.
+source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 
 " Colorshceme settings {{{
 if s:HasPlugin('vim-hybrid')

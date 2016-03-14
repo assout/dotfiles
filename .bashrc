@@ -4,7 +4,6 @@
 # Notes:
 # - 基本デフォルト厨とする(aliasとかもあんま作らない)
 # - which使うと遅い
-#
 # }}}1
 
 # [Begin] {{{1
@@ -37,10 +36,8 @@ is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0
 # History settings
 HISTSIZE=5000
 HISTFILESIZE=5000
-# 重複を排除
-HISTCONTROL=ignoredups
-# コマンド実行時刻を記録する
-HISTTIMEFORMAT='%F %T '
+HISTCONTROL=ignoredups # 重複を排除
+HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
@@ -58,14 +55,13 @@ fi
 if [ "${is_office}" ] ; then
   export EDITOR="vim --noplugin" # For less +v
   export NODE_PATH="/mingw64/lib/node_modules"
+  export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
-export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 # }}}1
 
 # [Functions & Aliases] {{{1
-# General
 function cd_parent {
   local to=${1:-1}
   local toStr="";
@@ -84,8 +80,7 @@ function cdls {
 # Vim
 alias vi=vim
 if [ "${is_home}" ] ; then
-  # クリップボード共有するため
-  alias vim='vimx'
+  alias vim='vimx' # クリップボード共有するため
 fi
 
 if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
@@ -97,8 +92,7 @@ fi
 
 # Peco
 if [ "${is_home}" ] ; then
-  # ls & cd
-  function peco_lscd {
+  function peco_lscd { # ls & cd
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco)"
     if [ ! -z "$dir" ] ; then
       cd "$dir" || exit 1
@@ -106,8 +100,7 @@ if [ "${is_home}" ] ; then
   }
   alias pcd='peco_lscd'
 
-  # history
-  function peco_select_history() {
+  function peco_select_history() { # history
     local l
     local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
     HISTTIMEFORMAT=
@@ -119,7 +112,6 @@ if [ "${is_home}" ] ; then
   bind -x '"\e\C-r": peco_select_history'
 fi
 
-# Man
 function man_japanese {
   LANG_ESCAPE=$LANG
   LANG=ja_JP.UTF-8
@@ -157,8 +149,7 @@ fi
 # }}}1
 
 # [User process] {{{1
-# Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
-stty stop undef 2> /dev/null
+stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 
 # Create Today backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)

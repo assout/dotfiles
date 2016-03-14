@@ -803,7 +803,7 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
   endif " }}}
 
-  if s:HasPlugin('unite-todo') " {{{
+  if s:HasPlugin('unite-todo') " {{{ TODO: Note templateを指定したい(h1見出しにタイトルくらいだけど)
     let g:unite_todo_note_suffix = 'md'
     let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
 

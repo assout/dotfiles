@@ -821,7 +821,7 @@ if s:HasPlugin('unite.vim') " {{{
     command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
 
     function! s:UniteTodoKeyMappings()
-      nnoremap <buffer><expr>t unite#smart_map('t', unite#do_action('toggle'))
+      nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('toggle'))
     endfunction
 
     noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>

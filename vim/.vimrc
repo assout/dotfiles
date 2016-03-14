@@ -65,9 +65,7 @@ endfunction
 
 function! s:RestoreCursorPosition()
   let l:ignore_filetypes = ['gitcommit']
-  if index(l:ignore_filetypes, &l:filetype) >= 0
-    return
-  endif
+  if index(l:ignore_filetypes, &l:filetype) >= 0 | return | endif
   if line("'\"") > 1 && line("'\"") <= line('$')
     normal! g`"
   endif
@@ -233,7 +231,6 @@ vnoremap y y`>
 " }}}
 
 " Shortcut key prefix mappings {{{
-
 " <SID>[shortcut]a, d, rはsurround-pluginで使用
 " <SID>[shortcut]mはmaximizer-pluginで使用
 noremap  gs               s
@@ -371,7 +368,6 @@ if s:IsPluginEnabled()
     let &runtimepath = g:is_office_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
   endif
   call g:plug#begin(s:plugged_path)
-
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
   " General {{{
   Plug 'AndrewRadev/linediff.vim'
@@ -475,7 +471,6 @@ if s:IsPluginEnabled()
   " Colorschemes {{{
   Plug 'w0ng/vim-hybrid'
   " }}}
-
   call g:plug#end()
 
   " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
@@ -485,7 +480,6 @@ if s:IsPluginEnabled()
   map  <Space>              <SID>[plugin]
   xmap <SID>[plugin]a       <SID>[alignta]
   map  <SID>[plugin]c       <SID>[camelize]
-  nmap <SID>[plugin]f       <SID>[fugitive]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
@@ -858,18 +852,6 @@ if s:HasPlugin('vim-easytags') " {{{
   let g:easytags_dynamic_files = 2
 endif " }}}
 
-if s:HasPlugin('vim-fugitive') " {{{
-  " TODO: fugitiveが有効なときのみマッピングしたい
-  nnoremap <SID>[fugitive]<CR>   :Git<Space>
-  nnoremap <SID>[fugitive]cm<CR> :Gcommit<CR>
-  nnoremap <SID>[fugitive]cmm    :Gcommit -m ""<Left>
-  nnoremap <SID>[fugitive]cma    :Gcommit -a<CR>
-  nnoremap <SID>[fugitive]d      :Gdiff<CR>
-  nnoremap <SID>[fugitive]l      :Glog<CR>
-  nnoremap <SID>[fugitive]p      :Gpush<CR>
-  nnoremap <SID>[fugitive]s      :Gstatus<CR>
-endif " }}}
-
 if s:HasPlugin('vim-gf-user') " {{{
   function! g:GfFile() " Refs: <http://d.hatena.ne.jp/thinca/20140324/1395590910>
     let l:path = expand('<cfile>')
@@ -878,7 +860,7 @@ if s:HasPlugin('vim-gf-user') " {{{
       let l:line = matchstr(l:path, '\d\+:\?$')
       let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
     endif
-    if !filereadable(l:path)
+    if !filereadable(l:path) | 
       return 0
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }

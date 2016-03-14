@@ -80,7 +80,6 @@ function cdls {
   command cd "$1"; # cdが循環しないようにcommand
   ls --color=auto --show-control-chars;
 }
-alias cd='cdls'
 
 # Vim
 alias vi=vim

@@ -2,18 +2,9 @@
 
 # [Index] {{{1
 #
-# - Begin
-# - Functions & Aliases
-# - Define, Export variables
-# - User process
-# - After
-#
 # Notes:
 # - 基本デフォルト厨とする(aliasとかもあんま作らない)
 # - which使うと遅い
-#
-# TODOs:
-# - TODO: `explorer`実行時、windowsでパス区切り文字が/だと開けないっぽい(/,\のどちらでもいけるはずでは？)
 #
 # }}}1
 
@@ -145,6 +136,11 @@ function man_japanese {
   LANG=$LANG_ESCAPE
 }
 alias jan='man_japanese'
+
+function exec_explorer {
+  command explorer "${1////\\}" # /を\に置換
+}
+alias explorer='exec_explorer'
 
 # Docker
 alias drm='docker rm $(docker ps -a -q)'

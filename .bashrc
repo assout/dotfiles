@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # [Index] {{{1
-#
 # Notes:
 # - 基本デフォルト厨とする(aliasとかもあんま作らない)
 # - which使うと遅い
@@ -9,7 +8,6 @@
 # }}}1
 
 # [Begin] {{{1
-
 # Start profile
 is_profile=$(if [ "${1}" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
@@ -29,11 +27,9 @@ fi
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
-
 # }}}1
 
 # [Define, Export variables] {{{1
-
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
 is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
 is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
@@ -66,14 +62,10 @@ fi
 
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
-
 # }}}1
 
 # [Functions & Aliases] {{{1
-
 # General
-
-
 function cd_parent {
   local to=${1:-1}
   local toStr="";
@@ -163,11 +155,9 @@ if [ "${is_office}" ] ; then
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
-
 # }}}1
 
 # [User process] {{{1
-
 # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 stty stop undef 2> /dev/null
 
@@ -194,11 +184,9 @@ elif [ "${is_office}" ] ; then
     cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}" 2>&1 | nkf32.exe -w
   fi
 fi
-
 # }}}1
 
 # [After] {{{1
-
 export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
@@ -233,7 +221,6 @@ if [ "${is_profile}" ] ; then
   set +x
   exec 2>&3 3>&-
 fi
-
 # }}}1
 
 # vim:nofoldenable:

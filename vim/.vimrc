@@ -168,7 +168,6 @@ set cmdheight=1
 set diffopt& diffopt+=vertical
 set expandtab
 set fileencodings=utf-8,ucs-bom,iso-2020-jp-3,iso-2022-jp,eucjp-ms,euc-jisx0213,euc-jp,sjis,cp932,latin,latin1,utf-8
-set foldcolumn=2
 set foldlevelstart=0
 set foldmethod=marker
 " TODO: Windows Gvimで~からのパスをgrepすると結果ファイルが表示できない(D:\d\hoge\fuga のように解釈されてるっぽい)(/d/admin/hogeも同様にNG)
@@ -187,7 +186,7 @@ set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 set lazyredraw " マクロなどを実行中は描画を中断
-set nonumber
+set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやすい
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set ruler
 set scrolloff=5
@@ -226,8 +225,6 @@ nnoremap Y y$
 nnoremap <CR> i<CR><Esc>
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
 nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
-" ビジュアルモードでのヤンク後にカーソルを選択前の位置に戻さない(メソッド選択してコピペ時など)
-vnoremap y y`>
 " }}}
 
 " Shortcut key prefix mappings {{{
@@ -264,16 +261,12 @@ nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
 nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
-" TODO: To plugin or function " TODO: .(dot) repeat
+" TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap       <SID>[insert]  <Nop>
 noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]-  :MyPrefix - <CR>
-noremap       <SID>[insert]1  :MyPrefix # <CR>A
-noremap       <SID>[insert]2  :MyPrefix ## <CR>A
-noremap       <SID>[insert]3  :MyPrefix ### <CR>A
-noremap       <SID>[insert]4  :MyPrefix #### <CR>A
+noremap       <SID>[insert]#  :MyPrefix # <CR>
 noremap       <SID>[insert]>  :MyPrefix > <CR>
-noremap       <SID>[insert]T  :MyPrefix TODO: <CR>
 noremap       <SID>[insert]f  :MyPrefix file://<CR>
 noremap <expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
 noremap <expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'

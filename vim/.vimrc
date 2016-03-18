@@ -79,7 +79,7 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
-command! MyToggleExpandTab call <SID>ToggleExpandTab()
+command! ToggleExpandTab call <SID>ToggleExpandTab()
 
 function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
@@ -90,15 +90,15 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
 endfunction
-command! -nargs=1 MyChangeTabstep call <SID>ChangeTabstep(<q-args>)
+command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
 function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 MyPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 MySuffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
+command! -range -nargs=1 Prefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
-function! s:Explorer(...)
+function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
   if g:is_office
     execute '!start explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
@@ -106,15 +106,15 @@ function! s:Explorer(...)
     execute '!nautilus ' . l:path . '&'
   endif
 endfunction
-command! -nargs=? -complete=dir MyExplorer call <SID>Explorer(<f-args>)
+command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 
-command! -bang MyBufClear %bdelete<bang>
-command! -range=% MyTrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
-command! -range=% MyDelBlankLine <line1>,<line2>v/\S/d | nohlsearch
+command! -bang BufClear %bdelete<bang>
+command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
+command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
-command! MyVimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
+command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
-command! MyDiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 " }}}1
 
 " # Let defines {{{1
@@ -248,7 +248,7 @@ nnoremap <SID>[shortcut]n :<C-u>nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
 nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
-nnoremap <SID>[shortcut]t :<C-u>MyTranslate<CR>
+nnoremap <SID>[shortcut]t :<C-u>Translate<CR>
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
@@ -263,22 +263,21 @@ nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap       <SID>[insert]  <Nop>
-noremap <expr><SID>[insert]p ':MyPrefix ' . input('prefix:') . '<CR>'
-noremap       <SID>[insert]-  :MyPrefix - <CR>
-noremap       <SID>[insert]#  :MyPrefix # <CR>
-noremap       <SID>[insert]>  :MyPrefix > <CR>
-noremap       <SID>[insert]f  :MyPrefix file://<CR>
-noremap <expr><SID>[insert]s ':MySuffix ' . input('suffix:') . '<CR>'
-noremap <expr><SID>[insert]d ':MySuffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <expr><SID>[insert]t ':MySuffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <expr><SID>[insert]n ':MySuffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
-noremap <expr><SID>[insert]a ':MySuffix \ @' . input('author:') . '<CR>'
-noremap       <SID>[insert]l  :MySuffix \<Space>\ <CR>
+noremap <expr><SID>[insert]p ':Prefix ' . input('prefix:') . '<CR>'
+noremap       <SID>[insert]-  :Prefix - <CR>
+noremap       <SID>[insert]#  :Prefix # <CR>
+noremap       <SID>[insert]>  :Prefix > <CR>
+noremap       <SID>[insert]f  :Prefix file://<CR>
+noremap <expr><SID>[insert]s ':Suffix ' . input('suffix:') . '<CR>'
+noremap <expr><SID>[insert]d ':Suffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
+noremap <expr><SID>[insert]t ':Suffix ' . strftime('\ @%H:%M:%S') . '<CR>'
+noremap <expr><SID>[insert]n ':Suffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
+noremap <expr><SID>[insert]a ':Suffix \ @' . input('author:') . '<CR>'
+noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
-let g:myvimrcPath = resolve(expand($MYVIMRC))
-nnoremap <expr><SID>[open]v ':<C-u>edit ' . g:myvimrcPath . '<CR>'
+nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 " }}}
 
 " Ctrl, Alt key prefix mappings {{{
@@ -417,7 +416,7 @@ if s:IsPluginEnabled()
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
-  Plug 'thinca/vim-singleton', has('gui_running') ? {'for' : '*'} : {'on' : []} " Caution: 引数無しで起動すると二重起動される
+  Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
   Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-fugitive'
@@ -552,6 +551,7 @@ if has('kaoriya') " {{{
   let g:plugin_scrnmode_disable = 1 " scrnmode plugin無効
 else
   command! -nargs=0 CdCurrent cd %:p:h
+  command! DiffOrig vertical new | set buftype=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
@@ -560,11 +560,11 @@ if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MemoGrep(word)
-    call histadd('cmd', 'MyMemoGrep '  . a:word)
+    call histadd('cmd', 'MemoGrep '  . a:word)
     " Caution: a:wordはオプションが入ってくるかもなので""で囲まない
     execute ':silent grep -r --exclude-dir=_book ' . a:word . ' ' . g:memolist_path
   endfunction
-  command! -nargs=1 -complete=command MyMemoGrep call <SID>MemoGrep(<q-args>)
+  command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
   autocmd vimrc User memolist.vim
         \ let g:unite_source_alias_aliases = {
@@ -580,7 +580,7 @@ if s:HasPlugin('memolist.vim') " {{{
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
-  nnoremap <expr><SID>[memolist]g ':<C-u>MyMemoGrep ' . input('MyMemoGrep word: ') . '<CR>'
+  nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
   nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
 endif " }}}
 
@@ -801,11 +801,11 @@ if s:HasPlugin('unite.vim') " {{{
     let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
 
     function! s:TodoGrep(word)
-      call histadd('cmd', 'MyTodoGrep '  . a:word)
+      call histadd('cmd', 'TodoGrep '  . a:word)
       " Note: a:wordはオプションが入ってくるかもなので""で囲まない
       execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
     endfunction
-    command! -nargs=1 -complete=command MyTodoGrep call <SID>TodoGrep(<q-args>)
+    command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
 
     function! s:UniteTodoKeyMappings()
       nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('toggle'))
@@ -815,7 +815,7 @@ if s:HasPlugin('unite.vim') " {{{
     noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
     nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
     nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
-    nnoremap <expr><SID>[todo]g ':<C-u>MyTodoGrep ' . input('MyTodoGrep word: ') . '<CR>'
+    nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 
     autocmd vimrc FileType unite if unite#get_current_unite().profile_name ==# 'todo' | call s:UniteTodoKeyMappings() | endif
     autocmd vimrc User unite-todo call unite#custom#default_action('todo', 'open')
@@ -881,7 +881,7 @@ if s:HasPlugin('vim-markdown') " {{{
   let g:vim_markdown_folding_disabled = 1
   let g:vim_markdown_emphasis_multiline = 0
 
-  function! s:MyVimMarkdownSettings() " Refs: <:help restore-position>
+  function! s:VimMarkdownSettings() " Refs: <:help restore-position>
     " Note: commentsを空にして箇条書きの継続を無効、indentexprを空にして不要な箇条書きのインデント補正を無効にする
     setlocal comments= indentexpr=
 
@@ -896,7 +896,7 @@ if s:HasPlugin('vim-markdown') " {{{
     " ファイルパスを開けなくなるので無効化
     unmap <buffer> gx
   endfunction
-  autocmd vimrc FileType markdown call s:MyVimMarkdownSettings()
+  autocmd vimrc FileType markdown call s:VimMarkdownSettings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
@@ -1033,7 +1033,7 @@ endif " }}}
 if s:HasPlugin('vim-singleton') " {{{
   let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
   let g:singleton#opener = 'vsplit'
-  autocmd vimrc User vim-singleton call g:singleton#enable()
+  if has('gui_running') | call g:singleton#enable() | endif
 endif " }}}
 
 if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長すぎるとInvalid argumentとなる(e.g. prefixを<submode>とするとエラー)
@@ -1223,10 +1223,10 @@ augroup vimrc
   autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
   autocmd FileType xml setlocal foldmethod=syntax foldlevel=99
   if executable('python')
-    autocmd FileType *json, command! -buffer -range=% MyFormatJson <line1>,<line2>!python -m json.tool
+    autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   endif
   if executable('xmllint') " Note: Windowsのときencode指定しないとうまくいかないことがある
-    autocmd FileType xml command! -buffer -range=% MyFormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
+    autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   endif
 
   if g:is_office " homeではRicty font使うので不要

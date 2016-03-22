@@ -1,15 +1,14 @@
 [push]
   default = simple
-# for gist.vim
+# for gist.vim FIXME: 不要であれば消す
 [github]
   user = assout
 [core]
   excludesfile = ~/.gitignore
   quotepath = false
-  autocrlf = input
   attributesfile = ~/.gitattributes
 [alias]
-  lg  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 [color]
   ui = true # 古いバージョンの場合defaultでないため
 [include]

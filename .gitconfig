@@ -12,6 +12,6 @@
   lg  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 [color]
   ui = true # 古いバージョンの場合defaultでないため
-[include] # user.name,user.email,proxy from local
+[include]
   path = .gitconfig.environment
-  path = .gitconfig.local
+

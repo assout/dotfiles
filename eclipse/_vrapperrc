@@ -79,7 +79,6 @@ unmap  <Space>
 
 " Normal mode mappings "
 nnoremap <SID>[shortcut]m :maximize<CR>
-nnoremap <SID>[shortcut]c :bdelete<CR>
 
 " Note: 他と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
 nnoremap <C-h> <C-w>gT

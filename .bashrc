@@ -58,7 +58,7 @@ if [ "${is_office}" ] ; then
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
-export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
+export SHELLCHECK_OPTS='--external-sources'
 # }}}1
 
 # [Functions & Aliases] {{{1
@@ -121,7 +121,8 @@ function man_japanese {
 alias jan='man_japanese'
 
 function exec_explorer {
-  command explorer "${1////\\}" # /を\に置換
+  local target="${1////\\}"
+  command explorer "${target:-.}" # /を\に置換
 }
 alias explorer='exec_explorer'
 
@@ -199,7 +200,6 @@ fi
 
 if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-  [ -n "$TMUX" ] && PS1=$PS1'$( [ ${PWD} = "/" ] && tmux rename-window "/" || tmux rename-window "${PWD##*/}")'
 fi
 
 if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ] ); then

@@ -241,7 +241,6 @@ map      <SID>[shortcut]i <SID>[insert]
 noremap  <SID>[shortcut]m <Nop>
 nmap     <SID>[shortcut]o <SID>[open]
 noremap  <SID>[shortcut]r <Nop>
-nnoremap <SID>[shortcut]t :<C-u>Translate<CR>
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
@@ -482,10 +481,10 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
 
+  " TODO: 押しづらい
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   nmap <SID>[sub_plugin]q   <SID>[qiita]
-  " TODO: 押しづらい
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 

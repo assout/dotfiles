@@ -236,17 +236,10 @@ noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]/ /\v
 noremap  <SID>[shortcut]? ?\v
 noremap  <SID>[shortcut]a <Nop>
-nnoremap <SID>[shortcut]c <C-w>c
 noremap  <SID>[shortcut]d <Nop>
-nnoremap <SID>[shortcut]h <C-w>h
 map      <SID>[shortcut]i <SID>[insert]
-nnoremap <SID>[shortcut]j <C-w>j
-nnoremap <SID>[shortcut]k <C-w>k
-nnoremap <SID>[shortcut]l <C-w>l
 noremap  <SID>[shortcut]m <Nop>
-nnoremap <SID>[shortcut]n :<C-u>nohlsearch<CR>
 nmap     <SID>[shortcut]o <SID>[open]
-nnoremap <SID>[shortcut]p :<C-u>split<CR>
 noremap  <SID>[shortcut]r <Nop>
 nnoremap <SID>[shortcut]t :<C-u>Translate<CR>
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
@@ -256,9 +249,6 @@ else
   " TODO: DRY(map内でif文意外とうまくいかない)
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
-nnoremap       <SID>[shortcut]v :<C-u>vsplit<CR>
-nnoremap       <SID>[shortcut]x :<C-u>bdelete<CR>
-nnoremap       <SID>[shortcut]z :<C-u>pclose<CR>
 nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor

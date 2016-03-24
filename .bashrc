@@ -49,7 +49,7 @@ fi
 
 if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PATH="${PATH}:${HOME}/scripts"
-  PATH="${PATH}:${HOME}/scripts/local/bash"
+  PATH="${PATH}:${HOME}/scripts/local"
 fi
 
 if [ "${is_office}" ] ; then

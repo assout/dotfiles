@@ -899,12 +899,6 @@ if s:HasPlugin('vim-migemo') " {{{
   nnoremap <SID>[migemo] :<C-u>Migemo<Space>
 endif " }}}
 
-if s:HasPlugin('vim-operator-flashy') " {{{
-  if g:is_office_cui " TODO: workaround。なんかmsys2でエラー出る
-    autocmd Colorscheme * highlight Cursor guifg=bg guibg=fg
-  endif
-endif " }}}
-
 if s:HasPlugin('vim-operator-replace') " {{{
   map <SID>[replace] <Plug>(operator-replace)
 

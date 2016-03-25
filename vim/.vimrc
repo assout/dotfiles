@@ -222,7 +222,8 @@ set nowrapscan
 " # Key-mappings {{{1
 " Normal, Visual mode basic mappings {{{
 nnoremap Y y$
-nnoremap <CR> i<CR><Esc>
+" Note: <CR>でマッピングするとVrapperで有効にならない
+nnoremap <C-m> i<CR><Esc>
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
 nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
 " }}}
@@ -267,16 +268,6 @@ noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
-" }}}
-
-" Ctrl, Alt key prefix mappings {{{
-nnoremap <M-h> gT
-nnoremap <M-l> gt
-nnoremap <M-t> :<C-u>tabedit<CR>
-nnoremap <M-c> :<C-u>tabclose<CR>
-
-" Use ':tjump' instead of ':tag'. -> Caution: 下記の設定はしない!(vimrcとかをシンボリックリンク作ってる場合ちょいちょい重複してうざいため)
-" nnoremap <C-]> g<C-]>
 " }}}
 
 " Like unimpaired plugin mappings {{{

@@ -22,6 +22,7 @@
 " Ctrl + n - New
 " Ctrl + o - Quick Outline
 " Ctrl + p - Print
+" Ctrl + q - Last edit location
 " Ctrl + r - Next Word
 " Ctrl + t - Quick Hierarchy
 " Ctrl + u - Execute
@@ -39,7 +40,7 @@
 " - TODO: Command modeで<C-m>で決定したものがヒストリーに入らない
 " - TODO: Split解除したときにフォーカスを失う Refs: https://github.com/vrapper/vrapper/issues/435
 " - TODO: 右、左のタブ閉じる
-" - TODO: タブの移動(CVimと合わせるなら<>)
+" - TODO: タブの移動(CVimと合わせるなら<>)(tmuxでは<C-s>{H,L})
 " - TODO: <C-a>のインクリメンタルを10進数にしたい(0埋めされているときダメ)(nrformatsが効かないか)
 " - TODO: 最近開いたファイルを開くのをやりやすいようにする
 " - TODO: vimrcでvrapperで解釈できない命令がエラー表示される(e.g. cabbrev) 一応動作には影響なさそう
@@ -80,11 +81,13 @@ unmap  <Space>
 " Normal mode mappings "
 nnoremap <SID>[shortcut]m :maximize<CR>
 
-" Note: 他と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
+" Note: tmux等と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
 nnoremap <C-h> <C-w>gT
 nnoremap <C-l> <C-w>gt
+nnoremap <C-q> :bdelete<CR>
 
-nnoremap <C-m> i<CR><Esc>
+nnoremap <C-w>c :bdelete<CR>
+nnoremap <C-w>q :bdelete<CR>
 
 " Insert mode mappings "
 " TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.

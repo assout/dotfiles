@@ -33,3 +33,17 @@ cd ./dotfiles
 cmd //c ".\install.bat"
 ```
 
+## Notes
+
+### gitignore by gibo
+
+    (gibo \
+    Eclipse \
+    Java \
+    Linux \
+    Vim \
+    Windows \
+    ; cat .gitignore.manual) > .gitignore
+
+
+

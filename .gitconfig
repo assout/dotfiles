@@ -1,8 +1,5 @@
 [push]
   default = simple
-# for gist.vim FIXME: 不要であれば消す
-[github]
-  user = assout
 [core]
   excludesfile = ~/.gitignore
   quotepath = false

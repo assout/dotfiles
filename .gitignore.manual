@@ -1,0 +1,10 @@
+# Manual add
+
+### Eclipse ###
+.eclipse-pmd
+.pmd
+
+### Vim ###
+tags
+.tags
+local/

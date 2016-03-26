@@ -42,6 +42,7 @@ HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
 export LESS='-R'
+export EDITOR='vi' # Fow todo.txt note
 
 if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
@@ -136,6 +137,8 @@ alias dpl='docker ps -lq'
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
+alias t=todo.sh
+complete -F _todo t
 
 if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'

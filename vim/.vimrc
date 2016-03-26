@@ -1,8 +1,8 @@
 " # Index {{{1
 " * Introduction
 " * Begin
-" * Functions and Commands
 " * Let defines
+" * Functions and Commands
 " * Options
 " * Key-mappings
 " * Plug-ins
@@ -52,6 +52,46 @@ if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif
 augroup vimrc
   autocmd!
 augroup END
+" }}}1
+
+" # Let defines {{{1
+" Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
+let g:is_home = $USERNAME ==# 'oji'
+let g:is_office = $USERNAME ==# 'admin'
+let g:is_office_gui = g:is_office && has('gui_running')
+let g:is_office_cui = g:is_office && !has('gui_running')
+let g:is_jenkins = exists('$BUILD_NUMBER')
+
+let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
+let s:plugged_path = s:dotvim_path . '/plugged'
+
+let g:xml_syntax_folding = 1
+let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+" Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
+if g:is_office_cui
+  let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
+endif
+
+" Disable unused built-in plugins {{{ Note: netrwは非プラグイン環境で必要(VimFiler使えない環境)
+" let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
+let g:loaded_getscriptPlugin = 1
+" let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
+let g:loaded_matchparen      = 1 " Refs: <:help matchparen>
+let g:loaded_tar             = 1
+let g:loaded_tarPlugin       = 1
+let g:loaded_vimball         = 1
+let g:loaded_vimballPlugin   = 1
+let g:loaded_zip             = 1
+let g:loaded_zipPlugin       = 1
+" }}}
+
+if g:is_office_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
+  let &t_ti .= "\e[1 q"
+  let &t_SI .= "\e[5 q"
+  let &t_EI .= "\e[1 q"
+  let &t_te .= "\e[0 q"
+endif
 " }}}1
 
 " # Functions and Commands {{{1
@@ -108,6 +148,14 @@ function! s:ShowExplorer(...)
 endfunction
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 
+let g:todo_note_directory = g:is_home ? '~/Dropbox/todo/notes' : expand('~/Documents/todo/notes')
+function! s:TodoGrep(word)
+  call histadd('cmd', 'TodoGrep '  . a:word)
+  " Note: a:wordはオプションが入ってくるかもなので""で囲まない
+  execute ':silent grep ' . a:word . ' ' . g:todo_note_directory . '/*'
+endfunction
+command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
+
 command! -bang BufClear %bdelete<bang>
 command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
@@ -115,46 +163,6 @@ command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
-" }}}1
-
-" # Let defines {{{1
-" Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_home = $USERNAME ==# 'oji'
-let g:is_office = $USERNAME ==# 'admin'
-let g:is_office_gui = g:is_office && has('gui_running')
-let g:is_office_cui = g:is_office && !has('gui_running')
-let g:is_jenkins = exists('$BUILD_NUMBER')
-
-let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
-let s:plugged_path = s:dotvim_path . '/plugged'
-
-let g:xml_syntax_folding = 1
-let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
-let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
-" Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
-if g:is_office_cui
-  let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
-endif
-
-" Disable unused built-in plugins {{{ Note: netrwは非プラグイン環境で必要(VimFiler使えない環境)
-" let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
-let g:loaded_getscriptPlugin = 1
-" let g:loaded_gzip            = 1 " Caution: ヘルプが引けなくなることがあるのでコメントアウト
-let g:loaded_matchparen      = 1 " Refs: <:help matchparen>
-let g:loaded_tar             = 1
-let g:loaded_tarPlugin       = 1
-let g:loaded_vimball         = 1
-let g:loaded_vimballPlugin   = 1
-let g:loaded_zip             = 1
-let g:loaded_zipPlugin       = 1
-" }}}
-
-if g:is_office_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
-  let &t_ti .= "\e[1 q"
-  let &t_SI .= "\e[5 q"
-  let &t_EI .= "\e[1 q"
-  let &t_te .= "\e[0 q"
-endif
 " }}}1
 
 " # Options {{{1
@@ -210,7 +218,10 @@ let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title
 set ttimeoutlen=0
-if has('persistent_undo')
+if g:is_home
+  set undodir=~/.vim/undo
+  set undofile
+else
   set noundofile
 endif
 set wildmenu
@@ -268,6 +279,7 @@ noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap <SID>[open]t :<C-u>edit ~/Dropbox/todo/todo.txt<CR>
 " }}}
 
 " Like unimpaired plugin mappings {{{
@@ -348,11 +360,10 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'UniteTodoAddBuffer', 'UniteTodoAddSimple', 'MemoGrep', 'MemoList', 'MemoNew']}
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler'] }
-        \ | Plug 'assout/unite-todo', {'on' : ['Unite', 'UniteTodoAddBuffer', 'UniteTodoAddSimple']}
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
@@ -366,6 +377,7 @@ if s:IsPluginEnabled()
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
+  Plug 'freitass/todo.txt-vim'
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
@@ -675,6 +687,10 @@ if s:HasPlugin('syntastic') " {{{
   nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<CR>
 endif " }}}
 
+if s:HasPlugin('todo.txt-vim') " {{{
+  nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
+endif " }}}
+
 if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
@@ -774,31 +790,6 @@ if s:HasPlugin('unite.vim') " {{{
   if s:HasPlugin('unite-codic.vim') " {{{ TODO: Ignorecase (or Smartcase)
     nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
     nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
-  endif " }}}
-
-  if s:HasPlugin('unite-todo') " {{{ TODO: Note templateを指定したい(h1見出しにタイトルくらいだけど)
-    let g:unite_todo_note_suffix = 'md'
-    let g:unite_todo_data_directory = g:is_home ? '~/Dropbox' : expand('~/Documents')
-
-    function! s:TodoGrep(word)
-      call histadd('cmd', 'TodoGrep '  . a:word)
-      " Note: a:wordはオプションが入ってくるかもなので""で囲まない
-      execute ':silent grep ' . a:word . ' ' . g:unite_todo_data_directory . '/todo/note/*.md'
-    endfunction
-    command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
-
-    function! s:UniteTodoKeyMappings()
-      nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('toggle'))
-    endfunction
-
-    noremap        <SID>[todo]a :UniteTodoAddSimple -memo<CR>
-    noremap        <SID>[todo]q :UniteTodoAddSimple<CR>
-    nnoremap       <SID>[todo]l :Unite todo:undone -buffer-name=todo<CR>
-    nnoremap       <SID>[todo]L :Unite todo -buffer-name=todo<CR>
-    nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
-
-    autocmd vimrc FileType unite if unite#get_current_unite().profile_name ==# 'todo' | call s:UniteTodoKeyMappings() | endif
-    autocmd vimrc User unite-todo call unite#custom#default_action('todo', 'open')
   endif " }}}
 endif " }}}
 

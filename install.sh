@@ -6,7 +6,7 @@ if [ "${OSTYPE}" = msys ] ; then
 fi
 
 readonly INSTALL_DIR=~/Development
-readonly HERE="%{INSTALL_DIR}/dotfiles"
+readonly HERE="${INSTALL_DIR}/dotfiles"
 
 mkdir -p ~/Development/vim-plugins
 

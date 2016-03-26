@@ -56,7 +56,7 @@ augroup END
 
 " # Functions and Commands {{{1
 function! s:IsPluginEnabled()
-  return isdirectory(expand(s:plugged_path)) && &loadplugins
+  return isdirectory(expand(s:dotvim_path . '/autoload/')) && &loadplugins
 endfunction
 
 function! s:HasPlugin(plugin)

@@ -93,14 +93,6 @@ fi
 
 # Peco
 if [ "${is_home}" ] ; then
-  function peco_lscd { # ls & cd
-    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco)"
-    if [ ! -z "$dir" ] ; then
-      cd "$dir" || exit 1
-    fi
-  }
-  alias pcd='peco_lscd'
-
   function peco_select_history() { # history
     local l
     local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
@@ -112,7 +104,9 @@ if [ "${is_home}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history'
 
-  alias pg='target=$(ghq root)/$(ghq list | peco); if [ -n "${target}" ] ; then cd "${target}" ; fi'
+  alias pcd='dir=$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
+
+  alias pg='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias pgh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 fi
 

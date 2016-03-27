@@ -11,4 +11,4 @@
 [include]
   path = .gitconfig.environment
 [ghq]
-  root = ~/.ghq
+  root = ~/Development

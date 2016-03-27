@@ -111,6 +111,9 @@ if [ "${is_home}" ] ; then
     HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
   }
   bind -x '"\e\C-r": peco_select_history'
+
+  alias pg='cd $(ghq root)/$(ghq list | peco)'
+  alias pgh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 fi
 
 function man_japanese {
@@ -137,8 +140,7 @@ alias dpl='docker ps -lq'
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias t=todo.sh
-complete -F _todo t
+alias t=todo.sh; complete -F _todo t
 
 if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'

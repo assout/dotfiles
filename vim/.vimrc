@@ -845,6 +845,7 @@ if s:HasPlugin('vim-json') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-localrc') " {{{
+  " TODO: ghq対応後無効
   let g:localrc_filename = '.vimrc.development'
 endif " }}}
 

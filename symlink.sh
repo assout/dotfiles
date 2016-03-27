@@ -1,14 +1,14 @@
 #!/bin/bash
 
+readonly CMD_NAME=$(basename "${0}")
 if [ "${OSTYPE}" = msys ] ; then
-  echo "install.sh: It doesn't meet the prerequisites" >&2
+  echo "${CMD_NAME}: It doesn't meet the prerequisites" >&2
   exit 1
 fi
 
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
 ln -sf "${HERE}/" ~/
-
 ln -sf "${HERE}/eclipse/_vrapperrc" ~/.vrapperrc
 ln -sf "${HERE}/eclipse/_vrapperrc.linux" ~/.vrapperrc.environment
 ln -sf "${HERE}/lint/.mdlrc" ~/
@@ -18,7 +18,6 @@ ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.textstatrc" ~/
 ln -sf "${HERE}/vim/.gvimrc" ~/
 ln -sf "${HERE}/vim/.vimrc" ~/
-# ln -sf "${HERE}/vim/.vimrc.development" ~/Development/vim-plugins
 ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/

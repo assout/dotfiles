@@ -112,7 +112,7 @@ if [ "${is_home}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history'
 
-  alias pg='cd $(ghq root)/$(ghq list | peco)'
+  alias pg='target=$(ghq root)/$(ghq list | peco); if [ -n "${target}" ] ; then cd "${target}" ; fi'
   alias pgh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 fi
 

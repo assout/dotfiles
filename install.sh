@@ -5,15 +5,7 @@ if [ "${OSTYPE}" = msys ] ; then
   exit 1
 fi
 
-readonly INSTALL_DIR=~/Development
-readonly HERE="${INSTALL_DIR}/dotfiles"
-
-mkdir -p ~/Development/vim-plugins
-
-cd "${INSTALL_DIR}" || exit
-if [ ! -d "./dotfiles" ] ; then
-  git clone git@github.com:assout/dotfiles.git
-fi
+readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
 ln -sf "${HERE}/" ~/
 
@@ -26,7 +18,7 @@ ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.textstatrc" ~/
 ln -sf "${HERE}/vim/.gvimrc" ~/
 ln -sf "${HERE}/vim/.vimrc" ~/
-ln -sf "${HERE}/vim/.vimrc.development" ~/Development/vim-plugins
+# ln -sf "${HERE}/vim/.vimrc.development" ~/Development/vim-plugins
 ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/

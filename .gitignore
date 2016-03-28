@@ -124,6 +124,7 @@ $RECYCLE.BIN/
 ### Eclipse ###
 .eclipse-pmd
 .pmd
+target
 
 ### Vim ###
 tags

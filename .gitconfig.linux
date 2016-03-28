@@ -4,6 +4,8 @@
 [core]
   autocrlf = input
   filemode = false
+[ghq]
+  root = ~/Development
 
 # vim: filetype=gitconfig:
 

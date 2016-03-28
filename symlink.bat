@@ -6,16 +6,6 @@ set here=%~dp0
 
 mklink "%HOME%\Documents\AutoHotkey.ahk" "%here%\AutoHotkey.ahk"
 
-mklink "%HOME%\.bashrc" "%here%\.bashrc"
-mklink "%HOME%\.ctags" "%here%\.ctags"
-mklink "%HOME%\.gitconfig" "%here%\.gitconfig"
-mklink "%HOME%\.gitconfig.environment" "%here%\.gitconfig.windows"
-mklink "%HOME%\.gitignore" "%here%\.gitignore"
-mklink "%HOME%\.gitattributes" "%here%\.gitattributes"
-mklink "%HOME%\.inputrc" "%here%\.inputrc"
-mklink "%HOME%\.minttyrc" "%here%\.minttyrc"
-mklink "%HOME%\.tmux.conf" "%here%\.tmux.conf"
-
 mklink "%HOME%\_gvimrc" "%here%\vim\.gvimrc"
 mklink "%HOME%\_vimrc" "%here%\vim\.vimrc"
 
@@ -28,6 +18,17 @@ mklink "%HOME%\.vrapperrc.environment" "%here%\eclipse\_vrapperrc.win"
 
 mklink "%HOME%\.mdlrc" "%here%\lint\.mdlrc"
 mklink "%HOME%\.mdlrc.style.rb" "%here%\lint\.mdlrc.style.rb"
+
+mklink "%HOME%\.bashrc" "%here%\.bashrc"
+mklink "%HOME%\.ctags" "%here%\.ctags"
+mklink "%HOME%\.gitconfig" "%here%\.gitconfig"
+mklink "%HOME%\.gitconfig.environment" "%here%\.gitconfig.windows"
+mklink "%HOME%\.gitignore" "%here%\.gitignore"
+mklink "%HOME%\.gitattributes" "%here%\.gitattributes"
+mklink "%HOME%\.inputrc" "%here%\.inputrc"
+mklink "%HOME%\.minttyrc" "%here%\.minttyrc"
+mklink "%HOME%\.tmux.conf" "%here%\.tmux.conf"
+mklink "%HOME%\.todo" "%here%\.todo"
 
 git config user.name "assout"
 git config user.email "assout@users.noreply.github.com"

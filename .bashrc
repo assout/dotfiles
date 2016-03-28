@@ -137,6 +137,10 @@ alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias t=todo.sh; complete -F _todo t
 
 if [ "${is_office}" ] ; then
+  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+fi
+
+if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'

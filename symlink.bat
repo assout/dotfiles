@@ -4,12 +4,12 @@ rem TODO: %HOME%未定義のとき考慮
 rem 当ファイル自身のパス
 set here=%~dp0
 
-mklink /J "%HOME%\dotfiles" "%here%"
 mklink "%HOME%\Documents\AutoHotkey.ahk" "%here%\AutoHotkey.ahk"
 
 mklink "%HOME%\.bashrc" "%here%\.bashrc"
 mklink "%HOME%\.ctags" "%here%\.ctags"
 mklink "%HOME%\.gitconfig" "%here%\.gitconfig"
+mklink "%HOME%\.gitconfig.environment" "%here%\.gitconfig.windows"
 mklink "%HOME%\.gitignore" "%here%\.gitignore"
 mklink "%HOME%\.gitattributes" "%here%\.gitattributes"
 mklink "%HOME%\.inputrc" "%here%\.inputrc"

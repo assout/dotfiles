@@ -3,6 +3,7 @@
 ### Eclipse ###
 .eclipse-pmd
 .pmd
+target
 
 ### Vim ###
 tags

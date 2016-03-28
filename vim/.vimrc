@@ -148,7 +148,7 @@ function! s:ShowExplorer(...)
 endfunction
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 
-let g:todo_note_directory = g:is_home ? '~/Dropbox/todo/notes' : expand('~/Documents/todo/notes')
+let g:todo_note_directory = expand('~/Documents/todo/notes')
 function! s:TodoGrep(word)
   call histadd('cmd', 'TodoGrep '  . a:word)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
@@ -279,7 +279,7 @@ noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
-nnoremap <SID>[open]t :<C-u>edit ~/Dropbox/todo/todo.txt<CR>
+nnoremap <SID>[open]t :<C-u>edit ~/Documents/todo/todo.txt<CR>
 " }}}
 
 " Like unimpaired plugin mappings {{{
@@ -548,7 +548,7 @@ endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = expand(g:is_home ? '~/Dropbox/memolist' : '~/Documents/memolist')
+  let g:memolist_path = expand('~/memolist')
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MemoGrep(word)

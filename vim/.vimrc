@@ -66,7 +66,7 @@ let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
-let g:maplocalleader = ',' " For todo.txt
+let g:maplocalleader = ',' " For todo.txt TODO: <Space> or s にしたい
 " Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
 if g:is_office_cui
   let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
@@ -280,7 +280,6 @@ noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
-nnoremap <SID>[open]t :<C-u>edit ~/Documents/todo/todo.txt<CR>
 " }}}
 
 " Like unimpaired plugin mappings {{{
@@ -691,6 +690,7 @@ endif " }}}
 if s:HasPlugin('todo.txt-vim') " {{{
   " TODO: Unite source化など
   nnoremap       <SID>[todo]l  :<C-u>edit ~/Documents/todo/todo.txt<CR>
+  nnoremap       <SID>[todo]L  :<C-u>edit ~/Documents/todo/done.txt<CR>
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 endif " }}}
 

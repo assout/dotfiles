@@ -42,7 +42,7 @@ HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
 export LESS='-R'
-export EDITOR='vi' # Fow todo.txt note
+export EDITOR='vi' # For todo.txt note, less +v
 
 if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
@@ -54,7 +54,6 @@ if [ "${is_home}" ] || [ "${is_office}" ] ; then
 fi
 
 if [ "${is_office}" ] ; then
-  export EDITOR="vim --noplugin" # For less +v
   export NODE_PATH="/mingw64/lib/node_modules"
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi

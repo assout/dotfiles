@@ -23,6 +23,7 @@ ln -sf "${HERE}/.gitconfig" ~/
 ln -sf "${HERE}/.gitconfig.linux" ~/.gitconfig.environment
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/
+ln -sf "${HERE}/.git_templates" ~/
 ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/

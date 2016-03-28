@@ -377,7 +377,7 @@ if s:IsPluginEnabled()
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
-  Plug 'freitass/todo.txt-vim'
+  Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}

@@ -42,7 +42,7 @@ HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
 export LESS='-R'
-export EDITOR='vi' # For todo.txt note, less +v
+export EDITOR='vim' # For todo.txt note, less +v
 
 if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen

@@ -691,6 +691,7 @@ if s:HasPlugin('todo.txt-vim') " {{{
   " TODO: Unite source化など
   nnoremap       <SID>[todo]l  :<C-u>edit ~/Documents/todo/todo.txt<CR>
   nnoremap       <SID>[todo]L  :<C-u>edit ~/Documents/todo/done.txt<CR>
+  nnoremap       <SID>[todo]r  :<C-u>edit ~/Documents/todo/report.txt<CR>
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 endif " }}}
 

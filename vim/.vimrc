@@ -65,13 +65,14 @@ let g:is_jenkins = exists('$BUILD_NUMBER')
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
 
-let g:xml_syntax_folding = 1
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
-let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+let g:maplocalleader = ',' " For todo.txt
 " Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
 if g:is_office_cui
   let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
 endif
+let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
+let g:xml_syntax_folding = 1
 
 " Disable unused built-in plugins {{{ Note: netrwは非プラグイン環境で必要(VimFiler使えない環境)
 " let g:loaded_2html_plugin    = 1 " Refs: <:help 2html> Caution: ちょいちょい使う
@@ -688,6 +689,8 @@ if s:HasPlugin('syntastic') " {{{
 endif " }}}
 
 if s:HasPlugin('todo.txt-vim') " {{{
+  " TODO: Unite source化など
+  nnoremap       <SID>[todo]l  :<C-u>edit ~/Documents/todo/todo.txt<CR>
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 endif " }}}
 

@@ -1,6 +1,3 @@
-[user]
-  name = assout
-  email = assout@users.noreply.github.com
 [core]
   autocrlf = input
   filemode = false

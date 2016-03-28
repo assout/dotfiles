@@ -10,5 +10,6 @@
   ui = true # 古いバージョンの場合defaultでないため
 [include]
   path = .gitconfig.environment
-[ghq]
-  root = ~/Development
+[hub]
+  protocol = https
+

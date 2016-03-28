@@ -3,6 +3,9 @@
   filemode = false
 [ghq]
   root = ~/Development
+[user]
+  name = assout
+  email = assout@users.noreply.github.com
 
 # vim: filetype=gitconfig:
 

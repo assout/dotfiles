@@ -14,10 +14,10 @@
   path = .gitconfig.environment
 [hub]
   protocol = https
-[user "git@github.com"]
+[user "git@github.com"] # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
   name = assout
   email = assout@users.noreply.github.com
-[user "https://github.com"]
+[user "https://github.com"] # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
   name = assout
   email = assout@users.noreply.github.com
 

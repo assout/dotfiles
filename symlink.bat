@@ -25,11 +25,9 @@ mklink "%HOME%\.gitconfig" "%here%\.gitconfig"
 mklink "%HOME%\.gitconfig.environment" "%here%\.gitconfig.windows"
 mklink "%HOME%\.gitignore" "%here%\.gitignore"
 mklink "%HOME%\.gitattributes" "%here%\.gitattributes"
+mklink "%HOME%\.git_templates" "%here%\.git_templates"
 mklink "%HOME%\.inputrc" "%here%\.inputrc"
 mklink "%HOME%\.minttyrc" "%here%\.minttyrc"
 mklink "%HOME%\.tmux.conf" "%here%\.tmux.conf"
 mklink "%HOME%\.todo" "%here%\.todo"
-
-git config user.name "assout"
-git config user.email "assout@users.noreply.github.com"
 

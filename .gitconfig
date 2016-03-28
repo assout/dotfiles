@@ -1,3 +1,5 @@
+[init]
+  templatedir = ~/.git_templates/
 [push]
   default = simple
 [core]
@@ -12,4 +14,10 @@
   path = .gitconfig.environment
 [hub]
   protocol = https
+[user "git@github.com"]
+  name = assout
+  email = assout@users.noreply.github.com
+[user "https://github.com"]
+  name = assout
+  email = assout@users.noreply.github.com
 

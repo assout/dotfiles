@@ -219,7 +219,7 @@ let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title
 set ttimeoutlen=0
-if g:is_home
+if has('persistent_undo')
   set undodir=~/.vim/undo
   set undofile
 else

@@ -134,7 +134,7 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias t=todo.sh; complete -F _todo t
-alias ghq-update='ghq list | sed -E "s/^[^\/]+\/(.+)/\1/" | xargs -n 1 -P 10 ghq get -u'
+alias ghq-update='ghq list | sed -e "s?^?https://?" | xargs -n 1 -P 10 ghq get -u'
 
 if [ "${is_office}" ] ; then
   alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>

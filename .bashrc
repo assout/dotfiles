@@ -48,11 +48,6 @@ if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 fi
 
-if [ "${is_home}" ] || [ "${is_office}" ] ; then
-  PATH="${PATH}:${HOME}/scripts"
-  PATH="${PATH}:${HOME}/scripts/local"
-fi
-
 if [ "${is_office}" ] ; then
   export NODE_PATH="/mingw64/lib/node_modules"
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
@@ -77,7 +72,8 @@ if [ "${is_office}" ] ; then
 else
   ghq_root=$(ghq root)
 fi
-PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts/
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local/
 
 export PATH
 

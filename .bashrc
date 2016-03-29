@@ -150,6 +150,15 @@ if [ "${is_office}" ] ; then
 elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
+
+if [ "${is_office}" ] ; then
+  ghq_root=$(cygpath $(ghq root))
+else
+  ghq_root=$(ghq root)
+fi
+export PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
+export PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
+
 # }}}1
 
 # [User process] {{{1

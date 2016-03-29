@@ -59,6 +59,28 @@ if [ "${is_office}" ] ; then
 fi
 
 export SHELLCHECK_OPTS='--external-sources'
+
+# Export tools path # Note: Gvimから実行するものは環境変数に入れる(e.g. shellcheck)
+TOOLS_DIR="~/Tools"
+if [ "${is_office}" ] ; then
+  PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${TOOLS_DIR}/hub/bin"
+  PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
+  PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
+  PATH="${PATH}:${TOOLS_DIR}/ghq"
+  PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
+  PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
+fi
+
+if [ "${is_office}" ] ; then
+  ghq_root=$(cygpath $(ghq root))
+else
+  ghq_root=$(ghq root)
+fi
+PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
+
+export PATH
+
 # }}}1
 
 # [Functions & Aliases] {{{1
@@ -129,16 +151,17 @@ alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
+# GHQ
+alias ghq-update='ghq list | sed -e "s?^?https://?" | xargs -n 1 -P 10 ghq get -u'
+if [ "${is_office}" ] ; then
+  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+fi
+
 # Other
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias t=todo.sh; complete -F _todo t
-alias ghq-update='ghq list | sed -e "s?^?https://?" | xargs -n 1 -P 10 ghq get -u'
-
-if [ "${is_office}" ] ; then
-  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-fi
 
 if [ "${is_office}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
@@ -151,13 +174,6 @@ elif [ "${is_home}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
-if [ "${is_office}" ] ; then
-  ghq_root=$(cygpath $(ghq root))
-else
-  ghq_root=$(ghq root)
-fi
-export PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
-export PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
 
 # }}}1
 

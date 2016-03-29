@@ -3,8 +3,15 @@
 readonly CMD_NAME=$(basename "${0}")
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
-ln -sf "${HERE}/eclipse/_vrapperrc" ~/.vrapperrc
-ln -sf "${HERE}/eclipse/_vrapperrc.linux" ~/.vrapperrc.environment
+if [ "${OSTYPE}" = msys ] ; then
+  # Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
+  ln -sf "${HERE}/eclipse/_vrapperrc" "$(cygpath ${USERPROFILE})/.vrapperrc"
+  ln -sf "${HERE}/eclipse/_vrapperrc.win" "$(cygpath ${USERPROFILE})/.vrapperrc.environment"
+else
+  ln -sf "${HERE}/eclipse/_vrapperrc" ~/.vrapperrc
+  ln -sf "${HERE}/eclipse/_vrapperrc.linux" ~/.vrapperrc.environment
+fi
+
 ln -sf "${HERE}/lint/.mdlrc" ~/
 ln -sf "${HERE}/lint/.mdlrc.style.rb" ~/
 ln -sf "${HERE}/lint/.eslintrc.json" ~/
@@ -15,11 +22,19 @@ ln -sf "${HERE}/vim/.vimrc" ~/
 ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
-ln -sf "${HERE}/.gitconfig.linux" ~/.gitconfig.environment
+if [ "${OSTYPE}" = msys ] ; then
+  ln -sf "${HERE}/.gitconfig.windows" ~/.gitconfig.environment
+else
+  ln -sf "${HERE}/.gitconfig.linux" ~/.gitconfig.environment
+fi
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/
-ln -sf "${HERE}/.git_hooks" ~/
+ln -sf "${HERE}/.git_templates" ~/
 ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
+
+if [ "${OSTYPE}" = msys ] ; then
+  ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/
+fi
 

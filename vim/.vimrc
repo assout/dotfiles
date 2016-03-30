@@ -727,7 +727,8 @@ if s:HasPlugin('unite.vim') " {{{
 
   " Note: mapはunimpairedの`]u`系を無効にしないといけない " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim
-        \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
+        \   call g:unite#custom#profile('default', 'context', { 'start_insert' : 1 })
+        \ | call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
         \ | call g:unite#custom#default_action('directory', 'vimfiler')
         \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])

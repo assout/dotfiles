@@ -5,11 +5,11 @@ readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
 if [ "${OSTYPE}" = msys ] ; then
   # Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
-  ln -sf "${HERE}/eclipse/_vrapperrc" "$(cygpath ${USERPROFILE})/.vrapperrc"
-  ln -sf "${HERE}/eclipse/_vrapperrc.win" "$(cygpath ${USERPROFILE})/.vrapperrc.environment"
+  ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
+  ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.environment"
 else
-  ln -sf "${HERE}/eclipse/_vrapperrc" ~/.vrapperrc
-  ln -sf "${HERE}/eclipse/_vrapperrc.linux" ~/.vrapperrc.environment
+  ln -sf "${HERE}/eclipse/.vrapperrc" ~/.vrapperrc
+  ln -sf "${HERE}/eclipse/.vrapperrc.linux" ~/.vrapperrc.environment
 fi
 
 ln -sf "${HERE}/lint/.mdlrc" ~/

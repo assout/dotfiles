@@ -220,7 +220,7 @@ set tabstop=2
 set title
 set ttimeoutlen=0
 if has('persistent_undo')
-  set undodir=~/.vim/undo
+  set undodir=~/.cache/undo
   set undofile
 else
   set noundofile

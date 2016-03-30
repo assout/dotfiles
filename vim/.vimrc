@@ -717,7 +717,7 @@ if s:HasPlugin('unite.vim') " {{{
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
-    nnoremap <buffer><expr>p unite#smart_map('p', unite#do_action('split'))
+    nnoremap <buffer><expr>p unite#smart_map('s', unite#do_action('split'))
     nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
     " TODO: msys2で効かない(そもそも"start"アクションが効かない) -> uniteにモンキーパッチ当てたらうごいた(今cygstart呼ばれちゃってる)
     " (cygstartをstartに変えたら/usr/hogeとかは開くが、/d/hogeやD:/hogeは開かない。FileHandlerにしたら両方いけるが実行後vim画面がredrawされない)

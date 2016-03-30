@@ -713,6 +713,9 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
 
   function! s:UniteKeymappings()
+    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+    nmap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+
     " TODO: sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
@@ -730,7 +733,6 @@ if s:HasPlugin('unite.vim') " {{{
         \   call g:unite#custom#profile('default', 'context', { 'start_insert' : 1 })
         \ | call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
-        \ | call g:unite#custom#default_action('directory', 'vimfiler')
         \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
         \ | call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
@@ -738,6 +740,7 @@ if s:HasPlugin('unite.vim') " {{{
         \ | execute 'nnoremap ]u :silent UniteNext<CR>'
         \ | execute 'nnoremap [U :silent UniteFirst<CR>'
         \ | execute 'nnoremap ]U :silent UniteLast<CR>'
+        " \ | call g:unite#custom#default_action('directory', 'vimfiler')
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -748,6 +751,7 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+  nnoremap <SID>[unite]G    :<C-u>Unite directory:~/Development -buffer-name=directory-ghq<CR>
   nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
@@ -766,7 +770,7 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
   endif
   if s:HasPlugin('vim-ref-gene') " {{{
-    nnoremap <SID>[unite]G :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
+    nnoremap <SID>[unite]R :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
   endif " }}}
   if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>

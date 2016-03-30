@@ -8,7 +8,7 @@
 
 # [Begin] {{{1
 # Start profile
-is_profile=$(if [ "${1}" = "-p" ] ; then echo 0; fi)
+is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
   PS4='+ $(date "+%S.%3N")\011 '
   exec 3>&2 2>/tmp/bashstart.$$.log
@@ -17,10 +17,12 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
+  # shellcheck source=/dev/null
   source /etc/bashrc
 fi
 
 if [ -f ~/.bashrc.local ] ; then
+  # shellcheck source=/dev/null
   source ~/.bashrc.local
 fi
 
@@ -55,7 +57,7 @@ fi
 
 export SHELLCHECK_OPTS='--external-sources'
 
-# Export tools path # Note: Gvimから実行するものは環境変数に入れる(e.g. shellcheck)
+# Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
 TOOLS_DIR="${HOME}/Tools"
 if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
@@ -66,6 +68,9 @@ if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
+
+  # shellcheck source=/dev/null
+  source "${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
 fi
 
 if [ "${is_office}" ] ; then
@@ -73,10 +78,11 @@ if [ "${is_office}" ] ; then
 else
   ghq_root=$(ghq root)
 fi
-PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks/
-PATH="${PATH}:${ghq_root}/github.com/assout/scripts"
-PATH="${PATH}:${ghq_root}/github.com/assout/scripts/local"
-PATH="${PATH}:${HOME}/.cabal/bin"
+PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
+PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
+PATH=${PATH}:${HOME}/.cabal/bin
 
 export PATH
 
@@ -151,7 +157,6 @@ alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
 # GHQ
-# TODO: windowsの環境変数にghqパスとおってないとダメ
 alias ghq-update='ghq list | sed -e "s?^?https://?" | xargs -n 1 -P 10 ghq get -u'
 if [ "${is_office}" ] ; then
   alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
@@ -198,9 +203,11 @@ fi
 # [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
+# shellcheck source=/dev/null
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if [ "${is_home}" ] ; then
+  # shellcheck source=/dev/null
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -208,6 +215,7 @@ if [ "${is_home}" ] ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif [ "${is_office}" ] ; then
+  # shellcheck source=/dev/null
   source /usr/share/git/completion/git-prompt.sh
 fi
 

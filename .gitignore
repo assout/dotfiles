@@ -119,7 +119,7 @@ $RECYCLE.BIN/
 *.lnk
 
 
-# Manual add
+# Manually add
 
 ### Eclipse ###
 .eclipse-pmd
@@ -129,4 +129,7 @@ target
 ### Vim ###
 tags
 .tags
+
+### Other ###
 local/
+

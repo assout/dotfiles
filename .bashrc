@@ -70,6 +70,7 @@ if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/ghq"
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
+  PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
 fi
 
 if [ "${is_office}" ] ; then

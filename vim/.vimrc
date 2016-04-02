@@ -220,7 +220,7 @@ set tabstop=2
 set title
 set ttimeoutlen=0
 if has('persistent_undo')
-  set undodir=~/.vim/undo
+  set undodir=~/.cache/undo
   set undofile
 else
   set noundofile
@@ -386,6 +386,7 @@ if s:IsPluginEnabled()
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home.'/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
+  Plug 'itchyny/vim-parenmatch'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}
@@ -713,11 +714,14 @@ if s:HasPlugin('unite.vim') " {{{
   endfunction
 
   function! s:UniteKeymappings()
+    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+    nmap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+
     " TODO: sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
     nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
     nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
-    nnoremap <buffer><expr>p unite#smart_map('p', unite#do_action('split'))
+    nnoremap <buffer><expr>p unite#smart_map('s', unite#do_action('split'))
     nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
     " TODO: msys2で効かない(そもそも"start"アクションが効かない) -> uniteにモンキーパッチ当てたらうごいた(今cygstart呼ばれちゃってる)
     " (cygstartをstartに変えたら/usr/hogeとかは開くが、/d/hogeやD:/hogeは開かない。FileHandlerにしたら両方いけるが実行後vim画面がredrawされない)
@@ -727,9 +731,9 @@ if s:HasPlugin('unite.vim') " {{{
 
   " Note: mapはunimpairedの`]u`系を無効にしないといけない " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
   autocmd vimrc User unite.vim
-        \   call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
+        \   call g:unite#custom#profile('default', 'context', { 'start_insert' : 1 })
+        \ | call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
         \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
-        \ | call g:unite#custom#default_action('directory', 'vimfiler')
         \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
         \ | call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
@@ -737,6 +741,7 @@ if s:HasPlugin('unite.vim') " {{{
         \ | execute 'nnoremap ]u :silent UniteNext<CR>'
         \ | execute 'nnoremap [U :silent UniteFirst<CR>'
         \ | execute 'nnoremap ]U :silent UniteLast<CR>'
+        " \ | call g:unite#custom#default_action('directory', 'vimfiler')
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -747,6 +752,7 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+  nnoremap <SID>[unite]G    :<C-u>Unite directory:~/Development -buffer-name=directory-ghq<CR>
   nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
@@ -765,7 +771,7 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
   endif
   if s:HasPlugin('vim-ref-gene') " {{{
-    nnoremap <SID>[unite]G :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
+    nnoremap <SID>[unite]R :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
   endif " }}}
   if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>

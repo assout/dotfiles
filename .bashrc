@@ -42,7 +42,7 @@ HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
 export LESS='-R'
-export EDITOR='vim' # For todo.txt note, less +v
+export EDITOR='vi' # For todo.txt note, less +v
 
 if [ "${is_home}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
@@ -199,10 +199,6 @@ fi
 
 # [After] {{{1
 
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-#comment out as a workaround, slow.
-# [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
-
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
@@ -217,11 +213,9 @@ elif [ "${is_office}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if [ "${is_home}" ] || [ "${is_office}" ] ; then
-  PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-fi
+PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ]); then
+if ! [ "${TMUX}" ] ; then
   exec tmux
 fi
 

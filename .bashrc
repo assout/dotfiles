@@ -131,6 +131,8 @@ if [ "${is_home}" ] ; then
 
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+
+  alias tp='todo.sh note edit $(todo.sh list | peco | cut -d " " -f 1)'
 fi
 
 function man_japanese {

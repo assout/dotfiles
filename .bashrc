@@ -156,7 +156,7 @@ alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
 # GHQ
-function ghq-update() {
+function ghq_update() {
   ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
 }
 if [ "${is_office}" ] ; then

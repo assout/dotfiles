@@ -17,12 +17,10 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
-  # shellcheck source=/dev/null
   source /etc/bashrc
 fi
 
 if [ -f ~/.bashrc.local ] ; then
-  # shellcheck source=/dev/null
   source ~/.bashrc.local
 fi
 
@@ -53,8 +51,6 @@ fi
 if [ "${is_office}" ] ; then
   export NODE_PATH="/mingw64/lib/node_modules" # TODO: npm root -gで取得
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
-else
-  export NODE_PATH=$(npm root -g) # <http://qiita.com/hikaruna/items/abdadca27f12c0e4eb78>
 fi
 
 export SHELLCHECK_OPTS='--external-sources'
@@ -71,7 +67,6 @@ if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
 
-  # shellcheck source=/dev/null
   source "${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
 fi
 
@@ -134,7 +129,10 @@ if [ "${is_home}" ] ; then
 
   alias pcd='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
 
-  alias pg='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
+  function pg() {
+    target=$(ghq list "$@" | peco)
+    if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi
+  }
   alias pgh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 fi
 
@@ -205,11 +203,9 @@ fi
 # [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
-# shellcheck source=/dev/null
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if [ "${is_home}" ] ; then
-  # shellcheck source=/dev/null
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -217,7 +213,6 @@ if [ "${is_home}" ] ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif [ "${is_office}" ] ; then
-  # shellcheck source=/dev/null
   source /usr/share/git/completion/git-prompt.sh
 fi
 
@@ -238,6 +233,3 @@ fi
 
 # vim:nofoldenable:
 
-
-export NVM_DIR="/home/oji/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

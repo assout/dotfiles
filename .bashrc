@@ -127,13 +127,10 @@ if [ "${is_home}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history'
 
-  alias pcd='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
+  alias cdp='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
 
-  function pg() {
-    target=$(ghq list "$@" | peco)
-    if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi
-  }
-  alias pgh='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+  alias ghp='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
+  alias hup='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 fi
 
 function man_japanese {
@@ -157,7 +154,9 @@ alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
 # GHQ
-alias ghq-update='ghq list | sed -e "s?^?https://?" | xargs -n 1 -P 10 ghq get -u'
+function ghq-update() {
+  ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
+}
 if [ "${is_office}" ] ; then
   alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 fi

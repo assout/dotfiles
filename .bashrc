@@ -114,6 +114,10 @@ if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
   fi
 fi
 
+alias memo='vi -c ":Unite memolist"'
+alias mrf='vi -c ":Unite neomru/file"'
+alias mrd='vi -c ":Unite neomru/directory"'
+
 # Peco
 if [ "${is_home}" ] ; then
   function peco_select_history() { # history

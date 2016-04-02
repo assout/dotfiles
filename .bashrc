@@ -49,8 +49,10 @@ if [ "${is_home}" ] ; then
 fi
 
 if [ "${is_office}" ] ; then
-  export NODE_PATH="/mingw64/lib/node_modules"
+  export NODE_PATH="/mingw64/lib/node_modules" # TODO: npm root -gで取得
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
+else
+  export NODE_PATH=$(npm root -g) # <http://qiita.com/hikaruna/items/abdadca27f12c0e4eb78>
 fi
 
 export SHELLCHECK_OPTS='--external-sources'
@@ -239,3 +241,6 @@ fi
 
 # vim:nofoldenable:
 
+
+export NVM_DIR="/home/oji/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

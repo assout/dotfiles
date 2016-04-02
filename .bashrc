@@ -8,7 +8,7 @@
 
 # [Begin] {{{1
 # Start profile
-is_profile=$(if [ "${1}" = "-p" ] ; then echo 0; fi)
+is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
   PS4='+ $(date "+%S.%3N")\011 '
   exec 3>&2 2>/tmp/bashstart.$$.log
@@ -17,10 +17,12 @@ fi
 
 # Source global definitions
 if [ -f /etc/bashrc ] ; then
+  # shellcheck source=/dev/null
   source /etc/bashrc
 fi
 
 if [ -f ~/.bashrc.local ] ; then
+  # shellcheck source=/dev/null
   source ~/.bashrc.local
 fi
 
@@ -57,8 +59,8 @@ fi
 
 export SHELLCHECK_OPTS='--external-sources'
 
-# Export tools path # Note: Gvimから実行するものは環境変数に入れる(e.g. shellcheck)
-TOOLS_DIR="~/Tools"
+# Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
+TOOLS_DIR="${HOME}/Tools"
 if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
   PATH="${PATH}:${TOOLS_DIR}/hub/bin"
@@ -67,15 +69,22 @@ if [ "${is_office}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/ghq"
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
+  PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
+
+  # shellcheck source=/dev/null
+  source "${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
 fi
 
 if [ "${is_office}" ] ; then
-  ghq_root=$(cygpath $(ghq root))
+  ghq_root=$(cygpath "$(ghq root)")
 else
   ghq_root=$(ghq root)
 fi
-PATH=${PATH}:${ghq_root}/github.com/assout/scripts/
-PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local/
+PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
+PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
+PATH=${PATH}:${HOME}/.cabal/bin
 
 export PATH
 
@@ -180,40 +189,27 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 
 # Create Today backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
-if [ "${is_home}" ] ; then
-  if [ ! -d "${todayBackupPath}" ] ; then
-    mkdir -p "${todayBackupPath}"
-    ln -sfn "${todayBackupPath}" "${HOME}/Today"
-  fi
-elif [ "${is_office}" ] ; then
-  if [ ! -d "${todayBackupPath}" ] ; then
-    # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅く必要最小限の実行とするためここで再取得している
-    _home=$(cmd //c echo %HOME%)
-    todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
-    mkdir -p "${todayBackupPath}"
-
-    todayBackupLinkPathHome="${_home}\\Today"
-    if [ -d "${todayBackupLinkPathHome}" ] ; then
-      rm -r "${todayBackupLinkPathHome}"
-    fi
-    cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
-    todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
-    cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}" 2>&1 | nkf32.exe -w
+if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
+  mkdir -p "${todayBackupPath}"
+  ln -sfn "${todayBackupPath}" "${HOME}/Today"
+  if [ "${is_office}" ] ; then
+    ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
   fi
 fi
 # }}}1
 
 # [After] {{{1
-export PATH="$HOME/.cabal/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
 #comment out as a workaround, slow.
 # [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
+# shellcheck source=/dev/null
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
 if [ "${is_home}" ] ; then
+  # shellcheck source=/dev/null
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -221,6 +217,7 @@ if [ "${is_home}" ] ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif [ "${is_office}" ] ; then
+  # shellcheck source=/dev/null
   source /usr/share/git/completion/git-prompt.sh
 fi
 
@@ -228,7 +225,7 @@ if [ "${is_home}" ] || [ "${is_office}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 fi
 
-if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ] ); then
+if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ]); then
   exec tmux
 fi
 

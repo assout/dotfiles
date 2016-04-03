@@ -8,7 +8,7 @@
 
 # [Begin] {{{1
 # Start profile
-is_profile=$(if [ "${1}" = "-p" ] ; then echo 0; fi)
+is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
   PS4='+ $(date "+%S.%3N")\011 '
   exec 3>&2 2>/tmp/bashstart.$$.log
@@ -39,26 +39,51 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
-export GOPATH=$HOME/.go
+export GOPATH=${HOME}/Development/
 export LANG=en_US.UTF-8
 export LESS='-R'
+export EDITOR='vim' # For todo.txt note, less +v
 
 if [ "${is_unix}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 fi
 
-if [ "${is_unix}" ] || [ "${is_win}" ] ; then
-  PATH="${PATH}:${HOME}/scripts"
-  PATH="${PATH}:${HOME}/scripts/local"
-fi
-
 if [ "${is_win}" ] ; then
-  export EDITOR="vim --noplugin" # For less +v
   export NODE_PATH="/mingw64/lib/node_modules"
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
 export SHELLCHECK_OPTS='--external-sources'
+
+# Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
+TOOLS_DIR="${HOME}/Tools"
+if [ "${is_win}" ] ; then
+  PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${TOOLS_DIR}/hub/bin"
+  PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
+  PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
+  PATH="${PATH}:${TOOLS_DIR}/ghq"
+  PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
+  PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
+  PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
+
+  source "${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
+fi
+
+if [ "${is_win}" ] ; then
+  ghq_root=$(cygpath "$(ghq root)")
+else
+  ghq_root=$(ghq root)
+fi
+PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts
+PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
+PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
+PATH=${PATH}:${HOME}/.cabal/bin
+PATH=${PATH}:${GOPATH}/bin
+
+export PATH
+
 # }}}1
 
 # [Functions & Aliases] {{{1
@@ -90,6 +115,10 @@ if ! [ "${is_unix}" ] && ! [ "${is_win}" ] ; then
   fi
 fi
 
+alias memo='vi -c ":Unite memolist"'
+alias mrf='vi -c ":Unite neomru/file"'
+alias mrd='vi -c ":Unite neomru/directory"'
+
 # Peco
 if [ "${is_unix}" ] ; then
   function peco_lscd { # ls & cd
@@ -110,6 +139,13 @@ if [ "${is_unix}" ] ; then
     HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
   }
   bind -x '"\e\C-r": peco_select_history'
+
+  alias c='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
+
+  alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
+  alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+
+  alias tp='todo.sh note edit $(todo.sh list | peco | cut -d " " -f 1)'
 fi
 
 function man_japanese {
@@ -132,10 +168,19 @@ alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
+# GHQ
+function ghq_update {
+  ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
+}
+if [ "${is_win}" ] ; then
+  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+fi
+
 # Other
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
+alias t=todo.sh; complete -F _todo t
 
 if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
@@ -147,6 +192,8 @@ if [ "${is_win}" ] ; then
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
+
+
 # }}}1
 
 # [User process] {{{1
@@ -154,35 +201,16 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 
 # Create Today backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
-if [ "${is_unix}" ] ; then
-  if [ ! -d "${todayBackupPath}" ] ; then
-    mkdir -p "${todayBackupPath}"
-    ln -sfn "${todayBackupPath}" "${HOME}/Today"
-  fi
-elif [ "${is_win}" ] ; then
-  if [ ! -d "${todayBackupPath}" ] ; then
-    # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅く必要最小限の実行とするためここで再取得している
-    _home=$(cmd //c echo %HOME%)
-    todayBackupPath=${_home}\\Backup\\$(date +%Y%m%d)
-    mkdir -p "${todayBackupPath}"
-
-    todayBackupLinkPathHome="${_home}\\Today"
-    if [ -d "${todayBackupLinkPathHome}" ] ; then
-      rm -r "${todayBackupLinkPathHome}"
-    fi
-    cmd //c "mklink /D ${todayBackupLinkPathHome} ${todayBackupPath}" 2>&1 | nkf32.exe -w
-    todayBackupLinkPathDesktop="${_home}\\Desktop\\Today"
-    cmd //c "xcopy /IB ${todayBackupLinkPathHome} ${todayBackupLinkPathDesktop}" 2>&1 | nkf32.exe -w
+if [ ! -d "${todayBackupPath}" ] && ([ "${is_unix}" ] || [ "${is_win}" ]) ; then
+  mkdir -p "${todayBackupPath}"
+  ln -sfn "${todayBackupPath}" "${HOME}/Today"
+  if [ "${is_win}" ] ; then
+    ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
   fi
 fi
 # }}}1
 
 # [After] {{{1
-export PATH="$HOME/.cabal/bin:$PATH"
-
-#THIS MUST BE AT THE END OF THE FILE FOR GVM TO WORK!!!
-#comment out as a workaround, slow.
-# [[ -s "/home/oji/.gvm/bin/gvm-init.sh" ]] && source "/home/oji/.gvm/bin/gvm-init.sh"
 
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
@@ -198,11 +226,9 @@ elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if [ "${is_unix}" ] || [ "${is_win}" ] ; then
-  PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-fi
+PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-if (! [ "${TMUX}" ]) && ( [ "${is_win}" ] || [ "${is_unix}" ] ); then
+if ! [ "${TMUX}" ] ; then
   exec tmux
 fi
 

@@ -1233,7 +1233,11 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
+    " highlight Normal ctermbg=none
     highlight Normal ctermbg=none
+    " highlight ErrorMsg ctermbg=none term=standout cterm=standout ctermfg=234 gui=standout guifg=#1d1f21 guibg=#cc6666
+    " highlight ErrorMsg term=standout cterm=standout ctermfg=234 ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
+    highlight ErrorMsg term=standout cterm=standout ctermfg=black ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
   endfunction
   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid

@@ -9,19 +9,29 @@
 # Add words you do not want to publish to the internet as follow,
 #   $ echo "secretword" >> ~/.git_prohibited_words
 #
+
+check() {
+  word=$*
+  # Skip comment or blank lines
+  echo "${word}" | grep ^# > /dev/null && return
+  echo "${word}" | grep '^\s*$' > /dev/null && return
+
+  git diff --cached -U0 | grep -i "$word" > /dev/null
+  if [ $? -eq 0 ]; then
+    echo "Can't commit because of including the prohibited word '$word'" >&2
+    exit 1
+  fi
+}
+here=$(cd "$(dirname "$0")" || exit 1; pwd)
 git remote -v | grep -E '^.+\s+(git@github.com:|https?://github.com/).+\(push\)$' >/dev/null
 if [ $? -eq 0 ]; then
+  while read word; do
+    check "${word}"
+  done < "${here}/.git_prohibited_words"
+
   if [ -e ~/.git_prohibited_words ]; then
     while read word; do
-      # Skip comment or blank lines
-      echo $word | grep ^# > /dev/null && continue
-      echo $word | grep '^\s*$' > /dev/null && continue
-
-      git diff --cached -U0 | grep -i "$word" > /dev/null
-      if [ $? -eq 0 ]; then
-        echo "Can't commit because of including the prohibited word '$word'" >&2
-        exit 1
-      fi
+      check "${word}"
     done < ~/.git_prohibited_words
   fi
 fi

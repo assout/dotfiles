@@ -1,4 +1,6 @@
 #!/bin/bash
 here=$(cd "$(dirname "$0")" || exit 1; pwd)
-"${here}"/pre-commit.d/*
+for script in "${here}"/pre-commit.d/* ; do
+  ${script}
+done
 

@@ -1,9 +1,11 @@
-[user]
-  name = assout
-  email = assout@users.noreply.github.com
 [core]
   autocrlf = input
   filemode = false
+[ghq]
+  root = ~/Development/src
+[user]
+  name = assout
+  email = assout@users.noreply.github.com
 
 # vim: filetype=gitconfig:
 

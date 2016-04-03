@@ -16,7 +16,8 @@ ln -sf "${HERE}/lint/.mdlrc" ~/
 ln -sf "${HERE}/lint/.mdlrc.style.rb" ~/
 ln -sf "${HERE}/lint/.eslintrc.json" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
-ln -sf "${HERE}/lint/.textstatrc" ~/
+ln -sf "${HERE}/lint/.textlintrc" ~/
+ln -sf "${HERE}/lint/.prh.yml" ~/
 ln -sf "${HERE}/vim/.gvimrc" ~/
 ln -sf "${HERE}/vim/.vimrc" ~/
 ln -sf "${HERE}/.bashrc" ~/

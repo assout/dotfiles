@@ -1,3 +1,4 @@
 #!/bin/bash
-exit 1
-./pre-commit.d/test.sh
+here=$(cd "$(dirname "$0")" || exit 1; pwd)
+"${here}"/pre-commit.d/*
+

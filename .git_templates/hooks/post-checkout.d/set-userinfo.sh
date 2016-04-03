@@ -47,4 +47,3 @@ else
     echo "No remote URL"
 fi
 
-# vim:filetype=sh:

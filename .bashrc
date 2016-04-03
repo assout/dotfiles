@@ -30,8 +30,8 @@ fi
 
 # [Define, Export variables] {{{1
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
-is_home=$(if [ "${USER}" =  oji ] ; then echo 0 ; fi)
-is_office=$(if [ "${OSTYPE}" = msys ] && [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
+is_unix=$(if [ "${OSTYPE}" = unix ] && [ "${USER}" =  oji ] ; then echo 0 ; fi)
+is_win=$(if [ "${OSTYPE}" = msys ] && ( [ "${USERNAME}" = admin ] || [ "${USERNAME}" = porinsan ] ) ; then echo 0 ; fi)
 
 # History settings
 HISTSIZE=5000
@@ -43,16 +43,16 @@ export GOPATH=$HOME/.go
 export LANG=en_US.UTF-8
 export LESS='-R'
 
-if [ "${is_home}" ] ; then
+if [ "${is_unix}" ] ; then
   export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
 fi
 
-if [ "${is_home}" ] || [ "${is_office}" ] ; then
+if [ "${is_unix}" ] || [ "${is_win}" ] ; then
   PATH="${PATH}:${HOME}/scripts"
   PATH="${PATH}:${HOME}/scripts/local"
 fi
 
-if [ "${is_office}" ] ; then
+if [ "${is_win}" ] ; then
   export EDITOR="vim --noplugin" # For less +v
   export NODE_PATH="/mingw64/lib/node_modules"
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
@@ -79,11 +79,11 @@ function cdls {
 
 # Vim
 alias vi=vim
-if [ "${is_home}" ] ; then
+if [ "${is_unix}" ] ; then
   alias vim='vimx' # クリップボード共有するため
 fi
 
-if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
+if ! [ "${is_unix}" ] && ! [ "${is_win}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   if [ -e "${here}/.vimrc" ] ; then
     alias vim='vim -u ${here}/.vimrc'
@@ -91,7 +91,7 @@ if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
 fi
 
 # Peco
-if [ "${is_home}" ] ; then
+if [ "${is_unix}" ] ; then
   function peco_lscd { # ls & cd
     local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco)"
     if [ ! -z "$dir" ] ; then
@@ -137,14 +137,14 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
-if [ "${is_office}" ] ; then
+if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
 
   # TODO: セグる
   # alias es='cygpath -u $(command es)'
-elif [ "${is_home}" ] ; then
+elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 # }}}1
@@ -154,12 +154,12 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 
 # Create Today backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
-if [ "${is_home}" ] ; then
+if [ "${is_unix}" ] ; then
   if [ ! -d "${todayBackupPath}" ] ; then
     mkdir -p "${todayBackupPath}"
     ln -sfn "${todayBackupPath}" "${HOME}/Today"
   fi
-elif [ "${is_office}" ] ; then
+elif [ "${is_win}" ] ; then
   if [ ! -d "${todayBackupPath}" ] ; then
     # cmd実行時のため、Windows形式のHOMEパスで再取得。Caution: cmdは遅く必要最小限の実行とするためここで再取得している
     _home=$(cmd //c echo %HOME%)
@@ -187,22 +187,22 @@ export PATH="$HOME/.cabal/bin:$PATH"
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
-if [ "${is_home}" ] ; then
+if [ "${is_unix}" ] ; then
   source /usr/share/git-core/contrib/completion/git-prompt.sh
   # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
   export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
-elif [ "${is_office}" ] ; then
+elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
 fi
 
-if [ "${is_home}" ] || [ "${is_office}" ] ; then
+if [ "${is_unix}" ] || [ "${is_win}" ] ; then
   PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 fi
 
-if (! [ "${TMUX}" ]) && ( [ "${is_office}" ] || [ "${is_home}" ] ); then
+if (! [ "${TMUX}" ]) && ( [ "${is_win}" ] || [ "${is_unix}" ] ); then
   exec tmux
 fi
 

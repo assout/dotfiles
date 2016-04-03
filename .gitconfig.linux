@@ -2,7 +2,7 @@
   autocrlf = input
   filemode = false
 [ghq]
-  root = ~/Development
+  root = ~/Development/src
 [user]
   name = assout
   email = assout@users.noreply.github.com

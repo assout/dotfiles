@@ -85,6 +85,9 @@ export TODO_ACTIONS_DIR="$HOME/.todo.actions.d"
 
 export TODOTXT_DATE_ON_ADD=1
 
-# export TODOTXT_GRAPH_THRESHOLD=5
+# graph add-on settings #
+export TODOTXT_GRAPH_THRESHOLD=5
+# note add-on settings #
+export TODO_NOTE_EXT=".md"
 
 # vim:set filetype=sh:

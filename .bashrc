@@ -39,7 +39,7 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
-export GOPATH=$HOME/.go
+export GOPATH=${HOME}/Development/
 export LANG=en_US.UTF-8
 export LESS='-R'
 export EDITOR='vi' # For todo.txt note, less +v
@@ -80,6 +80,7 @@ PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
 PATH=${PATH}:${HOME}/.cabal/bin
+PATH=${PATH}:${GOPATH}/bin
 
 export PATH
 

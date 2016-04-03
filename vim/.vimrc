@@ -578,7 +578,12 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  " let g:neocomplete#enable_at_startup = 1 " TODO: 重い時があるためいったん無効
+  let g:neocomplete#enable_at_startup = 1 " TODO: 重い時がある
+  let g:neocomplete#text_mode_filetypes = {
+        \ 'markdown': 1,
+        \ 'gitrebase': 1,
+        \ 'gitcommit': 1,
+        \ }
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{

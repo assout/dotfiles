@@ -27,7 +27,7 @@ git remote -v | grep -E '^.+\s+(git@github.com:|https?://github.com/).+\(push\)$
 if [ $? -eq 0 ]; then
   while read word; do
     check "${word}"
-  done < "${here}/.git_prohibited_words"
+  done < "${here}/git_prohibited_words"
 
   if [ -e ~/.git_prohibited_words ]; then
     while read word; do

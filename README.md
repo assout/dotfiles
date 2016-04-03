@@ -5,31 +5,25 @@ jenkins: [![Build Status](https://jenkins-assout.rhcloud.com/buildStatus/icon?jo
 
 Configuration files for editors and other UNIX tools. This is to make it easier to setup programming environment for me.
 
-## How to install
-
-Linux
+## How to symlink
 
 ```
-curl -L https://raw.githubusercontent.com/assout/dotfiles/master/install.sh | bash
+git clone https://github.com/assout/dotfiles
+cd dotfiles
+./symlink.sh
 ```
 
-Windows (CMD) (Caution: change repository git user config)
+## Notes
 
-```
-mkdir D:\admin\Development\vim-plugins
-cd D:\admin\Development
-git clone git@github.com:assout/dotfiles.git
-cd .\dotfiles
-.\install.bat
-```
+### gitignore by gibo
 
-Windows(unix tool e.g. msysgit) (Caution: change repository git user config)
+    (gibo \
+    Eclipse \
+    Java \
+    Linux \
+    Vim \
+    Windows \
+    ; cat .gitignore.manual) > .gitignore
 
-```
-mkdir -p ~/Development/vim-plugins
-cd ./Development
-git clone git@github.com:assout/dotfiles.git
-cd ./dotfiles
-cmd //c ".\install.bat"
-```
+
 

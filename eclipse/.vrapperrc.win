@@ -1,5 +1,5 @@
 " TODO: HOME直書き
-source D:/admin/_vimrc
+source D:/admin/.vimrc
 
 " path to gvim executable.
 " TODO: PATH通ってるとこから探してくれないか

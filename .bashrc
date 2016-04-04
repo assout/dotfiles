@@ -53,7 +53,7 @@ if [ "${is_win}" ] ; then
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
-export SHELLCHECK_OPTS='--external-sources'
+export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
 if [ "${is_win}" ] ; then
@@ -72,7 +72,9 @@ if [ "${is_win}" ] ; then
 fi
 
 if [ "${is_win}" ] ; then
-  ghq_root=$(cygpath "$(ghq root)")
+  # ghq_root=$(cygpath "$(ghq root)")
+  # TODO: hardcode for speed
+  ghq_root=/d/admin/Development/src
 else
   ghq_root=$(ghq root)
 fi

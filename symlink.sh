@@ -37,5 +37,6 @@ ln -sf "${HERE}/.todo" ~/
 
 if [ "${OSTYPE}" = msys ] ; then
   ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/
+  ln -sf "${HERE}/.minttyrc" ~/
 fi
 

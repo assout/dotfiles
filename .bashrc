@@ -56,8 +56,8 @@ fi
 export SHELLCHECK_OPTS='--external-sources'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
-TOOLS_DIR="${HOME}/Tools"
 if [ "${is_win}" ] ; then
+  TOOLS_DIR="${HOME}/Tools"
   PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
   PATH="${PATH}:${TOOLS_DIR}/hub/bin"
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"

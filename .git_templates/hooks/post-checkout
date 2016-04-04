@@ -2,7 +2,7 @@
 here=$(cd "$(dirname "$0")" || exit 1; pwd)
 for script in "${here}"/post-checkout.d/* ; do
   if [ -x "${script}" ] ; then
-    ${script}
+    ${script} "$@"
   fi
 done
 

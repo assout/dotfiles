@@ -176,6 +176,13 @@ alias dpl='docker ps -lq'
 function ghq_update {
   ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
 }
+
+function ghq_status {
+  for t in $(ghq list "$@" | sed -e "s?^?${ghq_root}/?") ; do
+    (cd "${t}" && git status)
+  done
+}
+
 if [ "${is_win}" ] ; then
   alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 fi

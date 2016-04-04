@@ -67,7 +67,8 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
 
-  source "${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
+  todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
+  if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi
 fi
 
 if [ "${is_win}" ] ; then

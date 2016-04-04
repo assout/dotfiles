@@ -49,6 +49,7 @@ if [ "${is_unix}" ] ; then
 fi
 
 if [ "${is_win}" ] ; then
+  export GOROOT=/mingw64/lib/go # TODO: Workaround
   export NODE_PATH="/mingw64/lib/node_modules"
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi

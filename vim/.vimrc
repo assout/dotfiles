@@ -57,7 +57,7 @@ augroup END
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
 let g:is_home = $USERNAME ==# 'oji'
-let g:is_office = $USERNAME ==# 'admin'
+let g:is_office = $USERNAME ==# 'admin' " FIXME: my win machine TODO: is_win,is_unixのほうがよいかも
 let g:is_office_gui = g:is_office && has('gui_running')
 let g:is_office_cui = g:is_office && !has('gui_running')
 let g:is_jenkins = exists('$BUILD_NUMBER')
@@ -1233,11 +1233,10 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
-    " highlight Normal ctermbg=none
-    highlight Normal ctermbg=none
-    " highlight ErrorMsg ctermbg=none term=standout cterm=standout ctermfg=234 gui=standout guifg=#1d1f21 guibg=#cc6666
-    " highlight ErrorMsg term=standout cterm=standout ctermfg=234 ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
-    highlight ErrorMsg term=standout cterm=standout ctermfg=black ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
+    if g:is_home " TODO: workaround. 見づらいため.
+      highlight Normal ctermbg=none
+      highlight ErrorMsg term=standout cterm=standout ctermfg=black ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
+    endif
   endfunction
   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid

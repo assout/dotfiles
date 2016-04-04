@@ -459,7 +459,7 @@ if s:IsPluginEnabled()
   call g:plug#end()
 
   " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
-  if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win32/plugins/vimproc' | endif
+  if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win64/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
@@ -578,12 +578,8 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = 1 " TODO: 重い時がある
-  let g:neocomplete#text_mode_filetypes = {
-        \ 'markdown': 1,
-        \ 'gitrebase': 1,
-        \ 'gitcommit': 1,
-        \ }
+  let g:neocomplete#enable_at_startup = g:is_home ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
+  let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{
@@ -673,6 +669,13 @@ if s:HasPlugin('switch.vim') " {{{
         \     '\v【(.{-})】' : '「\1」',
         \  },
         \]
+
+  " FIXME: 空白区切りの文字列をクォート切り替え
+        " \  {
+        " \     '\v\$(.{-})\s' : '"$\1"',
+        " \     '\v"\$(.{-})\s"' : '''$\1''',
+        " \     '\v''\$(.{-})''' : '$\1',
+        " \  },
 
   nnoremap <SID>[switch] :<C-u>Switch<CR>
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>

@@ -120,8 +120,7 @@ if ! [ "${is_unix}" ] && ! [ "${is_win}" ] ; then
 fi
 
 alias memo='vi -c ":Unite memolist"'
-alias mrf='vi -c ":Unite neomru/file"'
-alias mrd='vi -c ":Unite neomru/directory"'
+alias mr='vi -c ":Unite neomru/file"' # "mr"u(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then
@@ -235,6 +234,7 @@ if [ "${is_unix}" ] ; then
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
+  source /usr/share/git/completion/git-completion.bash
 fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "

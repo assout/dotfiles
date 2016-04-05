@@ -971,7 +971,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   let g:quickrun_config = {}
   let g:quickrun_config['plantuml'] = {
         \  'command': 'plantuml',
-        \  'exec': ['%c %s', 'eog %s:p:r.png'],
+        \  'exec': ['%c %s', 'google-chrome %s:p:r.png'],
         \  'outputter': 'null'
         \}
 

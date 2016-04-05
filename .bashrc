@@ -179,7 +179,7 @@ function ghq_update {
 
 function ghq_status {
   for t in $(ghq list "$@" | sed -e "s?^?${ghq_root}/?") ; do
-    (cd "${t}" && git status)
+    (cd "${t}" && echo "${t}" && git status)
   done
 }
 

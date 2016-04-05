@@ -671,11 +671,11 @@ if s:HasPlugin('switch.vim') " {{{
         \]
 
   " FIXME: 空白区切りの文字列をクォート切り替え
-        " \  {
-        " \     '\v\$(.{-})\s' : '"$\1"',
-        " \     '\v"\$(.{-})\s"' : '''$\1''',
-        " \     '\v''\$(.{-})''' : '$\1',
-        " \  },
+  " \  {
+  " \     '\v\$(.{-})\s' : '"$\1"',
+  " \     '\v"\$(.{-})\s"' : '''$\1''',
+  " \     '\v''\$(.{-})''' : '$\1',
+  " \  },
 
   nnoremap <SID>[switch] :<C-u>Switch<CR>
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
@@ -749,7 +749,7 @@ if s:HasPlugin('unite.vim') " {{{
         \ | execute 'nnoremap ]u :silent UniteNext<CR>'
         \ | execute 'nnoremap [U :silent UniteFirst<CR>'
         \ | execute 'nnoremap ]U :silent UniteLast<CR>'
-        " \ | call g:unite#custom#default_action('directory', 'vimfiler')
+  " \ | call g:unite#custom#default_action('directory', 'vimfiler')
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -968,16 +968,19 @@ endif " }}}
 if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
-  let g:quickrun_config = {
-        \  'plantuml' :{
-        \    'type' : 'my_plantuml'
-        \  },
-        \  'my_plantuml' : {
-        \    'command': 'plantuml',
-        \    'exec': ['%c %s', 'eog %s:p:r.png'],
-        \    'outputter': 'null'
-        \  },
+  let g:quickrun_config = {}
+  let g:quickrun_config['plantuml'] = {
+        \  'command': 'plantuml',
+        \  'exec': ['%c %s', 'eog %s:p:r.png'],
+        \  'outputter': 'null'
         \}
+
+  let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
+  let g:quickrun_config['markdown/markdown-to-slides'] = {
+        \  'command': 'markdown-to-slides',
+        \  'outputter': 'browser'
+        \ }
+
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{
@@ -1124,47 +1127,25 @@ if s:HasPlugin('vim-watchdogs') " {{{
 
   let g:watchdogs_check_BufWritePost_enable = 1
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
-  let g:quickrun_config = {
-        \  'watchdogs_checker/_' : {
-        \    'outputter/quickfix/open_cmd' : '',
-        \    'runner/vimproc/updatetime' : 30,
-        \    'hook/echo/enable' : 1,
-        \    'hook/echo/output_success' : 'No Errors Found.',
-        \    'hook/echo/output_failure' : 'Errors Found!',
-        \    'hook/qfsigns_update/enable_exit': 1,
-        \  },
+  let g:quickrun_config['watchdogs_checker/_'] = {
+        \  'outputter/quickfix/open_cmd' : '',
+        \  'runner/vimproc/updatetime' : 30,
+        \  'hook/echo/enable' : 1,
+        \  'hook/echo/output_success' : 'No Errors Found.',
+        \  'hook/echo/output_failure' : 'Errors Found!',
+        \  'hook/qfsigns_update/enable_exit': 1,
         \}
   " Note: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
   let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
-
-  call extend(g:quickrun_config, {
-        \  'sh/watchdogs_checker' : {
-        \    'type'
-        \      : executable('shellcheck') ? 'watchdogs_checker/shellcheck'
-        \      : executable('checkbashisms') ? 'watchdogs_checker/checkbashisms'
-        \      : executable('bashate') ? 'watchdogs_checker/bashate'
-        \      : executable('sh') ? 'watchdogs_checker/sh'
-        \      : '',
-        \    },
-        \})
-
-  call extend(g:quickrun_config, {
-        \  'markdown/watchdogs_checker': {
-        \    'type'
-        \      : executable('mdl') ? 'watchdogs_checker/mdl'
-        \      : executable('textlint') ? 'watchdogs_checker/textlint'
-        \      : executable('redpen') ? 'watchdogs_checker/redpen'
-        \      : executable('eslint-md') ? 'watchdogs_checker/eslint-md'
-        \      : '',
-        \   },
-        \})
+  let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
+  let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
 
   if g:is_office_gui
-    call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
-    call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}})
+    let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
+    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
   elseif g:is_office_cui
-    call extend(g:quickrun_config, {'watchdogs_checker/shellcheck' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
-    call extend(g:quickrun_config, {'watchdogs_checker/mdl' : {'exec' : 'chcp.com 65001 | %c %o %s:p'}})
+    let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
+    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
   endif
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
@@ -1206,12 +1187,9 @@ augroup vimrc
   " Note: aws.json を考慮して*jsonとしている
   autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
   autocmd FileType xml setlocal foldmethod=syntax foldlevel=99
-  if executable('python')
-    autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
-  endif
-  if executable('xmllint') " Note: Windowsのときencode指定しないとうまくいかないことがある
-    autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  endif
+  autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
+  " Note: Windowsのときencode指定しないとうまくいかないことがある
+  autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
 
   if g:is_office " homeではRicty font使うので不要
     " Double byte space highlight

@@ -7,6 +7,7 @@
 # }}}1
 
 # [Begin] {{{1
+
 # Start profile
 is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
@@ -227,11 +228,17 @@ fi
 
 if [ "${is_unix}" ] ; then
   source /usr/share/git-core/contrib/completion/git-prompt.sh
+
   # Caution: 以下4つmsys2だと遅い
   export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
   export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
+
+  # Note: デフォルトで読まれるがhubの保管有効にするために必要
+  source /usr/share/bash-completion/completions/git
+  source /etc/bash_completion.d/hub.bash_completion.sh
+
 elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
   source /usr/share/git/completion/git-completion.bash

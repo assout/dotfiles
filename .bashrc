@@ -30,7 +30,7 @@ fi
 
 # [Define, Export variables] {{{1
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
-is_unix=$(if [ "${OSTYPE}" = unix ] && [ "${USER}" =  oji ] ; then echo 0 ; fi)
+is_unix=$(if [ "${OSTYPE}" = linux-gnu ] && [ "${USER}" =  oji ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] && ( [ "${USERNAME}" = admin ] || [ "${USERNAME}" = porinsan ] ) ; then echo 0 ; fi)
 
 # History settings

@@ -60,6 +60,7 @@ export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
 if [ "${is_win}" ] ; then
   TOOLS_DIR="${HOME}/Tools"
+  PATH="${PATH}:${TOOLS_DIR}"
   PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
   PATH="${PATH}:${TOOLS_DIR}/hub/bin"
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
@@ -68,6 +69,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
+  PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
   if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi

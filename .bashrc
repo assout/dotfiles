@@ -31,8 +31,10 @@ fi
 
 # [Define, Export variables] {{{1
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
-is_unix=$(if [ "${OSTYPE}" = linux-gnu ] && [ "${USER}" =  oji ] ; then echo 0 ; fi)
-is_win=$(if [ "${OSTYPE}" = msys ] && ( [ "${USERNAME}" = admin ] || [ "${USERNAME}" = porinsan ] ) ; then echo 0 ; fi)
+is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
+is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
+is_home=$(if [ "${USER}" =  oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
+is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 
 # History settings
 HISTSIZE=5000
@@ -75,13 +77,7 @@ if [ "${is_win}" ] ; then
   if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi
 fi
 
-if [ "${is_win}" ] ; then
-  # ghq_root=$(cygpath "$(ghq root)")
-  # TODO: hardcode for speed
-  ghq_root=/d/admin/Development/src
-else
-  ghq_root=$(ghq root)
-fi
+ghq_root="${HOME}/.ghq"
 PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
@@ -115,7 +111,7 @@ if [ "${is_unix}" ] ; then
   alias vim='vimx' # クリップボード共有するため
 fi
 
-if ! [ "${is_unix}" ] && ! [ "${is_win}" ] ; then
+if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
   if [ -e "${here}/.vimrc" ] ; then
     alias vim='vim -u ${here}/.vimrc'
@@ -214,7 +210,7 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 
 # Create Today backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
-if [ ! -d "${todayBackupPath}" ] && ([ "${is_unix}" ] || [ "${is_win}" ]) ; then
+if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
   mkdir -p "${todayBackupPath}"
   ln -sfn "${todayBackupPath}" "${HOME}/Today"
   if [ "${is_win}" ] ; then
@@ -248,7 +244,7 @@ fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-if ! [ "${TMUX}" ] ; then
+if ! [ "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) ; then
   exec tmux
 fi
 

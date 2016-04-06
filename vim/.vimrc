@@ -969,17 +969,25 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
   let g:quickrun_config = {}
+
   let g:quickrun_config['plantuml'] = {
         \  'command': 'plantuml',
         \  'exec': ['%c %s', 'google-chrome %s:p:r.png'],
         \  'outputter': 'null'
         \}
+  if g:is_office
+    let g:quickrun_config['plantuml']['exec'] = ['java -jar ~/Tools/plantuml.jar %s', 'chrome.exe %s:p:r.png']
+  endif
 
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
   let g:quickrun_config['markdown/markdown-to-slides'] = {
         \  'command': 'markdown-to-slides',
         \  'outputter': 'browser'
         \ }
+  if g:is_office
+    let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
+    let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['%c %s -o %s:p:r.html', 'chrome.exe %s:p:r.html']
+  endif
 
 endif " }}}
 

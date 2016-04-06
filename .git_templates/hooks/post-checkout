@@ -1,6 +1,6 @@
 #!/bin/bash
 here=$(cd "$(dirname "$0")" || exit 1; pwd)
-for script in "${here}"/post-checkout.d/* ; do
+for script in "${here}"/post-checkout.d/*.sh ; do
   if [ -x "${script}" ] ; then
     ${script} "$@"
   fi

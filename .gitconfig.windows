@@ -1,7 +1,0 @@
-[ghq]
-  root = D:\\admin\\Development\\src
-[core]
-  filemode = false
-
-# vim: filetype=gitconfig:
-

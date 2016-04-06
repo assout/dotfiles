@@ -3,7 +3,10 @@
 readonly CMD_NAME=$(basename "${0}")
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
-if [ "${OSTYPE}" = msys ] ; then
+is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
+is_home=$(if [ "${USERNAME}" = oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
+
+if [ "${is_win}" ] ; then
   # Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
   ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
   ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.environment"
@@ -23,10 +26,8 @@ ln -sf "${HERE}/vim/.vimrc" ~/
 ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
-if [ "${OSTYPE}" = msys ] ; then
-  ln -sf "${HERE}/.gitconfig.windows" ~/.gitconfig.environment
-else
-  ln -sf "${HERE}/.gitconfig.linux" ~/.gitconfig.environment
+if [ "${is_home}" ] ; then
+  ln -sf "${HERE}/.gitconfig.home" ~/.gitconfig.environment
 fi
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/
@@ -35,7 +36,7 @@ ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
 
-if [ "${OSTYPE}" = msys ] ; then
+if [ "${is_win}" ] ; then
   ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/
   ln -sf "${HERE}/.minttyrc" ~/
 fi

@@ -77,7 +77,7 @@ if [ "${is_win}" ] ; then
   if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi
 fi
 
-ghq_root="${HOME}/.ghq"
+ghq_root="${HOME}/Development/src"
 PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
@@ -233,7 +233,7 @@ if [ "${is_unix}" ] ; then
   export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
   export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 
-  # Note: デフォルトで読まれるがhubの保管有効にするために必要
+  # Note: デフォルトで読まれるがhubの補完有効にするために必要
   source /usr/share/bash-completion/completions/git
   source /etc/bash_completion.d/hub.bash_completion.sh
 

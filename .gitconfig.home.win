@@ -2,5 +2,8 @@
   name = assout
   email = assout@users.noreply.github.com
 
+[ghq]
+  root = C:\\Users\\porinsan\\Development\\src
+
 # vim: filetype=gitconfig:
 

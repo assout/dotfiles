@@ -1,0 +1,9 @@
+[user]
+  name = assout
+  email = assout@users.noreply.github.com
+
+[ghq]
+  root = ~/Development/src
+
+# vim: filetype=gitconfig:
+

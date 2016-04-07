@@ -23,15 +23,12 @@ check() {
   fi
 }
 here=$(cd "$(dirname "$0")" || exit 1; pwd)
-git remote -v | grep -E '^.+\s+(git@github.com:|https?://github.com/).+\(push\)$' >/dev/null
-if [ $? -eq 0 ]; then
+while read word; do
+  check "${word}"
+done < "${here}/git_prohibited_words"
+
+if [ -e ~/.git_prohibited_words ]; then
   while read word; do
     check "${word}"
-  done < "${here}/git_prohibited_words"
-
-  if [ -e ~/.git_prohibited_words ]; then
-    while read word; do
-      check "${word}"
-    done < ~/.git_prohibited_words
-  fi
+  done < ~/.git_prohibited_words
 fi

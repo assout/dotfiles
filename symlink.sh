@@ -4,7 +4,9 @@ readonly CMD_NAME=$(basename "${0}")
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
+is_unix=$(if [ "${OSTYPE}" = gnu-linux ] ; then echo 0 ; fi)
 is_home=$(if [ "${USERNAME}" = oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
+is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 
 if [ "${is_win}" ] ; then
   # Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
@@ -26,8 +28,12 @@ ln -sf "${HERE}/vim/.vimrc" ~/
 ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
-if [ "${is_home}" ] ; then
-  ln -sf "${HERE}/.gitconfig.home" ~/.gitconfig.environment
+if [ "${is_home}" ] && [ "${is_unix}" ] ; then
+  ln -sf "${HERE}/.gitconfig.home.linux" ~/.gitconfig.environment
+elif [ "${is_home}" ] && [ "${is_win}" ] ; then
+  ln -sf "${HERE}/.gitconfig.home.win" ~/.gitconfig.environment
+elif [ "${is_office}" ] ; then
+  ln -sf "${HERE}/.gitconfig.office" ~/.gitconfig.environment
 fi
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/

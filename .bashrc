@@ -75,7 +75,9 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
-  if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi
+  if [ -r "${todo_completion_path}" ] ; then
+    source "${todo_completion_path}" ;
+  fi
 fi
 
 ghq_root="${HOME}/Development/src"

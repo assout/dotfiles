@@ -72,6 +72,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
+  PATH="${PATH}:/c/ProgramData/chocolatey/bin"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
   if [ -r "${todo_completion_path}" ] ; then source "${todo_completion_path}" ; fi

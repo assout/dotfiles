@@ -2,6 +2,7 @@
 # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
 
 PREVIOUS_HEAD=$1
+# shellcheck disable=SC2034
 NEW_HEAD=$2
 BRANCH_SWITCH=$3
 Z40="0000000000000000000000000000000000000000"
@@ -12,6 +13,7 @@ if [ "$PREVIOUS_HEAD" != "$Z40" -o "$BRANCH_SWITCH" != "1" ]; then
 fi
 
 origin_name="$(git remote | head -1)"
+# shellcheck disable=SC2086
 current_remote_url="$(git config --get --local remote.$origin_name.url)"
 default_name="$(git config --get user.name)"
 default_email="$(git config --get user.email)"
@@ -23,21 +25,25 @@ if [ "$current_remote_url" ]; then
         *://*)
             # Normalize URL: remove leading "git+"
             #   e.g. "git+ssh://user@host/path/" ==> "ssh://user@host/path/"
+            # shellcheck disable=SC2086
             current_remote_url=$(echo $current_remote_url | sed 's/^git\+//')
             ;;
         *:*)
             # Convert scp-style URL to normal-form
             #   e.g. "user@host:path/" ==> "ssh://user@host/path/"
+            # shellcheck disable=SC2086
             current_remote_url=$(echo $current_remote_url | sed 's/\(.*\):/ssh:\/\/\1\//')
             ;;
     esac
     if [ -z "$local_name" ]; then
+        # shellcheck disable=SC2086
         name="$(git config --get-urlmatch user.name $current_remote_url)"
         if [ "$name" != "$default_name" ]; then
             git config --local user.name "$name"
         fi
     fi
     if [ -z "$local_email" ]; then
+        # shellcheck disable=SC2086
         email="$(git config --get-urlmatch user.email $current_remote_url)"
         if [ "$email" != "$default_email" ]; then
             git config --local user.email "$email"

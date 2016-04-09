@@ -4,7 +4,7 @@ readonly CMD_NAME=$(basename "${0}")
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
-is_unix=$(if [ "${OSTYPE}" = gnu-linux ] ; then echo 0 ; fi)
+is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_home=$(if [ "${USERNAME}" = oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
 is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 

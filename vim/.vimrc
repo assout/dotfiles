@@ -57,10 +57,10 @@ augroup END
 
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_home = $USERNAME ==# 'oji'
-let g:is_office = $USERNAME ==# 'admin' " FIXME: my win machine TODO: is_win,is_unixのほうがよいかも
-let g:is_office_gui = g:is_office && has('gui_running')
-let g:is_office_cui = g:is_office && !has('gui_running')
+let g:is_linux = $USERNAME ==# 'oji'
+let g:is_win = $USERNAME ==# 'admin' || $USERNAME ==# 'porinsan'
+let g:is_win_gui = g:is_win && has('gui_running')
+let g:is_win_cui = g:is_win && !has('gui_running')
 let g:is_jenkins = exists('$BUILD_NUMBER')
 
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
@@ -69,7 +69,7 @@ let s:plugged_path = s:dotvim_path . '/plugged'
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:maplocalleader = ',' " For todo.txt TODO: <Space> or s にしたい
 " Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
-if g:is_office_cui
+if g:is_win_cui
   let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
 endif
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
@@ -88,7 +88,7 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-if g:is_office_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
+if g:is_win_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
   let &t_ti .= "\e[1 q"
   let &t_SI .= "\e[5 q"
   let &t_EI .= "\e[1 q"
@@ -142,7 +142,7 @@ command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-ar
 
 function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
-  if g:is_office
+  if g:is_win
     execute '!start explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
   else
     execute '!nautilus ' . l:path . '&'
@@ -211,11 +211,11 @@ set shortmess& shortmess+=atTOI
 set sidescrolloff=5
 set smartcase
 set softtabstop=0
-let &spellfile = expand(g:is_home ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
+let &spellfile = expand(g:is_linux ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
 set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
-let &swapfile = g:is_office ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
+let &swapfile = g:is_win ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
 let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title
@@ -350,7 +350,7 @@ cnoremap <M-f> <S-Right>
 " # Plug-ins {{{1
 if s:IsPluginEnabled()
   if has('vim_starting')
-    let &runtimepath = g:is_office_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
+    let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
   endif
   call g:plug#begin(s:plugged_path)
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
@@ -368,16 +368,16 @@ if s:IsPluginEnabled()
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
-        \ | Plug 'sgur/unite-everything', g:is_home ? {'on' : []} : {'on' : ['Unite']}
+        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_office_gui ? {'on' : []} : g:is_home ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
+  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-  Plug 'fuenor/im_control.vim', g:is_home ? {} : {'on' : []}
+  Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
   Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
@@ -401,7 +401,7 @@ if s:IsPluginEnabled()
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
-  Plug 'thinca/vim-localrc', g:is_office ? {'on' :[]} : {'for' : 'vim'}
+  Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
   Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
         \ | Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'}
@@ -460,7 +460,7 @@ if s:IsPluginEnabled()
   call g:plug#end()
 
   " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
-  if g:is_office_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win64/plugins/vimproc' | endif
+  if g:is_win_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win64/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
@@ -514,8 +514,8 @@ else " Vim-Plug有効の場合勝手にされる
 endif
 
 if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = g:is_home ? 1 : 0
-  let g:calendar_google_task = g:is_home ? 1 : 0
+  let g:calendar_google_calendar = g:is_linux ? 1 : 0
+  let g:calendar_google_task = g:is_linux ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('hateblo.vim') " {{{
@@ -579,7 +579,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = g:is_home ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
+  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
   let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
 endif " }}}
 
@@ -588,7 +588,7 @@ if s:HasPlugin('open-browser.vim') " {{{
         \    'translate' : 'https://translate.google.com/?hl=ja#auto/ja/{query}',
         \    'stackoverflow' : 'http://stackoverflow.com/search?q={query}',
         \  }) " Note: vimrcリロードでデフォルト値が消えてしまわないようにしている
-  if g:is_office_cui
+  if g:is_win_cui
     let g:openbrowser_browser_commands = [{'name' : 'rundll32', 'args' : 'rundll32 url.dll,FileProtocolHandler {uri}'}]
   endif
   let s:engines = {
@@ -709,7 +709,7 @@ if s:HasPlugin('unite.vim') " {{{
   let g:unite_enable_ignore_case = 1
   let g:unite_enable_smart_case = 1
   let g:unite_source_grep_max_candidates = 200
-  if g:is_office_gui
+  if g:is_win_gui
     let g:unite_source_rec_async_command = ['find', '-L']
   endif
   let s:RelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
@@ -976,7 +976,7 @@ if s:HasPlugin('vim-quickrun') " {{{
         \  'exec': ['%c %s', 'google-chrome %s:p:r.png'],
         \  'outputter': 'null'
         \}
-  if g:is_office
+  if g:is_win
     let g:quickrun_config['plantuml']['exec'] = ['java -jar ~/Tools/plantuml.jar %s', 'chrome.exe %s:p:r.png']
   endif
 
@@ -985,7 +985,7 @@ if s:HasPlugin('vim-quickrun') " {{{
         \  'command': 'markdown-to-slides',
         \  'outputter': 'browser'
         \ }
-  if g:is_office
+  if g:is_win
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['%c %s -o %s:p:r.html', 'chrome.exe %s:p:r.html']
   endif
@@ -1149,10 +1149,10 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
   let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
 
-  if g:is_office_gui
+  if g:is_win_gui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
     let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
-  elseif g:is_office_cui
+  elseif g:is_win_cui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
     let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
   endif
@@ -1180,7 +1180,7 @@ augroup vimrc
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
   " Change cursor shape in different modes. Refs: <http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes>
-  if g:is_home
+  if g:is_linux
     autocmd VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
     autocmd InsertEnter,InsertChange *
           \ if     v:insertmode == 'i' | silent execute '!echo -ne "\e[6 q"' | redraw! |
@@ -1200,7 +1200,7 @@ augroup vimrc
   " Note: Windowsのときencode指定しないとうまくいかないことがある
   autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
 
-  if g:is_office " homeではRicty font使うので不要
+  if g:is_win " homeではRicty font使うので不要
     " Double byte space highlight
     autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
     autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
@@ -1223,7 +1223,7 @@ if s:HasPlugin('vim-hybrid')
     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
-    if g:is_home " TODO: workaround. 見づらいため.
+    if g:is_linux " TODO: workaround. 見づらいため.
       highlight Normal ctermbg=none
       highlight ErrorMsg term=standout cterm=standout ctermfg=black ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
     endif
@@ -1231,7 +1231,7 @@ if s:HasPlugin('vim-hybrid')
   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid
 else
-  if g:is_office | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
+  if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
 " }}}1

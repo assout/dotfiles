@@ -1114,10 +1114,11 @@ endif " }}}
 
 if s:HasPlugin('vim-textobj-multiblock') " {{{
   let g:textobj_multiblock_blocks = [
-        \  [ '\~', '\~', 1 ],
+        \  [ '`', '`', 1 ],
         \  [ '*', '*', 1 ],
         \  [ '_', '_', 1 ],
-        \  [ '`', '`', 1 ],
+        \  [ '\~', '\~', 1 ],
+        \  [ '|', '|', 1 ],
         \]
   omap ib <Plug>(textobj-multiblock-i)
   omap ab <Plug>(textobj-multiblock-a)

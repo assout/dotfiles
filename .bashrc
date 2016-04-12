@@ -193,6 +193,7 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias t=todo.sh; complete -F _todo t
+alias groot='cd "$(git rev-parse --show-toplevel)"'
 
 if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
@@ -204,7 +205,6 @@ if [ "${is_win}" ] ; then
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
-
 
 # }}}1
 

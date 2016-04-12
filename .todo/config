@@ -89,5 +89,6 @@ export TODOTXT_DATE_ON_ADD=1
 export TODOTXT_GRAPH_THRESHOLD=5
 # note add-on settings #
 export TODO_NOTE_EXT=".md"
+# export TODO_NOTE_IS_OPEN="2"
 
 # vim:set filetype=sh:

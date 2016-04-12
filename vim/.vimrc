@@ -1117,7 +1117,12 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
         \  [ '\~', '\~', 1 ],
         \  [ '*', '*', 1 ],
         \  [ '_', '_', 1 ],
+        \  [ '`', '`', 1 ],
         \]
+  omap ib <Plug>(textobj-multiblock-i)
+  omap ab <Plug>(textobj-multiblock-a)
+  xmap ib <Plug>(textobj-multiblock-i)
+  xmap aba <Plug>(textobj-multiblock-a)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{

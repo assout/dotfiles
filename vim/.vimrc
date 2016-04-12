@@ -400,7 +400,7 @@ if s:IsPluginEnabled()
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
-  Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'}
+  Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
   Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
   Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}

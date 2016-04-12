@@ -448,7 +448,7 @@ if s:IsPluginEnabled()
         \ | Plug 'kana/vim-textobj-indent'
         \ | Plug 'kana/vim-textobj-line'
         \ | Plug 'mattn/vim-textobj-url'
-        \ | Plug 'rhysd/vim-textobj-anyblock'
+        \ | Plug 'osyo-manga/vim-textobj-multiblock'
         \ | Plug 'sgur/vim-textobj-parameter'
         \ | Plug 'thinca/vim-textobj-between'
         \ | Plug 'thinca/vim-textobj-comment'
@@ -904,16 +904,16 @@ endif " }}}
 if s:HasPlugin('vim-operator-replace') " {{{
   map <SID>[replace] <Plug>(operator-replace)
 
-  if s:HasPlugin('vim-textobj-anyblock') " {{{
-    nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-anyblock-i)
-  endif " }}}
-
   if s:HasPlugin('vim-textobj-between') " {{{
     nmap <SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
   endif " }}}
 
   if s:HasPlugin('vim-textobj-line') " {{{
     nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-multiblock') " {{{
+    nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-multiblock-i)
   endif " }}}
 
   " if s:HasPlugin('vim-textobj-parameter') " {{{  Caution: aは<Space>paeとかできなくなるのでやらない
@@ -937,12 +937,6 @@ if s:HasPlugin('vim-operator-surround') " {{{
   map <SID>[surround-d] <Plug>(operator-surround-delete)
   map <SID>[surround-r] <Plug>(operator-surround-replace)
 
-  if s:HasPlugin('vim-textobj-anyblock') " {{{
-    nmap <SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-anyblock-a)
-    nmap <SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-anyblock-a)
-    nmap <SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-anyblock-a)
-  endif " }}}
-
   if s:HasPlugin('vim-textobj-between') " {{{
     nmap <SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
     nmap <SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
@@ -953,6 +947,12 @@ if s:HasPlugin('vim-operator-surround') " {{{
     nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
     nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
     nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
+  endif " }}}
+
+  if s:HasPlugin('vim-textobj-multiblock') " {{{
+    nmap <SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-multiblock-a)
+    nmap <SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-multiblock-a)
+    nmap <SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-multiblock-a)
   endif " }}}
 
   " if s:HasPlugin('vim-textobj-parameter') " {{{ Caution: aはsaawとかできなくなるのでやらない
@@ -1110,6 +1110,14 @@ if s:HasPlugin('vim-textobj-entire') " {{{
   nmap yie yie``
   nmap =ae =ae``
   nmap =ie =ie``
+endif " }}}
+
+if s:HasPlugin('vim-textobj-multiblock') " {{{
+  let g:textobj_multiblock_blocks = [
+        \  [ '\~', '\~', 1 ],
+        \  [ '*', '*', 1 ],
+        \  [ '_', '_', 1 ],
+        \]
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{

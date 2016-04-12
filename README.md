@@ -18,12 +18,14 @@ cd dotfiles
 ### gitignore by gibo
 
     (gibo \
-    Eclipse \
+    GitBook \
     Java \
+    Maven \
+    Node \
+    \
+    Eclipse \
     Linux \
     Vim \
     Windows \
     ; cat .gitignore.manual) > .gitignore
-
-
 

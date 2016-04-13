@@ -73,6 +73,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
+  PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
   if [ -r "${todo_completion_path}" ] ; then
@@ -122,7 +123,7 @@ if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
 fi
 
 alias memo='vi -c ":Unite memolist"'
-alias mr='vi -c ":Unite neomru/file"' # "mr"u(most recent use) file
+alias mru='vi -c ":Unite neomru/file"' # "mr"u(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then

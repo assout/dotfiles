@@ -987,7 +987,7 @@ if s:HasPlugin('vim-quickrun') " {{{
         \ }
   if g:is_win
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
-    let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['%c %s -o %s:p:r.html', 'chrome.exe %s:p:r.html']
+    let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/md-to-slides-\$\$.html \&\& %c %s -o \$tmp \&\& chrome.exe \$tmp']
   endif
 
 endif " }}}

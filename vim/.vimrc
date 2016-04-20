@@ -750,7 +750,6 @@ if s:HasPlugin('unite.vim') " {{{
         \ | execute 'nnoremap ]u :silent UniteNext<CR>'
         \ | execute 'nnoremap [U :silent UniteFirst<CR>'
         \ | execute 'nnoremap ]U :silent UniteLast<CR>'
-  " \ | call g:unite#custom#default_action('directory', 'vimfiler')
 
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
@@ -1203,7 +1202,7 @@ augroup vimrc
   endif
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
-  autocmd FileType * setlocal formatoptions-=c
+  autocmd FileType * setlocal formatoptions-=c formatoptions-=t
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 cinkeys=""
   autocmd FileType java setlocal noexpandtab

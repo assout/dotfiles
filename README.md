@@ -30,3 +30,4 @@ cd dotfiles
     ; cat .gitignore.manual) > .gitignore
 
 廣川
+hirokawa

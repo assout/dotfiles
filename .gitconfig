@@ -8,8 +8,7 @@
   attributesfile = ~/.gitattributes
 [alias]
   graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  wip = !(echo [from wip] && git diff --cached --no-ext-diff --stat) | git commit -F -
-  WIP = !git add -A && (echo [from wip] && git diff --cached --no-ext-diff --stat) | git commit -F -
+  wip = !git add -A && (echo [from wip] && git diff --cached --no-ext-diff --stat) | git commit -F -
 [color]
   ui = true # 古いバージョンの場合defaultでないため
 [include]

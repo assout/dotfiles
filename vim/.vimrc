@@ -57,8 +57,8 @@ augroup END
 
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_linux = $USERNAME ==# 'oji'
-let g:is_win = $USERNAME ==# 'admin' || $USERNAME ==# 'porinsan'
+let g:is_linux = has('unix') && !has('win32unix') && $USERNAME ==# 'oji'
+let g:is_win = (has('win32') || has('win32unix')) && ($USERNAME ==# 'admin' || $USERNAME ==# 'porinsan')
 let g:is_win_gui = g:is_win && has('gui_running')
 let g:is_win_cui = g:is_win && !has('gui_running')
 let g:is_jenkins = exists('$BUILD_NUMBER')

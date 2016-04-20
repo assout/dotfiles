@@ -724,7 +724,6 @@ if s:HasPlugin('unite.vim') " {{{
 
   function! s:UniteKeymappings()
     imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
-    nmap <buffer> <C-w> <Plug>(unite_delete_backward_path)
 
     " TODO: sortしたい。↓じゃダメ。
     " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])

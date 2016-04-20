@@ -29,3 +29,4 @@ cd dotfiles
     Windows \
     ; cat .gitignore.manual) > .gitignore
 
+廣川

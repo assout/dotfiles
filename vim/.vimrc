@@ -354,6 +354,7 @@ if s:IsPluginEnabled()
   endif
   call g:plug#begin(s:plugged_path)
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
+  " TODO: 計測して遅いやつon-demand、on-demandしてないやつは理由をコメント
   " General {{{
   Plug 'AndrewRadev/linediff.vim'
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
@@ -385,7 +386,7 @@ if s:IsPluginEnabled()
   " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
-  Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home.'/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
+  Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'itchyny/vim-parenmatch'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
@@ -966,6 +967,7 @@ endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
+  " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
   let g:quickrun_config = {}
 

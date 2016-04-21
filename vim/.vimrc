@@ -973,11 +973,11 @@ if s:HasPlugin('vim-quickrun') " {{{
 
   let g:quickrun_config['plantuml'] = {
         \  'command': 'plantuml',
-        \  'exec': ['%c %s', 'google-chrome %s:p:r.png'],
+        \  'exec': ['%c %o %s', 'google-chrome %s:p:r.png'],
         \  'outputter': 'null'
         \}
   if g:is_win
-    let g:quickrun_config['plantuml']['exec'] = ['java -jar ~/Tools/plantuml.jar %s', 'chrome.exe %s:p:r.png']
+    let g:quickrun_config['plantuml']['exec'] = ['java -jar ~/Tools/plantuml.jar %o %s', 'chrome.exe %s:p:r.png']
   endif
 
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
@@ -987,7 +987,7 @@ if s:HasPlugin('vim-quickrun') " {{{
         \ }
   if g:is_win
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
-    let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/md-to-slides-\$\$.html \&\& %c %s -o \$tmp \&\& chrome.exe \$tmp']
+    let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/md-to-slides-\$\$.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']
   endif
 endif " }}}
 

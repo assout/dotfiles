@@ -372,7 +372,7 @@ if s:IsPluginEnabled()
         \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_mingw64.mak'}
+  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'} " TODO mingw64でなくmsysじゃないと失敗しそう Refs:<http://togetter.com/li/900570>
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}

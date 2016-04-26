@@ -372,7 +372,7 @@ if s:IsPluginEnabled()
         \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Unite']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
         \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
-  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'}
+  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_mingw64.mak'}
   Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'assout/benchvimrc-vim' , {'on' : 'BenchVimrc'}
@@ -969,7 +969,13 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
-  let g:quickrun_config = {}
+  " let g:quickrun_config = {}
+  let g:quickrun_config = {
+        \  '_' : {
+        \      'runner' : 'vimproc',
+        \      'runner/vimproc/updatetime' : 60
+        \  },
+        \}
 
   let g:quickrun_config['plantuml'] = {
         \  'command': 'plantuml',
@@ -1203,6 +1209,7 @@ augroup vimrc
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c formatoptions-=t
+  autocmd FileType go setlocal noexpandtab
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 cinkeys=""
   autocmd FileType java setlocal noexpandtab

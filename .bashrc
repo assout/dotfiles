@@ -152,6 +152,9 @@ if [ "${is_unix}" ] ; then
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
   alias tp='todo.sh note edit $(todo.sh list | peco | cut -d " " -f 1)'
+else
+  alias gh='target=$(winpty bash -c "ghq list | peco"); if [ -n "${target}" ] ; then cd "$ghq root)/${target}" ; fi'
+  alias ppp='target=$(peco_wrapper "ghq list")'
 fi
 
 function man_japanese {

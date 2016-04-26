@@ -969,7 +969,6 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
-  " let g:quickrun_config = {}
   let g:quickrun_config = {
         \  '_' : {
         \      'runner' : 'vimproc',

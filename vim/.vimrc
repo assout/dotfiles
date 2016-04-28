@@ -143,7 +143,7 @@ command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-ar
 function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
   if g:is_win
-    execute '!start explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
+    execute '!explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
   else
     execute '!nautilus ' . l:path . '&'
   endif

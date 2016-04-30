@@ -81,6 +81,10 @@ if [ "${is_win}" ] ; then
   fi
 fi
 
+if [ "${is_win}" ] && [ "${is_home}" ]; then
+  PATH="${PATH}:/c/ProgramData/Oracle/Java/javapath/" # TODO 仮
+fi
+
 ghq_root="${HOME}/Development/src"
 PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
@@ -209,6 +213,11 @@ if [ "${is_win}" ] ; then
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
+
+if [ "${is_win}" ] && [ "${is_home}" ]; then
+  alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
+fi
+
 
 # }}}1
 

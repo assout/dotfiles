@@ -57,11 +57,13 @@ augroup END
 
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_linux = has('unix') && !has('win32unix') && $USERNAME ==# 'oji'
-let g:is_win = (has('win32') || has('win32unix')) && ($USERNAME ==# 'admin' || $USERNAME ==# 'porinsan')
+let g:is_linux = has('unix') && !has('win32unix')
+let g:is_win = (has('win32') || has('win32unix'))
 let g:is_win_gui = g:is_win && has('gui_running')
 let g:is_win_cui = g:is_win && !has('gui_running')
 let g:is_jenkins = exists('$BUILD_NUMBER')
+let g:is_home = $USERNAME ==# 'oji' || $USERNAME ==# 'porinsan'
+let g:is_office = $USERNAME ==# 'admin'
 
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
@@ -200,7 +202,6 @@ set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやす�
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set ruler
 set scrolloff=5
-set shellcmdflag=-ic " winでalias使いたいため
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
@@ -970,27 +971,11 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
-  let g:quickrun_config = {
-        \  '_' : {
-        \      'runner' : 'vimproc',
-        \      'runner/vimproc/updatetime' : 60
-        \  },
-        \}
 
-  let g:quickrun_config['plantuml'] = {
-        \  'command': 'plantuml',
-        \  'exec': ['%c %o %s', 'google-chrome %s:p:r.png'],
-        \  'outputter': 'null'
-        \}
-  if g:is_win
-    let g:quickrun_config['plantuml']['exec'] = ['plantuml %o %s', 'chrome.exe %s:p:r.png']
-  endif
-
+  let g:quickrun_config = { '_' : { 'runner' : 'vimproc'} }
+  let g:quickrun_config['plantuml'] = { 'command': 'chrome', 'outputter': 'null' }
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
-  let g:quickrun_config['markdown/markdown-to-slides'] = {
-        \  'command': 'markdown-to-slides',
-        \  'outputter': 'browser'
-        \ }
+  let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'outputter': 'browser' }
   if g:is_win
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/md-to-slides-\$\$.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']

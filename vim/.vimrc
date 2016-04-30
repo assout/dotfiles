@@ -200,6 +200,7 @@ set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやす�
 set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
 set ruler
 set scrolloff=5
+set shellcmdflag=-ic " winでalias使いたいため
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
@@ -982,7 +983,7 @@ if s:HasPlugin('vim-quickrun') " {{{
         \  'outputter': 'null'
         \}
   if g:is_win
-    let g:quickrun_config['plantuml']['exec'] = ['java -jar ~/Tools/plantuml.jar %o %s', 'chrome.exe %s:p:r.png']
+    let g:quickrun_config['plantuml']['exec'] = ['plantuml %o %s', 'chrome.exe %s:p:r.png']
   endif
 
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }

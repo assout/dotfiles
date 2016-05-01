@@ -973,7 +973,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
 
   let g:quickrun_config = { '_' : { 'runner' : 'vimproc'} }
-  let g:quickrun_config['plantuml'] = { 'command': 'chrome', 'outputter': 'null' }
+  let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
   let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'outputter': 'browser' }
   if g:is_win

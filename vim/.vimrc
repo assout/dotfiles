@@ -387,6 +387,7 @@ if s:IsPluginEnabled()
   Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
   " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
+  Plug 'heavenshell/vim-jsdoc'
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
@@ -431,9 +432,9 @@ if s:IsPluginEnabled()
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
   Plug 'wellle/tmux-complete.vim'
-  Plug 'xolox/vim-misc', {'for' : ['vim', 'sh']}
-        \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh']}
-        \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh']}
+  Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
+        \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript']}
+        \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript']}
   " }}}
 
   " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる

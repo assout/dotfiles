@@ -131,14 +131,6 @@ alias mru='vi -c ":Unite neomru/file"' # "mr"u(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then
-  function peco_lscd { # ls & cd
-    local -r dir="$(find . -maxdepth 1 -type d | sed -e 's?\./??' | peco)"
-    if [ ! -z "$dir" ] ; then
-      cd "$dir" || exit 1
-    fi
-  }
-  alias pcd='peco_lscd'
-
   function peco_select_history() { # history
     local l
     local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"

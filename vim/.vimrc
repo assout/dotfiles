@@ -591,8 +591,8 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('neosnippet.vim') " {{{
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  imap <C-l> <Plug>(neosnippet_expand_or_jump)
+  smap <C-l> <Plug>(neosnippet_expand_or_jump)
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{

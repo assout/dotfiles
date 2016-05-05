@@ -363,6 +363,8 @@ if s:IsPluginEnabled()
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
+  Plug 'Shougo/neosnippet.vim'
+        \ | Plug 'Shougo/neosnippet-snippets'
   " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
   Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
@@ -585,6 +587,11 @@ endif " }}}
 if s:HasPlugin('neocomplete') " {{{
   let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
   let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
+endif " }}}
+
+if s:HasPlugin('neosnippet.vim') " {{{
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{

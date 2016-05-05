@@ -398,6 +398,7 @@ if s:IsPluginEnabled()
   Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}
   Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
+  Plug 'marijnh/tern_for_vim', {'do' : 'npm install', 'for' : ['javascript']}
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1

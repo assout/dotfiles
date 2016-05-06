@@ -140,9 +140,10 @@ if [ "${is_unix}" ] ; then
     READLINE_POINT=${#l}
     HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
   }
-  bind -x '"\e\C-r": peco_select_history'
+  bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
   alias c='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | sort | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
+  alias fn='declare -F | peco'
 
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'

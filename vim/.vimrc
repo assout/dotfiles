@@ -190,7 +190,7 @@ set hidden
 set history=200
 set hlsearch
 set ignorecase
-set iminsert=1 " Notes: msys2 gvim で挿入モードでIMEオンになってしまうのを防ぐため
+set iminsert=1 " Note: msys2 gvim で挿入モードでIMEオンになってしまうのを防ぐため
 set incsearch
 " set iskeyword-=_ " TODO: やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
 set indentkeys-=0# " <<,>>で#をインデントできるようにする
@@ -362,7 +362,7 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim'
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
+  Plug 'Shougo/neocomplete'
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   Plug 'Shougo/neosnippet.vim'
         \ | Plug 'Shougo/neosnippet-snippets'
@@ -387,7 +387,7 @@ if s:IsPluginEnabled()
   Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
-  Plug 'h1mesuke/vim-alignta',{'on' : ['Align', 'Alignta']}
+  Plug 'h1mesuke/vim-alignta', {'on' : ['Align', 'Alignta']}
   " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   Plug 'heavenshell/vim-jsdoc'
@@ -399,7 +399,7 @@ if s:IsPluginEnabled()
   Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}
   Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
-  Plug 'marijnh/tern_for_vim', {'do' : 'npm install', 'for' : ['javascript']}
+  Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
@@ -587,7 +587,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
+  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 1 " TODO: win gvimでダイアログが一瞬出る。
   let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
 endif " }}}
 

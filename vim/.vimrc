@@ -190,6 +190,7 @@ set hidden
 set history=200
 set hlsearch
 set ignorecase
+set iminsert=1 " Notes: msys2 gvim で挿入モードでIMEオンになってしまうのを防ぐため
 set incsearch
 " set iskeyword-=_ " TODO: やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
 set indentkeys-=0# " <<,>>で#をインデントできるようにする

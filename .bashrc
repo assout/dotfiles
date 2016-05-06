@@ -159,8 +159,8 @@ function man_japanese {
 alias jan='man_japanese'
 
 function exec_explorer {
-  local target="${1////\\}"
-  command explorer "${target:-.}" # /を\に置換
+  local target="${1////\\}" # /を\に置換
+  command explorer "${target:-.}"
 }
 alias explorer='exec_explorer'
 

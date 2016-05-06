@@ -41,6 +41,7 @@ ln -sf "${HERE}/.git_templates" ~/
 ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
+ln -sf "${HERE}/.tern-project" ~/
 
 if [ "${is_win}" ] ; then
   ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/

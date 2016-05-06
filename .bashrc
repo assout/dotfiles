@@ -143,7 +143,7 @@ if [ "${is_unix}" ] ; then
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
   alias c='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | sort | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
-  alias fn='declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco'
+  alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
 
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'

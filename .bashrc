@@ -47,10 +47,6 @@ export LANG=en_US.UTF-8
 export LESS='-R'
 export EDITOR='vim' # For todo.txt note, less +v
 
-if [ "${is_unix}" ] ; then
-  export JAVA_HOME=/etc/alternatives/java_sdk # for RedPen
-fi
-
 if [ "${is_win}" ] ; then
   export GOROOT=/mingw64/lib/go # TODO: Workaround
   export NODE_PATH="/mingw64/lib/node_modules"
@@ -81,12 +77,7 @@ if [ "${is_win}" ] ; then
   fi
 fi
 
-if [ "${is_win}" ] && [ "${is_home}" ]; then
-  PATH="${PATH}:/c/ProgramData/Oracle/Java/javapath/" # TODO 仮
-fi
-
 ghq_root="${HOME}/Development/src"
-PATH=${PATH}:${ghq_root}/github.com/git-hooks/git-hooks
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
@@ -207,7 +198,6 @@ fi
 if [ "${is_win}" ] && [ "${is_home}" ]; then
   alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
 fi
-
 
 # }}}1
 

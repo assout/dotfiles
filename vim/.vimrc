@@ -587,7 +587,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 1 " TODO: win gvimでダイアログが一瞬出る。
+  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
   let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
 endif " }}}
 

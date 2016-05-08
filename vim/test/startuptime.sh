@@ -61,11 +61,12 @@ function mesure {
   echo "" >> "${result_details_file}"
 }
 
+readonly here=$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)
 readonly target_dir="${WORKSPACE:-.}/target"
 mkdir -p "${target_dir}"
 
 readonly SAMPLE_FILE_PREFIX=sample
-readonly MYVIMRC="${WORKSPACE:-~/dotfiles}/vim/.vimrc"
+readonly MYVIMRC="${WORKSPACE:-${here}/../..}/vim/.vimrc"
 readonly FILE_TYPES=('boot' 'markdown' 'sh')
 
 for filetype in "${FILE_TYPES[@]}" ; do

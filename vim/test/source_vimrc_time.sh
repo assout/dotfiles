@@ -1,5 +1,6 @@
 #!/bin/bash
-readonly MYVIMRC="${WORKSPACE:-~/dotfiles}/vim/.vimrc"
+readonly here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
+readonly MYVIMRC="${WORKSPACE:-${here}/../..}/vim/.vimrc"
 
 temp_raw=$(mktemp)
 # vim -u "${MYVIMRC}" -e -c "BenchVimrc ${MYVIMRC} ${temp_raw} | qa!"
@@ -10,7 +11,6 @@ sed -e '/^        .*/d' "${temp_raw}" | sort -r > "${temp_sorted}"
 
 readonly target_dir="${WORKSPACE:-.}/target"
 mkdir -p "${target_dir}"
-readonly here="$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
 cat "${here}"/html/header.html "${temp_sorted}" "${here}"/html/footer.html > "${target_dir}"/index.html
 
 temp_filterd=$(mktemp)

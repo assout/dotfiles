@@ -366,8 +366,10 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   Plug 'Shougo/neosnippet.vim'
         \ | Plug 'Shougo/neosnippet-snippets'
-  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew']}
+  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
+  " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
+  " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
+  Plug 'Shougo/unite.vim', {'on' : ['Unite', '<Plug>(yankround-', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler'] }
@@ -412,10 +414,10 @@ if s:IsPluginEnabled()
   Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
   Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
   Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'osyo-manga/shabadou.vim', {'on' : 'WatchdogsRun'}
-        \ | Plug 'dannyob/quickfixstatus', {'on' : 'WatchdogsRun'}
-        \ | Plug 'KazuakiM/vim-qfsigns', {'on' : 'WatchdogsRun'}
-        \ | Plug 'osyo-manga/vim-watchdogs', {'on' : 'WatchdogsRun'}
+        \ | Plug 'osyo-manga/shabadou.vim', {'on' : ['QuickRun', 'WatchdogsRun']}
+        \ | Plug 'dannyob/quickfixstatus', {'on' : ['QuickRun', 'WatchdogsRun']}
+        \ | Plug 'KazuakiM/vim-qfsigns', {'on' : ['QuickRun', 'WatchdogsRun']}
+        \ | Plug 'osyo-manga/vim-watchdogs', {'on' : ['QuickRun', 'WatchdogsRun']}
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
   Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
@@ -570,8 +572,8 @@ if s:HasPlugin('memolist.vim') " {{{
 
   autocmd vimrc User memolist.vim
         \ let g:unite_source_alias_aliases = {
-        \  'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
-        \  'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
+        \   'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
+        \   'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
         \ }
         \ | call g:unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
         \ | call g:unite#custom#source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])

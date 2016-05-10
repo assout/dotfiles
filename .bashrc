@@ -141,14 +141,17 @@ if [ "${is_unix}" ] ; then
 
   alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
 else # TODO msys2でのpeco強引利用。もうちょい汎用化したい。
-  function gh() { # TODO ghq listがちょい遅い @office
+  # TODO ghq listがちょい遅い。eclipseのworkspaceが遅いっポイ。 @office
+  # TODO たまに移動しない @office
+  function gh() {
     ghq list -p > /tmp/ghq.log
     script -qc "winpty peco /tmp/ghq.log" /tmp/script.log
     local target="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K$// | sed s/^0m// )"
     [ -d "${target}" ] && cd "${target}"
   }
 
-  function tp() { # TODO 崩れる @office
+  # TODO 崩れる。全角があるとだめかも。 @office
+  function tp() {
     todo.sh -p list | sed '$d' | sed '$d' > /tmp/todo.log
     script -qc "winpty peco /tmp/todo.log" /tmp/script.log
     local target="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/^0m// | cut -d 'G' -f 1)"

@@ -17,13 +17,8 @@ if [ "${is_profile}" ] ; then
 fi
 
 # Source global definitions
-if [ -f /etc/bashrc ] ; then
-  source /etc/bashrc
-fi
-
-if [ -f ~/.bashrc.local ] ; then
-  source ~/.bashrc.local
-fi
+[ -f /etc/bashrc ] && source /etc/bashrc
+[ -f ~/.bashrc.local ] && source ~/.bashrc.local
 
 # Uncomment the following line if you don't like systemctl's auto-paging feature:
 # export SYSTEMD_PAGER=
@@ -72,12 +67,10 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
-  if [ -r "${todo_completion_path}" ] ; then
-    source "${todo_completion_path}" ;
-  fi
+  [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
-ghq_root="${HOME}/Development/src"
+ghq_root="${HOME}/Development/src" # Note: ghq rootコマンドは使わない(performance)
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
@@ -106,19 +99,15 @@ function cdls {
 
 # Vim
 alias vi=vim
-if [ "${is_unix}" ] ; then
-  alias vim='vimx' # クリップボード共有するため
-fi
+[ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
   here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-  if [ -e "${here}/.vimrc" ] ; then
-    alias vim='vim -u ${here}/.vimrc'
-  fi
+  [ -e "${here}/.vimrc" ] && alias vim='vim -u ${here}/.vimrc'
 fi
 
 alias memo='vi -c ":Unite memolist"'
-alias mru='vi -c ":Unite neomru/file"' # "mr"u(most recent use) file
+alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then
@@ -141,9 +130,9 @@ if [ "${is_unix}" ] ; then
 
   alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
 else
-  # TODO msys2でのpeco強引利用。もうちょい汎用化したい。
+  # TODO msys2でのpeco強引利用。2functionがめんどくさい。
   function pecowrap_exec() {
-    $1 > /tmp/cmd.log
+    eval $1 > /tmp/cmd.log
     script -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
@@ -160,10 +149,10 @@ else
 
   # TODO 崩れる。全角があるとだめかも。 @office
   function tp() {
-    pecowrap_exec "todo.sh -p list | sed '$d' | sed '$d'"
+    pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'"
     local target="$(pecowrap_result | cut -d 'G' -f 1)"
     expr "${target}" + 1 > /dev/null 2>&1
-    if [ $? -lt 2 ] ; then todo.sh note "${target}"; fi
+    [ $? -lt 2 ] && todo.sh note "${target}"
   }
 fi
 
@@ -193,14 +182,12 @@ function ghq_update {
 }
 
 function ghq_status {
-  for t in $(ghq list "$@" | sed -e "s?^?${ghq_root}/?") ; do
+  for t in $(ghq list -p "$@") ; do
     (cd "${t}" && echo "${t}" && git status)
   done
 }
 
-if [ "${is_win}" ] ; then
-  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-fi
+[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 
 # Other
 alias jp='LANG=ja_JP.UTF8'
@@ -234,9 +221,7 @@ todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
   mkdir -p "${todayBackupPath}"
   ln -sfn "${todayBackupPath}" "${HOME}/Today"
-  if [ "${is_win}" ] ; then
-    ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
-  fi
+  [ "${is_win}" ] && ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
 fi
 # }}}1
 
@@ -265,9 +250,7 @@ fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-if ! [ "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) ; then
-  exec tmux
-fi
+([ "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] )) && exec tmux
 
 # End profile
 if [ "${is_profile}" ] ; then

@@ -101,11 +101,6 @@ function cdls {
 alias vi=vim
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-if ! [ "${is_home}" ] && ! [ "${is_office}" ] ; then
-  here="$(command cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)"
-  [ -e "${here}/.vimrc" ] && alias vim='vim -u ${here}/.vimrc'
-fi
-
 alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 

@@ -117,6 +117,7 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
+  # TODO 引数で開始ディレクトリ受ける
   alias c='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | sort | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
 
@@ -134,6 +135,13 @@ else
   function pecowrap_result() {
     local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K$// | sed s/^0m// )"
     echo "${result}"
+  }
+
+  # TODO 引数で開始ディレクトリ受ける
+  function c() {
+    pecowrap_exec 'find . -maxdepth 1 -type d | sed -e "s?\./??" | sort'
+    target=$(pecowrap_result | sed -e "s/0K.*//g")
+    [ -d "${target}" ] && cd "${target}"
   }
 
   function gh() {
@@ -245,7 +253,7 @@ fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-([ "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] )) && exec tmux
+! [ "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
 
 # End profile
 if [ "${is_profile}" ] ; then

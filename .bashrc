@@ -140,21 +140,28 @@ if [ "${is_unix}" ] ; then
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
   alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
-else # TODO msys2でのpeco強引利用。もうちょい汎用化したい。
-  # TODO ghq listがちょい遅い。eclipseのworkspaceが遅いっポイ。 @office
-  # TODO たまに移動しない @office
+else
+  # TODO msys2でのpeco強引利用。もうちょい汎用化したい。
+  function pecowrap_exec() {
+    $1 > /tmp/cmd.log
+    script -qc "winpty peco /tmp/cmd.log" /tmp/script.log
+  }
+
+  function pecowrap_result() {
+    local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K$// | sed s/^0m// )"
+    echo "${result}"
+  }
+
   function gh() {
-    ghq list -p > /tmp/ghq.log
-    script -qc "winpty peco /tmp/ghq.log" /tmp/script.log
-    local target="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K$// | sed s/^0m// )"
+    pecowrap_exec "ghq list -p"
+    target=$(pecowrap_result)
     [ -d "${target}" ] && cd "${target}"
   }
 
   # TODO 崩れる。全角があるとだめかも。 @office
   function tp() {
-    todo.sh -p list | sed '$d' | sed '$d' > /tmp/todo.log
-    script -qc "winpty peco /tmp/todo.log" /tmp/script.log
-    local target="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/^0m// | cut -d 'G' -f 1)"
+    pecowrap_exec "todo.sh -p list | sed '$d' | sed '$d'"
+    local target="$(pecowrap_result | cut -d 'G' -f 1)"
     expr "${target}" + 1 > /dev/null 2>&1
     if [ $? -lt 2 ] ; then todo.sh note "${target}"; fi
   }

@@ -134,15 +134,21 @@ else
   }
 
   function pecowrap_result() {
-    local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K$// | sed s/^0m// )"
+    local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K.*$// | sed s/^0m// )" # TODO 強引。特に"0K"が含まれると削除しちゃう
     echo "${result}"
   }
 
   # TODO 引数で開始ディレクトリ受ける
   function c() {
     pecowrap_exec 'find . -maxdepth 1 -type d | sed -e "s?\./??" | sort'
-    target=$(pecowrap_result | sed -e "s/0K.*//g")
+    target=$(pecowrap_result)
     [ -d "${target}" ] && cd "${target}"
+  }
+
+  function fn() {
+    pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"'
+    target=$(pecowrap_result)
+    eval "${target}"
   }
 
   function gh() {

@@ -133,6 +133,7 @@ else
     script -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
+  # TODO: 選択したものが行折り返すとただしく取得できない
   function pecowrap_result() {
     local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K.*$// | sed s/^0m// )" # TODO 強引。特に"0K"が含まれると削除しちゃう
     echo "${result}"

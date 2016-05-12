@@ -129,19 +129,17 @@ if [ "${is_unix}" ] ; then
 else
   # TODO msys2でのpeco強引利用。2functionがめんどくさい。
   function pecowrap_exec() {
-    eval $1 > /tmp/cmd.log
+    eval "$1" > /tmp/cmd.log
     script -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
-  # TODO: 選択したものが行折り返すとただしく取得できない
   function pecowrap_result() {
-    local result="$(col -bx < /tmp/script.log | tail -2 | head -1 | sed s/0K.*$// | sed s/^0m// )" # TODO 強引。特に"0K"が含まれると削除しちゃう
+    local result="$(col -bx < /tmp/script.log | tr -d '\n' | sed 's/.*0m\(.*\)0K.*$/\1/g' | sed 's/0K//g')" # TODO 強引。特に"0K"が含まれると削除しちゃう
     echo "${result}"
   }
 
-  # TODO 引数で開始ディレクトリ受ける
   function c() {
-    pecowrap_exec 'find . -maxdepth 1 -type d | sed -e "s?\./??" | sort'
+    pecowrap_exec "find $1 -maxdepth 1 -type d | sort"
     target=$(pecowrap_result)
     [ -d "${target}" ] && cd "${target}"
   }

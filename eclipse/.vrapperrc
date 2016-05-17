@@ -89,6 +89,10 @@ nnoremap <C-q> :bdelete<CR>
 nnoremap <C-w>c :bdelete<CR>
 nnoremap <C-w>q :bdelete<CR>
 
+" Note: なぜかこれらだけCtrl押したままだと効かないため
+nnoremap <C-w><C-h> <C-w>h
+nnoremap <C-w><C-j> <C-w>j
+
 " Insert mode mappings "
 " TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a> <C-o>^

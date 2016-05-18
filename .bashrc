@@ -165,6 +165,7 @@ else
   }
 
   # TODO: 適当
+  # TODO: linuxでも
   function s() {
     source /usr/share/bash-completion/completions/ssh
 

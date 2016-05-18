@@ -58,7 +58,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/hub/bin"
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
   PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
-  PATH="${PATH}:${TOOLS_DIR}/ghq"
+  PATH="${PATH}:${TOOLS_DIR}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
@@ -118,9 +118,10 @@ if [ "${is_unix}" ] ; then
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
   # TODO 引数で開始ディレクトリ受ける
-  alias c='dir=$(find . -maxdepth 1 -type d | sed -e "s?\./??" | sort | peco); if [ -n "${dir}" ] ; then cd "${dir}"; fi'
+  alias c='dir=$(find . -maxdepth 1 -type d | sort | peco); if [ -d "${dir}" ] ; then cd "${dir}"; fi'
+  # TODO 引数で開始ディレクトリ受ける
+  alias v='file=$(find . -maxdepth 1 -type f | sort | peco); if [ -f "${file}" ] ; then vi "${file}"; fi'
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
-
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
@@ -142,6 +143,12 @@ else
     pecowrap_exec "find $1 -maxdepth 1 -type d | sort"
     target=$(pecowrap_result)
     [ -d "${target}" ] && cd "${target}"
+  }
+
+  function v() {
+    pecowrap_exec "find $1 -maxdepth 1 -type f | sort"
+    target=$(pecowrap_result)
+    [ -f "${target}" ] && vi "${target}"
   }
 
   function fn() {

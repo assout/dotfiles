@@ -172,6 +172,26 @@ else
     expr "${target}" + 1 > /dev/null 2>&1
     [ $? -lt 2 ] && todo.sh note "${target}"
   }
+
+  # TODO: 適当
+  # TODO: linuxでも
+  function s() {
+    source /usr/share/bash-completion/completions/ssh
+
+    local configfile
+    _ssh_configfile
+    _known_hosts_real -a -F "$configfile" "$cur"
+
+    local args
+    _count_args
+    if [[ $args -gt 1 ]]; then
+      compopt -o filenames
+      COMPREPLY+=( $( compgen -c -- "$cur" ) )
+    fi
+    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n'"
+    local target=$(pecowrap_result)
+    ssh "${target}"
+  }
 fi
 
 function man_japanese {

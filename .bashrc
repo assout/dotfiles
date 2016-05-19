@@ -174,6 +174,7 @@ else
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
 
+    unset COMPREPLY
     local configfile
     _ssh_configfile
     _known_hosts_real -a -F "$configfile" "$cur"

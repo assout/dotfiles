@@ -128,6 +128,8 @@ if [ "${is_unix}" ] ; then
   # TODO 崩れる？
   alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
 else
+  # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
+
   # TODO msys2でのpeco強引利用。2functionがめんどくさい。
   function pecowrap_exec() {
     eval "$1" > /tmp/cmd.log

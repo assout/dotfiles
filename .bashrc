@@ -132,8 +132,8 @@ else
 
   # TODO msys2でのpeco強引利用。2functionがめんどくさい。
   function pecowrap_exec() {
-    eval "$1" > /tmp/cmd.log
-    script -qc "winpty peco /tmp/cmd.log" /tmp/script.log
+    eval "$@" > /tmp/cmd.log
+    script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
   function pecowrap_result() {
@@ -142,32 +142,28 @@ else
   }
 
   function c() {
-    pecowrap_exec "find $1 -maxdepth 1 -type d | sort"
-    target=$(pecowrap_result)
-    [ -d "${target}" ] && cd "${target}"
+    pecowrap_exec "find $1 -maxdepth 1 -type d | sort" || return
+    cd $(pecowrap_result)
   }
 
   function v() {
-    pecowrap_exec "find $1 -maxdepth 1 -type f | sort"
-    target=$(pecowrap_result)
-    [ -f "${target}" ] && vi "${target}"
+    pecowrap_exec "find $1 -maxdepth 1 -type f | sort" || return
+    vi $(pecowrap_result)
   }
 
   function fn() {
-    pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"'
-    target=$(pecowrap_result)
-    eval "${target}"
+    pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
+    eval $(pecowrap_result)
   }
 
   function gh() {
-    pecowrap_exec "ghq list -p"
-    target=$(pecowrap_result)
-    [ -d "${target}" ] && cd "${target}"
+    pecowrap_exec "ghq list -p" || return
+    cd $(pecowrap_result)
   }
 
   # TODO 崩れる。全角があるとだめかも。 @office
   function tp() {
-    pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'"
+    pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
     local target="$(pecowrap_result | cut -d 'G' -f 1)"
     expr "${target}" + 1 > /dev/null 2>&1
     [ $? -lt 2 ] && todo.sh note "${target}"
@@ -176,21 +172,14 @@ else
   # TODO: 適当
   # TODO: linuxでも
   function s() {
-    source /usr/share/bash-completion/completions/ssh
+    local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
 
     local configfile
     _ssh_configfile
     _known_hosts_real -a -F "$configfile" "$cur"
 
-    local args
-    _count_args
-    if [[ $args -gt 1 ]]; then
-      compopt -o filenames
-      COMPREPLY+=( $( compgen -c -- "$cur" ) )
-    fi
-    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n'"
-    local target=$(pecowrap_result)
-    ssh "${target}"
+    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\\n'" || return
+    ssh $(pecowrap_result)
   }
 fi
 

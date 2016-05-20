@@ -54,14 +54,14 @@ export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 if [ "${is_win}" ] ; then
   TOOLS_DIR="${HOME}/Tools"
   PATH="${PATH}:${TOOLS_DIR}"
-  PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
-  PATH="${PATH}:${TOOLS_DIR}/hub/bin"
-  PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
-  PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
-  PATH="${PATH}:${TOOLS_DIR}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
   PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
-  PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
+  PATH="${PATH}:${TOOLS_DIR}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
+  PATH="${PATH}:${TOOLS_DIR}/hub/bin"
+  PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
+  PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
+  PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"

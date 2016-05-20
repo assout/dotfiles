@@ -84,7 +84,7 @@ export PATH
 # [Functions & Aliases] {{{1
 function cd_parent {
   local to=${1:-1}
-  local toStr="";
+  local toStr=""
   for _ in $(seq 1 "${to}") ; do
     toStr="${toStr}"../
   done
@@ -94,7 +94,7 @@ alias ..='cd_parent'
 
 function cdls {
   command cd "$1"; # cdが循環しないようにcommand
-  ls --color=auto --show-control-chars;
+  ls --color=auto --show-control-chars
 }
 
 # Vim
@@ -131,40 +131,40 @@ else
   # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
 
   # TODO msys2でのpeco強引利用。2functionがめんどくさい。
-  function pecowrap_exec() {
+  function _pecowrap_exec() {
     eval "$@" > /tmp/cmd.log
     script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
-  function pecowrap_result() {
+  function _pecowrap_result() {
     local result="$(col -bx < /tmp/script.log | tr -d '\n' | sed 's/.*0m\(.*\)0K.*$/\1/g' | sed 's/0K//g')" # TODO 強引。特に"0K"が含まれると削除しちゃう
     echo "${result}"
   }
 
   function c() {
-    pecowrap_exec "find $1 -maxdepth 1 -type d | sort" || return
-    cd $(pecowrap_result)
+    _pecowrap_exec "find $1 -maxdepth 1 -type d | sort" || return
+    cd $(_pecowrap_result)
   }
 
   function v() {
-    pecowrap_exec "find $1 -maxdepth 1 -type f | sort" || return
-    vi $(pecowrap_result)
+    _pecowrap_exec "find $1 -maxdepth 1 -type f | sort" || return
+    vi $(_pecowrap_result)
   }
 
   function fn() {
-    pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
-    eval $(pecowrap_result)
+    _pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
+    eval $(_pecowrap_result)
   }
 
   function gh() {
-    pecowrap_exec "ghq list -p" || return
-    cd $(pecowrap_result)
+    _pecowrap_exec "ghq list -p" || return
+    cd $(_pecowrap_result)
   }
 
   # TODO 崩れる。全角があるとだめかも。 @office
   function tp() {
-    pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    local target="$(pecowrap_result | cut -d 'G' -f 1)"
+    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
+    local target="$(_pecowrap_result | cut -d 'G' -f 1)"
     expr "${target}" + 1 > /dev/null 2>&1
     [ $? -lt 2 ] && todo.sh note "${target}"
   }
@@ -178,8 +178,8 @@ else
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
     _known_hosts_real -a -F "$configfile" "$cur"
 
-    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u" || return
-    ssh $(pecowrap_result)
+    _pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u" || return
+    ssh $(_pecowrap_result)
   }
 fi
 

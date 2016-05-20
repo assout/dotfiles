@@ -162,7 +162,7 @@ else
     cd $(_pecowrap_result)
   }
 
-  # TODO 崩れる。@office 全角があるとだめかも(homeだといけた気が。。)
+  # TODO 崩れる。@office @home 全角があるとだめかも
   function tp() {
     _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
     todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"

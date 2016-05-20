@@ -169,17 +169,16 @@ else
     [ $? -lt 2 ] && todo.sh note "${target}"
   }
 
-  # TODO: 適当
   # TODO: linuxでも
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
 
     unset COMPREPLY
     local configfile
-    _ssh_configfile
+    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
     _known_hosts_real -a -F "$configfile" "$cur"
 
-    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\\n'" || return
+    pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u" || return
     ssh $(pecowrap_result)
   }
 fi

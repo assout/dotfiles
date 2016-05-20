@@ -59,6 +59,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
   PATH="${PATH}:${TOOLS_DIR}/hub/bin"
   PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${TOOLS_DIR}/seq2gif/seq2gif-0.10.3"
   PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"

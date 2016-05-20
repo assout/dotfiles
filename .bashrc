@@ -161,21 +161,18 @@ else
     cd $(_pecowrap_result)
   }
 
-  # TODO 崩れる。全角があるとだめかも。 @office
+  # TODO 崩れる。@office 全角があるとだめかも(homeだといけた気が。。)
   function tp() {
     _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    local target="$(_pecowrap_result | cut -d 'G' -f 1)"
-    expr "${target}" + 1 > /dev/null 2>&1
-    [ $? -lt 2 ] && todo.sh note "${target}"
+    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
   }
 
   # TODO: linuxでも
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
-
-    unset COMPREPLY
     local configfile
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
+    unset COMPREPLY
     _known_hosts_real -a -F "$configfile" "$cur"
 
     _pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u" || return

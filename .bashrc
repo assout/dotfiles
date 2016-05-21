@@ -120,11 +120,11 @@ if [ "${is_unix}" ] ; then
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
   function c() {
-    local dir=$(find $1 -maxdepth 1 -type d | sort | peco); [ -d "${dir}" ] && cd "${dir}"
+    local dir; dir="$(find "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
 
   function v() {
-    local file=$(find $1 -maxdepth 1 -type f | sort | peco); [ -f "${file}" ] && vi "${file}"
+    local file; file="$(find "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
   }
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
@@ -138,10 +138,10 @@ if [ "${is_unix}" ] ; then
     local configfile
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
     unset COMPREPLY
-    _known_hosts_real -a -F "$configfile" "$cur"
+    _known_hosts_real -a -F "$configfile" ""
 
-    local target=$(echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u | peco)
-    [ -n ${target} ] && ssh ${target}
+    local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | peco)
+    [ -n "${target}" ] && ssh "${target}"
   }
 else
   # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
@@ -153,28 +153,28 @@ else
   }
 
   function _pecowrap_result() {
-    local result="$(col -bx < /tmp/script.log | tr -d '\n' | sed 's/.*0m\(.*\)0K.*$/\1/g' | sed 's/0K//g')" # TODO 強引。特に"0K"が含まれると削除しちゃう
+    local result; result="$(col -bx < /tmp/script.log | tr -d '\n' | sed 's/.*0m\(.*\)0K.*$/\1/g' | sed 's/0K//g')" # TODO 強引。特に"0K"が含まれると削除しちゃう
     echo "${result}"
   }
 
   function c() {
     _pecowrap_exec "find $1 -maxdepth 1 -type d | sort" || return
-    cd $(_pecowrap_result)
+    cd "$(_pecowrap_result)"
   }
 
   function v() {
     _pecowrap_exec "find $1 -maxdepth 1 -type f | sort" || return
-    vi $(_pecowrap_result)
+    vi "$(_pecowrap_result)"
   }
 
   function fn() {
     _pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
-    eval $(_pecowrap_result)
+    eval "$(_pecowrap_result)"
   }
 
   function gh() {
     _pecowrap_exec "ghq list -p" || return
-    cd $(_pecowrap_result)
+    cd "$(_pecowrap_result)"
   }
 
   # TODO 崩れる。@office @home 全角があるとだめかも
@@ -188,10 +188,10 @@ else
     local configfile
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
     unset COMPREPLY
-    _known_hosts_real -a -F "$configfile" "$cur"
+    _known_hosts_real -a -F "$configfile" ""
 
-    _pecowrap_exec "echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u" || return
-    ssh $(_pecowrap_result)
+    _pecowrap_exec "echo ${COMPREPLY[*]} | tr ' ' '\n' | sort -u" || return
+    ssh "$(_pecowrap_result)"
   }
 fi
 

@@ -118,20 +118,34 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
-  # TODO 引数で開始ディレクトリ受ける
-  alias c='dir=$(find . -maxdepth 1 -type d | sort | peco); if [ -d "${dir}" ] ; then cd "${dir}"; fi'
-  # TODO 引数で開始ディレクトリ受ける
-  alias v='file=$(find . -maxdepth 1 -type f | sort | peco); if [ -f "${file}" ] ; then vi "${file}"; fi'
+  function c() {
+    local dir=$(find $1 -maxdepth 1 -type d | sort | peco); [ -d "${dir}" ] && cd "${dir}"
+  }
+
+  function v() {
+    local file=$(find $1 -maxdepth 1 -type f | sort | peco); [ -f "${file}" ] && vi "${file}"
+  }
+
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
-  # TODO 崩れる？
   alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
+
+  function s() {
+    local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
+    local configfile
+    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
+    unset COMPREPLY
+    _known_hosts_real -a -F "$configfile" "$cur"
+
+    local target=$(echo ${COMPREPLY[@]} | tr ' ' '\n' | sort -u | peco)
+    [ -n ${target} ] && ssh ${target}
+  }
 else
   # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
 
-  # TODO msys2でのpeco強引利用。2functionがめんどくさい。
+  # Note: msys2でのpeco強引利用。
   function _pecowrap_exec() {
     eval "$@" > /tmp/cmd.log
     script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
@@ -168,7 +182,6 @@ else
     todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
   }
 
-  # TODO: linuxでも
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile

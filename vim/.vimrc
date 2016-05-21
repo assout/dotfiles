@@ -1089,6 +1089,7 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
   call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}
 
+" TODO: test
 if s:HasPlugin('vim-textmanip') " {{{
   xmap <C-j> <Plug>(textmanip-move-down)
   xmap <C-k> <Plug>(textmanip-move-up)

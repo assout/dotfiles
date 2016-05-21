@@ -120,11 +120,11 @@ if [ "${is_unix}" ] ; then
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
   function c() {
-    local dir; dir="$(find "$@" -L -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
+    local dir; dir="$(find -L "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
 
   function v() {
-    local file; file="$(find "$@" -L -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+    local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
   }
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
@@ -158,12 +158,12 @@ else
   }
 
   function c() {
-    _pecowrap_exec "find $1 -L -maxdepth 1 -type d | sort" || return
+    _pecowrap_exec "find -L $1 -maxdepth 1 -type d | sort" || return
     cd "$(_pecowrap_result)"
   }
 
   function v() {
-    _pecowrap_exec "find $1 -L -maxdepth 1 -type f | sort" || return
+    _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
     vi "$(_pecowrap_result)"
   }
 

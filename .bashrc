@@ -130,7 +130,6 @@ if [ "${is_unix}" ] ; then
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
-
   alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
 
   function s() {

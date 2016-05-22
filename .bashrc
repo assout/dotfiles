@@ -131,7 +131,7 @@ if [ "${is_unix}" ] ; then
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
-  alias tp='todo.sh note $(todo.sh list | sed "$d" | sed "$d" | peco | cut -d " " -f 1)'
+  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
 
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}

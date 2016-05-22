@@ -226,17 +226,21 @@ function ghq_status {
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 
-# Other
-alias jp='LANG=ja_JP.UTF8'
+# Others
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias t=todo.sh; complete -F _todo t
 alias groot='cd "$(git rev-parse --show-toplevel)"'
+alias jp='LANG=ja_JP.UTF8'
+alias t=todo.sh; complete -F _todo t
 
 if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
+
+  function esu() {
+    es $1 | sed 's/\\/\\\\/g' | xargs cygpath
+  }
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi

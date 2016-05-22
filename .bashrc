@@ -245,9 +245,7 @@ elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
-if [ "${is_win}" ] && [ "${is_home}" ]; then
-  alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
-fi
+[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
 
 # }}}1
 

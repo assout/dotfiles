@@ -237,16 +237,11 @@ if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
-
-  # TODO: セグる
-  # alias es='cygpath -u $(command es)'
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
-if [ "${is_win}" ] && [ "${is_home}" ]; then
-  alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
-fi
+[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
 
 # }}}1
 
@@ -279,7 +274,6 @@ if [ "${is_unix}" ] ; then
   # Note: デフォルトで読まれるがhubの補完有効にするために必要
   source /usr/share/bash-completion/completions/git
   source /etc/bash_completion.d/hub.bash_completion.sh
-
 elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
   source /usr/share/git/completion/git-completion.bash

@@ -123,14 +123,9 @@ if [ "${is_unix}" ] ; then
     local dir; dir="$(find -L "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
 
-  function v() {
-    local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
-  }
-
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
-  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
 
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
@@ -142,8 +137,15 @@ if [ "${is_unix}" ] ; then
     local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | peco)
     [ -n "${target}" ] && ssh "${target}"
   }
+
+  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
+
+  function v() {
+    local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+  }
+
 else
-  # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
+  # TODO: 全角文字化け。
 
   # Note: msys2でのpeco強引利用。
   function _pecowrap_exec() {
@@ -161,9 +163,9 @@ else
     cd "$(_pecowrap_result)"
   }
 
-  function v() {
-    _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
-    vi "$(_pecowrap_result)"
+  function e() {
+    _pecowrap_exec "find ~/Desktop/ -name *.lnk |  xargs -i cygpath.exe -w "{}"" || return
+    explorer "$(_pecowrap_result)"
   }
 
   function fn() {
@@ -176,12 +178,6 @@ else
     cd "$(_pecowrap_result)"
   }
 
-  # TODO 崩れる。@office @home 全角があるとだめかも
-  function tp() {
-    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
-  }
-
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile
@@ -192,6 +188,16 @@ else
     _pecowrap_exec "echo ${COMPREPLY[*]} | tr ' ' '\n' | sort -u" || return
     ssh "$(_pecowrap_result)"
   }
+
+  function tp() {
+    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
+    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
+  }
+
+  function v() {
+    _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
+    vi "$(_pecowrap_result)"
+  }
 fi
 
 function man_japanese {
@@ -201,12 +207,6 @@ function man_japanese {
   LANG=$LANG_ESCAPE
 }
 alias jan='man_japanese'
-
-function exec_explorer {
-  local target="${1////\\}" # /を\に置換
-  command explorer "${target:-.}"
-}
-alias explorer='exec_explorer'
 
 # Docker
 alias drm='docker rm $(docker ps -a -q)'

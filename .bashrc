@@ -107,7 +107,6 @@ alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then
-  # TODO: msys2でも。
   function peco_select_history() { # history
     local l
     local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"

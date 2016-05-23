@@ -32,3 +32,4 @@ Please remember that, with sample code; it's easier to reproduce bug and much fa
 Please git clone https://github.com/appium/sample-code and use one of your favourite languages and sample apps to reproduce issue.
 
 In case a similar scenario is missing in sample-code, please submit a PR with one of the sample apps provided.
+

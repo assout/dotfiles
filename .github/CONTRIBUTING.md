@@ -1,4 +1,6 @@
-<!--- Refs: [atom/CONTRIBUTING.md at master · atom/atom · GitHub](https://github.com/atom/atom/blob/master/CONTRIBUTING.md) --->
+<!--- Refs: -->
+<!--- - [Setting guidelines for repository contributors - User Documentation ](https://help.github.com/articles/setting-guidelines-for-repository-contributors/) -->
+<!--- - [atom/CONTRIBUTING.md at master · atom/atom · GitHub](https://github.com/atom/atom/blob/master/CONTRIBUTING.md) -->
 
 # Contributing to Hoge
 

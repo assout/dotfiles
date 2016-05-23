@@ -1,4 +1,6 @@
-<!--- Refs: [appium/PULL_REQUEST_TEMPLATE.md at master · appium/appium · GitHub](https://github.com/appium/appium/blob/master/.github/PULL_REQUEST_TEMPLATE.md) --->
+<!--- Refs: -->
+<!--- - https://github.com/devspace/awesome-github-templates/blob/master/readme.md -->
+<!--- - [appium/PULL_REQUEST_TEMPLATE.md at master · appium/appium · GitHub](https://github.com/appium/appium/blob/master/.github/PULL_REQUEST_TEMPLATE.md) -->
 
 ## Proposed changes
 

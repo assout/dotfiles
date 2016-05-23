@@ -1,4 +1,6 @@
-<!--- Refs: [appium/ISSUE_TEMPLATE.md at master · appium/appium · GitHub](https://github.com/appium/appium/blob/master/.github/ISSUE_TEMPLATE.md) --->
+<!--- Refs: -->
+<!--- - [awesome-github-templates/readme.md at master · devspace/awesome-github-templates · GitHub](https://github.com/devspace/awesome-github-templates/blob/master/readme.md) -->
+<!--- - [appium/ISSUE_TEMPLATE.md at master · appium/appium · GitHub](https://github.com/appium/appium/blob/master/.github/ISSUE_TEMPLATE.md) -->
 
 ## The problem
 

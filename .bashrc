@@ -144,11 +144,12 @@ if [ "${is_unix}" ] ; then
   }
 
 else
-  # TODO: 全角文字化け。
+  # TODO: 全角崩れ。
 
   # Note: msys2でのpeco強引利用。
   function _pecowrap_exec() {
     eval "$@" > /tmp/cmd.log
+    # nkf32 -s --overwrite /tmp/cmd.log # TODO: 全角崩れworkaround
     script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
@@ -163,7 +164,8 @@ else
   }
 
   function e() {
-    _pecowrap_exec "find ~/Desktop/ -name *.lnk |  xargs -i cygpath.exe -w "{}"" || return
+    if [ ${is_office} ] ; then local target="~/Documents/shortcuts/peco"; else local target="~/Desktop" ; fi
+    _pecowrap_exec "find ${target} -name *.lnk |  xargs -i cygpath.exe -w "{}"" || return
     explorer "$(_pecowrap_result)"
   }
 

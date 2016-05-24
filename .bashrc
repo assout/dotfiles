@@ -118,13 +118,11 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
-  function c() {
-    local dir; dir="$(find -L "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
+  function _peco_cd() {
+    local dir; dir="$(find -L $2 -maxdepth $1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
-
-  function C() {
-    local dir; dir="$(find -L "$@" -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
-  }
+  alias c='_peco_cd 1'
+  alias C='_peco_cd 100'
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
@@ -143,13 +141,11 @@ if [ "${is_unix}" ] ; then
 
   alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
 
-  function v() {
-    local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+  function _peco_vim() {
+    local file; file="$(find -L $2 -maxdepth $1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
   }
-
-  function V() {
-    local file; file="$(find -L "$@" -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
-  }
+  alias v='_peco_vim 1'
+  alias V='_peco_vim 1'
 
 else
   # TODO: 全角崩れる。 @msys2
@@ -165,15 +161,12 @@ else
     echo "${result}"
   }
 
-  function c() {
-    _pecowrap_exec "find -L $1 -maxdepth 1 -type d | sort" || return
+  function _peco_cd() {
+    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d| sort" || return
     cd "$(_pecowrap_result)"
   }
-
-  function C() {
-    _pecowrap_exec "find -L $1 -type d | sort" || return
-    cd "$(_pecowrap_result)"
-  }
+  alias c='_peco_cd 1'
+  alias C='_peco_cd 100'
 
   function e() {
     if [ ${is_office} ] ; then local target="~/Documents/shortcuts/peco"; else local target="~/Desktop" ; fi
@@ -207,15 +200,13 @@ else
     todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
   }
 
-  function v() {
-    _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
+  function _peco_vim() {
+    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type f | sort" || return
     vi "$(_pecowrap_result)"
   }
+  alias v='_peco_vim 1'
+  alias V='_peco_vim 100'
 
-  function V() {
-    _pecowrap_exec "find -L $1 -type f | sort" || return
-    vi "$(_pecowrap_result)"
-  }
 fi
 
 function man_japanese {

@@ -8,8 +8,8 @@
     no-start-duplicated-conjunction: true
     preset-japanese: true
     # preset-jtf-style: true
-    prh:
-      rulePaths:
-        - "/home/oji/.prh.yml"
+    # prh:
+    #   rulePaths:
+    #     - "/home/oji/.prh.yml"
 
 # vim:ft=yaml

@@ -169,7 +169,7 @@ else
   alias C='_peco_cd 10'
 
   function e() {
-    if [ "${is_office}" ] ; then local target="${HOME}/Documents/shortcuts/peco"; else local target="${HOME}/Desktop" ; fi
+    local target="${HOME}/Documents/shortcuts/peco"
     _pecowrap_exec "find \"${target}\" -name *.lnk |  xargs -i cygpath.exe -w \"{}\"" || return
     explorer "$(_pecowrap_result)"
   }

@@ -122,7 +122,7 @@ if [ "${is_unix}" ] ; then
     local dir; dir="$(find -L $2 -maxdepth $1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
   alias c='_peco_cd 1'
-  alias C='_peco_cd 100'
+  alias C='_peco_cd 10'
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
@@ -145,7 +145,7 @@ if [ "${is_unix}" ] ; then
     local file; file="$(find -L $2 -maxdepth $1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
   }
   alias v='_peco_vim 1'
-  alias V='_peco_vim 1'
+  alias V='_peco_vim 10'
 
 else
   # TODO: 全角崩れる。 @msys2
@@ -166,7 +166,7 @@ else
     cd "$(_pecowrap_result)"
   }
   alias c='_peco_cd 1'
-  alias C='_peco_cd 100'
+  alias C='_peco_cd 10'
 
   function e() {
     if [ ${is_office} ] ; then local target="~/Documents/shortcuts/peco"; else local target="~/Desktop" ; fi
@@ -205,7 +205,7 @@ else
     vi "$(_pecowrap_result)"
   }
   alias v='_peco_vim 1'
-  alias V='_peco_vim 100'
+  alias V='_peco_vim 10'
 
 fi
 

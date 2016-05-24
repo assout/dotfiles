@@ -107,7 +107,6 @@ alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 
 # Peco
 if [ "${is_unix}" ] ; then
-  # TODO: msys2でも。
   function peco_select_history() { # history
     local l
     local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
@@ -119,18 +118,15 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
-  function c() {
-    local dir; dir="$(find -L "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
+  function _peco_cd() {
+    local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
-
-  function v() {
-    local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
-  }
+  alias c='_peco_cd 1'
+  alias C='_peco_cd 10'
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
-  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
 
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
@@ -142,8 +138,17 @@ if [ "${is_unix}" ] ; then
     local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | peco)
     [ -n "${target}" ] && ssh "${target}"
   }
+
+  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
+
+  function _peco_vim() {
+    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+  }
+  alias v='_peco_vim 1'
+  alias V='_peco_vim 10'
+
 else
-  # TODO: 指定したディレクトリをExplorで開く(sourceはどこか保存するか。vimfiler使ってるならmru/directoryとキャッシュファイル共用してもよい？いやExploerのお気に入りとかショートカットフォルダと連携するべき)
+  # TODO: 全角崩れる。 @msys2
 
   # Note: msys2でのpeco強引利用。
   function _pecowrap_exec() {
@@ -156,14 +161,17 @@ else
     echo "${result}"
   }
 
-  function c() {
-    _pecowrap_exec "find -L $1 -maxdepth 1 -type d | sort" || return
+  function _peco_cd() {
+    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d| sort" || return
     cd "$(_pecowrap_result)"
   }
+  alias c='_peco_cd 1'
+  alias C='_peco_cd 10'
 
-  function v() {
-    _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
-    vi "$(_pecowrap_result)"
+  function e() {
+    if [ "${is_office}" ] ; then local target="${HOME}/Documents/shortcuts/peco"; else local target="${HOME}/Desktop" ; fi
+    _pecowrap_exec "find \"${target}\" -name *.lnk |  xargs -i cygpath.exe -w \"{}\"" || return
+    explorer "$(_pecowrap_result)"
   }
 
   function fn() {
@@ -176,12 +184,6 @@ else
     cd "$(_pecowrap_result)"
   }
 
-  # TODO 崩れる。@office @home 全角があるとだめかも
-  function tp() {
-    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
-  }
-
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile
@@ -192,6 +194,19 @@ else
     _pecowrap_exec "echo ${COMPREPLY[*]} | tr ' ' '\n' | sort -u" || return
     ssh "$(_pecowrap_result)"
   }
+
+  function tp() {
+    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
+    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
+  }
+
+  function _peco_vim() {
+    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type f | sort" || return
+    vi "$(_pecowrap_result)"
+  }
+  alias v='_peco_vim 1'
+  alias V='_peco_vim 10'
+
 fi
 
 function man_japanese {
@@ -201,12 +216,6 @@ function man_japanese {
   LANG=$LANG_ESCAPE
 }
 alias jan='man_japanese'
-
-function exec_explorer {
-  local target="${1////\\}" # /を\に置換
-  command explorer "${target:-.}"
-}
-alias explorer='exec_explorer'
 
 # Docker
 alias drm='docker rm $(docker ps -a -q)'
@@ -227,25 +236,26 @@ function ghq_status {
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 
-# Other
-alias jp='LANG=ja_JP.UTF8'
+# Others
 alias en='LANG=en_US.UTF8'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias t=todo.sh; complete -F _todo t
 alias groot='cd "$(git rev-parse --show-toplevel)"'
+alias jp='LANG=ja_JP.UTF8'
+alias t=todo.sh; complete -F _todo t
 
 if [ "${is_win}" ] ; then
   alias l.='ls -d .* --color=auto --show-control-chars'
   alias ls='ls --color=auto --show-control-chars'
   alias ll='ls -l --color=auto --show-control-chars'
 
-  # TODO: セグる
-  # alias es='cygpath -u $(command es)'
+  function esu() {
+    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
+  }
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 fi
 
-[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar" # TODO
+[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
 
 # }}}1
 
@@ -278,7 +288,6 @@ if [ "${is_unix}" ] ; then
   # Note: デフォルトで読まれるがhubの補完有効にするために必要
   source /usr/share/bash-completion/completions/git
   source /etc/bash_completion.d/hub.bash_completion.sh
-
 elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
   source /usr/share/git/completion/git-completion.bash

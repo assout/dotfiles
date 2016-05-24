@@ -392,7 +392,7 @@ if s:IsPluginEnabled()
   Plug 'h1mesuke/vim-alignta', {'on' : ['Align', 'Alignta']}
   " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
-  Plug 'heavenshell/vim-jsdoc'
+  Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
@@ -433,7 +433,7 @@ if s:IsPluginEnabled()
         \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
   Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'ujihisa/neco-look'
-  Plug 'vim-jp/vimdoc-ja', {}
+  Plug 'vim-jp/vimdoc-ja'
   Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}

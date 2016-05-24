@@ -122,6 +122,10 @@ if [ "${is_unix}" ] ; then
     local dir; dir="$(find -L "$@" -maxdepth 1 -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
 
+  function C() {
+    local dir; dir="$(find -L "$@" -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
+  }
+
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
   alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
@@ -143,13 +147,16 @@ if [ "${is_unix}" ] ; then
     local file; file="$(find -L "$@" -maxdepth 1 -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
   }
 
+  function V() {
+    local file; file="$(find -L "$@" -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+  }
+
 else
-  # TODO: 全角崩れ。
+  # TODO: 全角崩れる。 @msys2
 
   # Note: msys2でのpeco強引利用。
   function _pecowrap_exec() {
     eval "$@" > /tmp/cmd.log
-    # nkf32 -s --overwrite /tmp/cmd.log # TODO: 全角崩れworkaround
     script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
   }
 
@@ -160,6 +167,11 @@ else
 
   function c() {
     _pecowrap_exec "find -L $1 -maxdepth 1 -type d | sort" || return
+    cd "$(_pecowrap_result)"
+  }
+
+  function C() {
+    _pecowrap_exec "find -L $1 -type d | sort" || return
     cd "$(_pecowrap_result)"
   }
 
@@ -197,6 +209,11 @@ else
 
   function v() {
     _pecowrap_exec "find -L $1 -maxdepth 1 -type f | sort" || return
+    vi "$(_pecowrap_result)"
+  }
+
+  function V() {
+    _pecowrap_exec "find -L $1 -type f | sort" || return
     vi "$(_pecowrap_result)"
   }
 fi

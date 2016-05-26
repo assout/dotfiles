@@ -118,6 +118,8 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
+  alias br='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+
   function _peco_cd() {
     local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
   }
@@ -126,7 +128,6 @@ if [ "${is_unix}" ] ; then
 
   alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
-  alias hu='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
 
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
@@ -167,6 +168,12 @@ else
   }
   alias c='_peco_cd 1'
   alias C='_peco_cd 10'
+
+  function br() {
+    _pecowrap_exec "ghq list" || return
+    # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
+    start "http://$(_pecowrap_result)"
+  }
 
   function e() {
     local target="${HOME}/Documents/shortcuts/peco"

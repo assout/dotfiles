@@ -25,6 +25,7 @@ fi
 # }}}1
 
 # [Define, Export variables] {{{1
+
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
 is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
@@ -83,6 +84,7 @@ export PATH
 # }}}1
 
 # [Functions & Aliases] {{{1
+
 function cd_parent {
   local to=${1:-1}
   local toStr=""
@@ -267,6 +269,7 @@ fi
 # }}}1
 
 # [User process] {{{1
+
 stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 
 # Create Today backup directory

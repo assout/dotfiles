@@ -162,18 +162,18 @@ else
     echo "${result}"
   }
 
+  function br() {
+    _pecowrap_exec "ghq list" || return
+    # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
+    start "http://$(_pecowrap_result)"
+  }
+
   function _peco_cd() {
     _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d| sort" || return
     cd "$(_pecowrap_result)"
   }
   alias c='_peco_cd 1'
   alias C='_peco_cd 10'
-
-  function br() {
-    _pecowrap_exec "ghq list" || return
-    # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
-    start "http://$(_pecowrap_result)"
-  }
 
   function e() {
     local target="${HOME}/Documents/shortcuts/peco"

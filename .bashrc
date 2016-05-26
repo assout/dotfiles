@@ -167,7 +167,7 @@ else
   function br() {
     _pecowrap_exec "ghq list" || return
     # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
-    start "http://$(_pecowrap_result)"
+    start "http://$(_pecowrap_result | sed 's?.wiki$?/wikis/home?')" # Note: gitlabのwikiをgitとしてcloneしてる場合を考慮
   }
 
   function _peco_cd() {

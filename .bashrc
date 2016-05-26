@@ -194,7 +194,7 @@ else
   function s() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile
-    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
+    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっぽい
     unset COMPREPLY
     _known_hosts_real -a -F "$configfile" ""
 

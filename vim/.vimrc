@@ -41,6 +41,7 @@
 " * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " * TODO: neocompleteでたまに日本語入力が変になる
 " * TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
+" * TODO: GVim@officeで複数ファイルを開いたときの<C-w>h,lが遅い(プラグインなし、vimrc空でも再現)
 " }}}1
 
 " # Begin {{{1
@@ -897,6 +898,8 @@ if s:HasPlugin('vim-markdown') " {{{
 
     " ファイルパスを開けなくなるので無効化
     unmap <buffer> gx
+    " デフォルト変えたくないので無効化
+    unmap <buffer> ge
   endfunction
   autocmd vimrc FileType markdown call s:VimMarkdownSettings()
 endif " }}}

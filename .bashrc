@@ -108,6 +108,7 @@ alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 
 # Peco
+# TODO:historyに追加(特にssh)
 if [ "${is_unix}" ] ; then
   function peco_select_history() { # history
     local l
@@ -132,6 +133,11 @@ if [ "${is_unix}" ] ; then
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
 
   function s() {
+    target=$("awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u") # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+    [ -n "${target}" ] && ssh "${target}"
+  }
+
+  function S() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
@@ -193,6 +199,12 @@ else
   }
 
   function s() {
+    # _pecowrap_exec "grep -iE '^host\s+(\w|\d)+' ~/.ssh/config | awk '{print \$2}' | sort -u" # 簡易版
+    _pecowrap_exec "awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u" || return # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+    ssh "$(_pecowrap_result)"
+  }
+
+  function S() {
     local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
     local configfile
     type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっぽい

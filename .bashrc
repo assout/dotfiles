@@ -100,6 +100,11 @@ function cdls {
   ls --color=auto --show-control-chars
 }
 
+function _with_history {
+  history -s $@
+  $@
+}
+
 # Vim
 alias vi=vim
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
@@ -108,7 +113,6 @@ alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 
 # Peco
-# TODO:historyに追加(特にssh)
 if [ "${is_unix}" ] ; then
   function peco_select_history() { # history
     local l
@@ -121,20 +125,20 @@ if [ "${is_unix}" ] ; then
   }
   bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
 
-  alias br='hub browse $(ghq list | peco | cut -d "/" -f 2,3)'
+  alias br='_with_history "hub browse $(ghq list | peco | cut -d "/" -f 2,3)"'
 
   function _peco_cd() {
-    local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | peco)"; [ -d "${dir}" ] && cd "${dir}"
+    local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | peco)"; [ -d "${dir}" ] && _with_history "cd "${dir}""
   }
   alias c='_peco_cd 1'
   alias C='_peco_cd 10'
 
-  alias fn='eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)'
-  alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then cd "$(ghq root)/${target}" ; fi'
+  alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)"'
+  alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
 
   function s() {
     target=$("awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u") # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-    [ -n "${target}" ] && ssh "${target}"
+    [ -n "${target}" ] && _with_history "ssh "${target}""
   }
 
   function S() {
@@ -145,13 +149,13 @@ if [ "${is_unix}" ] ; then
     _known_hosts_real -a -F "$configfile" ""
 
     local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | peco)
-    [ -n "${target}" ] && ssh "${target}"
+    [ -n "${target}" ] && _with_history "ssh "${target}""
   }
 
-  alias tp='todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)'
+  alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)"'
 
   function _peco_vim() {
-    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && vi "${file}"
+    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && _with_history "vi "${file}""
   }
   alias v='_peco_vim 1'
   alias V='_peco_vim 10'
@@ -172,12 +176,12 @@ else
   function br() {
     _pecowrap_exec "ghq list" || return
     # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
-    start "http://$(_pecowrap_result | sed 's?.wiki$?/wikis/home?')" # Note: gitlabのwikiをgitとしてcloneしてる場合を考慮
+    _with_history "start "http://$(_pecowrap_result | sed 's?.wiki$?/wikis/home?')"" # Note: gitlabのwikiをgitとしてcloneしてる場合を考慮
   }
 
   function _peco_cd() {
     _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d| sort" || return
-    cd "$(_pecowrap_result)"
+    _with_history "cd "$(_pecowrap_result)""
   }
   alias c='_peco_cd 1'
   alias C='_peco_cd 10'
@@ -185,23 +189,23 @@ else
   function e() {
     local target="${HOME}/Documents/shortcuts/peco"
     _pecowrap_exec "find \"${target}\" -name *.lnk |  xargs -i cygpath.exe -w \"{}\"" || return
-    explorer "$(_pecowrap_result)"
+    _with_history "explorer "$(_pecowrap_result)""
   }
 
   function fn() {
     _pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
-    eval "$(_pecowrap_result)"
+    _with_history "eval "$(_pecowrap_result)""
   }
 
   function gh() {
     _pecowrap_exec "ghq list -p" || return
-    cd "$(_pecowrap_result)"
+    _with_history "cd "$(_pecowrap_result)""
   }
 
   function s() {
     # _pecowrap_exec "grep -iE '^host\s+(\w|\d)+' ~/.ssh/config | awk '{print \$2}' | sort -u" # 簡易版
     _pecowrap_exec "awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u" || return # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-    ssh "$(_pecowrap_result)"
+    _with_history "ssh "$(_pecowrap_result)""
   }
 
   function S() {
@@ -212,17 +216,17 @@ else
     _known_hosts_real -a -F "$configfile" ""
 
     _pecowrap_exec "echo ${COMPREPLY[*]} | tr ' ' '\n' | sort -u" || return
-    ssh "$(_pecowrap_result)"
+    _with_history "ssh "$(_pecowrap_result)""
   }
 
   function tp() {
     _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)"
+    _with_history "todo.sh note "$(_pecowrap_result | cut -d 'G' -f 1)""
   }
 
   function _peco_vim() {
     _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type f | sort" || return
-    vi "$(_pecowrap_result)"
+    _with_history "vim "$(_pecowrap_result)""
   }
   alias v='_peco_vim 1'
   alias V='_peco_vim 10'

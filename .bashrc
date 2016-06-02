@@ -203,7 +203,6 @@ else
   }
 
   function s() {
-    # _pecowrap_exec "grep -iE '^host\s+(\w|\d)+' ~/.ssh/config | awk '{print \$2}' | sort -u" # 簡易版
     _pecowrap_exec "awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u" || return # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
     _with_history "ssh $(_pecowrap_result)"
   }

@@ -480,6 +480,7 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
+  map  <SID>[plugin]i       <SID>[indentguide]
   map  <SID>[plugin]l       <SID>[markdown_l]
   nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
@@ -549,6 +550,10 @@ endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
+endif " }}}
+
+if s:HasPlugin('vim-indent-guides') " {{{
+  nnoremap <SID>[indentguide] :<C-u>IndentGuidesToggle<CR>
 endif " }}}
 
 if has('kaoriya') " {{{

@@ -860,7 +860,7 @@ if s:HasPlugin('vim-gf-user') " {{{
       let l:line = matchstr(l:path, '\d\+:\?$')
       let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
     endif
-    if !filereadable(l:path) | 
+    if !filereadable(l:path)
       return 0
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }

@@ -157,7 +157,7 @@ let g:todo_note_directory = expand('~/Documents/todo/notes')
 function! s:TodoGrep(word)
   call histadd('cmd', 'TodoGrep '  . a:word)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
-  execute ':silent grep ' . a:word . ' ' . g:todo_note_directory . '/*'
+  execute ':silent grep -r ' . a:word . ' ' . g:todo_note_directory . '/*'
 endfunction
 command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
 

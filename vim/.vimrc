@@ -157,7 +157,7 @@ let g:todo_note_directory = expand('~/Documents/todo/notes')
 function! s:TodoGrep(word)
   call histadd('cmd', 'TodoGrep '  . a:word)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
-  execute ':silent grep ' . a:word . ' ' . g:todo_note_directory . '/*'
+  execute ':silent grep -r ' . a:word . ' ' . g:todo_note_directory . '/*'
 endfunction
 command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
 
@@ -480,6 +480,7 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
+  map  <SID>[plugin]i       <SID>[indentguide]
   map  <SID>[plugin]l       <SID>[markdown_l]
   nmap <SID>[plugin]L       <SID>[markdown_L]
   nmap <SID>[plugin]m       <SID>[memolist]
@@ -549,6 +550,10 @@ endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
+endif " }}}
+
+if s:HasPlugin('vim-indent-guides') " {{{
+  nnoremap <SID>[indentguide] :<C-u>IndentGuidesToggle<CR>
 endif " }}}
 
 if has('kaoriya') " {{{
@@ -855,7 +860,7 @@ if s:HasPlugin('vim-gf-user') " {{{
       let l:line = matchstr(l:path, '\d\+:\?$')
       let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
     endif
-    if !filereadable(l:path) | 
+    if !filereadable(l:path)
       return 0
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }

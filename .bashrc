@@ -101,8 +101,7 @@ function cdls {
 }
 
 function _with_history {
-  history -s $@
-  $@
+  history -s "$@"; $@
 }
 
 # Vim
@@ -180,7 +179,7 @@ else
   }
 
   function _peco_cd() {
-    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d| sort" || return
+    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d | sort" || return
     _with_history "cd "$(_pecowrap_result)""
   }
   alias c='_peco_cd 1'

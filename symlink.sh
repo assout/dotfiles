@@ -19,7 +19,7 @@ fi
 
 ln -sf "${HERE}/lint/.mdlrc" ~/
 ln -sf "${HERE}/lint/.mdlrc.style.rb" ~/
-ln -sf "${HERE}/lint/.eslintrc.json" ~/
+ln -sf "${HERE}/lint/.eslintrc.yml" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.prh.yml" ~/

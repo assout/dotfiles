@@ -101,7 +101,7 @@ function cdls {
 }
 
 function _with_history {
-  history -s "$@"; $@
+  history -s "$1"; $1
 }
 
 # Vim
@@ -154,7 +154,7 @@ if [ "${is_unix}" ] ; then
   alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)"'
 
   function _peco_vim() {
-    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && _with_history "vi ${file}"
+    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && _with_history "vim ${file}"
   }
   alias v='_peco_vim 1'
   alias V='_peco_vim 10'

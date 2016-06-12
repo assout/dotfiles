@@ -1178,6 +1178,8 @@ if s:HasPlugin('vim-watchdogs') " {{{
   elseif g:is_win_cui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
     let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
+  else
+    let g:quickrun_config['watchdogs_checker/mdl'] = {'cmdopt' : '-c ~/.mdlrc'} " TODO: 未指定だとデフォルト見てくれないので暫定的に。
   endif
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)

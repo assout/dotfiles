@@ -110,6 +110,7 @@ alias vi=vim
 
 alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
+alias mdl='mdl -c ~/.mdlrc' # TODO: 未指定だとデフォルト見てくれないので暫定的に。
 
 # Peco
 if [ "${is_unix}" ] ; then

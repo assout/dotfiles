@@ -85,6 +85,11 @@ export PATH
 
 # [Functions & Aliases] {{{1
 
+# General {{{2
+function _with_history {
+  history -s "$1"; $1
+}
+
 function cd_parent {
   local to=${1:-1}
   local toStr=""
@@ -100,19 +105,43 @@ function cdls {
   ls --color=auto --show-control-chars
 }
 
-function _with_history {
-  history -s "$1"; $1
+function jan {
+  LANG_ESCAPE=$LANG
+  LANG=ja_JP.UTF-8
+  man "$*"
+  LANG=$LANG_ESCAPE
 }
 
-# Vim
+alias en='LANG=en_US.UTF8'
+alias jp='LANG=ja_JP.UTF8'
+
+alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
+alias mdl='mdl -c ~/.mdlrc' # TODO: 未指定だとデフォルト見てくれないので暫定的に。
+alias t=todo.sh; complete -F _todo t
+
+if [ "${is_win}" ] ; then
+  alias l.='ls -d .* --color=auto --show-control-chars'
+  alias ls='ls --color=auto --show-control-chars'
+  alias ll='ls -l --color=auto --show-control-chars'
+  [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
+
+  function esu() {
+    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
+  }
+elif [ "${is_unix}" ] ; then
+  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+fi
+# }}}2
+
+# Vim {{{2
 alias vi=vim
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
-alias mdl='mdl -c ~/.mdlrc' # TODO: 未指定だとデフォルト見てくれないので暫定的に。
+# }}}2
 
-# Peco
+# Peco {{{2
 if [ "${is_unix}" ] ; then
   function peco_select_history() { # history
     local l
@@ -230,21 +259,24 @@ else
   alias v='_peco_vim 1'
   alias V='_peco_vim 10'
 fi
+# }}}2
 
-function jan {
-  LANG_ESCAPE=$LANG
-  LANG=ja_JP.UTF-8
-  man "$*"
-  LANG=$LANG_ESCAPE
-}
-
-# Docker
+# Docker {{{2
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
+# }}}2
 
-# GHQ
+# Git {{{2
+alias groot='cd "$(git rev-parse --show-toplevel)"'
+# Note: hub使えばできるがgitlabもあるのでこうしている
+alias browse="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
+# }}}2
+
+# GHQ {{{2
+[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+
 function ghq_update {
   ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
 }
@@ -254,27 +286,7 @@ function ghq_status {
     (cd "${t}" && echo "${t}" && git status)
   done
 }
-
-# Others
-alias en='LANG=en_US.UTF8'
-alias jp='LANG=ja_JP.UTF8'
-alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias groot='cd "$(git rev-parse --show-toplevel)"'
-alias t=todo.sh; complete -F _todo t
-
-if [ "${is_win}" ] ; then
-  alias l.='ls -d .* --color=auto --show-control-chars'
-  alias ls='ls --color=auto --show-control-chars'
-  alias ll='ls -l --color=auto --show-control-chars'
-  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-  [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
-
-  function esu() {
-    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
-  }
-elif [ "${is_unix}" ] ; then
-  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
-fi
+# }}}2
 
 # }}}1
 

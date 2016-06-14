@@ -1224,12 +1224,9 @@ augroup vimrc
   autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   " Note: Windowsのときencode指定しないとうまくいかないことがある
   autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-
-  if g:is_win " homeではRicty font使うので不要
-    " Double byte space highlight
-    autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-    autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
-  endif
+  " Double byte space highlight
+  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END
 " }}}1
 

@@ -1172,14 +1172,14 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
   let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
 
+  let g:quickrun_config['watchdogs_checker/mdl'] = { 'cmdopt' : '-c ~/.mdlrc' } " TODO: 未指定だとデフォルト見てくれないので暫定的に。
   if g:is_win_gui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
-    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
+    let g:quickrun_config['watchdogs_checker/mdl']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
   elseif g:is_win_cui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
-    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
+    let g:quickrun_config['watchdogs_checker/mdl']['exec'] = 'chcp.com 65001 | %c %o %s:p'
   endif
-  let g:quickrun_config['watchdogs_checker/mdl']['cmdopt'] = '-c ~/.mdlrc' " TODO: 未指定だとデフォルト見てくれないので暫定的に。
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
 endif " }}}

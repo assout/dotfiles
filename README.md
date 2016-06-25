@@ -7,11 +7,9 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
 
 ## How to symlink
 
-```
-git clone https://github.com/assout/dotfiles
-cd dotfiles
-./symlink.sh
-```
+    git clone https://github.com/assout/dotfiles
+    cd dotfiles
+    ./symlink.sh
 
 ## Notes
 

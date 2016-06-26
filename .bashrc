@@ -271,7 +271,7 @@ alias dpl='docker ps -lq'
 # Git {{{2
 alias groot='cd "$(git rev-parse --show-toplevel)"'
 # Note: hub使えばできるがgitlabもあるのでこうしている
-alias browse="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
+[ "${is_win}" ] && alias browse="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
 # }}}2
 
 # GHQ {{{2

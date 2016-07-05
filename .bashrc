@@ -67,6 +67,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
+  PATH="${PATH}:/usr/share/git/workdir"
 
   todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
   [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"

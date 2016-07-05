@@ -1170,8 +1170,8 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " Note: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
   let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
   let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
-  " let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
-  let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/textlint' }
+  let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
+  " let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/textlint' }
 
   let g:quickrun_config['watchdogs_checker/mdl'] = { 'cmdopt' : '-c ~/.mdlrc' } " TODO: 未指定だとデフォルト見てくれないので暫定的に。
   if g:is_win_gui

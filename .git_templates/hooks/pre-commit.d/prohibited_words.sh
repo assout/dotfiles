@@ -1,6 +1,7 @@
 #!/bin/sh
 # Refs: http://qiita.com/niku4i/items/f39eb7d4d5c4f5c0775c
 # TODO: "===..."の誤検知
+# TODO: 引っ掛かった場所の表示
 
 # This prevents pushing prohibited words e.g in-house information to
 # github.com by mistake.

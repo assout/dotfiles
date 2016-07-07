@@ -501,7 +501,7 @@ if s:IsPluginEnabled()
   " TODO: 押しづらい
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
-  nmap <SID>[sub_plugin]q   <SID>[qiita]
+  nmap <SID>[sub_plugin]q   <SID>[Quickrun]
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
@@ -989,7 +989,8 @@ endif " }}}
 if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
-  nnoremap <SID>[quickrun] :<C-u>QuickRun<CR>
+  nnoremap <SID>[Quickrun]  :<C-u>QuickRun<CR>
+  nnoremap <SID>[quickrun]m :<C-u>QuickRun mattersend<CR>
 
   let g:quickrun_config = { '_' : { 'runner' : 'vimproc'} }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
@@ -1000,6 +1001,7 @@ if s:HasPlugin('vim-quickrun') " {{{
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/%s:t.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']
   endif
+  let g:quickrun_config['mattersend'] = { 'exec' : 'mattersend.py -f %s', 'outputter' : 'null' }
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{

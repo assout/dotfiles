@@ -77,6 +77,7 @@ ghq_root="${HOME}/Development/src" # Note: ghq rootコマンドは使わない(p
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
+PATH=${PATH}:${ghq_root}/github.com/mtorromeo/mattersend
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:${GOPATH}/bin
 

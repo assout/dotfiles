@@ -168,6 +168,8 @@ command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+" Mattertee
+command! -nargs=* Mattertee :silent write !mattertee <f-args>
 " }}}1
 
 " # Options {{{1
@@ -990,7 +992,6 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[Quickrun]  :<C-u>QuickRun<CR>
-  nnoremap <SID>[quickrun]m :<C-u>QuickRun mattersend<CR>
 
   let g:quickrun_config = { '_' : { 'runner' : 'vimproc'} }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
@@ -1001,7 +1002,6 @@ if s:HasPlugin('vim-quickrun') " {{{
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/%s:t.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']
   endif
-  let g:quickrun_config['mattersend'] = { 'exec' : 'mattersend.py -f %s', 'outputter' : 'null' }
 endif " }}}
 
 if s:HasPlugin('vim-ref') " {{{

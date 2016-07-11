@@ -169,7 +169,7 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 " Mattertee
-command! -nargs=* Mattertee :silent write !mattertee <f-args>
+command! -nargs=? Mattertee :write !mattertee <args>
 " }}}1
 
 " # Options {{{1

@@ -1,5 +1,6 @@
 version: 1
 rules:
   - expected: jQuery
-    pattern: ジェークエリ
-  - expected: JSON
+  - expected: WebSocket
+    pattern: Webソケット
+

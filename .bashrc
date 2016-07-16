@@ -79,6 +79,7 @@ PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:${GOPATH}/bin
+PATH=${PATH}:${HOME}/.ghg/bin
 
 export PATH
 

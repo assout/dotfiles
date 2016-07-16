@@ -1,8 +1,5 @@
 version: 1
 rules:
   - expected: jQuery
-    specs:
-      - from: jquery
-        to:   jQuery
-      - from: ＪＱＵＥＲＹ
-        to:   jQuery
+    pattern: ジェークエリ
+  - expected: JSON

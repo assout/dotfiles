@@ -9,9 +9,9 @@
     no-dropping-the-ra: true
     no-start-duplicated-conjunction: true
     preset-japanese: true # Note: slow
-    # preset-jtf-style: true
-    # prh:
-    #   rulePaths:
-    #     - "/home/oji/.prh.yml"
+    preset-jtf-style: true
+    prh:
+      rulePaths:
+        - "~/.prh.yml"
 
 # vim:ft=yaml

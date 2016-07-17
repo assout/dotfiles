@@ -507,8 +507,15 @@ if s:IsPluginEnabled()
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
-  " Caution: Kは定義不要だがプラグインの遅延ロードのため定義している
+  " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している
   nmap K                <Plug>(ref-keyword)
+  nmap gf               <Plug>(gf-user-gf)
+  nmap gF               <Plug>(gf-user-gF)
+  nmap <C-w>f           <Plug>(gf-user-<C-w>f)
+  nmap <C-w><C-f>       <Plug>(gf-user-<C-w><C-f>)
+  nmap <C-w>F           <Plug>(gf-user-<C-w>F)
+  nmap <C-w>gf          <Plug>(gf-user-<C-w>gf)
+  nmap <C-w>gF          <Plug>(gf-user-<C-w>gF)
   map  y                <Plug>(operator-flashy)
   nmap Y                <Plug>(operator-flashy)$
   nmap p                <Plug>(yankround-p)
@@ -864,7 +871,11 @@ if s:HasPlugin('vim-gf-user') " {{{
       let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
     endif
     if !filereadable(l:path)
-      return 0
+      let l:mdpath = expand('%:p:h') . "/" . l:path . ".md"
+      if filereadable(l:mdpath)
+        return { 'path': l:mdpath, 'line': l:line, 'col': 0, }
+      endif
+        return 0
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction

@@ -4,7 +4,7 @@ let g:did_install_default_menus = 1 " メニューバー非表示の場合この
 
 if has('unix')
   " set guifont=Ricty\ Diminished\ 11
-  set guifont=Myrica\ M\ 11
+  " set guifont=Myrica\ M\ 11
 else
   set guifont=Consolas:h9
   set guifontwide=MS_Gothic:h9:cSHIFTJIS

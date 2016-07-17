@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # TODO テスト系スクリプトプロジェクトトップのtestにまとめる
 
 vim_dir=${WORKSPACE}/.vim

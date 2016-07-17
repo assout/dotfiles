@@ -423,7 +423,7 @@ if s:IsPluginEnabled()
         \ | Plug 'KazuakiM/vim-qfsigns', {'on' : ['QuickRun', 'WatchdogsRun']}
         \ | Plug 'osyo-manga/vim-watchdogs', {'on' : ['QuickRun', 'WatchdogsRun']}
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
-        \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']}
+        \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
   Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
   Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>

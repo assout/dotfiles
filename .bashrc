@@ -165,6 +165,7 @@ if [ "${is_unix}" ] ; then
   alias C='_peco_cd 10'
 
   alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)"'
+  # TODO go getで取得した奴は見たくない
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
 
   function s() {

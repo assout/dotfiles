@@ -1,6 +1,6 @@
 ---
   rules:
-    # common-misspelings: true # TODO: エラー出る
+    common-misspellings: true
     # ja-yahoo-kousei: true # TODO 登録が必要
     max-appearence-count-of-words: true
     # max-number-of-lines: true # Note: 文書はしかたない

@@ -329,7 +329,8 @@ fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
-[ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
+# TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
+# [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
 
 # End profile
 if [ "${is_profile}" ] ; then

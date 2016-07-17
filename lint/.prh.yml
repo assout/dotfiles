@@ -2,5 +2,7 @@ version: 1
 rules:
   - expected: jQuery
   - expected: WebSocket
-    pattern: Webソケット
+    pattern:
+      - /[wW][eE][bB][sS][oO][cC][kK][eE][tT]/
+      - Webソケット
 

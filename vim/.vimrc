@@ -425,7 +425,7 @@ if s:IsPluginEnabled()
   Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
         \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
   Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
-  Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!--- hoge --->`となるが`<!--- hoge -->`では？(シンタックスハイライトエラーになる)
+  Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-fugitive'
         \ | Plug 'junegunn/gv.vim'

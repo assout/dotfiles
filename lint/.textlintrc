@@ -8,7 +8,7 @@
     no-dead-link: true
     no-dropping-the-ra: true
     no-start-duplicated-conjunction: true
-    preset-japanese: true # Note: slow
+    preset-japanese: true # Note: slow(no-mix-dearu-desumasuが遅そう)
     preset-jtf-style: true
     prh:
       rulePaths:

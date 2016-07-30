@@ -170,10 +170,6 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 " Mattertee
 command! -nargs=? Mattertee :write !mattertee <args>
-" ESLint fix current buffer
-command! EsFix :call system("eslint --fix " . expand("%")) | :edit!
-" textlint fix current buffer
-command! TsFix :call system("textlint --fix " . expand("%")) | :edit!
 
 " }}}1
 
@@ -1243,6 +1239,10 @@ augroup vimrc
   autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   " Note: Windowsのときencode指定しないとうまくいかないことがある
   autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
+  " ESLint fix current buffer
+  autocmd FileType javascript command! FixEslint :call system("eslint --fix " . expand("%")) | :edit!
+  " textlint fix current buffer
+  autocmd FileType markdown command! FixTextlint :call system("textlint --fix " . expand("%")) | :edit!
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/

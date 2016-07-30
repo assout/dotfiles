@@ -466,6 +466,7 @@ if s:IsPluginEnabled()
         \ | Plug 'sgur/vim-textobj-parameter'
         \ | Plug 'thinca/vim-textobj-between'
         \ | Plug 'thinca/vim-textobj-comment'
+        \ | Plug 'thinca/vim-textobj-function-javascript'
   " }}}
 
   " Colorschemes {{{

@@ -170,6 +170,11 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 " Mattertee
 command! -nargs=? Mattertee :write !mattertee <args>
+" ESLint fix current buffer
+command! EsFix :call system("eslint --fix " . expand("%")) | :edit!
+" textlint fix current buffer
+command! TsFix :call system("textlint --fix " . expand("%")) | :edit!
+
 " }}}1
 
 " # Options {{{1
@@ -871,7 +876,7 @@ if s:HasPlugin('vim-gf-user') " {{{
       let l:path = matchstr(l:path, '.*\ze:\d\+:\?$')
     endif
     if !filereadable(l:path)
-      let l:mdpath = expand('%:p:h') . "/" . l:path . ".md"
+      let l:mdpath = expand('%:p:h') . '/' . l:path . '.md'
       if filereadable(l:mdpath)
         return { 'path': l:mdpath, 'line': l:line, 'col': 0, }
       endif

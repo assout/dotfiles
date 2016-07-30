@@ -1,10 +1,15 @@
 ---
+  extends: "airbnb"
   env:
     # browser: true
     es6: true
     # jquery: true
     webextensions: true
-  extends: "google"
   rules:
+    strict: 0
+    import/no-unresolved: 0
     require-jsdoc: 0 # TODO 暫定
-    # camelcase: 0
+    no-console: 0
+    no-unused-vars: [2, {"vars": "all", "args": "none"}]
+    func-names: 0
+

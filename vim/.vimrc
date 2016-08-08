@@ -402,6 +402,7 @@ if s:IsPluginEnabled()
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'itchyny/vim-parenmatch'
+  Plug 'kamichidu/vim-edit-properties'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}

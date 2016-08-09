@@ -442,6 +442,8 @@ if s:IsPluginEnabled()
   Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
   Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
   Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
+  Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
+        \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
   Plug 'wellle/tmux-complete.vim'
   Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
         \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript']}

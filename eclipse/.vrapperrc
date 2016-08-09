@@ -92,6 +92,10 @@ nnoremap <C-w>q :bdelete<CR>
 nnoremap <C-w><C-h> <C-w>h
 nnoremap <C-w><C-j> <C-w>j
 
+" cycle pluginの挙動をvimのswitch pluginのキーバインドに合わせる
+nnoremap + <C-a>
+nnoremap - <C-x>
+
 " Insert mode mappings "
 " TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
 inoremap <C-a> <C-o>^

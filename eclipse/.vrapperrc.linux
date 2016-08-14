@@ -1,6 +1,7 @@
 source /home/oji/.vimrc
 
 " TODO: linuxだとコマンド実行後改行されてしまうため
-cnoremap <C-m> <Nop>
+map <C-m> <Nop>
+cnoremap <C-m> <CR>
 
 " vim: filetype=vim nofoldenable:

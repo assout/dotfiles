@@ -687,6 +687,8 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['public', 'protected', 'private', ],
         \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
         \  ['日', '月', '火', '水', '木', '金', '土'],
+        \  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+        \  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         \  {
         \     '\v\$\{(.{-})\}' : '"${\1}"',
         \     '\v"\$\{(.{-})\}"' : '''${\1}''',
@@ -1009,7 +1011,12 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[Quickrun]  :<C-u>QuickRun<CR>
 
-  let g:quickrun_config = { '_' : { 'runner' : 'vimproc'} }
+  let g:quickrun_config = {
+  \  "_" : {
+  \    'runner' : 'vimproc',
+  \    'runner/vimproc/updatetime' : 60
+  \  }
+  \}
   let g:quickrun_config['javascript'] = { 'command': 'node' }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }

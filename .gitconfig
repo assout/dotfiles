@@ -23,4 +23,3 @@
   email = assout@users.noreply.github.com
 [pre-commit]
   checks = [merge_conflict]
-

@@ -9,6 +9,11 @@ target
 tags
 .tags
 
+### Node.js ###
+.env
+deploy.env
+
 ### Other ###
 local/
+
 

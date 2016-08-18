@@ -6,7 +6,7 @@
   root = ~/Development/src
 
 [credential]
-	helper = gnomekering
+	helper = gnome-keyring
 
 # vim: filetype=gitconfig:
 

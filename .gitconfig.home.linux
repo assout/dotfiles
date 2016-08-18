@@ -5,5 +5,8 @@
 [ghq]
   root = ~/Development/src
 
+[credential]
+	helper = gnomekering
+
 # vim: filetype=gitconfig:
 

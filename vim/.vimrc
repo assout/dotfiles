@@ -412,7 +412,8 @@ if s:IsPluginEnabled()
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
-  Plug 'pangloss/vim-javascript', {'for' : 'javascript'} " For indent only
+  " Plug 'othree/yajs.vim' " vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
+  Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？ 
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元

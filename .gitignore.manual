@@ -10,8 +10,10 @@ tags
 .tags
 
 ### Node.js ###
+# node-lambda
 .env
 deploy.env
+build
 
 ### Other ###
 local/

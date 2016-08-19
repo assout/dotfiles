@@ -1013,7 +1013,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   nnoremap <SID>[Quickrun]  :<C-u>QuickRun<CR>
 
   let g:quickrun_config = {
-  \  "_" : {
+  \  '_' : {
   \    'runner' : 'vimproc',
   \    'runner/vimproc/updatetime' : 60
   \  }
@@ -1243,19 +1243,20 @@ augroup vimrc
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c formatoptions-=t
   autocmd FileType go setlocal noexpandtab
-  " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
-  autocmd FileType markdown highlight! def link markdownItalic LineNr | setlocal spell tabstop=4 shiftwidth=4 cinkeys=""
   autocmd FileType java setlocal noexpandtab
+  autocmd FileType javascript command! -buffer FixEslint :call system("eslint --fix " . expand("%")) | :edit!
   " Note: aws.json を考慮して*jsonとしている
-  autocmd FileType *json setlocal foldmethod=syntax foldlevel=99
-  autocmd FileType xml setlocal foldmethod=syntax foldlevel=99
-  autocmd FileType *json, command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
-  " Note: Windowsのときencode指定しないとうまくいかないことがある
-  autocmd FileType xml command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  " ESLint fix current buffer
-  autocmd FileType javascript command! FixEslint :call system("eslint --fix " . expand("%")) | :edit!
-  " textlint fix current buffer
-  autocmd FileType markdown command! FixTextlint :call system("textlint --fix " . expand("%")) | :edit!
+  autocmd FileType *json
+        \   setlocal foldmethod=syntax foldlevel=99
+        \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
+  " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
+  autocmd FileType markdown
+        \   setlocal spell tabstop=4 shiftwidth=4 cinkeys=''
+        \ | command! -buffer FixTextlint :call system("textlint --fix " . expand("%")) <BAR> :edit!
+  " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
+  autocmd FileType xml
+        \   setlocal foldmethod=syntax foldlevel=99
+        \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/

@@ -251,7 +251,7 @@ nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
 " }}}
 
 " Shortcut key prefix mappings {{{
-" <SID>[shortcut]a, d, rはsurround-pluginで使用
+" <SID>[shortcut]a, c, dはsurround-pluginで使用
 " <SID>[shortcut]mはmaximizer-pluginで使用
 noremap  gs               s
 map      s                <SID>[shortcut]
@@ -259,11 +259,11 @@ noremap  <SID>[shortcut]  <Nop>
 noremap  <SID>[shortcut]/ /\v
 noremap  <SID>[shortcut]? ?\v
 noremap  <SID>[shortcut]a <Nop>
+noremap  <SID>[shortcut]c <Nop>
 noremap  <SID>[shortcut]d <Nop>
 map      <SID>[shortcut]i <SID>[insert]
 noremap  <SID>[shortcut]m <Nop>
 nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]r <Nop>
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
   nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
@@ -415,7 +415,7 @@ if s:IsPluginEnabled()
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   " Plug 'othree/yajs.vim' " vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
-  Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？ 
+  Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
@@ -486,7 +486,7 @@ if s:IsPluginEnabled()
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
   xmap <SID>[plugin]a       <SID>[alignta]
-  map  <SID>[plugin]c       <SID>[camelize]
+  map  <SID>[plugin]c       <SID>[replace]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
@@ -498,7 +498,6 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]O       <SID>[Open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
-  map  <SID>[plugin]r       <SID>[replace]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -510,6 +509,7 @@ if s:IsPluginEnabled()
 
   " TODO: 押しづらい
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
+  map  <SID>[sub_plugin]c   <SID>[camelize]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   nmap <SID>[sub_plugin]q   <SID>[Quickrun]
   nmap <SID>[sub_plugin]r   <SID>[ref]
@@ -533,8 +533,8 @@ if s:IsPluginEnabled()
   nmap +                <SID>[switch]
   nmap -                <SID>[Switch]
   map  <SID>[shortcut]a <SID>[surround-a]
+  map  <SID>[shortcut]c <SID>[surround-r]
   map  <SID>[shortcut]d <SID>[surround-d]
-  map  <SID>[shortcut]r <SID>[surround-r]
   map  <SID>[shortcut]m <SID>[maximizer]
   " }}}
 else " Vim-Plug有効の場合勝手にされる
@@ -1164,7 +1164,7 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
   omap ib <Plug>(textobj-multiblock-i)
   omap ab <Plug>(textobj-multiblock-a)
   xmap ib <Plug>(textobj-multiblock-i)
-  xmap aba <Plug>(textobj-multiblock-a)
+  xmap ab <Plug>(textobj-multiblock-a)
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{

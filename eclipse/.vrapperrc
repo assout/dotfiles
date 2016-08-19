@@ -105,6 +105,12 @@ inoremap <C-d> <C-o>x
 " Command-line mode mappings
 cnoremap <C-e> <End>
 
+" Cycle.vim plugin settings Note: 全角は無理っぽい
+AddCycleGroup foo bar baz qux quux corge grault garply waldo fred plugh xyzzy thud 
+AddCycleGroup hoge piyo fuga hogera hogehoge moge hage 
+AddCycleGroup public protected private 
+AddCycleGroup Sun Mon Tue Wed Thu Fri Sut
+
 " Eclipse action 基本<Space>prefix {{{
 " navigate
 nnoremap <Space>s :OpenSuperImplementation<CR>

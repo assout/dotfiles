@@ -58,13 +58,15 @@ augroup END
 
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
-let g:is_linux = has('unix') && !has('win32unix')
-let g:is_win = (has('win32') || has('win32unix'))
-let g:is_win_gui = g:is_win && has('gui_running')
-let g:is_win_cui = g:is_win && !has('gui_running')
-let g:is_jenkins = exists('$BUILD_NUMBER')
-let g:is_home = $USERNAME ==# 'oji' || $USERNAME ==# 'porinsan'
-let g:is_office = $USERNAME ==# 'admin'
+let g:is_linux     = has('unix') && !has('win32unix')
+let g:is_linux_gui = g:is_linux && has('gui_running')
+let g:is_linux_cui = g:is_linux && !has('gui_running')
+let g:is_win       = has('win32') || has('win32unix')
+let g:is_win_gui   = g:is_win && has('gui_running')
+let g:is_win_cui   = g:is_win && !has('gui_running')
+let g:is_jenkins   = exists('$BUILD_NUMBER')
+let g:is_home      = $USERNAME ==# 'oji' || $USERNAME ==# 'porinsan'
+let g:is_office    = $USERNAME ==# 'admin'
 
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
@@ -1232,7 +1234,7 @@ augroup vimrc
   autocmd BufWinEnter * call s:RestoreCursorPosition()
 
   " Change cursor shape in different modes. Refs: <http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes>
-  if g:is_linux
+  if g:is_linux_cui
     autocmd VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
     autocmd InsertEnter,InsertChange *
           \ if     v:insertmode == 'i' | silent execute '!echo -ne "\e[6 q"' | redraw! |

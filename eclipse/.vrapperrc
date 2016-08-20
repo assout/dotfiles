@@ -81,11 +81,9 @@ unmap  <Space>
 nnoremap <SID>[shortcut]m :maximize<CR>
 
 " Note: tmux等と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
-nnoremap <C-h> gT
-nnoremap <C-l> gt
-" TODO: ほんとは以下のようにウィンドウごとにタブ移動したいのだが、なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまう
-" nnoremap <C-h> <C-w>gT
-" nnoremap <C-l> <C-w>gt
+" TODO: なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまう
+nnoremap <C-h> <C-w>gT
+nnoremap <C-l> <C-w>gt
 nnoremap <C-q> :bdelete<CR>
 
 nnoremap <C-w>c :bdelete<CR>

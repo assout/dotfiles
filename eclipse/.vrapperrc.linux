@@ -4,4 +4,6 @@ source /home/oji/.vimrc
 map <C-m> <Nop>
 cnoremap <C-m> <CR>
 
+nnoremap sm :maximize<CR>
+
 " vim: filetype=vim nofoldenable:

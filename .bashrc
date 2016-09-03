@@ -118,7 +118,6 @@ alias en='LANG=en_US.UTF8'
 alias jp='LANG=ja_JP.UTF8'
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias mdl='mdl -c ~/.mdlrc' # TODO: 未指定だとデフォルト見てくれないので暫定的に。
 alias t=todo.sh; complete -F _todo t
 
 if [ "${is_win}" ] ; then

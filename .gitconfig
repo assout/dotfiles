@@ -9,6 +9,7 @@
 [alias]
   graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   wip = !git add -A && (echo [WIP] && git diff --cached --no-ext-diff --stat) | git commit -F -
+  undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [color]
   ui = true # 古いバージョンの場合defaultでないため
 [include]
@@ -21,5 +22,4 @@
 [user "https://github.com"] # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
   name = assout
   email = assout@users.noreply.github.com
-[pre-commit]
-  checks = [merge_conflict]
+

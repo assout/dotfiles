@@ -363,7 +363,6 @@ if s:IsPluginEnabled()
   endif
   call g:plug#begin(s:plugged_path)
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
-  " TODO: 計測して遅いやつon-demand、on-demandしてないやつは理由をコメント
   " General {{{
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
@@ -413,6 +412,7 @@ if s:IsPluginEnabled()
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
   Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  Plug 'moll/vim-node' " Lazyできない
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   " Plug 'othree/yajs.vim' " vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
   Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？

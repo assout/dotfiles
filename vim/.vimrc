@@ -1206,10 +1206,10 @@ if s:HasPlugin('vim-watchdogs') " {{{
 
   if g:is_win_gui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
-    let g:quickrun_config['watchdogs_checker/mdl']['exec'] = 'cmd /c "chcp.com 65001 | %c %o %s:p"'
+    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
   elseif g:is_win_cui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
-    let g:quickrun_config['watchdogs_checker/mdl']['exec'] = 'chcp.com 65001 | %c %o %s:p'
+    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
   endif
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)

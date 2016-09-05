@@ -25,9 +25,9 @@ ln -sf "${HERE}/lint/.eslintrc.yml" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.prh.yml" ~/
-ln -sf "${HERE}/vim/.gvimrc" ~/
-ln -sf "${HERE}/vim/.vimrc" ~/
-ln -sf "${HERE}/.bashrc" ~/
+ln -sb "${HERE}/vim/.gvimrc" ~/
+ln -sb "${HERE}/vim/.vimrc" ~/
+ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
 if [ "${is_home}" ] && [ "${is_unix}" ] ; then

@@ -1,4 +1,4 @@
 [ghq]
-  root = D:\\admin\\Development\\src # Note: GOPATHと一緒にするとghq listが出力増えすぎるので別にしている
+  root = D:\\admin\\.ghq # Note: GOPATHと一緒にするとghq listが出力増えすぎるので別にしている
 
 # vim: filetype=gitconfig:

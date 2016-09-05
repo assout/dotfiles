@@ -66,6 +66,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
   PATH="${PATH}:${TOOLS_DIR}/gron"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
+  PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
   PATH="${PATH}:/usr/share/git/workdir"
@@ -74,7 +75,7 @@ if [ "${is_win}" ] ; then
   [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
-ghq_root="${HOME}/Development/src" # Note: ghq rootコマンドは使わない(performance)
+export ghq_root="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance)
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts
 PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
 PATH=${PATH}:${ghq_root}/github.com/chrismdp/p

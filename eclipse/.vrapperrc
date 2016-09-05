@@ -53,7 +53,7 @@
 " }}}1
 
 " # Begin {{{1
-source .vrapperrc.environment
+source .vrapperrc.env
 " }}}1
 
 " # Vim Settings {{{1

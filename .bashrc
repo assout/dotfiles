@@ -75,13 +75,13 @@ if [ "${is_win}" ] ; then
   [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
-export ghq_root="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance)
-PATH=${PATH}:${ghq_root}/github.com/assout/scripts
-PATH=${PATH}:${ghq_root}/github.com/assout/scripts/local
-PATH=${PATH}:${ghq_root}/github.com/chrismdp/p
+export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance)
+PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
+PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
+PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
 PATH=${PATH}:${HOME}/.cabal/bin
-PATH=${PATH}:${GOPATH}/bin
 PATH=${PATH}:${HOME}/.ghg/bin
+PATH=${PATH}:${GOPATH}/bin
 
 export PATH
 

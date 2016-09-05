@@ -2,11 +2,8 @@
   name = assout
   email = assout@users.noreply.github.com
 
-[ghq]
-  root = ~/Development/src
-
 [credential]
-	helper = gnome-keyring
+  helper = gnome-keyring
 
 # vim: filetype=gitconfig:
 

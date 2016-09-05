@@ -38,7 +38,7 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
-export GOPATH=${HOME}/Development/
+export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R'
 export EDITOR='vim' # For todo.txt note, less +v
@@ -64,6 +64,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
   PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
   PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
+  PATH="${PATH}:${TOOLS_DIR}/gron"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
@@ -164,7 +165,6 @@ if [ "${is_unix}" ] ; then
   alias C='_peco_cd 10'
 
   alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)"'
-  # TODO go getで取得した奴は見たくない
   alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
 
   function s() {

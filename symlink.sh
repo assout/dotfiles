@@ -11,10 +11,10 @@ is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 if [ "${is_win}" ] ; then
   # Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
   ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
-  ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.environment"
+  ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.env"
 else
   ln -sf "${HERE}/eclipse/.vrapperrc" ~/.vrapperrc
-  ln -sf "${HERE}/eclipse/.vrapperrc.linux" ~/.vrapperrc.environment
+  ln -sf "${HERE}/eclipse/.vrapperrc.linux" ~/.vrapperrc.env
 fi
 
 ln -sf "${HERE}/lint/.mdlrc" ~/
@@ -29,11 +29,11 @@ ln -sf "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
 if [ "${is_home}" ] && [ "${is_unix}" ] ; then
-  ln -sf "${HERE}/.gitconfig.home.linux" ~/.gitconfig.environment
+  ln -sf "${HERE}/.gitconfig.home.linux" ~/.gitconfig.env
 elif [ "${is_home}" ] && [ "${is_win}" ] ; then
-  ln -sf "${HERE}/.gitconfig.home.win" ~/.gitconfig.environment
+  ln -sf "${HERE}/.gitconfig.home.win" ~/.gitconfig.env
 elif [ "${is_office}" ] ; then
-  ln -sf "${HERE}/.gitconfig.office" ~/.gitconfig.environment
+  ln -sf "${HERE}/.gitconfig.office" ~/.gitconfig.env
 fi
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/

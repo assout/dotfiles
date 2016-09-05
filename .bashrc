@@ -31,6 +31,7 @@ is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
 is_home=$(if [ "${USER}" =  oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
 is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
+tools_dir="${HOME}/Tools"
 
 # History settings
 HISTSIZE=5000
@@ -42,6 +43,8 @@ export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R'
 export EDITOR='vim' # For todo.txt note, less +v
+export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
+export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 
 if [ "${is_win}" ] ; then
   export GOROOT=/mingw64/lib/go # TODO: Workaround
@@ -49,39 +52,32 @@ if [ "${is_win}" ] ; then
   export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
-export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
-
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
 if [ "${is_win}" ] ; then
-  TOOLS_DIR="${HOME}/Tools"
-  PATH="${PATH}:${TOOLS_DIR}"
-  PATH="${PATH}:${TOOLS_DIR}/ansifilter-1.15"
-  PATH="${PATH}:${TOOLS_DIR}/apache-maven-3.3.9/bin"
-  PATH="${PATH}:${TOOLS_DIR}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
-  PATH="${PATH}:${TOOLS_DIR}/hub/bin"
-  PATH="${PATH}:${TOOLS_DIR}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
-  PATH="${PATH}:${TOOLS_DIR}/seq2gif/seq2gif-0.10.3"
-  PATH="${PATH}:${TOOLS_DIR}/tar-1.13-1-bin/bin"
-  PATH="${PATH}:${TOOLS_DIR}/todo.txt_cli-2.10"
-  PATH="${PATH}:${TOOLS_DIR}/xz-5.2.1-windows/bin_x86-64"
-  PATH="${PATH}:${TOOLS_DIR}/gron"
+  PATH="${PATH}:${tools_dir}"
+  PATH="${PATH}:${tools_dir}/ansifilter-1.15"
+  PATH="${PATH}:${tools_dir}/apache-maven-3.3.9/bin"
+  PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
+  PATH="${PATH}:${tools_dir}/gron"
+  PATH="${PATH}:${tools_dir}/hub/bin"
+  PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
+  PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
+  PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
+  PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
   PATH="${PATH}:/usr/share/git/workdir"
-
-  todo_completion_path="${TOOLS_DIR}/todo.txt_cli-2.10/todo_completion"
-  [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
-export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance)
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
 PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
+PATH=${PATH}:${GOPATH}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:${HOME}/.ghg/bin
-PATH=${PATH}:${GOPATH}/bin
 
 export PATH
 
@@ -326,6 +322,9 @@ if [ "${is_unix}" ] ; then
 elif [ "${is_win}" ] ; then
   source /usr/share/git/completion/git-prompt.sh
   source /usr/share/git/completion/git-completion.bash
+
+  todo_completion_path="${tools_dir}/todo.txt_cli-2.10/todo_completion"
+  [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "

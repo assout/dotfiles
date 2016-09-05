@@ -802,7 +802,7 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
   " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
   nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
-  nnoremap <SID>[unite]G    :<C-u>Unite directory:~/Development -buffer-name=directory-ghq<CR>
+  nnoremap <SID>[unite]G    :<C-u>Unite directory:$ghq_root -buffer-name=directory-ghq<CR>
   nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>

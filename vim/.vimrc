@@ -1,15 +1,3 @@
-" # Index {{{1
-" * Introduction
-" * Begin
-" * Let defines
-" * Functions and Commands
-" * Options
-" * Key-mappings
-" * Plug-ins
-" * Auto-commands
-" * After
-" }}}1
-
 " # Introduction {{{1
 "
 " ## Principles
@@ -101,7 +89,7 @@ if g:is_win_cui " For mintty. Note: Gnome terminalでは不可なので別途aut
 endif
 " }}}1
 
-" # Functions and Commands {{{1
+" # Functions {{{1
 function! s:IsPluginEnabled()
   return isdirectory(expand(s:dotvim_path . '/autoload/')) && &loadplugins
 endfunction
@@ -126,7 +114,6 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
-command! ToggleExpandTab call <SID>ToggleExpandTab()
 
 function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
   if &l:expandtab
@@ -137,13 +124,10 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
   let &l:tabstop = a:size
   let &l:shiftwidth = a:size
 endfunction
-command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 
 function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
-command! -range -nargs=1 Prefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
@@ -153,7 +137,6 @@ function! s:ShowExplorer(...)
     execute '!nautilus ' . l:path . '&'
   endif
 endfunction
-command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 
 let g:todo_note_directory = expand('~/Documents/todo/notes')
 function! s:TodoGrep(word)
@@ -161,18 +144,24 @@ function! s:TodoGrep(word)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
   execute ':silent grep -r ' . a:word . ' ' . g:todo_note_directory . '/*'
 endfunction
-command! -nargs=1 -complete=command TodoGrep call <SID>TodoGrep(<q-args>)
+" }}}1
+
+" # Commands {{{1
+command! -range -nargs=1 Prefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
 command! -bang BufClear %bdelete<bang>
-command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
+command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
+" Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
+command! DiffOrig vertical new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
+command! -nargs=? Mattertee :write !mattertee <args>
+command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
+command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
+command! ToggleExpandTab call <SID>ToggleExpandTab()
+command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
 command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
-" Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
-command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
-" Mattertee
-command! -nargs=? Mattertee :write !mattertee <args>
-
 " }}}1
 
 " # Options {{{1
@@ -498,6 +487,7 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]O       <SID>[Open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
+  nmap <SID>[plugin]r       <SID>[ref]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -507,12 +497,10 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin][       [subP]
   nmap <SID>[plugin]]       [subN]
 
-  " TODO: 押しづらい
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   map  <SID>[sub_plugin]c   <SID>[camelize]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
   nmap <SID>[sub_plugin]q   <SID>[Quickrun]
-  nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
   " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している
@@ -1246,6 +1234,7 @@ augroup vimrc
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c formatoptions-=t
   autocmd FileType go setlocal noexpandtab
+  autocmd FileType hybrid setlocal noexpandtab
   autocmd FileType java setlocal noexpandtab
   autocmd FileType javascript command! -buffer FixEslint :call system("eslint --fix " . expand("%")) | :edit!
   " Note: aws.json を考慮して*jsonとしている

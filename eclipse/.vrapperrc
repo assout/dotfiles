@@ -101,8 +101,13 @@ inoremap <C-d> <C-o>x
 
 " Command-line mode mappings
 cnoremap <C-e> <End>
+" }}}1
 
-" Plugin settings {{{1
+" # Key-mappings {{{1
+command BufCrear :qall
+" }}}1
+
+" # Plugin settings {{{1
 " Cycle.vim
 " vimのswitch pluginのキーバインドに合わせる
 nnoremap + <C-a>
@@ -119,16 +124,14 @@ nnoremap sa ys
 nnoremap sc cs
 nnoremap sd ds
 vnoremap sa S
-
 " }}}1
 
-" Eclipse action 基本<Space>prefix {{{
+" # Eclipse action 基本<Space>prefix {{{1
 " navigate
 nnoremap <Space>s :OpenSuperImplementation<CR>
 nnoremap <Space>i :OpenImplementation<CR>
 nnoremap (        :GotoPreviousMember<CR>
 nnoremap )        :GotoNextMember<CR>
-" }}}
 " }}}1
 
 " # Define commands {{{1

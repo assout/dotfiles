@@ -8,7 +8,7 @@
   attributesfile = ~/.gitattributes
 [alias]
   graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  wip = !git add -A && (echo [WIP] && git diff --cached --no-ext-diff --stat) | git commit -F -
+  wip = !git add -A && (echo WIP: && git diff --cached --no-ext-diff --stat) | git commit -F -
   undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [color]
   ui = true # 古いバージョンの場合defaultでないため

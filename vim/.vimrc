@@ -90,12 +90,26 @@ endif
 " }}}1
 
 " # Functions {{{1
-function! s:IsPluginEnabled()
-  return isdirectory(expand(s:dotvim_path . '/autoload/')) && &loadplugins
+function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
+  if &l:expandtab
+    " Refs: <:help restore-position>
+    normal! msHmt
+    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! 'tzt`s
+  endif
+  let &l:tabstop = a:size
+  let &l:shiftwidth = a:size
 endfunction
 
 function! s:HasPlugin(plugin)
   return isdirectory(expand(s:plugged_path . '/' . a:plugin)) && &loadplugins
+endfunction
+
+function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
+  execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
+endfunction
+
+function! s:IsPluginEnabled()
+  return isdirectory(expand(s:dotvim_path . '/autoload/')) && &loadplugins
 endfunction
 
 function! s:RestoreCursorPosition()
@@ -103,6 +117,15 @@ function! s:RestoreCursorPosition()
   if index(l:ignore_filetypes, &l:filetype) >= 0 | return | endif
   if line("'\"") > 1 && line("'\"") <= line('$')
     normal! g`"
+  endif
+endfunction
+
+function! s:ShowExplorer(...)
+  let l:path = expand(a:0 == 0 ? '%:h' : a:1)
+  if g:is_win
+    execute '!explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
+  else
+    execute '!nautilus ' . l:path . '&'
   endif
 endfunction
 
@@ -115,34 +138,11 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
   endif
 endfunction
 
-function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻らないので注意
-  if &l:expandtab
-    " Refs: <:help restore-position>
-    normal! msHmt
-    execute '%substitute@\v^(%( {' . &l:tabstop . '})+)@\=repeat(" ", len(submatch(1)) / ' . &l:tabstop . ' * ' . a:size . ')@eg' | normal! 'tzt`s
-  endif
-  let &l:tabstop = a:size
-  let &l:shiftwidth = a:size
-endfunction
-
-function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
-  execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
-endfunction
-
-function! s:ShowExplorer(...)
-  let l:path = expand(a:0 == 0 ? '%:h' : a:1)
-  if g:is_win
-    execute '!explorer.exe ''' . fnamemodify(l:path, ':p:s?^/\([cd]\)?\1:?:gs?/?\\?') . ''''
-  else
-    execute '!nautilus ' . l:path . '&'
-  endif
-endfunction
-
-let g:todo_note_directory = expand('~/Documents/todo/notes')
 function! s:TodoGrep(word)
+  let l:todo_note_directory = expand('~/Documents/todo/notes')
   call histadd('cmd', 'TodoGrep '  . a:word)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
-  execute ':silent grep -r ' . a:word . ' ' . g:todo_note_directory . '/*'
+  execute ':silent grep -r ' . a:word . ' ' . l:todo_note_directory . '/*'
 endfunction
 " }}}1
 

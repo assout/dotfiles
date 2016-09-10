@@ -84,7 +84,6 @@ nnoremap <SID>[shortcut]m :maximize<CR>
 " TODO: なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまう
 nnoremap <C-h> <C-w>gT
 nnoremap <C-l> <C-w>gt
-nnoremap <C-q> :bdelete<CR>
 
 nnoremap <C-w>c :bdelete<CR>
 nnoremap <C-w>q :bdelete<CR>

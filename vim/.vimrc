@@ -1192,6 +1192,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
   let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
   " let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/textlint' }
+  let g:quickrun_config['watchdogs_checker/eslint'] = {'command' : 'eslint_d' }
 
   if g:is_win_gui
     let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}

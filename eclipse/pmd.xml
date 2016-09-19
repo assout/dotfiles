@@ -86,10 +86,6 @@
    <rule ref="rulesets/java/codesize.xml/StdCyclomaticComplexity"/>
    <rule ref="rulesets/java/codesize.xml/TooManyFields"/>
    <rule ref="rulesets/java/codesize.xml/TooManyMethods"/>
-   <rule ref="rulesets/java/comments.xml/CommentContent"/>
-   <rule ref="rulesets/java/comments.xml/CommentDefaultAccessModifier"/>
-   <rule ref="rulesets/java/comments.xml/CommentRequired"/>
-   <rule ref="rulesets/java/comments.xml/CommentSize"/>
    <rule ref="rulesets/java/controversial.xml/AssignmentInOperand"/>
    <rule ref="rulesets/java/controversial.xml/AtLeastOneConstructor"/>
    <rule ref="rulesets/java/controversial.xml/AvoidAccessibilityAlteration"/>

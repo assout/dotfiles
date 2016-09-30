@@ -140,124 +140,58 @@ alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 # }}}2
 
-# Peco {{{2
+# Peco, fzy {{{2
 if [ "${is_unix}" ] ; then
-  function peco_select_history() { # history
-    local l
-    local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
-    HISTTIMEFORMAT=
-    l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
-    READLINE_LINE="$l"
-    READLINE_POINT=${#l}
-    HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
-  }
-  bind -x '"\e\C-r": peco_select_history' # Ctrl+Alt+r
-
-  alias br='_with_history "hub browse $(ghq list | peco | cut -d "/" -f 2,3)"'
-
-  function _peco_cd() {
-    local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | peco)"; [ -d "${dir}" ] && _with_history "cd ${dir}"
-  }
-  alias c='_peco_cd 1'
-  alias C='_peco_cd 10'
-
-  alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | peco)"'
-  alias gh='target=$(ghq list | peco); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
-
-  function s() {
-    target=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | peco) # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-    [ -n "${target}" ] && _with_history "ssh ${target}"
-  }
-
-  function S() {
-    local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
-    local configfile
-    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
-    unset COMPREPLY
-    _known_hosts_real -a -F "$configfile" ""
-
-    local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | peco)
-    [ -n "${target}" ] && _with_history "ssh ${target}"
-  }
-
-  alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | peco | cut -d " " -f 1)"'
-
-  function _peco_vim() {
-    local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | peco)"; [ -f "${file}" ] && _with_history "vim ${file}"
-  }
-  alias v='_peco_vim 1'
-  alias V='_peco_vim 10'
+  selector_cmd='peco'
 else
-  # TODO: 全角崩れる。 @msys2
-
-  # Note: msys2でのpeco強引利用。
-  function _pecowrap_exec() {
-    eval "$@" > /tmp/cmd.log
-    script -e -qc "winpty peco /tmp/cmd.log" /tmp/script.log
-  }
-
-  function _pecowrap_result() {
-    local result; result="$(col -bx < /tmp/script.log | tr -d '\n' | sed 's/.*0m\(.*\)0K.*$/\1/g' | sed 's/0K//g')" # TODO 強引。特に"0K"が含まれると削除しちゃう
-    echo "${result}"
-  }
-
-  function br() {
-    _pecowrap_exec "ghq list" || return
-    # Note: ローカルのディレクトリ名もとにしているため正しくないかも。(hub使えばできるがgitlabもあるのでこうしている)
-    _with_history "start http://$(_pecowrap_result | sed 's?\.wiki$?/wikis/home?')" # Note: gitlabのwikiをgitとしてcloneしてる場合を考慮
-  }
-
-  function _peco_cd() {
-    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type d | sort" || return
-    _with_history "cd $(_pecowrap_result)"
-  }
-  alias c='_peco_cd 1'
-  alias C='_peco_cd 10'
-
-  function e() {
-    local target="${HOME}/Documents/shortcuts/peco"
-    _pecowrap_exec "find \"${target}\" -name *.lnk |  xargs -i cygpath.exe -w \"{}\"" || return
-    _with_history "explorer $(_pecowrap_result)"
-  }
-
-  function fn() {
-    _pecowrap_exec 'declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g"' || return
-    _with_history "eval $(_pecowrap_result)"
-  }
-
-  function gh() {
-    _pecowrap_exec "ghq list -p" || return
-    _with_history "cd $(_pecowrap_result)"
-  }
-
-  function s() {
-    _pecowrap_exec "awk 'tolower(\$1)==\"host\"{\$1=\"\";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u" || return # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-    _with_history "ssh $(_pecowrap_result)"
-  }
-
-  function S() {
-    local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
-    local configfile
-    type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっぽい
-    unset COMPREPLY
-    _known_hosts_real -a -F "$configfile" ""
-
-    _pecowrap_exec "echo ${COMPREPLY[*]} | tr ' ' '\n' | sort -u" || return
-    _with_history "ssh $(_pecowrap_result)"
-  }
-
-  function tp() {
-    _pecowrap_exec "todo.sh -p list | sed '\$d' | sed '\$d'" || return
-    _with_history "todo.sh note $(_pecowrap_result | cut -d 'G' -f 1)"
-  }
-
-  function _peco_vim() {
-    _pecowrap_exec "find -L $2 -maxdepth $1 -name '.git' -prune -o -type f | sort" || return
-    _with_history "vim $(_pecowrap_result)"
-  }
-  alias v='_peco_vim 1'
-  alias V='_peco_vim 10'
+  selector_cmd='fzy -l 50'
 fi
+
+function selector_history() { # history
+  local l
+  local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
+  HISTTIMEFORMAT=
+  l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
+  READLINE_LINE="$l"
+  READLINE_POINT=${#l}
+  HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
+}
+bind -x '"\e\C-r": selector_history' # Ctrl+Alt+r
+
+alias br='_with_history "hub browse $(ghq list | ${selector_cmd} | cut -d "/" -f 2,3)"'
+
+function _selector_cd() {
+  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector_cmd})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
+}
+alias c='_selector_cd 1'
+alias C='_selector_cd 10'
+
+alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector_cmd})"'
+alias gh='target=$(ghq list | ${selector_cmd}); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
+
+function s() {
+  target=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+  [ -n "${target}" ] && _with_history "ssh ${target}"
+}
+
+function S() {
+  local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
+  local configfile
+  type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
+  unset COMPREPLY
+  _known_hosts_real -a -F "$configfile" ""
+
+  local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector_cmd})
+  [ -n "${target}" ] && _with_history "ssh ${target}"
+}
+
+alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector_cmd} | cut -d " " -f 1)"'
+
+function _selector_vim() {
+  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector_cmd})"; [ -f "${file}" ] && _with_history "vim ${file}"
+}
+alias v='_selector_vim 1'
+alias V='_selector_vim 10'
 # }}}2
 
 # Docker {{{2

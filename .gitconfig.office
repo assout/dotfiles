@@ -1,3 +1,5 @@
+[core]
+  filemode = false
 [ghq]
   root = D:\\admin\\.ghq # Note: GOPATHと一緒にするとghq listが出力増えすぎるので別にしている
 

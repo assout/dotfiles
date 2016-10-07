@@ -158,6 +158,7 @@ function selector_history() { # history
 }
 bind -x '"\e\C-r": selector_history' # Ctrl+Alt+r
 
+# TODO: GitLab
 alias br='_with_history "hub browse $(ghq list | ${selector_cmd} | cut -d "/" -f 2,3)"'
 
 function _selector_cd() {

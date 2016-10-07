@@ -136,6 +136,7 @@ fi
 alias vi=vim
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
+# TODO: Peco or fzyの方がよいのでは(キャンセルしたとき、vim立ち上がったまま)
 alias memo='vi -c ":Unite memolist"'
 alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
 # }}}2

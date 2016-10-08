@@ -97,7 +97,7 @@ fi
 
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
-  alias BR="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
+  alias Br="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
@@ -113,7 +113,7 @@ if [ "${is_win}" ] ; then
 elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
   alias vim='vimx' # クリップボード共有するため
-  alias BR="hub browse"
+  alias Br="hub browse"
 fi
 
 # TODO: GitLab
@@ -184,8 +184,8 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
 alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector_cmd}) && vi ${t}'
-alias mr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector_cmd}) && vi ${t}'
-alias MR='vi $(sed -n  2p ~/.cache/neomru/file)'
+alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector_cmd}) && vi ${t}'
+alias Mru='vi $(sed -n  2p ~/.cache/neomru/file)'
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
   local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) && _with_history "ssh ${t}"
@@ -217,7 +217,7 @@ alias vi=vim
 
 stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 
-# Create Today backup directory
+# CreateToday backup directory
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
   mkdir -p "${todayBackupPath}"

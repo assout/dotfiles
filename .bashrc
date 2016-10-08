@@ -85,10 +85,39 @@ export PATH
 
 # [Functions & Aliases] {{{1
 
-# General {{{2
 function _with_history {
   history -s "$1"; $1
 }
+
+if [ "${is_unix}" ] ; then
+  selector_cmd='peco'
+else
+  selector_cmd='fzy -l 50'
+fi
+
+if [ "${is_win}" ] ; then
+  # Note: hub使えばできるがgitlabもあるのでこうしている
+  alias BR="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
+
+  function esu() {
+    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
+  }
+
+  alias l.='ls -d .* --color=auto --show-control-chars'
+  alias ls='ls --color=auto --show-control-chars'
+  alias ll='ls -l --color=auto --show-control-chars'
+
+  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+
+  [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
+elif [ "${is_unix}" ] ; then
+  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+  alias vim='vimx' # クリップボード共有するため
+  alias BR="hub browse"
+fi
+
+# TODO: GitLab
+alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector_cmd}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
 function cd_parent {
   local to=${1:-1}
@@ -105,112 +134,21 @@ function cdls {
   ls --color=auto --show-control-chars
 }
 
-function jan {
-  LANG_ESCAPE=$LANG
-  LANG=ja_JP.UTF-8
-  man "$*"
-  LANG=$LANG_ESCAPE
-}
-
-alias en='LANG=en_US.UTF8'
-alias jp='LANG=ja_JP.UTF8'
-
-alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
-alias t=todo.sh; complete -F _todo t
-
-if [ "${is_win}" ] ; then
-  alias l.='ls -d .* --color=auto --show-control-chars'
-  alias ls='ls --color=auto --show-control-chars'
-  alias ll='ls -l --color=auto --show-control-chars'
-  [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
-
-  function esu() {
-    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
-  }
-elif [ "${is_unix}" ] ; then
-  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
-fi
-# }}}2
-
-# Vim {{{2
-alias vi=vim
-[ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
-
-# TODO: Peco or fzyの方がよいのでは(キャンセルしたとき、vim立ち上がったまま)
-alias memo='vi -c ":Unite memolist"'
-alias mru='vi -c ":Unite neomru/file"' # mru(most recent use) file
-# }}}2
-
-# Peco, fzy {{{2
-if [ "${is_unix}" ] ; then
-  selector_cmd='peco'
-else
-  selector_cmd='fzy -l 50'
-fi
-
-function selector_history() { # history
-  local l
-  local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
-  HISTTIMEFORMAT=
-  l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
-  READLINE_LINE="$l"
-  READLINE_POINT=${#l}
-  HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
-}
-bind -x '"\e\C-r": selector_history' # Ctrl+Alt+r
-
-# TODO: GitLab
-alias br='_with_history "hub browse $(ghq list | ${selector_cmd} | cut -d "/" -f 2,3)"'
-
-function _selector_cd() {
+function _cd() {
   local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector_cmd})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
 }
-alias c='_selector_cd 1'
-alias C='_selector_cd 10'
+alias c='_cd 1'
+alias C='_cd 10'
 
-alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector_cmd})"'
-alias gh='target=$(ghq list | ${selector_cmd}); if [ -n "${target}" ] ; then _with_history "cd "$(ghq root)/${target}"" ; fi'
-
-function s() {
-  target=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  [ -n "${target}" ] && _with_history "ssh ${target}"
-}
-
-function S() {
-  local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
-  local configfile
-  type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
-  unset COMPREPLY
-  _known_hosts_real -a -F "$configfile" ""
-
-  local target; target=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector_cmd})
-  [ -n "${target}" ] && _with_history "ssh ${target}"
-}
-
-alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector_cmd} | cut -d " " -f 1)"'
-
-function _selector_vim() {
-  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector_cmd})"; [ -f "${file}" ] && _with_history "vim ${file}"
-}
-alias v='_selector_vim 1'
-alias V='_selector_vim 10'
-# }}}2
-
-# Docker {{{2
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
-# }}}2
 
-# Git {{{2
-alias groot='cd "$(git rev-parse --show-toplevel)"'
-# Note: hub使えばできるがgitlabもあるのでこうしている
-[ "${is_win}" ] && alias browse="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
-# }}}2
+alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector_cmd})"'
 
-# GHQ {{{2
-[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+alias gh='t=$(ghq list | ${selector_cmd}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
+alias gr='cd "$(git rev-parse --show-toplevel)"'
 
 function ghq_update {
   ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
@@ -221,7 +159,57 @@ function ghq_status {
     (cd "${t}" && echo "${t}" && git status)
   done
 }
-# }}}2
+
+alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
+
+function _history() {
+  local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
+  HISTTIMEFORMAT=
+  local l # Note: local宣言だけしないとshellcheckエラーになる
+  l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | peco --query "$READLINE_LINE")
+  READLINE_LINE="$l"
+  READLINE_POINT=${#l}
+  HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
+}
+bind -x '"\e\C-r": _history' # Ctrl+Alt+r
+
+function jan {
+  LANG_ESCAPE=$LANG
+  LANG=ja_JP.UTF-8
+  man "$*"
+  LANG=$LANG_ESCAPE
+}
+
+alias jp='LANG=ja_JP.UTF8'
+alias en='LANG=en_US.UTF8'
+
+alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector_cmd}) && vi ${t}'
+alias mr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector_cmd}) && vi ${t}'
+alias MR='vi $(sed -n  2p ~/.cache/neomru/file)'
+
+function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+  local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) && _with_history "ssh ${t}"
+}
+
+function S() {
+  local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
+  local configfile
+  type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
+  unset COMPREPLY
+  _known_hosts_real -a -F "$configfile" ""
+
+  local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector_cmd}); [ -n "${t}" ] && _with_history "ssh ${t}"
+}
+
+alias t=todo.sh; complete -F _todo t
+alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector_cmd} | cut -d " " -f 1)"'
+
+function _vim() {
+  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector_cmd})"; [ -f "${file}" ] && _with_history "vim ${file}"
+}
+alias v='_vim 1'
+alias V='_vim 10'
+alias vi=vim
 
 # }}}1
 

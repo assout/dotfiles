@@ -39,17 +39,17 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
+export EDITOR='vim' # For todo.txt note, less +v
+export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R'
-export EDITOR='vim' # For todo.txt note, less +v
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
-export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 
 if [ "${is_win}" ] ; then
+  export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
   export GOROOT=/mingw64/lib/go # TODO: Workaround
   export NODE_PATH="/mingw64/lib/node_modules"
-  export CHERE_INVOKING=1 # For mingw64. TODO: 以前はmingw64.iniで設定していれば不要だった気がするが効かなくなったので入れておく
 fi
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
@@ -185,7 +185,7 @@ alias en='LANG=en_US.UTF8'
 
 alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector_cmd}) && vi ${t}'
 alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector_cmd}) && vi ${t}'
-alias Mru='vi $(sed -n  2p ~/.cache/neomru/file)'
+alias Mru='vi $(sed -n 2p ~/.cache/neomru/file)'
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
   local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) && _with_history "ssh ${t}"

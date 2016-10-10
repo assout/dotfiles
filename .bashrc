@@ -90,9 +90,9 @@ function _with_history {
 }
 
 if [ "${is_unix}" ] ; then
-  selector_cmd='peco'
+  selector='peco'
 else
-  selector_cmd='fzy -l 50'
+  selector='fzy -l 50'
 fi
 
 if [ "${is_win}" ] ; then
@@ -117,7 +117,7 @@ elif [ "${is_unix}" ] ; then
 fi
 
 # TODO: GitLab
-alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector_cmd}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
+alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
 function cd_parent {
   local to=${1:-1}
@@ -135,7 +135,7 @@ function cdls {
 }
 
 function _cd() {
-  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector_cmd})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
+  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
 }
 alias c='_cd 1'
 alias C='_cd 10'
@@ -145,9 +145,9 @@ alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
 alias dpl='docker ps -lq'
 
-alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector_cmd})"'
+alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
-alias gh='t=$(ghq list | ${selector_cmd}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
+alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
 alias gr='cd "$(git rev-parse --show-toplevel)"'
 
 function ghq_update {
@@ -183,12 +183,12 @@ function jan {
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
-alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector_cmd}) && vi ${t}'
-alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector_cmd}) && vi ${t}'
+alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector}) && vi ${t}'
+alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
 alias Mru='vi $(sed -n 2p ~/.cache/neomru/file)'
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector_cmd}) && _with_history "ssh ${t}"
+  local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}) && _with_history "ssh ${t}"
 }
 
 function S() {
@@ -198,14 +198,14 @@ function S() {
   unset COMPREPLY
   _known_hosts_real -a -F "$configfile" ""
 
-  local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector_cmd}); [ -n "${t}" ] && _with_history "ssh ${t}"
+  local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
 alias t=todo.sh; complete -F _todo t
-alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector_cmd} | cut -d " " -f 1)"'
+alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1)"'
 
 function _vim() {
-  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector_cmd})"; [ -f "${file}" ] && _with_history "vim ${file}"
+  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector})"; [ -f "${file}" ] && _with_history "vim ${file}"
 }
 alias v='_vim 1'
 alias V='_vim 10'

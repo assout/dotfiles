@@ -188,7 +188,7 @@ alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
 alias Mru='vi $(sed -n 2p ~/.cache/neomru/file)'
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector} && _with_history "ssh ${t}"
+  local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
 function S() {
@@ -198,7 +198,7 @@ function S() {
   unset COMPREPLY
   _known_hosts_real -a -F "$configfile" ""
 
-  echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector} && _with_history "ssh ${t}"
+  local t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
 alias t=todo.sh; complete -F _todo t

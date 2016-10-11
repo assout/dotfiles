@@ -188,7 +188,6 @@ alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
 alias Mru='vi $(sed -n 2p ~/.cache/neomru/file)'
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  # local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}"] && _with_history "ssh ${t}"
   awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector} && _with_history "ssh ${t}"
 }
 
@@ -199,14 +198,14 @@ function S() {
   unset COMPREPLY
   _known_hosts_real -a -F "$configfile" ""
 
-  local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
+  echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector} && _with_history "ssh ${t}"
 }
 
 alias t=todo.sh; complete -F _todo t
 alias tp='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1)"'
 
 function _vim() {
-  local file; file="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector})"; [ -f "${file}" ] && _with_history "vim ${file}"
+  local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"
 }
 alias v='_vim 1'
 alias V='_vim 10'

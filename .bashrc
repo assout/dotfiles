@@ -98,6 +98,7 @@ fi
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
   alias Br="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
+  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && echo "http://${t}" | sed "s?\.wiki\$?/wikis/home?" | xargs start'
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
@@ -114,10 +115,10 @@ elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
   alias vim='vimx' # クリップボード共有するため
   alias Br="hub browse"
+  # TODO: 動確後削除
+  # alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
+  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 fi
-
-# TODO: GitLab
-alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
 function cd_parent {
   local to=${1:-1}

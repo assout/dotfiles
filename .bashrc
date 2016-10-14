@@ -134,11 +134,11 @@ function cdls {
   ls --color=auto --show-control-chars
 }
 
-function _cd() {
+function __cd() { # Note: `_cd`だと通常のcd後の補完が壊れる
   local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
 }
-alias c='_cd 1'
-alias C='_cd 10'
+alias c='__cd 1'
+alias C='__cd 10'
 
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'

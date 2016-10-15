@@ -115,9 +115,7 @@ elif [ "${is_unix}" ] ; then
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
   alias vim='vimx' # クリップボード共有するため
   alias Br="hub browse"
-  # TODO: 動確後削除
-  # alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
-  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
+  alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 fi
 
 function cd_parent {

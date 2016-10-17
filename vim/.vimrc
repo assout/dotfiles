@@ -1,35 +1,35 @@
 " # Introduction {{{1
 "
 " ## Principles
-" * Keep it short and simple, stupid! (500step以下に留めたい)
-" * To portable! (e.g. office/home/jenkins, vim/gvim/vrapper, development/server)
-" * デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
-" * キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
+" - Keep it short and simple, stupid! (500step以下に留めたい)
+" - To portable! (e.g. office/home/jenkins, vim/gvim/vrapper, development/server)
+" - デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
+" - キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
 "
 " ## Caution
-" * executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
+" - executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
-" * vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
-" * '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
-" * 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
-" * vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
-" * IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
-" * executable()は遅いらしいので使わない
+" - vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
+" - '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
+" - 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
+" - vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
+" - IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
+" - executable()は遅いらしいので使わない
 "
 " ## Refs:
-" * [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
-" * [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
-" * [Vimスクリプトリファレンス &mdash; 名無しのvim使い](http://nanasi.jp/code.html)
-" * [Vimの極め方](http://whileimautomaton.net/2008/08/vimworkshop3-kana-presentation)
-" * [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
-" * [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
-" * [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
+" - [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
+" - [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
+" - [Vimスクリプトリファレンス &mdash; 名無しのvim使い](http://nanasi.jp/code.html)
+" - [Vimの極め方](http://whileimautomaton.net/2008/08/vimworkshop3-kana-presentation)
+" - [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
+" - [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
+" - [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
 "
 " ## TODOs
-" * TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
-" * TODO: neocompleteでたまに日本語入力が変になる
-" * TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
-" * TODO: GVim@officeで複数ファイルを開いたときの<C-w>h,lが遅い(プラグインなし、vimrc空でも再現)
+" - TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
+" - TODO: neocompleteでたまに日本語入力が変になる
+" - TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
+" - TODO: GVim@officeで複数ファイルを開いたときの<C-w>h,lが遅い(プラグインなし、vimrc空でも再現)
 " }}}1
 
 " # Begin {{{1

@@ -149,7 +149,7 @@ alias dpl='docker ps -lq'
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
-alias gr='cd "$(git rev-parse --show-toplevel)"'
+alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 function ghq_update {
   ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
@@ -185,8 +185,8 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
 alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector}) && vi ${t}'
-alias mru='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
-alias Mru='vi $(sed -n 2p ~/.cache/neomru/file)'
+alias mr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # most recent
+alias Mr='vi $(sed -n 2p ~/.cache/neomru/file)' # Most recent
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
   local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"

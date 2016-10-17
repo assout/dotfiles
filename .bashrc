@@ -98,8 +98,7 @@ fi
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
   alias Br="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
-  # FIXME: ディレクトリ名変えてるとだめ
-  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && echo "http://${t}" | sed "s?\.wiki\$?/wikis/home?" | xargs start'
+  alias br="(cd ${GHQ_ROOT}/\`ghq list | ${selector}\`; Br)"
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
@@ -114,7 +113,7 @@ if [ "${is_win}" ] ; then
   [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
 elif [ "${is_unix}" ] ; then
   alias Br="hub browse"
-  # FIXME: ディレクトリ名変えてるとだめ
+  # TODO: ディレクトリ名変えてるとだめ？
   alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>

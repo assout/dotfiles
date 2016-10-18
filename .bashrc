@@ -96,8 +96,8 @@ fi
 
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
-  alias Br="git remote -v | head -1 | cut -d'	' -f 2 | cut -d' ' -f 1 | sed 's?\.wiki\.git\$?/wikis/home?' | xargs start"
-  alias br="(cd ${GHQ_ROOT}/\`ghq list | ${selector}\`; Br)"
+  alias Br='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
+  alias br='(cd ${GHQ_ROOT}/$(ghq list | ${selector}); Br)'
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
@@ -109,9 +109,9 @@ if [ "${is_win}" ] ; then
 
   alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 
-  [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
+  [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 elif [ "${is_unix}" ] ; then
-  alias Br="hub browse"
+  alias Br='hub browse'
   alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
@@ -141,7 +141,7 @@ alias C='__cd 10'
 
 alias drm='docker rm $(docker ps -a -q)'
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
-alias dip="docker inspect --format '{{ .NetworkSettings.IPAddress }}'"
+alias dip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
 alias dpl='docker ps -lq'
 
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
@@ -187,7 +187,7 @@ alias mr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # mos
 alias Mr='vi $(sed -n 2p ~/.cache/neomru/file)' # Most recent
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  local t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
+  local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
 function S() {
@@ -197,10 +197,10 @@ function S() {
   unset COMPREPLY
   _known_hosts_real -a -F "$configfile" ""
 
-  local t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
+  local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
-alias t=todo.sh; complete -F _todo t
+alias t='todo.sh'; complete -F _todo t
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
 alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 
@@ -209,7 +209,7 @@ function _vim() {
 }
 alias v='_vim 1'
 alias V='_vim 10'
-alias vi=vim
+alias vi='vim'
 
 # }}}1
 

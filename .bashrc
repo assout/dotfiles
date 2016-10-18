@@ -113,7 +113,7 @@ if [ "${is_win}" ] ; then
   [ "${is_home}" ] && alias plantuml="java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar"
 elif [ "${is_unix}" ] ; then
   alias Br="hub browse"
-  # TODO: ディレクトリ名変えてるとだめ？
+  # TODO: ディレクトリ名変えてるとだめ
   alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>

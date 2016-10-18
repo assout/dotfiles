@@ -201,7 +201,8 @@ function S() {
 }
 
 alias t=todo.sh; complete -F _todo t
-alias tn='_with_history "todo.sh note $(todo.sh list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1)"'
+alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
+alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 
 function _vim() {
   local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"

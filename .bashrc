@@ -97,7 +97,7 @@ fi
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
   alias Br='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
-  alias br='(cd ${GHQ_ROOT}/$(ghq list | ${selector}); Br)'
+  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath

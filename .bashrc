@@ -182,7 +182,7 @@ function jan {
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
-alias mm='t=~/memolist.wiki/$(ls ~/memolist.wiki | ${selector}) && vi ${t}'
+alias mm='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 alias mr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # most recent
 alias Mr='vi $(sed -n 2p ~/.cache/neomru/file)' # Most recent
 

@@ -183,6 +183,7 @@ alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
 alias mm='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
+
 alias re='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # Most 're'cent files.
 alias R='vi $(sed -n 2p ~/.cache/neomru/file)' # Most 'R'ecent file.
 

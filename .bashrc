@@ -41,6 +41,7 @@ HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
 export EDITOR='vim' # For todo.txt note, less +v
 export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
+export GHG_ROOT="${HOME}/.ghg" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R'
@@ -76,6 +77,7 @@ PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
 PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
 PATH=${PATH}:${GOPATH}/bin
+PATH=${PATH}:${GHG_ROOT}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 
 export PATH

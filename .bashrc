@@ -98,8 +98,8 @@ fi
 
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
+  alias b='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
   alias B='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
-  alias br='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
 
   function esu() {
     es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
@@ -113,8 +113,8 @@ if [ "${is_win}" ] ; then
 
   [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 elif [ "${is_unix}" ] ; then
+  alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
   alias B='hub browse'
-  alias br='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
 
   alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
   alias vim='vimx' # クリップボード共有するため
@@ -184,9 +184,9 @@ function jan {
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
-alias mm='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
+alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
-alias re='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # Most 're'cent files.
+alias r='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # Most 're'cent files.
 alias R='vi $(sed -n 2p ~/.cache/neomru/file)' # Most 'R'ecent file.
 
 function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>

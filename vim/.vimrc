@@ -822,9 +822,11 @@ if s:HasPlugin('unite.vim') " {{{
   endif
 
   if s:HasPlugin('neomru.vim') " {{{
-    " Note: Windows(msys2)で、ネットワーク上のファイルがあるとUnite候補表示時に遅くなるっポイのでignore " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
-    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
-    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)'
+    " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
+    " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
+    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
+    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
     let g:neomru#directory_mru_limit = 500
     let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
     let g:neomru#file_mru_limit = 500

@@ -40,8 +40,8 @@ HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%F %T ' # コマンド実行時刻を記録する
 
 export EDITOR='vim' # For todo.txt note, less +v
-export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GHG_ROOT="${HOME}/.ghg" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
+export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R'
@@ -73,11 +73,11 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:/usr/share/git/workdir"
 fi
 
+PATH=${PATH}:${GHG_ROOT}/bin
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
 PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
 PATH=${PATH}:${GOPATH}/bin
-PATH=${PATH}:${GHG_ROOT}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 
 export PATH
@@ -208,7 +208,7 @@ alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " "
 alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 
 function _vim() {
-  local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type f | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"
+  local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"
 }
 alias v='_vim 1'
 alias V='_vim 10'

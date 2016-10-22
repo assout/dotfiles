@@ -1,6 +1,7 @@
 # Manually add
 
 ### Eclipse ###
+.checkstyle
 .eclipse-pmd
 .pmd
 target

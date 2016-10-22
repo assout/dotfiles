@@ -197,6 +197,7 @@ $RECYCLE.BIN/
 # Manually add
 
 ### Eclipse ###
+.checkstyle
 .eclipse-pmd
 .pmd
 target

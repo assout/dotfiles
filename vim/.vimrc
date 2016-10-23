@@ -607,6 +607,7 @@ if s:HasPlugin('neocomplete') " {{{
 endif " }}}
 
 if s:HasPlugin('neosnippet.vim') " {{{
+  let g:neosnippet#snippets_directory='~/.vim/snippets/'
   imap <C-l> <Plug>(neosnippet_expand_or_jump)
   smap <C-l> <Plug>(neosnippet_expand_or_jump)
 endif " }}}

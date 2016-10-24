@@ -1,9 +1,53 @@
-snippet     task
+snippet     today
 options     head
-  `strftime("%m/%d")`予定
+	`strftime("%m/%d")`作業予定 #daily
 
-  * * [ ] ${1:<plan>}/0/${2:<name>}
+	- - [ ] 0.0/${1:<plan>}/${2:<name>}
 
-  ${3:<total>}/0/
+	0/${3:<total>}
 
+snippet     week
+options     head
+	`strftime("%m/%d")`w作業予定 #weekly
+
+	- 最終成果物(納品物)
+		- - [ ] ${1:<name>}/${2:num}//
+	- 中間成果物
+		- - [ ] ${1:<name>}/${2:num}//
+
+snippet     minutes
+alias     mi
+options     head
+	# 議事録 - ${1:title}
+
+	## 日時/場所/参加者
+
+	- 日時: `strftime("%y/%m/%d %H:%M-%H:%M")`
+	- 場所: ${2:place}
+	- 参加者(敬称略)
+		- ${3:member}(主催)
+		- ${4:me}(記)
+
+	## アジェンダ
+
+	1. ${5:agenda}
+		- [ ] ${6:mission}
+
+	## 資料
+
+	- \`${7:doc}\`
+
+	## 決定事項/要点
+
+	- ${8:fix}
+
+	## 残作業/課題/今後の進め方
+
+	- ${9:remain}
+
+	## 議事詳細
+
+	### ${10:sub}
+
+	- ${11:detail}
 

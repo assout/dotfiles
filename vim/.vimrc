@@ -608,8 +608,9 @@ endif " }}}
 
 if s:HasPlugin('neosnippet.vim') " {{{
   let g:neosnippet#snippets_directory='~/.vim/snippets/'
-  imap <C-l> <Plug>(neosnippet_expand_or_jump)
-  smap <C-l> <Plug>(neosnippet_expand_or_jump)
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  autocmd FileType neosnippet setlocal noexpandtab
 endif " }}}
 
 if s:HasPlugin('open-browser.vim') " {{{

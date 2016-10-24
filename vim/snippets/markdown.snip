@@ -1,13 +1,15 @@
-snippet     today
-options     head
+snippet today
+alias to
+options head
 	`strftime("%m/%d")`作業予定 #daily
 
 	- - [ ] 0.0/${1:<plan>}/${2:<name>}
 
 	0/${3:<total>}
 
-snippet     week
-options     head
+snippet week
+alias we
+options head
 	`strftime("%m/%d")`w作業予定 #weekly
 
 	- 最終成果物(納品物)
@@ -15,9 +17,9 @@ options     head
 	- 中間成果物
 		- - [ ] ${1:<name>}/${2:num}//
 
-snippet     minutes
-alias     mi
-options     head
+snippet minutes
+alias mi
+options head
 	# 議事録 - ${1:title}
 
 	## 日時/場所/参加者
@@ -50,4 +52,8 @@ options     head
 	### ${10:sub}
 
 	- ${11:detail}
+
+	## ホワイトボード
+
+	- ![wb_1}](`expand("%:r")`_1.jpg)
 

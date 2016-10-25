@@ -92,8 +92,11 @@ function _with_history {
 
 if [ "${is_unix}" ] ; then
   selector='peco'
+  starter='gnu-start'
 else
   selector='fzy -l 50'
+  starter='start'
+  # TODO fzy and starter
 fi
 
 if [ "${is_win}" ] ; then

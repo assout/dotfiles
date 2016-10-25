@@ -1,19 +1,21 @@
 snippet today
 alias to
 options head
-	`strftime("%m/%d")`作業予定 #daily
+	##### `strftime("%m/%d")`作業予定 #daily
 
 	- - [ ] 0.0/${1:<plan>}/${2:<name>}
+	${0}
 
 	0/${3:<total>}
 
 snippet week
 alias we
 options head
-	`strftime("%m/%d")`w作業予定 #weekly
+	##### `strftime("%m/%d")`w作業予定 #weekly
 
 	- 最終成果物(納品物)
 		- - [ ] ${1:<name>}/${2:num}//
+		${0}
 	- 中間成果物
 		- - [ ] ${1:<name>}/${2:num}//
 
@@ -52,8 +54,17 @@ options head
 	### ${10:sub}
 
 	- ${11:detail}
+	${0}
 
 	## ホワイトボード
 
 	- ![wb_1}](minutes/`expand("%:r")`_1.jpg)
+
+snippet table
+alias ta
+options head
+	|${1:header}|${2:header}|
+	|-|-|
+	|${3:body}|${4:body}|
+	${0}
 

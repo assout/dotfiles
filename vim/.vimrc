@@ -155,7 +155,7 @@ command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vertical new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
-command! -nargs=? Mattertee :write !mattertee <args>
+command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
 command! ToggleExpandTab call <SID>ToggleExpandTab()

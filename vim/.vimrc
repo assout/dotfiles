@@ -274,6 +274,8 @@ noremap <expr><SID>[insert]d ':Suffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
 noremap <expr><SID>[insert]t ':Suffix ' . strftime('\ @%H:%M:%S') . '<CR>'
 noremap <expr><SID>[insert]n ':Suffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
 noremap <expr><SID>[insert]a ':Suffix \ @' . input('author:') . '<CR>'
+noremap <expr><SID>[insert]b ':Suffix ' . expand("%") . '<CR>'
+noremap <expr><SID>[insert]B ':Suffix ' . expand("%:r") . '<CR>'
 noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
@@ -608,8 +610,9 @@ endif " }}}
 
 if s:HasPlugin('neosnippet.vim') " {{{
   let g:neosnippet#snippets_directory='~/.vim/snippets/'
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  " Note:exampleでは<C-k>に割り当ててるが、行末まで消去にあててるので。
+  imap <C-l> <Plug>(neosnippet_expand_or_jump)
+  smap <C-l> <Plug>(neosnippet_expand_or_jump)
   autocmd FileType neosnippet setlocal noexpandtab
 endif " }}}
 

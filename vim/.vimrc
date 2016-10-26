@@ -270,12 +270,7 @@ noremap       <SID>[insert]#  :Prefix # <CR>
 noremap       <SID>[insert]>  :Prefix > <CR>
 noremap       <SID>[insert]f  :Prefix file://<CR>
 noremap <expr><SID>[insert]s ':Suffix ' . input('suffix:') . '<CR>'
-noremap <expr><SID>[insert]d ':Suffix ' . strftime('\ @%Y-%m-%d') . '<CR>'
-noremap <expr><SID>[insert]t ':Suffix ' . strftime('\ @%H:%M:%S') . '<CR>'
-noremap <expr><SID>[insert]n ':Suffix ' . strftime('\ @%Y-%m-%d %H:%M:%S') . '<CR>'
 noremap <expr><SID>[insert]a ':Suffix \ @' . input('author:') . '<CR>'
-noremap <expr><SID>[insert]b ':Suffix ' . expand("%") . '<CR>'
-noremap <expr><SID>[insert]B ':Suffix ' . expand("%:r") . '<CR>'
 noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
@@ -790,23 +785,15 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
   nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
   nnoremap <SID>[unite]B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-  nnoremap <SID>[unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
+  if s:HasPlugin('unite-codic.vim') " {{{ TODO: Ignorecase (or Smartcase)
+    nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
+    nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
+  endif " }}}
   " TODO: asyncのほう使いたいが日本語文字化けする
   nnoremap <SID>[unite]e    :<C-u>Unite everything -buffer-name=everything<CR>
+
+  nnoremap <SID>[unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
   nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
-  " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
-  nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
-  nnoremap <SID>[unite]G    :<C-u>Unite directory:$GHQ_ROOT -buffer-name=directory-ghq<CR>
-  nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
-  nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
-  nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
-  nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
-  nnoremap <SID>[unite]p    :<C-u>Unite runtimepath -buffer-name=runtimepath<CR>
-  nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR>
-  nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
-  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
   if s:HasPlugin('vimproc') " {{{
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
@@ -814,12 +801,32 @@ if s:HasPlugin('unite.vim') " {{{
     nnoremap <SID>[unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
     nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
   endif
+
+  " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
+  nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
+  nnoremap <SID>[unite]G    :<C-u>Unite directory:$GHQ_ROOT -buffer-name=directory-ghq<CR>
+  nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
+  nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
+  if s:HasPlugin('neomru.vim') " {{{
+    nnoremap <SID>[unite]n :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
+  endif " }}}
+  nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
+  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
+  nnoremap <SID>[unite]p    :<C-u>Unite runtimepath -buffer-name=runtimepath<CR>
+  nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
+  nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
   if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <SID>[unite]R :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
   endif " }}}
+  if s:HasPlugin('neosnippet.vim') " {{{
+    nnoremap <SID>[unite]s :<C-u>Unite neosnippet -buffer-name=neosnippet<CR>
+  endif " }}}
+  " nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR> TODO: neosnippetを優先
   if s:HasPlugin('unite-tag') " {{{
     nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   endif " }}}
+  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
+  nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
   if s:HasPlugin('yankround.vim') " {{{
     nnoremap <SID>[unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
   else " }}}
@@ -837,13 +844,6 @@ if s:HasPlugin('unite.vim') " {{{
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
-
-    nnoremap <SID>[unite]n :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
-  endif " }}}
-
-  if s:HasPlugin('unite-codic.vim') " {{{ TODO: Ignorecase (or Smartcase)
-    nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
-    nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
   endif " }}}
 endif " }}}
 

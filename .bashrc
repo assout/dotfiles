@@ -98,13 +98,13 @@ elif [ "${is_win}" ] ; then
   opener='start'
 fi
 
-if [ "${is_win}" ] ; then
+if [ "${is_unix}" ] ; then
+  alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
+  alias B='hub browse'
+elif [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
   alias b='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
   alias B='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
-elif [ "${is_unix}" ] ; then
-  alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
-  alias B='hub browse'
 fi
 
 function cd_parent {

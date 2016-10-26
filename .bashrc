@@ -90,39 +90,21 @@ function _with_history {
   history -s "$1"; $1
 }
 
-# TODO fzy and starter
-# TODO fzy and neomru/directory cd
-
 if [ "${is_unix}" ] ; then
   selector='peco'
-  starter='gnu-start'
+  opener='gnome-open'
 else
   selector='fzy -l 50'
-  starter='start'
+  opener='start'
 fi
 
 if [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
   alias b='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
   alias B='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
-
-  function esu() {
-    es "$1" | sed 's/\\/\\\\/g' | xargs cygpath
-  }
-
-  alias l.='ls -d .* --color=auto --show-control-chars'
-  alias ls='ls --color=auto --show-control-chars'
-  alias ll='ls -l --color=auto --show-control-chars'
-
-  alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-
-  [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 elif [ "${is_unix}" ] ; then
   alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
   alias B='hub browse'
-
-  alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
-  alias vim='vimx' # クリップボード共有するため
 fi
 
 function cd_parent {
@@ -141,30 +123,28 @@ function cdls {
 }
 
 function __cd() { # Note: `_cd`だと通常のcd後の補完が壊れる
-  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
+  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
 }
 alias c='__cd 1'
 alias C='__cd 10'
+alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}'
 
-alias drm='docker rm $(docker ps -a -q)'
-alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
-alias dip='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
-alias dpl='docker ps -lq'
+alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
+alias dp='docker ps -lq'
+alias dr='docker rm $(docker ps -a -q)'
+alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+
+[ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
+[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
+[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
 alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
-function ghq_update {
-  ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I%  sh -c "ghq get -u %"
-}
-
-function ghq_status {
-  for t in $(ghq list -p "$@") ; do
-    (cd "${t}" && echo "${t}" && git status)
-  done
-}
+function ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; }
+function ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; }
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
@@ -189,15 +169,27 @@ function jan {
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
+if [ "${is_win}" ] ; then
+  alias l.='ls -d .* --color=auto --show-control-chars'
+  alias ls='ls --color=auto --show-control-chars'
+  alias ll='ls -l --color=auto --show-control-chars'
+fi
+
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
-alias r='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # Most 're'cent files.
-alias R='vi $(sed -n 2p ~/.cache/neomru/file)' # Most 'R'ecent file.
+function _open() { local t; t="$(find -L "${@:3}" -maxdepth "$2" -name '.git' -prune -o -name 'node_modules' -prune -o -type "${1}" 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+alias of='_open f 1'
+alias oF='_open f 10'
 
-function s() { # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-  local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
-}
+alias od='_open d 1'
+alias oD='_open d 10'
 
+alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}'
+
+[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
+
+ # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+function s() { local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"; }
 function S() {
   local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
   local configfile
@@ -212,12 +204,15 @@ alias t='todo.sh'; complete -F _todo t
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
 alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 
-function _vim() {
-  local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"
-}
-alias v='_vim 1'
-alias V='_vim 10'
+function _vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
+alias vf='_vim 1'
+alias vF='_vim 10'
+
+alias vr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
+alias vR='vi $(sed -n 2p ~/.cache/neomru/file)'
+
 alias vi='vim'
+[ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 # }}}1
 

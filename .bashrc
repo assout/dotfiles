@@ -140,11 +140,11 @@ alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
-alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
-
 function ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; }
 function ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; }
+
+alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
+alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
@@ -178,11 +178,10 @@ fi
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
 function _open() { local t; t="$(find -L "${@:3}" -maxdepth "$2" -name '.git' -prune -o -name 'node_modules' -prune -o -type "${1}" 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-alias of='_open f 1'
-alias oF='_open f 10'
-
 alias od='_open d 1'
 alias oD='_open d 10'
+alias of='_open f 1'
+alias oF='_open f 10'
 
 alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}'
 
@@ -204,15 +203,15 @@ alias t='todo.sh'; complete -F _todo t
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
 alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 
+alias vi='vim'
+[ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
+
 function _vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
 alias vf='_vim 1'
 alias vF='_vim 10'
 
 alias vr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
 alias vR='vi $(sed -n 2p ~/.cache/neomru/file)'
-
-alias vi='vim'
-[ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 # }}}1
 

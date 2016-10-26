@@ -807,14 +807,13 @@ if s:HasPlugin('unite.vim') " {{{
   nnoremap <SID>[unite]G    :<C-u>Unite directory:$GHQ_ROOT -buffer-name=directory-ghq<CR>
   nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
   nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
-  if s:HasPlugin('neomru.vim') " {{{
-    nnoremap <SID>[unite]n :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
-  endif " }}}
   nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
   nnoremap <SID>[unite]p    :<C-u>Unite runtimepath -buffer-name=runtimepath<CR>
-  nnoremap <SID>[unite]r    :<C-u>Unite resume -buffer-name=resume<CR>
-  nnoremap <SID>[unite]R    :<C-u>Unite register -buffer-name=register<CR>
+  if s:HasPlugin('neomru.vim') " {{{
+    nnoremap <SID>[unite]r :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
+  endif " }}}
+  nnoremap <SID>[unite]R    :<C-u>Unite resume -buffer-name=resume<CR>
   if s:HasPlugin('vim-ref-gene') " {{{
     nnoremap <SID>[unite]R :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
   endif " }}}

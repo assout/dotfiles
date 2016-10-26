@@ -498,7 +498,6 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   map  <SID>[sub_plugin]c   <SID>[camelize]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
-  nmap <SID>[sub_plugin]q   <SID>[Quickrun]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
   " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している
@@ -1009,12 +1008,11 @@ endif " }}}
 if s:HasPlugin('vim-quickrun') " {{{
   " TODO: プレビューウィンドウで開けないか(szで閉じやすいので)
   " TODO: 基本システムの関連付けで開くようにする？
-  nnoremap <SID>[Quickrun]  :<C-u>QuickRun<CR>
+  nnoremap <SID>[quickrun]  :<C-u>QuickRun<CR>
 
   let g:quickrun_config = {
   \  '_' : {
-  \    'runner' : 'vimproc',
-  \    'runner/vimproc/updatetime' : 60
+  \    'runner' : has("patch-7.4.2298") ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
   \  }
   \}
   let g:quickrun_config['javascript'] = { 'command': 'node' }

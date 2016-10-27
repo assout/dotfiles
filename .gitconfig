@@ -6,6 +6,7 @@
   excludesfile = ~/.gitignore
   quotepath = false
   attributesfile = ~/.gitattributes
+  filemode = false # TODO `.gitconifg.officeには指定してるんだけど、各リポジトリごとのデフォルトがtrueになってしまう。もしかしてこのファイル上での設定が使われるかもなんで設定してみる。
 [alias]
   graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   wip = !git add -A && (echo WIP: && git diff --cached --no-ext-diff --stat) | git commit -F -

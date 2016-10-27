@@ -199,6 +199,7 @@ $RECYCLE.BIN/
 ### Eclipse ###
 .checkstyle
 .eclipse-pmd
+.fbExcludeFilterFile
 .pmd
 target
 

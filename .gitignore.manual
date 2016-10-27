@@ -3,6 +3,7 @@
 ### Eclipse ###
 .checkstyle
 .eclipse-pmd
+.fbExcludeFilterFile
 .pmd
 target
 

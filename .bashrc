@@ -177,11 +177,14 @@ fi
 
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
-function _open() { local t; t="$(find -L "${@:3}" -maxdepth "$2" -name '.git' -prune -o -name 'node_modules' -prune -o -type "${1}" 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-alias od='_open d 1'
-alias oD='_open d 10'
-alias of='_open f 1'
-alias oF='_open f 10'
+[ "${is_unix}" ] && function _open_dir() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+[ "${is_win}" ] && function _open_dir() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | sed -e 's?/?\\?g')"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+alias od='_open_dir 1'
+alias oD='_open_dir 10'
+
+function _open_file() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+alias of='_open_file 1'
+alias oF='_open_file 10'
 
 alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}'
 

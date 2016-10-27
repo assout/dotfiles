@@ -137,6 +137,15 @@ alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 [ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 [ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
+[ "${is_unix}" ] && function _explorer() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+[ "${is_win}" ] && function _explorer() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | sed -e 's?/?\\?g')"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+alias e='_explorer 1'
+alias E='_explorer 10'
+
+function _file_with_vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
+alias f='_file_with_vim 1' # 'f'ile open with vim
+alias F='_file_with_vim 10'
+
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
@@ -177,14 +186,9 @@ fi
 
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
-[ "${is_unix}" ] && function _open_dir() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-[ "${is_win}" ] && function _open_dir() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | sed -e 's?/?\\?g')"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-alias od='_open_dir 1'
-alias oD='_open_dir 10'
-
-function _open_file() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-alias of='_open_file 1'
-alias oF='_open_file 10'
+function _open() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+alias o='_open 1'
+alias O='_open 10'
 
 alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
 
@@ -208,10 +212,6 @@ alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " "
 
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
-
-function _vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
-alias f='_vim 1' # 'f'ile open with vim
-alias F='_vim 10'
 
 alias r='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # open 'r'ecent file with vim
 alias R='vi $(sed -n 2p ~/.cache/neomru/file)'

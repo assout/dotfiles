@@ -139,9 +139,6 @@ alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
-alias f='vf'
-alias F='vF'
-
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; }
 function ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; }
@@ -189,12 +186,9 @@ function _open_file() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.gi
 alias of='_open_file 1'
 alias oF='_open_file 10'
 
-alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}'
+alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
-
-alias r='vr'
-alias R='vR'
 
  # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
 function s() { local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"; }
@@ -216,11 +210,11 @@ alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 function _vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type f 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
-alias vf='_vim 1'
-alias vF='_vim 10'
+alias f='_vim 1' # 'f'ile open with vim
+alias F='_vim 10'
 
-alias vr='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}'
-alias vR='vi $(sed -n 2p ~/.cache/neomru/file)'
+alias r='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # open 'r'ecent file with vim
+alias R='vi $(sed -n 2p ~/.cache/neomru/file)'
 
 # }}}1
 

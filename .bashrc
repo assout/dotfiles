@@ -103,7 +103,7 @@ if [ "${is_unix}" ] ; then
   alias B='hub browse'
 elif [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
-  alias b='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && Br)'
+  alias b='t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd ${GHQ_ROOT}/${t} && B)'
   alias B='git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.wiki\.git\$?/wikis/home?" | xargs start'
 fi
 

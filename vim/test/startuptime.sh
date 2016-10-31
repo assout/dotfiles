@@ -24,6 +24,7 @@ function add_header {
   sed -i -e 's/,$//' "${result_details_file}"
   echo "" >> "${result_file}"
   echo "" >> "${result_details_file}"
+  echo "" >> "${result_raw_file}"
 }
 
 # Write mesure
@@ -40,14 +41,14 @@ function mesure {
     if [ "${filetype}" != 'boot' ] ; then
       local openfile=${SAMPLE_FILE_PREFIX}.${filetype}
     fi
-    temp=$(mktemp)
+    echo ${option} >> ${result_raw_file}
     # shellcheck disable=SC2086
-    vim ${option} --startuptime ${temp} -e -c 'quit' ${openfile}
-    time="$(tail -1 "${temp}" | cut -d ' ' -f 1)"
+    vim ${option} --startuptime ${result_raw_file} -e -c 'quit' ${openfile}
+    time="$(tail -1 "${result_raw_file}" | cut -d ' ' -f 1)"
     echo -n "${time}," >> "${result_file}"
 
     if [ "${option}" == "${OPTIONS[0]}" ] ; then
-      vimrc_time="$(grep "sourcing.*vimrc$" "${temp}" | cut -d ' ' -f 3)"
+      vimrc_time="$(grep "sourcing.*vimrc$" "${result_raw_file}" | cut -d ' ' -f 3)"
       echo -n "${vimrc_time}," >> "${result_details_file}"
 
       other_time=$(echo "${time}" - "${vimrc_time}" | bc)
@@ -59,6 +60,7 @@ function mesure {
   sed -i -e 's/,$//' "${result_details_file}"
   echo "" >> "${result_file}"
   echo "" >> "${result_details_file}"
+  echo "" >> "${result_raw_file}"
 }
 
 readonly here=$(cd "$(dirname "${BASH_SOURCE:-$0}")"; pwd)
@@ -72,8 +74,10 @@ readonly FILE_TYPES=('boot' 'markdown' 'sh')
 for filetype in "${FILE_TYPES[@]}" ; do
   result_file="${target_dir}"/${filetype}.csv
   result_details_file="${target_dir}"/${filetype}_details.csv
+  result_raw_file="${target_dir}"/${filetype}_raw.log
   echo -n "" > "${result_file}"
   echo -n "" > "${result_details_file}"
+  echo -n "" > "${result_raw_file}"
 
   add_header
   mesure

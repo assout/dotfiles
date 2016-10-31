@@ -402,7 +402,7 @@ if s:IsPluginEnabled()
   Plug 'moll/vim-node' " Lazyできない
   Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
-  " Plug 'othree/yajs.vim' " vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
+  " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
   Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化

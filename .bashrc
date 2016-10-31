@@ -152,7 +152,7 @@ alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" 
 function ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; }
 function ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; }
 
-alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "$(ghq root)/${t}"" ; fi'
+alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
 alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'

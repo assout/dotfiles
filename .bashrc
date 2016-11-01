@@ -142,7 +142,7 @@ alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias e='_explorer 1'
 alias E='_explorer 10'
 
-function _file_with_vim() { local f; f="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -f "${f}" ] && _with_history "vim ${f}"; }
+function _file_with_vim() { local f; f=""$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && _with_history "vim ${f}"; }
 alias f='_file_with_vim 1' # 'f'ile open with vim
 alias F='_file_with_vim 10'
 

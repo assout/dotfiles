@@ -1013,7 +1013,7 @@ if s:HasPlugin('vim-quickrun') " {{{
 
   let g:quickrun_config = {
   \  '_' : {
-  \    'runner' : has("patch-7.4.2298") ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
+  \    'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
   \  }
   \}
   let g:quickrun_config['javascript'] = { 'command': 'node' }

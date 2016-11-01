@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 vim --cmd version --cmd quit
 
@@ -7,6 +7,6 @@ vint vim/.vimrc
 vint vim/.gvimrc
 # TODO: vlmlparser通らないっぽいからダメ - vint eclipse/_vrapperrc
 
-bashate -i E002,E003 .bashrc "$(find -name "*.sh")"
-shellcheck .bashrc "$(find -name "*.sh")"
+find \( -name "*.sh" -o -name ".bashrc" \) -exec bashate -i E002,E003 {} +
+find \( -name "*.sh" -o -name ".bashrc" \) -exec shellcheck .bashrc {} +
 

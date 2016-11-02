@@ -120,7 +120,7 @@ nnoremap - <C-x>
 
 " Surround.vim
 nnoremap sa ys
-nnoremap sc cs
+nnoremap sr cs
 nnoremap sd ds
 vnoremap sa S
 " }}}1

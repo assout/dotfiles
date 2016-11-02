@@ -474,7 +474,7 @@ if s:IsPluginEnabled()
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
   xmap <SID>[plugin]a       <SID>[alignta]
-  map  <SID>[plugin]c       <SID>[replace]
+  map  <SID>[plugin]c       <SID>[camelize]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
@@ -486,7 +486,7 @@ if s:IsPluginEnabled()
   map  <SID>[plugin]O       <SID>[Open-browser]
   nmap <SID>[plugin]p       <SID>[previm]
   nmap <SID>[plugin]q       <SID>[quickrun]
-  nmap <SID>[plugin]r       <SID>[ref]
+  map  <SID>[plugin]r       <SID>[replace]
   map  <SID>[plugin]t       <SID>[todo]
   nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
@@ -497,8 +497,8 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]]       [subN]
 
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
-  map  <SID>[sub_plugin]c   <SID>[camelize]
   map  <SID>[sub_plugin]h   <SID>[hateblo]
+  nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
   " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している

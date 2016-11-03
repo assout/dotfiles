@@ -57,7 +57,7 @@ source .vrapperrc.env
 " }}}1
 
 " # Vim Settings {{{1
-set clipboard=unnamedplus
+set clipboard=unnamed,unnamedplus,exclude:console
 set noexpandtab
 set number
 " }}}1

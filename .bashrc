@@ -86,6 +86,9 @@ export PATH
 
 # [Functions & Aliases] {{{1
 
+# TODO 大文字aliasのセマンティック統一。現状 E, F, D -> 再帰的に下る。B -> カレントプロジェクトのb。
+# TODO カレントdir or 指定ディレクトリのexplore開く
+
 function _with_history {
   history -s "$1"; $1
 }

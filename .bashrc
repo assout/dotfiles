@@ -86,9 +86,6 @@ export PATH
 
 # [Functions & Aliases] {{{1
 
-# TODO 大文字aliasのセマンティック統一。現状 E, F, D -> 再帰的に下る。B -> カレントプロジェクトのb。
-# TODO カレントdir or 指定ディレクトリのexplore開く
-
 function _with_history {
   history -s "$1"; $1
 }
@@ -125,9 +122,8 @@ function cdls {
   ls --color=auto --show-control-chars
 }
 
-function __cd() { # Note: `_cd`だと通常のcd後の補完が壊れる
-  local dir; dir="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"
-}
+# Note: `_cd`だと通常のcd後の補完が壊れる
+function __cd() { local dir; dir="$(find -L -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"; }
 alias c='__cd 1'
 alias C='__cd 10'
 alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}'
@@ -140,21 +136,25 @@ alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 [ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 [ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
-[ "${is_unix}" ] && function _explorer() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
-[ "${is_win}" ] && function _explorer() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | sed -e 's?/?\\?g')"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+function _explorer() {
+  if [ -n "$2" ] ; then
+    _with_history "${opener} $2";
+  else
+    local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | if [ "${is_win}" ] ; then sed -e 's?/?\\?g' ; else cat ; fi)"; [ -n "${t}" ] && _with_history "${opener} ${t}"
+  fi
+}
 alias e='_explorer 1'
 alias E='_explorer 10'
 
-function _file_with_vim() { local f; f=""$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && _with_history "vim ${f}"; }
+function _file_with_vim() { local f; f=""$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && _with_history "vim ${f}"; }
 alias f='_file_with_vim 1' # 'f'ile open with vim
 alias F='_file_with_vim 10'
 
 alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-function ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; }
-function ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; }
-
+function gu { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
+function gs { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
 alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
 alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
@@ -189,7 +189,7 @@ fi
 
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 
-function _open() { local t; t="$(find -L "${@:2}" -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
+function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
 alias o='_open 1'
 alias O='_open 10'
 

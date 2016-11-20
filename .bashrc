@@ -132,6 +132,7 @@ alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
 alias dp='docker ps -lq'
 alias dr='docker rm $(docker ps -a -q)'
 alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
+alias drm='docker rmi $(docker images -q)'
 
 [ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 [ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>

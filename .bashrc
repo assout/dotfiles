@@ -189,7 +189,6 @@ if [ "${is_win}" ] ; then
 fi
 
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
-alias M='vi $(mktemp ~/Today/temp.XXXX.md)'
 
 function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
 alias o='_open 1'

@@ -156,6 +156,7 @@ command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vertical new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
+command! ScrachSave execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '.md'
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
 command! ToggleExpandTab call <SID>ToggleExpandTab()
@@ -580,7 +581,8 @@ if s:HasPlugin('memolist.vim') " {{{
   endfunction
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
-  autocmd vimrc User memolist.vim
+  " autocmd vimrc User memolist.vim " TODO たまにmemolist実行時にエラー出るっぽいので暫定で↓にしてみる
+  autocmd vimrc User unite.vim
         \ let g:unite_source_alias_aliases = {
         \   'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
         \   'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },

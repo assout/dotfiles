@@ -156,7 +156,7 @@ command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 " Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
 command! DiffOrig vertical new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! ScrachSave execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '.md'
+command! SaveScrach execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '.md'
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
 command! ToggleExpandTab call <SID>ToggleExpandTab()

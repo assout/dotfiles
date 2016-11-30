@@ -354,6 +354,7 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
+  Plug 'Shougo/denite.nvim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
         \ | Plug 'ujihisa/neco-look'
         \ | Plug 'Konfekt/FastFold'

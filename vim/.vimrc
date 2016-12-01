@@ -478,7 +478,6 @@ if s:IsPluginEnabled()
   xmap <SID>[plugin]a       <SID>[alignta]
   map  <SID>[plugin]c       <SID>[camelize]
   nmap <SID>[plugin]d       <SID>[denite]
-  " nmap plugin]d       <SID>[denite]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]

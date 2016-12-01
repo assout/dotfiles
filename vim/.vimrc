@@ -313,7 +313,6 @@ nnoremap [w     :wincmd W<CR>
 nnoremap ]w     :wincmd w<CR>
 nnoremap [W     :wincmd t<CR>
 nnoremap ]W     :wincmd b<CR>
-" Note: uはunite用に確保
 " }}}
 
 " Insert mode mappings {{{
@@ -355,27 +354,24 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
   Plug 'Shougo/denite.nvim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'Jagua/vim-denite-ghq', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'LeafCage/yankround.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'Shougo/unite.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'Shougo/unite-outline', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'glidenote/memolist.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'tsukkee/unite-tag', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
         \ | Plug 'ujihisa/neco-look'
         \ | Plug 'Konfekt/FastFold'
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   Plug 'Shougo/neosnippet.vim'
         \ | Plug 'Shougo/neosnippet-snippets'
-  " TODO: たまに"E464: Ambiguous use of user-defined command"となってしまう
-  " TODO: unite everythingがmsys2だと有効にならないのでPR.投げる
-  " Note: uniteに依存するpluginのロード時の処理でuniteのfunction呼ぶことがあるのでuniteのon句にすべて必要
-  Plug 'Shougo/unite.vim', {'on' : ['Unite', '<Plug>(yankround-', 'VimFiler', 'MemoGrep', 'MemoList', 'MemoNew', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'LeafCage/yankround.vim', {'on' : ['Unite', '<Plug>(yankround-']}
-        \ | Plug 'Shougo/unite-outline', {'on' : ['Unite']}
-        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Unite', 'VimFiler'] }
-        \ | Plug 'glidenote/memolist.vim', {'on' : ['Unite', 'MemoGrep', 'MemoList', 'MemoNew']}
-        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Unite', 'Gista', '<Plug>(gista-']}
-        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Unite']}
-        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Unite']}
-        \ | Plug 'tsukkee/unite-tag', {'on' : ['Unite']}
-        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Unite']}
   Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'} " TODO mingw64でなくmsysじゃないと失敗しそう Refs:<http://togetter.com/li/900570>
-  Plug 'TKNGUE/hateblo.vim', g:is_jenkins ? {'on' : []} : {'on' : 'Hateblo'} " entryの保存位置を指定できるためfork版を使用。本家へもPRでてるので、取り込まれたら見先を変える。本家は('moznion/hateblo.vim')
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
@@ -391,7 +387,7 @@ if s:IsPluginEnabled()
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'itchyny/vim-parenmatch'
-  Plug 'kamichidu/vim-edit-properties'
+  " Plug 'kamichidu/vim-edit-properties'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
   Plug 'koron/codic-vim', {'on' : 'Codic'}
@@ -399,7 +395,6 @@ if s:IsPluginEnabled()
   Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
   Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
   Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-  Plug 'mattn/qiita-vim', {'on' : 'Qiita'}
   Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
   Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
   Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 
@@ -491,7 +486,6 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]q       <SID>[quickrun]
   map  <SID>[plugin]r       <SID>[replace]
   map  <SID>[plugin]t       <SID>[todo]
-  nmap <SID>[plugin]u       <SID>[unite]
   nmap <SID>[plugin]w       <SID>[watchdogs]
   nmap <SID>[plugin]W       <SID>[Watchdogs]
   nmap <SID>[plugin]/       <SID>[migemo]
@@ -500,7 +494,6 @@ if s:IsPluginEnabled()
   nmap <SID>[plugin]]       [subN]
 
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
-  map  <SID>[sub_plugin]h   <SID>[hateblo]
   nmap <SID>[sub_plugin]r   <SID>[ref]
   map  <SID>[sub_plugin]s   <SID>[syntastic]
 
@@ -537,29 +530,38 @@ if s:HasPlugin('calendar.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('denite.nvim') " {{{
-  nnoremap <SID>[denite]b :<C-u>Denite buffer<CR>
-  nnoremap <SID>[denite]f :<C-u>Denite file_rec<CR>
-  nnoremap <SID>[denite]F :<C-u>Denite file_rec<CR>
-  nnoremap <SID>[denite]r :<C-u>Denite file_mru<CR>
+  nnoremap       <SID>[denite]b  :<C-u>Denite buffer<CR>
+  nnoremap       <SID>[denite]B  :<C-u>Denite unite:bookmark<CR>
+  nnoremap <expr><SID>[denite]c ':<C-u>Denite unite:codic -direction=botright -input=' . expand('<cword>') . '<CR>'
+  nnoremap       <SID>[denite]C  :<C-u>Denite unite:codic -direction=botright -start-insert<CR>
+  " TODO: asyncのほう使いたいが日本語文字化けする
+  nnoremap       <SID>[denite]e  :<C-u>Denite unite:everything<CR>
+  nnoremap       <SID>[denite]d  :<C-u>DeniteBufferDir directory_rec<CR>
+  nnoremap       <SID>[denite]f  :<C-u>DeniteBufferDir file_rec<CR>
+  nnoremap       <SID>[denite]l  :<C-u>Denite unite:line -no-quit<CR>
+  nnoremap       <SID>[denite]o  :<C-u>Denite unite:outline -no-quit -direction=botright<CR>
+  nnoremap       <SID>[denite]O  :<C-u>Denite unite:outline:folding -no-quit -direction=botright<CR>
+  nnoremap       <SID>[denite]r  :<C-u>Denite file_mru<CR>
+  nnoremap       <SID>[denite]s  :<C-u>Denite unite:neosnippet<CR>
+  nnoremap       <SID>[denite]y  :<C-u>Denite unite:yankround<CR>
+
+  if s:HasPlugin('neomru.vim') " {{{
+    " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
+    " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
+    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
+    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+    let g:neomru#directory_mru_limit = 500
+    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
+    let g:neomru#file_mru_limit = 500
+    let g:neomru#filename_format = ''
+    let g:neomru#follow_links = 1
+  endif " }}}
 endif " }}}
 
-if s:HasPlugin('hateblo.vim') " {{{
-  let g:hateblo_vim = {
-        \  'user': 'assout',
-        \  'api_key': get(g:, 'g:hateblo_api_key', ''),
-        \  'api_endpoint': 'https://blog.hatena.ne.jp/assout/assout.hatenablog.com/atom',
-        \  'WYSIWYG_mode': 0,
-        \  'always_yes': 0,
-        \  'edit_command': 'edit'
-        \} " api_keyはvimrc.localから設定
-  let g:hateblo_dir = expand('~/.cache/hateblo/blog')
-
-  nnoremap <SID>[hateblo]l :<C-u>HatebloList<CR>
-  nnoremap <SID>[hateblo]c :<C-u>HatebloCreate<CR>
-  nnoremap <SID>[hateblo]C :<C-u>HatebloCreateDraft<CR>
-  nnoremap <SID>[hateblo]d :<C-u>HatebloDelete<CR>
-  nnoremap <SID>[hateblo]u :<C-u>HatebloUpdate<CR>
-endif " }}}
+autocmd vimrc User denite.nvim
+      \   call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+      \ | call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
 
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
@@ -591,7 +593,7 @@ if s:HasPlugin('memolist.vim') " {{{
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
   " autocmd vimrc User memolist.vim " TODO たまにmemolist実行時にエラー出るっぽいので暫定で↓にしてみる
-  autocmd vimrc User unite.vim
+  autocmd vimrc User denite.nvim
         \ let g:unite_source_alias_aliases = {
         \   'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
         \   'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
@@ -604,9 +606,8 @@ if s:HasPlugin('memolist.vim') " {{{
         \ | call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
-  nnoremap       <SID>[memolist]l  :<C-u>Unite memolist -buffer-name=memolist<CR>
+  nnoremap       <SID>[memolist]l  :<C-u>Denite unite:memolist -buffer-name=memolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
-  nnoremap       <SID>[memolist]L  :<C-u>Unite memolist_reading -buffer-name=memolist_reading<CR>
 endif " }}}
 
 if s:HasPlugin('neocomplete') " {{{
@@ -670,14 +671,6 @@ if s:HasPlugin('previm') " {{{
   nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
-if s:HasPlugin('qiita-vim') " {{{
-  nnoremap <SID>[qiita]l    :<C-u>Unite qiita<CR>
-  nnoremap <SID>[qiita]<CR> :<C-u>Qiita<CR>
-  nnoremap <SID>[qiita]c    :<C-u>Qiita<CR>
-  nnoremap <SID>[qiita]e    :<C-u>Qiita -e<CR>
-  nnoremap <SID>[qiita]d    :<C-u>Qiita -d<CR>
-endif " }}}
-
 if s:HasPlugin('restart.vim') " {{{
   command! -bar RestartWithSession let g:restart_sessionoptions = 'blank,curdir,folds,help,localoptions,tabpages' | Restart
 endif " }}}
@@ -711,8 +704,8 @@ if s:HasPlugin('switch.vim') " {{{
         \]
 
   " Note: 以下は""<->''より優先されてしまうので設定しない
-        " \  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-        " \  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+  " \  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+  " \  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 
   " FIXME: 空白区切りの文字列をクォート切り替え
   " \  {
@@ -746,115 +739,6 @@ if s:HasPlugin('todo.txt-vim') " {{{
   nnoremap       <SID>[todo]L  :<C-u>edit ~/Documents/todo/done.txt<CR>
   nnoremap       <SID>[todo]r  :<C-u>edit ~/Documents/todo/report.txt<CR>
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
-endif " }}}
-
-if s:HasPlugin('unite.vim') " {{{
-  let g:unite_enable_ignore_case = 1
-  let g:unite_enable_smart_case = 1
-  let g:unite_source_grep_max_candidates = 200
-  if g:is_win_gui
-    let g:unite_source_rec_async_command = ['find', '-L']
-  endif
-  let s:RelativeMove = {'description' : 'move after lcd', 'is_selectable' : 1, 'is_quit' : 0 }
-
-  function! s:RelativeMove.func(candidates) " move先を相対パスで指定するaction
-    let l:candidate = a:candidates[0]
-    let l:dir = isdirectory(l:candidate.word) ? l:candidate.word : fnamemodify(l:candidate.word, ':p:h')
-    execute g:unite_kind_cdable_lcd_command fnameescape(l:dir)
-    call g:unite#take_action('move', a:candidates)
-    call g:unite#force_redraw() " 呼ばないと表示更新されない
-  endfunction
-
-  function! s:UniteKeymappings()
-    imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
-
-    " TODO: sortしたい。↓じゃダメ。
-    " nnoremap <buffer><expr>S unite#mappings#set_current_filters(empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
-    nnoremap <buffer><expr>f unite#smart_map('f', unite#do_action('vimfiler'))
-    nnoremap <buffer><expr>m unite#smart_map('m', unite#do_action('relative_move'))
-    nnoremap <buffer><expr>p unite#smart_map('s', unite#do_action('split'))
-    nnoremap <buffer><expr>v unite#smart_map('v', unite#do_action('vsplit'))
-    " TODO: msys2で効かない(そもそも"start"アクションが効かない) -> uniteにモンキーパッチ当てたらうごいた(今cygstart呼ばれちゃってる)
-    " (cygstartをstartに変えたら/usr/hogeとかは開くが、/d/hogeやD:/hogeは開かない。FileHandlerにしたら両方いけるが実行後vim画面がredrawされない)
-    nnoremap <buffer><expr>x unite#smart_map('x', unite#do_action('start'))
-  endfunction
-  autocmd vimrc FileType unite call s:UniteKeymappings()
-
-  " Note: mapはunimpairedの`]u`系を無効にしないといけない " Note: UnitePrevious,Nextはsilentつけないと`Press Enter..`が表示されてしまう
-  autocmd vimrc User unite.vim
-        \   call g:unite#custom#profile('default', 'context', { 'start_insert' : 1 })
-        \ | call g:unite#custom#action('file,directory', 'relative_move', s:RelativeMove)
-        \ | call g:unite#custom#alias('file', 'delete', 'vimfiler__delete')
-        \ | call g:unite#custom#source('bookmark', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-        \ | call g:unite#custom#source('file_rec', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-        \ | call g:unite#custom#source('file_rec/async', 'ignore_pattern', '\(png\|gif\|jpeg\|jpg\)$')
-        \ | execute 'nnoremap [u :silent UnitePrevious<CR>'
-        \ | execute 'nnoremap ]u :silent UniteNext<CR>'
-        \ | execute 'nnoremap [U :silent UniteFirst<CR>'
-        \ | execute 'nnoremap ]U :silent UniteLast<CR>'
-
-  nnoremap <SID>[unite]<CR> :<C-u>Unite<CR>
-  nnoremap <SID>[unite]b    :<C-u>Unite buffer -buffer-name=buffer<CR>
-  nnoremap <SID>[unite]B    :<C-u>Unite bookmark -buffer-name=bookmark<CR>
-  if s:HasPlugin('unite-codic.vim') " {{{ TODO: Ignorecase (or Smartcase)
-    nnoremap <expr><SID>[unite]c ':<C-u>Unite codic -vertical -winwidth=30 -direction=botright -input=' . expand('<cword>') . '<CR>'
-    nnoremap       <SID>[unite]C  :<C-u>Unite codic -vertical -winwidth=30 -direction=botright -start-insert<CR>
-  endif " }}}
-  " TODO: asyncのほう使いたいが日本語文字化けする
-  nnoremap <SID>[unite]e    :<C-u>Unite everything -buffer-name=everything<CR>
-
-  nnoremap <SID>[unite]d    :<C-u>Unite directory -buffer-name=directory<CR>
-  nnoremap <SID>[unite]f    :<C-u>Unite file -buffer-name=file<CR>
-  if s:HasPlugin('vimproc') " {{{
-    nnoremap <SID>[unite]D :<C-u>Unite directory_rec/async -buffer-name=directory_rec/async<CR>
-    nnoremap <SID>[unite]F :<C-u>Unite file_rec/async -buffer-name=file_rec/async<CR>
-  else " }}}
-    nnoremap <SID>[unite]D :<C-u>Unite directory_rec -buffer-name=directory_rec<CR>
-    nnoremap <SID>[unite]F :<C-u>Unite file_rec -buffer-name=file_rec<CR>
-  endif
-
-  " TODO: msys2で`Target: .`が失敗する(empty)(Gvimはうまくいく)(/d/直下の場合はうまくいく)
-  nnoremap <SID>[unite]g    :<C-u>Unite grep -buffer-name=grep -no-empty<CR>
-  nnoremap <SID>[unite]G    :<C-u>Unite directory:$GHQ_ROOT -buffer-name=directory-ghq<CR>
-  nnoremap <SID>[unite]l    :<C-u>Unite line -buffer-name=line -no-quit<CR>
-  nnoremap <SID>[unite]m    :<C-u>Unite mapping -buffer-name=mapping<CR>
-  nnoremap <SID>[unite]o    :<C-u>Unite outline -buffer-name=outline -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  nnoremap <SID>[unite]O    :<C-u>Unite outline:folding -buffer-name=outline:folding -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  nnoremap <SID>[unite]p    :<C-u>Unite runtimepath -buffer-name=runtimepath<CR>
-  if s:HasPlugin('neomru.vim') " {{{
-    nnoremap <SID>[unite]r :<C-u>Unite neomru/file -buffer-name=neomru/file<CR>
-  endif " }}}
-  nnoremap <SID>[unite]R    :<C-u>Unite resume -buffer-name=resume<CR>
-  if s:HasPlugin('vim-ref-gene') " {{{
-    nnoremap <SID>[unite]R :<C-u>Unite ref/gene -buffer-name=ref/gene<CR>
-  endif " }}}
-  if s:HasPlugin('neosnippet.vim') " {{{
-    nnoremap <SID>[unite]s :<C-u>Unite neosnippet -buffer-name=neosnippet<CR>
-  endif " }}}
-  " nnoremap <SID>[unite]s    :<C-u>Unite find -buffer-name=find<CR> TODO: neosnippetを優先
-  if s:HasPlugin('unite-tag') " {{{
-    nnoremap <SID>[unite]t :<C-u>Unite tag -buffer-name=tag -no-quit -vertical -winwidth=30 -direction=botright -no-truncate<CR>
-  endif " }}}
-  nnoremap <SID>[unite]T    :<C-u>Unite tab -buffer-name=tab<CR>
-  nnoremap <SID>[unite]w    :<C-u>Unite window -buffer-name=window<CR>
-  if s:HasPlugin('yankround.vim') " {{{
-    nnoremap <SID>[unite]y :<C-u>Unite yankround -buffer-name=yankround<CR>
-  else " }}}
-    nnoremap <SID>[unite]y :<C-u>Unite history/yank -buffer-name=histry/yank<CR>
-  endif
-
-  if s:HasPlugin('neomru.vim') " {{{
-    " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
-    " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
-    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
-    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-    let g:neomru#directory_mru_limit = 500
-    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
-    let g:neomru#file_mru_limit = 500
-    let g:neomru#filename_format = ''
-    let g:neomru#follow_links = 1
-  endif " }}}
 endif " }}}
 
 if s:HasPlugin('vimfiler.vim') " {{{
@@ -893,7 +777,7 @@ if s:HasPlugin('vim-gf-user') " {{{
       if filereadable(l:mdpath)
         return { 'path': l:mdpath, 'line': l:line, 'col': 0, }
       endif
-        return 0
+      return 0
     endif
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
@@ -1023,10 +907,10 @@ if s:HasPlugin('vim-quickrun') " {{{
   nnoremap <SID>[quickrun]  :<C-u>QuickRun<CR>
 
   let g:quickrun_config = {
-  \  '_' : {
-  \    'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
-  \  }
-  \}
+        \  '_' : {
+        \    'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
+        \  }
+        \}
   let g:quickrun_config['javascript'] = { 'command': 'node' }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }

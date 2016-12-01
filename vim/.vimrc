@@ -477,6 +477,8 @@ if s:IsPluginEnabled()
   map  <Space>              <SID>[plugin]
   xmap <SID>[plugin]a       <SID>[alignta]
   map  <SID>[plugin]c       <SID>[camelize]
+  nmap <SID>[plugin]d       <SID>[denite]
+  " nmap plugin]d       <SID>[denite]
   map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
@@ -533,6 +535,13 @@ endif
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = g:is_linux ? 1 : 0
   let g:calendar_google_task = g:is_linux ? 1 : 0
+endif " }}}
+
+if s:HasPlugin('denite.nvim') " {{{
+  nnoremap <SID>[denite]b :<C-u>Denite buffer<CR>
+  nnoremap <SID>[denite]f :<C-u>Denite file_rec<CR>
+  nnoremap <SID>[denite]F :<C-u>Denite file_rec<CR>
+  nnoremap <SID>[denite]r :<C-u>Denite file_mru<CR>
 endif " }}}
 
 if s:HasPlugin('hateblo.vim') " {{{

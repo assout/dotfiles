@@ -358,8 +358,8 @@ if s:IsPluginEnabled()
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'Shougo/unite.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'glidenote/memolist.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'VimFiler']}
+        \ | Plug 'glidenote/memolist.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'MemoNew', 'MemoGrep']}
         \ | Plug 'lambdalisue/vim-gista', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}

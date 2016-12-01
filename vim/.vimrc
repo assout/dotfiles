@@ -353,14 +353,13 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  Plug 'Shougo/denite.nvim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+  Plug 'Shougo/denite.nvim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'MemoNew', 'MemoGrep', 'VimFiler']}
         \ | Plug 'Jagua/vim-denite-ghq', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'LeafCage/yankround.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'Shougo/unite.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'Shougo/unite-outline', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'VimFiler']}
         \ | Plug 'glidenote/memolist.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'MemoNew', 'MemoGrep']}
-        \ | Plug 'lambdalisue/vim-gista', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
         \ | Plug 'tsukkee/unite-tag', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
@@ -402,7 +401,6 @@ if s:IsPluginEnabled()
   " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
   " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
   Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
-  Plug 'scrooloose/syntastic', {'on' : []} " Caution: quickfixstatusと競合するので一旦無効化
   Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
   Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
@@ -473,7 +471,6 @@ if s:IsPluginEnabled()
   xmap <SID>[plugin]a       <SID>[alignta]
   map  <SID>[plugin]c       <SID>[camelize]
   nmap <SID>[plugin]d       <SID>[denite]
-  map  <SID>[plugin]g       <SID>[gista]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
   map  <SID>[plugin]i       <SID>[indentguide]
@@ -495,7 +492,6 @@ if s:IsPluginEnabled()
 
   map  <SID>[plugin]<Space> <SID>[sub_plugin]
   nmap <SID>[sub_plugin]r   <SID>[ref]
-  map  <SID>[sub_plugin]s   <SID>[syntastic]
 
   " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している
   nmap K                <Plug>(ref-keyword)
@@ -557,11 +553,11 @@ if s:HasPlugin('denite.nvim') " {{{
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
   endif " }}}
-endif " }}}
 
-autocmd vimrc User denite.nvim
-      \   call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-      \ | call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+  autocmd vimrc User denite.nvim
+        \   call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+        \ | call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
@@ -592,21 +588,8 @@ if s:HasPlugin('memolist.vim') " {{{
   endfunction
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
-  " autocmd vimrc User memolist.vim " TODO たまにmemolist実行時にエラー出るっぽいので暫定で↓にしてみる
-  autocmd vimrc User denite.nvim
-        \ let g:unite_source_alias_aliases = {
-        \   'memolist' : { 'source' : 'file_rec', 'args' : g:memolist_path },
-        \   'memolist_reading' : { 'source' : 'file', 'args' : g:memolist_path },
-        \ }
-        \ | call g:unite#custom#source('memolist', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-        \ | call g:unite#custom#source('memolist', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-        \ | call g:unite#custom#source('memolist', 'ignore_pattern', 'exercises\|reading\|_book\|\(png\|gif\|jpeg\|jpg\)$')
-        \ | call g:unite#custom#source('memolist_reading', 'sorters', ['sorter_ftime', 'sorter_reverse'])
-        \ | call g:unite#custom#source('memolist_reading', 'matchers', ['converter_tail_abbr', 'matcher_default', 'matcher_hide_hidden_files'])
-        \ | call g:unite#custom#source('memolist_reading', 'ignore_pattern', '^\%(.*exercises\|.*reading\)\@!.*\zs.*\|\(png\|gif\|jpeg\|jpg\)$')
-
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
-  nnoremap       <SID>[memolist]l  :<C-u>Denite unite:memolist -buffer-name=memolist<CR>
+  nnoremap       <SID>[memolist]l  :<C-u>Denite file_rec:~/memolist.wiki<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}
 
@@ -718,21 +701,6 @@ if s:HasPlugin('switch.vim') " {{{
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
 endif " }}}
 
-if s:HasPlugin('syntastic') " {{{
-  let g:syntastic_check_on_wq = 0 " :wq時にチェックしない
-  let g:syntastic_always_populate_loc_list = 1 " :Errorsを実行しなくてもlocation listに表示する
-  let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
-
-  let g:syntastic_sh_checkers = ['sh', 'shellcheck', 'bashate']
-  let g:syntastic_sh_bashate_args = '-i E002,E003'
-
-  let g:syntastic_vim_checkers = ['vint']
-  let g:syntastic_yaml_checkers = ['jsyaml']
-  let g:syntastic_markdown_mdl_args = '--no-warning'
-
-  nnoremap <SID>[syntastic] :<C-u>SyntasticCheck<CR>:lwindow<CR>
-endif " }}}
-
 if s:HasPlugin('todo.txt-vim') " {{{
   " TODO: Unite source化など
   nnoremap       <SID>[todo]l  :<C-u>edit ~/Documents/todo/todo.txt<CR>
@@ -782,14 +750,6 @@ if s:HasPlugin('vim-gf-user') " {{{
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
   autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
-endif " }}}
-
-if s:HasPlugin('vim-gista') " {{{
-  let g:gista#github_user = 'assout'
-  let g:gista#update_on_write = 1
-  nnoremap <SID>[gista]l    :<C-u>Unite gista<CR>
-  nnoremap <SID>[gista]c    :<C-u>Gista<CR>
-  nnoremap <SID>[gista]<CR> :<C-u>Gista<CR>
 endif " }}}
 
 if s:HasPlugin('vim-json') " {{{

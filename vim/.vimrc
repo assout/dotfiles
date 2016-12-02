@@ -353,17 +353,18 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  Plug 'Shougo/denite.nvim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'MemoNew', 'MemoGrep', 'VimFiler']}
-        \ | Plug 'Jagua/vim-denite-ghq', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'LeafCage/yankround.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'Shougo/unite.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'Shougo/unite-outline', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'Shougo/vimfiler.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'VimFiler']}
-        \ | Plug 'glidenote/memolist.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir', 'MemoNew', 'MemoGrep']}
-        \ | Plug 'rhysd/unite-codic.vim', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'tsukkee/unite-tag', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
-        \ | Plug 'ujihisa/unite-colorscheme', {'on' : ['Denite', 'DeniteBufferDir', 'DeniteCursorWord', 'DeniteProjectDir']}
+  " Note: なんかlazy化するのはだるいのであきらめる
+  Plug 'Shougo/denite.nvim'
+        \ | Plug 'Jagua/vim-denite-ghq'
+        \ | Plug 'LeafCage/yankround.vim'
+        \ | Plug 'Shougo/unite-outline'
+        \ | Plug 'Shougo/unite.vim'
+        \ | Plug 'Shougo/vimfiler.vim'
+        \ | Plug 'glidenote/memolist.vim'
+        \ | Plug 'koron/codic-vim'
+        \ | Plug 'rhysd/unite-codic.vim'
+        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {}
+        \ | Plug 'tsukkee/unite-tag'
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
         \ | Plug 'ujihisa/neco-look'
         \ | Plug 'Konfekt/FastFold'
@@ -389,7 +390,6 @@ if s:IsPluginEnabled()
   " Plug 'kamichidu/vim-edit-properties'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
-  Plug 'koron/codic-vim', {'on' : 'Codic'}
   Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
   Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
   Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
@@ -554,9 +554,8 @@ if s:HasPlugin('denite.nvim') " {{{
     let g:neomru#follow_links = 1
   endif " }}}
 
-  autocmd vimrc User denite.nvim
-        \   call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-        \ | call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{

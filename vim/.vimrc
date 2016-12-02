@@ -16,15 +16,6 @@
 " - IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
 " - executable()は遅いらしいので使わない
 "
-" ## Refs:
-" - [Vimスクリプト基礎文法最速マスター - 永遠に未完成](http://d.hatena.ne.jp/thinca/20100201/1265009821)
-" - [Big Sky :: モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)
-" - [Vimスクリプトリファレンス &mdash; 名無しのvim使い](http://nanasi.jp/code.html)
-" - [Vimの極め方](http://whileimautomaton.net/2008/08/vimworkshop3-kana-presentation)
-" - [Google Vimscript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptguide.xml)
-" - [Google Vimscript Guide](http://google-styleguide.googlecode.com/svn/trunk/vimscriptfull.xml)
-" - [Vim で使える Ctrl を使うキーバインドまとめ - 反省はしても後悔はしない](http://cohama.hateblo.jp/entry/20121023/1351003586)
-"
 " ## TODOs
 " - TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
 " - TODO: neocompleteでたまに日本語入力が変になる
@@ -525,7 +516,11 @@ if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_task = g:is_linux ? 1 : 0
 endif " }}}
 
+" TODO win,gvimでhas('python3')が0になる
 if s:HasPlugin('denite.nvim') " {{{
+  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
+  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+
   nnoremap       <SID>[denite]b  :<C-u>Denite buffer<CR>
   nnoremap       <SID>[denite]B  :<C-u>Denite unite:bookmark<CR>
   nnoremap <expr><SID>[denite]c ':<C-u>Denite unite:codic -direction=botright -input=' . expand('<cword>') . '<CR>'
@@ -553,9 +548,6 @@ if s:HasPlugin('denite.nvim') " {{{
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
   endif " }}}
-
-  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{

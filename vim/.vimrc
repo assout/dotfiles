@@ -788,68 +788,40 @@ if s:HasPlugin('vim-migemo') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-replace') " {{{
-  map <SID>[replace] <Plug>(operator-replace)
-
-  if s:HasPlugin('vim-textobj-between') " {{{
-    nmap <SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
-  endif " }}}
-
-  if s:HasPlugin('vim-textobj-line') " {{{
-    nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
-  endif " }}}
-
-  if s:HasPlugin('vim-textobj-multiblock') " {{{
-    nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-multiblock-i)
-  endif " }}}
-
-  " if s:HasPlugin('vim-textobj-parameter') " {{{  Caution: aは<Space>paeとかできなくなるのでやらない
-  "   nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
-  " endif " }}}
-
-  if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
-  endif " }}}
+  map  <SID>[replace] <Plug>(operator-replace)
+  " Caution: aは<Space>paeとかできなくなるのでやらない
+  " nmap <SID>[replace]a <Plug>(operator-replace)<Plug>(textobj-parameter-i)
+  nmap <SID>[replace]d <Plug>(operator-replace)<Plug>(textobj-between-i)
+  nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
+  nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-multiblock-i)
+  nmap <SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
   " TODO: 空白区切りがしたい(なぜか今でも2スペースならできる)
-  " Refs: <http://d.hatena.ne.jp/syngan/20140301/1393676442>
-  " Refs: <http://www.todesking.com/blog/2014-10-11-surround-vim-to-operator-vim/>
-  autocmd vimrc User vim-operator-surround
-        \   let g:operator#surround#blocks = deepcopy(g:operator#surround#default_blocks)
-        \ | call add(g:operator#surround#blocks['-'], { 'block' : ['<!-- ', ' -->'], 'motionwise' : ['char', 'line', 'block'], 'keys' : ['c']} )
 
   map <SID>[surround-a] <Plug>(operator-surround-append)
   map <SID>[surround-d] <Plug>(operator-surround-delete)
   map <SID>[surround-r] <Plug>(operator-surround-replace)
 
-  if s:HasPlugin('vim-textobj-between') " {{{
-    nmap <SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
-    nmap <SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
-    nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
-  endif " }}}
+  " Caution: aはsaawとかできなくなるのでやらない
+  " nmap <SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
+  " nmap <SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
+  " nmap <SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
 
-  if s:HasPlugin('vim-textobj-line') " {{{ TODO: lを潰したくない
-    nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
-    nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
-    nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
-  endif " }}}
+  nmap <SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-multiblock-a)
+  nmap <SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-multiblock-a)
+  nmap <SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-multiblock-a)
 
-  if s:HasPlugin('vim-textobj-multiblock') " {{{
-    nmap <SID>[surround-a]b <Plug>(operator-surround-append)<Plug>(textobj-multiblock-a)
-    nmap <SID>[surround-d]b <Plug>(operator-surround-delete)<Plug>(textobj-multiblock-a)
-    nmap <SID>[surround-r]b <Plug>(operator-surround-replace)<Plug>(textobj-multiblock-a)
-  endif " }}}
+  nmap <SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
+  nmap <SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
+  nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 
-  " if s:HasPlugin('vim-textobj-parameter') " {{{ Caution: aはsaawとかできなくなるのでやらない
-  "   nmap <SID>[surround-a]a <Plug>(operator-surround-append)<Plug>(textobj-parameter-a)
-  "   nmap <SID>[surround-d]a <Plug>(operator-surround-delete)<Plug>(textobj-parameter-a)
-  "   nmap <SID>[surround-r]a <Plug>(operator-surround-replace)<Plug>(textobj-parameter-a)
-  " endif " }}}
+  nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
+  nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
+  nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 
-  if s:HasPlugin('vim-textobj-url') " {{{
-    nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
-  endif " }}}
+  nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
@@ -857,11 +829,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun]  :<C-u>QuickRun<CR>
 
-  let g:quickrun_config = {
-        \  '_' : {
-        \    'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60
-        \  }
-        \}
+  let g:quickrun_config = { '_' : { 'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60 } }
   let g:quickrun_config['javascript'] = { 'command': 'node' }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
@@ -1102,7 +1070,6 @@ augroup vimrc
   autocmd FileType xml
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  " Double byte space highlight
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END

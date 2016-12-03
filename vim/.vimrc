@@ -701,10 +701,6 @@ if s:HasPlugin('todo.txt-vim') " {{{
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 endif " }}}
 
-if s:HasPlugin('tmux-complete.vim') " {{{
-  let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
-endif " }}}
-
 if s:HasPlugin('vimfiler.vim') " {{{
   " TODO: msys2でxでのシステム関連付けが開かない(uniteの箇所にもコメントしているがcygstart呼ばれているのが原因)
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
@@ -713,7 +709,7 @@ if s:HasPlugin('vimfiler.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-auto-programming') " {{{
-  set completefunc=autoprogramming#complete
+  set omnifunc=autoprogramming#complete " Note: completefuncはtmux-complete.vimとかぶるので。
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{

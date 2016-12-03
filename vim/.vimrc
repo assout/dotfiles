@@ -370,14 +370,15 @@ if s:IsPluginEnabled()
   Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
-  Plug 'h1mesuke/vim-alignta', {'on' : ['Align', 'Alignta']}
   " FIXME: windows(cui,gui)で動いてない。linux未確認
   Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
+  Plug 'haya14busa/vim-auto-programming'
   Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
   Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   Plug 'itchyny/vim-parenmatch'
+  Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
   " Plug 'kamichidu/vim-edit-properties'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
@@ -459,7 +460,7 @@ if s:IsPluginEnabled()
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
-  xmap <SID>[plugin]a       <SID>[alignta]
+  map  <SID>[plugin]a       <SID>[align]
   map  <SID>[plugin]c       <SID>[camelize]
   nmap <SID>[plugin]d       <SID>[denite]
   map  <SID>[plugin]h       <SID>[markdown_h]
@@ -700,6 +701,10 @@ if s:HasPlugin('todo.txt-vim') " {{{
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
 endif " }}}
 
+if s:HasPlugin('tmux-complete.vim') " {{{
+  let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
+endif " }}}
+
 if s:HasPlugin('vimfiler.vim') " {{{
   " TODO: msys2でxでのシステム関連付けが開かない(uniteの箇所にもコメントしているがcygstart呼ばれているのが原因)
   let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
@@ -707,15 +712,16 @@ if s:HasPlugin('vimfiler.vim') " {{{
   let g:vimfiler_as_default_explorer = 0 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 
-if s:HasPlugin('vim-alignta') " {{{
-  xnoremap <SID>[alignta]<CR> :Alignta<Space>
-  " Alignta for 's'hift align.
-  xnoremap <SID>[alignta]s    :Alignta<Space><-<Space>
-  " Alignta for 'm'ap. 空白区切りの要素を整列(e.g. nmap hoge fuga)(最初の2要素のみ)(コメント行は除く)
-  xnoremap <SID>[alignta]m    :Alignta<Space>v/^" <<0 \s\S/2<CR>
-  xnoremap <SID>[alignta]\|   :Alignta<Space>\|<CR>
-  xnoremap <SID>[alignta]:    :Alignta<Space>:<CR>
-  xnoremap <SID>[alignta],    :Alignta<Space>,<CR>
+if s:HasPlugin('vim-auto-programming') " {{{
+  set completefunc=autoprogramming#complete
+endif " }}}
+
+if s:HasPlugin('vim-easy-align') " {{{
+  " Start interactive EasyAlign in visual mode (e.g. vipga)
+  xmap <SID>[align] <Plug>(LiveEasyAlign)
+
+  " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+  nmap <SID>[align] <Plug>(LiveEasyAlign)
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{

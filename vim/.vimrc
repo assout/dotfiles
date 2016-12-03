@@ -544,7 +544,7 @@ if s:HasPlugin('denite.nvim') " {{{
     let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
     let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
     let g:neomru#directory_mru_limit = 500
-    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
+    let g:neomru#do_validate = 1 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
@@ -1072,8 +1072,8 @@ augroup vimrc
   autocmd FileType xml
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+  " autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+  " autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END
 " }}}1
 
@@ -1084,6 +1084,10 @@ source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 " Colorshceme settings {{{
 if s:HasPlugin('vim-hybrid')
   function! s:DefineHighlight()
+    " Note: for deoplete
+    highlight clear CursorLine
+    highlight CursorLine cterm=underline
+
     highlight clear SpellBad
     highlight clear SpellCap
     highlight clear SpellRare

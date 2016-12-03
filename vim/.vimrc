@@ -694,7 +694,7 @@ if s:HasPlugin('switch.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('tmux-complete.vim') " {{{
-  let g:tmuxcomplete#trigger = '' " Note: completefuncはvim-auto-programmingで使いたいので。
+  let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
 endif " }}}
 
 if s:HasPlugin('todo.txt-vim') " {{{

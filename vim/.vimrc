@@ -519,8 +519,8 @@ endif " }}}
 
 " TODO win,gvimでhas('python3')が0になる
 if s:HasPlugin('denite.nvim') " {{{
-  call denite#custom#map('insert', '<C-n>', 'move_to_next_line')
-  call denite#custom#map('insert', '<C-p>', 'move_to_prev_line')
+  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
+  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
 
   nnoremap       <SID>[denite]b  :<C-u>Denite buffer<CR>
   nnoremap       <SID>[denite]B  :<C-u>Denite unite:bookmark<CR>

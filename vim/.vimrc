@@ -408,6 +408,7 @@ if s:IsPluginEnabled()
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
   Plug 'tpope/vim-fugitive'
         \ | Plug 'junegunn/gv.vim'
+        \ | Plug 'skywind3000/asyncrun.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating'
   Plug 'tpope/vim-unimpaired'
@@ -507,6 +508,10 @@ else " Vim-Plug有効の場合勝手にされる
   filetyp indent on
   syntax on
 endif
+
+if s:HasPlugin('asyncrun.vim') " {{{
+  command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = g:is_linux ? 1 : 0

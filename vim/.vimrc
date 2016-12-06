@@ -510,7 +510,7 @@ else " Vim-Plug有効の場合勝手にされる
 endif
 
 if s:HasPlugin('asyncrun.vim') " {{{
-  command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
+  command! -bang -nargs=* -complete=file Make AsyncRun! -program=make @ <args>
 endif " }}}
 
 if s:HasPlugin('calendar.vim') " {{{
@@ -1036,6 +1036,7 @@ endif " }}}
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
   " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  " TODO fugitive, AsyncRunの時にフォーカスが奪われる
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | endif
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)

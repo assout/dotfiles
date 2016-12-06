@@ -512,6 +512,7 @@ endif
 if s:HasPlugin('asyncrun.vim') " {{{
   command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 endif " }}}
+
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = g:is_linux ? 1 : 0
   let g:calendar_google_task = g:is_linux ? 1 : 0

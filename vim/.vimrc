@@ -362,7 +362,6 @@ if s:IsPluginEnabled()
   Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
   Plug 'Shougo/neosnippet.vim'
         \ | Plug 'Shougo/neosnippet-snippets'
-  Plug 'Shougo/vimproc', g:is_jenkins ? {'on' : []} : g:is_win_gui ? {'on' : []} : g:is_linux ? {'do' : 'make -f make_unix.mak'} : {'do' : 'make -f make_cygwin.mak'} " TODO mingw64でなくmsysじゃないと失敗しそう Refs:<http://togetter.com/li/900570>
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
@@ -454,9 +453,6 @@ if s:IsPluginEnabled()
   Plug 'w0ng/vim-hybrid'
   " }}}
   call g:plug#end()
-
-  " Caution: Workaround. msys2からgvim起動したときkaoriyaのを入れないといけないため
-  if g:is_win_gui | let &runtimepath = &runtimepath . ',~/Tools/vim74-kaoriya-win64/plugins/vimproc' | endif
 
   " Plugin prefix mappings {{{
   map  <Space>              <SID>[plugin]
@@ -831,7 +827,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   " TODO: 基本システムの関連付けで開くようにする？
   nnoremap <SID>[quickrun]  :<C-u>QuickRun<CR>
 
-  let g:quickrun_config = { '_' : { 'runner' : has('patch-7.4.2298') ? 'job' : 'vimproc', 'runner/vimproc/updatetime' : 60 } }
+  let g:quickrun_config = { '_' : { 'runner' : has('patch-7.4.2298') ? 'job' : 'system'} }
   let g:quickrun_config['javascript'] = { 'command': 'node' }
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
@@ -1002,7 +998,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
   let g:quickrun_config['watchdogs_checker/_'] = {
         \  'outputter/quickfix/open_cmd' : '',
-        \  'runner/vimproc/updatetime' : 30,
         \  'hook/echo/enable' : 1,
         \  'hook/echo/output_success' : 'No Errors Found.',
         \  'hook/echo/output_failure' : 'Errors Found!',

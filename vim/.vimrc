@@ -998,6 +998,7 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
   let g:quickrun_config['watchdogs_checker/_'] = {
         \  'outputter/quickfix/open_cmd' : '',
+        \  'runner' : 'job',
         \  'hook/echo/enable' : 1,
         \  'hook/echo/output_success' : 'No Errors Found.',
         \  'hook/echo/output_failure' : 'Errors Found!',

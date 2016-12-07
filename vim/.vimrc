@@ -544,7 +544,7 @@ if s:HasPlugin('denite.nvim') " {{{
     let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
     let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
     let g:neomru#directory_mru_limit = 500
-    let g:neomru#do_validate = 1 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる
+    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
     let g:neomru#file_mru_limit = 500
     let g:neomru#filename_format = ''
     let g:neomru#follow_links = 1
@@ -1002,7 +1002,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
   let g:quickrun_config['watchdogs_checker/_'] = {
         \  'outputter/quickfix/open_cmd' : '',
-        \  'runner/vimproc/updatetime' : 30,
         \  'hook/echo/enable' : 1,
         \  'hook/echo/output_success' : 'No Errors Found.',
         \  'hook/echo/output_failure' : 'Errors Found!',

@@ -68,7 +68,7 @@ if [ "${is_win}" ] ; then
   PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
   PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
   PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
-  PATH="${PATH}:/c/Program Files (x86)/Java/jdk1.8.0_66/bin"
+  PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
   PATH="${PATH}:/c/ProgramData/chocolatey/bin"
   PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
   PATH="${PATH}:/usr/share/git/workdir"

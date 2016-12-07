@@ -694,6 +694,10 @@ if s:HasPlugin('switch.vim') " {{{
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
 endif " }}}
 
+if s:HasPlugin('tmux-complete.vim') " {{{
+  let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
+endif " }}}
+
 if s:HasPlugin('todo.txt-vim') " {{{
   " TODO: Unite source化など
   nnoremap       <SID>[todo]l  :<C-u>edit ~/Documents/todo/todo.txt<CR>
@@ -710,7 +714,7 @@ if s:HasPlugin('vimfiler.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-auto-programming') " {{{
-  set omnifunc=autoprogramming#complete " Note: tmux-complete.vimとかぶることに注意
+  set completefunc=autoprogramming#complete " Note: tmux-complete.vimとかぶることに注意。omnifuncにしてみたら動かないケースあり
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{

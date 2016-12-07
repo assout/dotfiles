@@ -127,7 +127,7 @@ function cdls {
 function __cd() { local dir; dir="$(find -L -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"; }
 alias c='__cd 1'
 alias C='__cd 10'
-alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}'
+alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}' #  'c'd to 'r'ecent directory
 
 alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
 alias dp='docker ps -lq'

@@ -74,8 +74,9 @@ set regexsearch " Search Regex
 " Caution: 他と合わせると<M-t,c>はタブ作成、クローズだが定義しない(もともとのCtrl+t,cを退避しているため).
 
 " vimrcでのマッピングを解除.
-nunmap l
 unmap  <Space>
+nunmap p
+nunmap P
 
 " Normal mode mappings "
 nnoremap <SID>[shortcut]m :maximize<CR>

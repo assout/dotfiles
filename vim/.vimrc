@@ -430,7 +430,6 @@ if s:IsPluginEnabled()
 
   " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
   Plug 'kana/vim-operator-user'
-        \ | Plug 'haya14busa/vim-operator-flashy'
         \ | Plug 'kana/vim-operator-replace'
         \ | Plug 'rhysd/vim-operator-surround'
         \ | Plug 'tyru/operator-camelize.vim'
@@ -491,8 +490,6 @@ if s:IsPluginEnabled()
   nmap <C-w>F           <Plug>(gf-user-<C-w>F)
   nmap <C-w>gf          <Plug>(gf-user-<C-w>gf)
   nmap <C-w>gF          <Plug>(gf-user-<C-w>gF)
-  map  y                <Plug>(operator-flashy)
-  nmap Y                <Plug>(operator-flashy)$
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)
   nmap <C-p>            <Plug>(yankround-prev)

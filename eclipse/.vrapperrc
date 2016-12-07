@@ -75,6 +75,7 @@ set regexsearch " Search Regex
 
 " vimrcでのマッピングを解除.
 unmap  <Space>
+nunmap l
 nunmap p
 nunmap P
 

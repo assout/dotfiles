@@ -195,7 +195,7 @@ function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -
 alias o='_open 1'
 alias O='_open 10'
 
-alias or='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
+alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
@@ -218,8 +218,8 @@ alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " "
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-alias r='t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && vi ${t}' # open 'r'ecent file with vim
-alias R='vi $(sed -n 2p ~/.cache/neomru/file)'
+alias r='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
+alias R='vi $(sed -n 2p ~/.cache/ctrlp/mru/cache.txt)'
 
 # }}}1
 

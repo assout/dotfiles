@@ -25,7 +25,9 @@
 
 " # Begin {{{1
 unlet! skip_defaults_vim
-source $VIMRUNTIME/defaults.vim " TODO:vrapperrcから読まれたときだめかも
+" TODO:vrapperrcから読まれたときだめかも
+" TODO:filetype plugin onがここと、vim-plugの中の2回されて遅くなるかも
+source $VIMRUNTIME/defaults.vim
 
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
@@ -262,32 +264,7 @@ nnoremap <SID>[open] <Nop>
 nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 " }}}
 
-" Like unimpaired plugin mappings {{{
-nnoremap [a     :previous<CR>
-nnoremap ]a     :next<CR>
-nnoremap [A     :first<CR>
-nnoremap ]A     :last<CR>
-nnoremap [b     :bprevious<CR>
-nnoremap ]b     :bnext<CR>
-nnoremap [B     :bfirst<CR>
-nnoremap ]B     :blast<CR>
-nnoremap [l     :lprevious<CR>
-nnoremap ]l     :lnext<CR>
-nnoremap [L     :lfirst<CR>
-nnoremap ]L     :llast<CR>
-nnoremap [<C-L> :lpfile<CR>
-nnoremap ]<C-L> :llast<CR>
-nnoremap [q     :cprevious<CR>
-nnoremap ]q     :cnext<CR>
-nnoremap [Q     :cfirst<CR>
-nnoremap ]Q     :clast<CR>
-nnoremap [<C-Q> :cpfile<CR>
-nnoremap ]<C-Q> :cnfile<CR>
-nnoremap [t     :tbprevious<CR>
-nnoremap ]t     :tnext<CR>
-nnoremap [T     :tfirst<CR>
-nnoremap ]T     :tlast<CR>
-" Adding to unimpaired plugin mapping
+" Adding to unimpaired plugin mapping {{{
 nnoremap [g     :tabprevious<CR>
 nnoremap ]g     :tabnext<CR>
 nnoremap [G     :tabfirst<CR>
@@ -476,6 +453,7 @@ if s:IsPluginEnabled()
   nmap <C-w>gF          <Plug>(gf-user-<C-w>gF)
   nmap p                <Plug>(yankround-p)
   nmap P                <Plug>(yankround-P)
+  " FIXME:ctrlpとかぶってる
   nmap <C-p>            <Plug>(yankround-prev)
   nmap <C-n>            <Plug>(yankround-next)
   nmap +                <SID>[switch]

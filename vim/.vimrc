@@ -333,7 +333,8 @@ cnoremap <M-f> <S-Right>
 " }}}
 " }}}1
 
-" # Plug-ins {{{1
+" # 
+" Plug-ins {{{1
 if s:IsPluginEnabled()
   if has('vim_starting')
     let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
@@ -344,26 +345,15 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  " Note: なんかlazy化するのはだるいのであきらめる
-  Plug 'Shougo/denite.nvim'
-        \ | Plug 'Jagua/vim-denite-ghq'
-        \ | Plug 'LeafCage/yankround.vim'
-        \ | Plug 'Shougo/unite-outline'
-        \ | Plug 'Shougo/unite.vim'
-        \ | Plug 'Shougo/vimfiler.vim'
-        \ | Plug 'glidenote/memolist.vim'
-        \ | Plug 'koron/codic-vim'
-        \ | Plug 'rhysd/unite-codic.vim'
-        \ | Plug 'sgur/unite-everything', g:is_linux ? {'on' : []} : {}
-        \ | Plug 'tsukkee/unite-tag'
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
         \ | Plug 'ujihisa/neco-look'
         \ | Plug 'Konfekt/FastFold'
-  Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {}
+  Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
   Plug 'Shougo/neosnippet.vim'
         \ | Plug 'Shougo/neosnippet-snippets'
   Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
+  Plug 'ctrlpvim/ctrlp.vim'
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
   Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
@@ -458,7 +448,6 @@ if s:IsPluginEnabled()
   map  <Space>              <SID>[plugin]
   map  <SID>[plugin]a       <SID>[align]
   map  <SID>[plugin]c       <SID>[camelize]
-  nmap <SID>[plugin]d       <SID>[denite]
   map  <SID>[plugin]h       <SID>[markdown_h]
   nmap <SID>[plugin]H       <SID>[markdown_H]
   map  <SID>[plugin]i       <SID>[indentguide]
@@ -515,38 +504,17 @@ if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_task = g:is_linux ? 1 : 0
 endif " }}}
 
-" TODO win,gvimでhas('python3')が0になる
-if s:HasPlugin('denite.nvim') " {{{
-  call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
-  call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
-
-  nnoremap       <SID>[denite]b  :<C-u>Denite buffer<CR>
-  nnoremap       <SID>[denite]B  :<C-u>Denite unite:bookmark<CR>
-  nnoremap <expr><SID>[denite]c ':<C-u>Denite unite:codic -direction=botright -input=' . expand('<cword>') . '<CR>'
-  nnoremap       <SID>[denite]C  :<C-u>Denite unite:codic -direction=botright -start-insert<CR>
-  " TODO: asyncのほう使いたいが日本語文字化けする
-  nnoremap       <SID>[denite]e  :<C-u>Denite unite:everything<CR>
-  nnoremap       <SID>[denite]d  :<C-u>DeniteBufferDir directory_rec<CR>
-  nnoremap       <SID>[denite]f  :<C-u>DeniteBufferDir file_rec<CR>
-  nnoremap       <SID>[denite]l  :<C-u>Denite unite:line -no-quit<CR>
-  nnoremap       <SID>[denite]o  :<C-u>Denite unite:outline -no-quit -direction=botright<CR>
-  nnoremap       <SID>[denite]O  :<C-u>Denite unite:outline:folding -no-quit -direction=botright<CR>
-  nnoremap       <SID>[denite]r  :<C-u>Denite file_mru<CR>
-  nnoremap       <SID>[denite]s  :<C-u>Denite unite:neosnippet<CR>
-  nnoremap       <SID>[denite]y  :<C-u>Denite unite:yankround<CR>
-
-  if s:HasPlugin('neomru.vim') " {{{
-    " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
-    " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
-    " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
-    let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-    let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-    let g:neomru#directory_mru_limit = 500
-    let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
-    let g:neomru#file_mru_limit = 500
-    let g:neomru#filename_format = ''
-    let g:neomru#follow_links = 1
-  endif " }}}
+if s:HasPlugin('neomru.vim') " {{{
+  " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
+  " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
+  " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
+  let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+  let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+  let g:neomru#directory_mru_limit = 500
+  let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
+  let g:neomru#file_mru_limit = 500
+  let g:neomru#filename_format = ''
+  let g:neomru#follow_links = 1
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
@@ -579,7 +547,7 @@ if s:HasPlugin('memolist.vim') " {{{
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
-  nnoremap       <SID>[memolist]l  :<C-u>Denite file_rec:~/memolist.wiki<CR>
+  nnoremap       <SID>[memolist]l  :<C-u>CtrlP ~/memolist.wiki<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}
 

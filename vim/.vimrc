@@ -970,7 +970,8 @@ if s:HasPlugin('vim-watchdogs') " {{{
 endif " }}}
 
 if s:HasPlugin('yankround.vim') " {{{
-  let g:yankround_dir = '~/.cache/yankround'
+  " nnoremap <silent><SID>(ctrlp) :<C-u>CtrlP<CR>
+  nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 endif " }}}
 " }}}1
 

@@ -24,8 +24,9 @@
 " }}}1
 
 " # Begin {{{1
-" vint: -ProhibitSetNoCompatible
-set nocompatible " Caution: アンチパターンらしいがvim -uで起動した時エラーとならないように設定している
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim " TODO:vrapperrcから読まれたときだめかも
+
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif
@@ -144,8 +145,6 @@ command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-ar
 command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
-" Compairing the difference between the pre-edit file. Refs: `:help DiffOrig`
-command! DiffOrig vertical new | set buftype=nofile | read ++edit # | 0d_ | diffthis | wincmd p | diffthis
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
 command! SaveScrach execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '.md'
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
@@ -158,7 +157,6 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 
 " # Options {{{1
 set background=dark
-set backspace=indent,eol,start
 set cindent
 set nobackup
 set clipboard=unnamed,unnamedplus
@@ -174,7 +172,6 @@ set foldmethod=marker
 set grepprg=grep\ -nH\ --binary-files=without-match\ --exclude-dir=.git
 set helplang=ja,en " keywordprgで日本語優先にしたいため
 set hidden
-set history=200
 set hlsearch
 set ignorecase
 set iminsert=1 " Note: msys2 gvim で挿入モードでIMEオンになってしまうのを防ぐため
@@ -187,15 +184,11 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 set lazyredraw " マクロなどを実行中は描画を中断
 set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやすい
-set nrformats="" " インクリメンタル/デクリメンタルを常に10進数として扱う
-set ruler
-set scrolloff=5
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
 set shellslash
 set shiftwidth=2
-set showcmd
 set showtabline=1
 set shortmess& shortmess+=atTOI
 set sidescrolloff=5
@@ -216,7 +209,6 @@ if has('persistent_undo')
 else
   set noundofile
 endif
-set wildmenu
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
 set nowrapscan
@@ -345,6 +337,7 @@ if s:IsPluginEnabled()
   Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
   Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
   Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
+  Plug 'LeafCage/yankround.vim'
   Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
         \ | Plug 'ujihisa/neco-look'
         \ | Plug 'Konfekt/FastFold'
@@ -357,6 +350,7 @@ if s:IsPluginEnabled()
   Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
   Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
+  Plug 'glidenote/memolist.vim'
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   " FIXME: windows(cui,gui)で動いてない。linux未確認
@@ -371,6 +365,7 @@ if s:IsPluginEnabled()
   " Plug 'kamichidu/vim-edit-properties'
   Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   Plug 'kana/vim-submode'
+  Plug 'koron/codic-vim'
   Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
   Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
   Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}

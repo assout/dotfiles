@@ -102,18 +102,6 @@ function! s:InsertString(pos, str) range " Note: 引数にスペースを含め�
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
-function! s:IsPluginEnabled()
-  return isdirectory(expand(s:dotvim_path . '/autoload/')) && &loadplugins
-endfunction
-
-function! s:RestoreCursorPosition()
-  let l:ignore_filetypes = ['gitcommit']
-  if index(l:ignore_filetypes, &l:filetype) >= 0 | return | endif
-  if line("'\"") > 1 && line("'\"") <= line('$')
-    normal! g`"
-  endif
-endfunction
-
 function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
   if g:is_win
@@ -218,35 +206,52 @@ set nowrapscan
 
 " # Key-mappings {{{1
 " Normal, Visual mode basic mappings {{{
-nnoremap Y y$
-" Note: <CR>でマッピングするとVrapperで有効にならない
-nnoremap <C-m> i<CR><Esc>
+" Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
+nmap           K <Plug>(ref-keyword)        
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
 nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
-" }}}
 
-" Shortcut key prefix mappings {{{
-" <SID>[shortcut]a, d, rはsurround-pluginで使用
-" <SID>[shortcut]mはmaximizer-pluginで使用
-noremap  gs               s
-map      s                <SID>[shortcut]
-noremap  <SID>[shortcut]  <Nop>
-noremap  <SID>[shortcut]/ /\v
-noremap  <SID>[shortcut]? ?\v
-noremap  <SID>[shortcut]a <Nop>
-noremap  <SID>[shortcut]d <Nop>
-map      <SID>[shortcut]i <SID>[insert]
-noremap  <SID>[shortcut]m <Nop>
-nmap     <SID>[shortcut]o <SID>[open]
-noremap  <SID>[shortcut]r <Nop>
+nmap           gf         <Plug>(gf-user-gf)
+nmap           gF         <Plug>(gf-user-gF)
+nmap           <C-w>f     <Plug>(gf-user-<C-w>f)
+nmap           <C-w><C-f> <Plug>(gf-user-<C-w><C-f>)
+nmap           <C-w>F     <Plug>(gf-user-<C-w>F)
+nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
+nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
+
+nmap           p          <Plug>(yankround-p)
+nmap           P          <Plug>(yankround-P)
+nmap <expr>    <C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
+nmap           <C-n>      <Plug>(yankround-next)
+
+nnoremap       Y y$
+nmap           +          <SID>[switch]
+nmap           -          <SID>[Switch]
+" Note: <CR>でマッピングするとVrapperで有効にならない
+nnoremap <C-m> i<CR><Esc>
+
+noremap gs              s
+map     s               <SID>[special]
+map     <SID>[special]a <SID>[surround-a]
+map     <SID>[special]d <SID>[surround-d]
+map     <SID>[special]r <SID>[surround-r]
+
+map     <SID>[special]i <SID>[insert]
+map     <SID>[special]m <SID>[maximizer]
+nmap    <SID>[special]o <SID>[open]
+nmap    <SID>[special]p <SID>[previm]
+
+noremap <SID>[special]/ /\v
+noremap <SID>[special]? ?\v
+
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
-  nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+  nnoremap <silent><SID>[special]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 else
   " TODO: DRY(map内でif文意外とうまくいかない)
-  nnoremap <silent><SID>[shortcut]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+  nnoremap <silent><SID>[special]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
-nnoremap <expr><SID>[shortcut]] ':ptag ' . expand("<cword>") . '<CR>'
+nnoremap <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap       <SID>[insert]  <Nop>
@@ -300,173 +305,146 @@ cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 " }}}
+
+" Plugin prefix mappings {{{
+map  <Space>              <SID>[plugin]
+map  <SID>[plugin]a       <SID>[align]
+map  <SID>[plugin]c       <SID>[camelize]
+map  <SID>[plugin]h       <SID>[markdown_h]
+nmap <SID>[plugin]H       <SID>[markdown_H]
+map  <SID>[plugin]i       <SID>[indentguide]
+map  <SID>[plugin]l       <SID>[markdown_l]
+nmap <SID>[plugin]L       <SID>[markdown_L]
+nmap <SID>[plugin]m       <SID>[memolist]
+map  <SID>[plugin]o       <SID>[open-browser]
+map  <SID>[plugin]O       <SID>[Open-browser]
+nmap <SID>[plugin]p       <SID>[ctrlp]
+nmap <SID>[plugin]q       <SID>[quickrun]
+map  <SID>[plugin]r       <SID>[replace]
+map  <SID>[plugin]t       <SID>[todo]
+nmap <SID>[plugin]w       <SID>[watchdogs]
+nmap <SID>[plugin]W       <SID>[Watchdogs]
+nmap <SID>[plugin]/       <SID>[migemo]
+" TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
+nmap <SID>[plugin][            [subP]
+nmap <SID>[plugin]]            [subN]
+" }}}
 " }}}1
 
 " # 
 " Plug-ins {{{1
-if s:IsPluginEnabled()
-  if has('vim_starting')
-    let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
-  endif
-  call g:plug#begin(s:plugged_path)
-  " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
-  " General {{{
-  Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
-  Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
-  Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-  Plug 'LeafCage/yankround.vim'
-  Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
-        \ | Plug 'ujihisa/neco-look'
-        \ | Plug 'Konfekt/FastFold'
-  Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
-  Plug 'Shougo/neosnippet.vim'
-        \ | Plug 'Shougo/neosnippet-snippets'
-  Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
-  Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
-  Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-  Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
-  Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
-  Plug 'glidenote/memolist.vim'
-  Plug 'godlygeek/tabular', {'for' : 'markdown'}
-        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
-  " FIXME: windows(cui,gui)で動いてない。linux未確認
-  Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
-  Plug 'haya14busa/vim-auto-programming'
-  Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
-  Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
-  Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
-  Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
-  Plug 'itchyny/vim-parenmatch'
-  Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
-  " Plug 'kamichidu/vim-edit-properties'
-  Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
-  Plug 'kana/vim-submode'
-  Plug 'koron/codic-vim'
-  Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
-  Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
-  Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
-  Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-  Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
-  Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
-  Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 
-  Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
-  " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
-  " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
-  Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
-  Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
-  Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
-  Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
-  Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
-  Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'osyo-manga/shabadou.vim', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'dannyob/quickfixstatus', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'KazuakiM/vim-qfsigns', {'on' : ['QuickRun', 'WatchdogsRun']}
-        \ | Plug 'osyo-manga/vim-watchdogs', {'on' : ['QuickRun', 'WatchdogsRun']}
-  Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
-        \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
-  Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
-  Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
-  " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
-  Plug 'tpope/vim-fugitive'
-        \ | Plug 'junegunn/gv.vim'
-        \ | Plug 'skywind3000/asyncrun.vim'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-speeddating'
-  Plug 'tpope/vim-unimpaired'
-  Plug 'tyru/capture.vim', {'on' : 'Capture'}
-  Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-        \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
-  Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
-  Plug 'vim-jp/vimdoc-ja'
-  Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
-  Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
-  Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
-  Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
-        \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
-  Plug 'wellle/tmux-complete.vim'
-  Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
-        \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript']}
-        \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript']}
-  " }}}
-
-  " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
-  Plug 'kana/vim-operator-user'
-        \ | Plug 'kana/vim-operator-replace'
-        \ | Plug 'rhysd/vim-operator-surround'
-        \ | Plug 'tyru/operator-camelize.vim'
-  " }}}
-
-  " User Textobjects {{{
-  Plug 'kana/vim-textobj-user'
-        \ | Plug 'kana/vim-textobj-entire'
-        \ | Plug 'kana/vim-textobj-function'
-        \ | Plug 'kana/vim-textobj-indent'
-        \ | Plug 'kana/vim-textobj-line'
-        \ | Plug 'mattn/vim-textobj-url'
-        \ | Plug 'osyo-manga/vim-textobj-multiblock'
-        \ | Plug 'sgur/vim-textobj-parameter'
-        \ | Plug 'thinca/vim-textobj-between'
-        \ | Plug 'thinca/vim-textobj-comment'
-        \ | Plug 'thinca/vim-textobj-function-javascript'
-  " }}}
-
-  " Colorschemes {{{
-  Plug 'w0ng/vim-hybrid'
-  " }}}
-  call g:plug#end()
-
-  " Plugin prefix mappings {{{
-  map  <Space>              <SID>[plugin]
-  map  <SID>[plugin]a       <SID>[align]
-  map  <SID>[plugin]c       <SID>[camelize]
-  map  <SID>[plugin]h       <SID>[markdown_h]
-  nmap <SID>[plugin]H       <SID>[markdown_H]
-  map  <SID>[plugin]i       <SID>[indentguide]
-  map  <SID>[plugin]l       <SID>[markdown_l]
-  nmap <SID>[plugin]L       <SID>[markdown_L]
-  nmap <SID>[plugin]m       <SID>[memolist]
-  map  <SID>[plugin]o       <SID>[open-browser]
-  map  <SID>[plugin]O       <SID>[Open-browser]
-  nmap <SID>[plugin]p       <SID>[previm]
-  nmap <SID>[plugin]q       <SID>[quickrun]
-  map  <SID>[plugin]r       <SID>[replace]
-  map  <SID>[plugin]t       <SID>[todo]
-  nmap <SID>[plugin]w       <SID>[watchdogs]
-  nmap <SID>[plugin]W       <SID>[Watchdogs]
-  nmap <SID>[plugin]/       <SID>[migemo]
-  " TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
-  nmap <SID>[plugin][       [subP]
-  nmap <SID>[plugin]]       [subN]
-
-  map  <SID>[plugin]<Space> <SID>[sub_plugin]
-  nmap <SID>[sub_plugin]r   <SID>[ref]
-
-  " Caution: K,gf系は定義不要だがプラグインの遅延ロードのため定義している
-  nmap K                <Plug>(ref-keyword)
-  nmap gf               <Plug>(gf-user-gf)
-  nmap gF               <Plug>(gf-user-gF)
-  nmap <C-w>f           <Plug>(gf-user-<C-w>f)
-  nmap <C-w><C-f>       <Plug>(gf-user-<C-w><C-f>)
-  nmap <C-w>F           <Plug>(gf-user-<C-w>F)
-  nmap <C-w>gf          <Plug>(gf-user-<C-w>gf)
-  nmap <C-w>gF          <Plug>(gf-user-<C-w>gF)
-  nmap p                <Plug>(yankround-p)
-  nmap P                <Plug>(yankround-P)
-  " FIXME:ctrlpとかぶってる
-  nmap <C-p>            <Plug>(yankround-prev)
-  nmap <C-n>            <Plug>(yankround-next)
-  nmap +                <SID>[switch]
-  nmap -                <SID>[Switch]
-  map  <SID>[shortcut]a <SID>[surround-a]
-  map  <SID>[shortcut]d <SID>[surround-d]
-  map  <SID>[shortcut]r <SID>[surround-r]
-  map  <SID>[shortcut]m <SID>[maximizer]
-  " }}}
-else " Vim-Plug有効の場合勝手にされる
-  filetyp indent on
-  syntax on
+if has('vim_starting')
+  let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
 endif
+call g:plug#begin(s:plugged_path)
+" Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
+" General {{{
+Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
+Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
+Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
+Plug 'LeafCage/yankround.vim'
+Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
+      \ | Plug 'ujihisa/neco-look'
+      \ | Plug 'Konfekt/FastFold'
+Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
+Plug 'Shougo/neosnippet.vim'
+      \ | Plug 'Shougo/neosnippet-snippets'
+Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
+Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
+Plug 'ctrlpvim/ctrlp.vim'
+      \ | Plug 'kaneshin/ctrlp-memolist'
+      \ | Plug 'ompugao/ctrlp-locate' " Slow..
+Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
+Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
+Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
+Plug 'glidenote/memolist.vim'
+Plug 'godlygeek/tabular', {'for' : 'markdown'}
+      \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
+" FIXME: windows(cui,gui)で動いてない。linux未確認
+Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
+Plug 'haya14busa/vim-auto-programming'
+Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
+Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
+Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
+Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
+Plug 'itchyny/vim-parenmatch'
+Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
+" Plug 'kamichidu/vim-edit-properties'
+Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
+Plug 'kana/vim-submode'
+Plug 'koron/codic-vim'
+Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
+Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
+Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
+Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
+Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
+Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 
+Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
+" Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
+" Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
+Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
+Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
+Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
+Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
+Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
+Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
+      \ | Plug 'osyo-manga/shabadou.vim', {'on' : ['QuickRun', 'WatchdogsRun']}
+      \ | Plug 'dannyob/quickfixstatus', {'on' : ['QuickRun', 'WatchdogsRun']}
+      \ | Plug 'KazuakiM/vim-qfsigns', {'on' : ['QuickRun', 'WatchdogsRun']}
+      \ | Plug 'osyo-manga/vim-watchdogs', {'on' : ['QuickRun', 'WatchdogsRun']}
+Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
+      \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
+Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
+Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
+" Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
+Plug 'tpope/vim-fugitive'
+      \ | Plug 'junegunn/gv.vim'
+      \ | Plug 'skywind3000/asyncrun.vim'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-unimpaired'
+Plug 'tyru/capture.vim', {'on' : 'Capture'}
+Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+      \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
+Plug 'vim-jp/vimdoc-ja'
+Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
+Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
+Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
+Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
+      \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
+Plug 'wellle/tmux-complete.vim'
+Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
+      \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript']}
+      \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript']}
+" }}}
+
+" User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
+Plug 'kana/vim-operator-user'
+      \ | Plug 'kana/vim-operator-replace'
+      \ | Plug 'rhysd/vim-operator-surround'
+      \ | Plug 'tyru/operator-camelize.vim'
+" }}}
+
+" User Textobjects {{{
+Plug 'kana/vim-textobj-user'
+      \ | Plug 'kana/vim-textobj-entire'
+      \ | Plug 'kana/vim-textobj-function'
+      \ | Plug 'kana/vim-textobj-indent'
+      \ | Plug 'kana/vim-textobj-line'
+      \ | Plug 'mattn/vim-textobj-url'
+      \ | Plug 'osyo-manga/vim-textobj-multiblock'
+      \ | Plug 'sgur/vim-textobj-parameter'
+      \ | Plug 'thinca/vim-textobj-between'
+      \ | Plug 'thinca/vim-textobj-comment'
+      \ | Plug 'thinca/vim-textobj-function-javascript'
+" }}}
+
+" Colorschemes {{{
+Plug 'w0ng/vim-hybrid'
+" }}}
+call g:plug#end()
 
 if s:HasPlugin('asyncrun.vim') " {{{
   command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
@@ -475,6 +453,15 @@ endif " }}}
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = g:is_linux ? 1 : 0
   let g:calendar_google_task = g:is_linux ? 1 : 0
+endif " }}}
+
+if s:HasPlugin('ctrlp.vim') " {{{
+  let g:ctrlp_map = '<Nop>'
+  nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
+  nnoremap <SID>[ctrlp]b :<C-u>CtrlPBuffer<CR>
+  nnoremap <SID>[ctrlp]l :<C-u>CtrlPLine<CR>
+  nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
+  nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
 endif " }}}
 
 if s:HasPlugin('neomru.vim') " {{{
@@ -520,7 +507,7 @@ if s:HasPlugin('memolist.vim') " {{{
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
-  nnoremap       <SID>[memolist]l  :<C-u>CtrlP ~/memolist.wiki<CR>
+  nnoremap       <SID>[memolist]l  :<C-u>CtrlPMemolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}
 
@@ -970,7 +957,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
 endif " }}}
 
 if s:HasPlugin('yankround.vim') " {{{
-  " nnoremap <silent><SID>(ctrlp) :<C-u>CtrlP<CR>
   nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 endif " }}}
 " }}}1
@@ -987,8 +973,6 @@ augroup vimrc
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
-  " Restore cusor position
-  autocmd BufWinEnter * call s:RestoreCursorPosition()
 
   " Change cursor shape in different modes. Refs: <http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes>
   if g:is_linux_cui
@@ -1017,8 +1001,8 @@ augroup vimrc
   autocmd FileType xml
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  " autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-  " autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
+  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END
 " }}}1
 
@@ -1029,22 +1013,11 @@ source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 " Colorshceme settings {{{
 if s:HasPlugin('vim-hybrid')
   function! s:DefineHighlight()
-    " Note: for deoplete
-    highlight clear CursorLine
-    highlight CursorLine cterm=underline
-
-    highlight clear SpellBad
-    highlight clear SpellCap
-    highlight clear SpellRare
-    highlight clear SpellLocal
+    highlight clear SpellBad SpellCap SpellRare SpellLocal
     highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
-    if g:is_linux " TODO: workaround. 見づらいため.
-      highlight Normal ctermbg=none
-      highlight ErrorMsg term=standout cterm=standout ctermfg=black ctermbg=167 gui=standout guifg=#1d1f21 guibg=#cc6666
-    endif
   endfunction
   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
   colorscheme hybrid

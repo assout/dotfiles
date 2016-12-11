@@ -239,7 +239,6 @@ map     <SID>[special]r <SID>[surround-r]
 map     <SID>[special]i <SID>[insert]
 map     <SID>[special]m <SID>[maximizer]
 nmap    <SID>[special]o <SID>[open]
-nmap    <SID>[special]p <SID>[previm]
 
 noremap <SID>[special]/ /\v
 noremap <SID>[special]? ?\v
@@ -360,7 +359,7 @@ Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
 Plug 'glidenote/memolist.vim'
 Plug 'godlygeek/tabular', {'for' : 'markdown'}
       \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
-" FIXME: windows(cui,gui)で動いてない。linux未確認
+" FIXME: windows(cui,gui)で動いてない。linuxはいけた。
 Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
 Plug 'haya14busa/vim-auto-programming'
 Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
@@ -566,10 +565,6 @@ endif " }}}
 
 if s:HasPlugin('operator-camelize.vim') " {{{
   map <SID>[camelize] <Plug>(operator-camelize-toggle)
-endif " }}}
-
-if s:HasPlugin('previm') " {{{
-  nnoremap <SID>[previm] :<C-u>PrevimOpen<CR>
 endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
@@ -954,10 +949,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
   endif
 
   autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
-endif " }}}
-
-if s:HasPlugin('yankround.vim') " {{{
-  nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 endif " }}}
 " }}}1
 

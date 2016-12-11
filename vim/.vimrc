@@ -211,7 +211,6 @@ map  <SID>[plugin]a       <SID>[align]
 map  <SID>[plugin]c       <SID>[camelize]
 map  <SID>[plugin]h       <SID>[markdown_h]
 nmap <SID>[plugin]H       <SID>[markdown_H]
-map  <SID>[plugin]i       <SID>[indentguide]
 map  <SID>[plugin]l       <SID>[markdown_l]
 nmap <SID>[plugin]L       <SID>[markdown_L]
 nmap <SID>[plugin]m       <SID>[memolist]
@@ -284,10 +283,7 @@ noremap <expr><SID>[insert]p ':Prefix ' . input('prefix:') . '<CR>'
 noremap       <SID>[insert]-  :Prefix - <CR>
 noremap       <SID>[insert]#  :Prefix # <CR>
 noremap       <SID>[insert]>  :Prefix > <CR>
-noremap       <SID>[insert]f  :Prefix file://<CR>
 noremap <expr><SID>[insert]s ':Suffix ' . input('suffix:') . '<CR>'
-noremap <expr><SID>[insert]a ':Suffix \ @' . input('author:') . '<CR>'
-noremap       <SID>[insert]l  :Suffix \<Space>\ <CR>
 
 nnoremap <SID>[open] <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
@@ -359,7 +355,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
-Plug 'glidenote/memolist.vim'
+Plug 'glidenote/memolist.vim', {'on' : ['MemoNew', 'MemoGrep']}
 Plug 'godlygeek/tabular', {'for' : 'markdown'}
       \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
 " FIXME: windows(cui,gui)で動いてない。linuxはいけた。
@@ -371,14 +367,14 @@ Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_
 Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
 Plug 'itchyny/vim-parenmatch'
 Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
-" Plug 'kamichidu/vim-edit-properties'
+Plug 'kamichidu/vim-edit-properties'
 Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
-Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
+Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
 Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
 Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
 Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
@@ -485,10 +481,6 @@ endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
-endif " }}}
-
-if s:HasPlugin('vim-indent-guides') " {{{
-  nnoremap <SID>[indentguide] :<C-u>IndentGuidesToggle<CR>
 endif " }}}
 
 if has('kaoriya') " {{{

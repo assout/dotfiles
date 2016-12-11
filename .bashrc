@@ -92,7 +92,7 @@ function _with_history {
 }
 
 if [ "${is_unix}" ] ; then
-  selector='peco'
+  selector='fzy -l 50'
   opener='gnome-open'
 elif [ "${is_win}" ] ; then
   selector='fzy -l 50'

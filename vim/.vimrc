@@ -4,7 +4,7 @@
 " - Keep it short and simple, stupid! (500step以下に留めたい)
 " - To portable! (e.g. office/home/jenkins, vim/gvim/vrapper, development/server)
 " - デフォルト環境(サーバなど)での操作時に混乱するカスタマイズはしない(;と:の入れ替えとか)(sだけはつぶしちゃう)
-" - キーマッピングでは、スペースキーをプラグイン用、sキーをvim標準のプレフィックスとする
+" - キーマッピングでは、スペースキー、sキーを特別なプレフィックスキーとする
 "
 " ## Caution
 " - executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
@@ -340,7 +340,7 @@ call g:plug#begin(s:plugged_path)
 Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-Plug 'LeafCage/yankround.vim'
+Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
       \ | Plug 'ujihisa/neco-look'
       \ | Plug 'Konfekt/FastFold'
@@ -457,9 +457,16 @@ endif " }}}
 if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_map = '<Nop>'
   let g:ctrlp_clear_cache_on_exit = 0
+  let g:ctrlp_prompt_mappings = {
+        \ 'PrtSelectMove("j")': ['<c-n>'],
+        \ 'PrtSelectMove("k")': ['<c-p>'],
+        \ 'PrtHistory(-1)':     ['<c-j>'],
+        \ 'PrtHistory(1)':      ['<c-k>'],
+        \ }
+
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
   nnoremap <SID>[ctrlp]b :<C-u>CtrlPBuffer<CR>
-  nnoremap <SID>[ctrlp]l :<C-u>CtrlPLine<CR>
+  nnoremap <SID>[ctrlp]l :<C-u>CtrlPLocate<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
   " TODO:mdがダメ

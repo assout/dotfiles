@@ -205,6 +205,30 @@ set nowrapscan
 " }}}1
 
 " # Key-mappings {{{1
+" Plugin prefix mappings {{{
+map  <Space>              <SID>[plugin]
+map  <SID>[plugin]a       <SID>[align]
+map  <SID>[plugin]c       <SID>[camelize]
+map  <SID>[plugin]h       <SID>[markdown_h]
+nmap <SID>[plugin]H       <SID>[markdown_H]
+map  <SID>[plugin]i       <SID>[indentguide]
+map  <SID>[plugin]l       <SID>[markdown_l]
+nmap <SID>[plugin]L       <SID>[markdown_L]
+nmap <SID>[plugin]m       <SID>[memolist]
+map  <SID>[plugin]o       <SID>[open-browser]
+map  <SID>[plugin]O       <SID>[Open-browser]
+nmap <SID>[plugin]p       <SID>[ctrlp]
+nmap <SID>[plugin]q       <SID>[quickrun]
+map  <SID>[plugin]r       <SID>[replace]
+map  <SID>[plugin]t       <SID>[todo]
+nmap <SID>[plugin]w       <SID>[watchdogs]
+nmap <SID>[plugin]W       <SID>[Watchdogs]
+nmap <SID>[plugin]/       <SID>[migemo]
+" TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
+nmap <SID>[plugin][            [subP]
+nmap <SID>[plugin]]            [subN]
+" }}}
+
 " Normal, Visual mode basic mappings {{{
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
 nmap           K <Plug>(ref-keyword)        
@@ -239,6 +263,7 @@ map     <SID>[special]r <SID>[surround-r]
 map     <SID>[special]i <SID>[insert]
 map     <SID>[special]m <SID>[maximizer]
 nmap    <SID>[special]o <SID>[open]
+nmap    <SID>[special]t <SID>[tagbar]
 
 noremap <SID>[special]/ /\v
 noremap <SID>[special]? ?\v
@@ -305,29 +330,6 @@ cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 " }}}
 
-" Plugin prefix mappings {{{
-map  <Space>              <SID>[plugin]
-map  <SID>[plugin]a       <SID>[align]
-map  <SID>[plugin]c       <SID>[camelize]
-map  <SID>[plugin]h       <SID>[markdown_h]
-nmap <SID>[plugin]H       <SID>[markdown_H]
-map  <SID>[plugin]i       <SID>[indentguide]
-map  <SID>[plugin]l       <SID>[markdown_l]
-nmap <SID>[plugin]L       <SID>[markdown_L]
-nmap <SID>[plugin]m       <SID>[memolist]
-map  <SID>[plugin]o       <SID>[open-browser]
-map  <SID>[plugin]O       <SID>[Open-browser]
-nmap <SID>[plugin]p       <SID>[ctrlp]
-nmap <SID>[plugin]q       <SID>[quickrun]
-map  <SID>[plugin]r       <SID>[replace]
-map  <SID>[plugin]t       <SID>[todo]
-nmap <SID>[plugin]w       <SID>[watchdogs]
-nmap <SID>[plugin]W       <SID>[Watchdogs]
-nmap <SID>[plugin]/       <SID>[migemo]
-" TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
-nmap <SID>[plugin][            [subP]
-nmap <SID>[plugin]]            [subN]
-" }}}
 " }}}1
 
 " # 
@@ -371,8 +373,9 @@ Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
 " Plug 'kamichidu/vim-edit-properties'
 Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 Plug 'kana/vim-submode'
-Plug 'koron/codic-vim'
+Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
+Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim' , {'on' : 'BenchVimrc'}
 Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -414,9 +417,9 @@ Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
 Plug 'wellle/tmux-complete.vim'
-Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
-      \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript']}
-      \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript']}
+Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+      \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+      \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
 " }}}
 
 " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
@@ -461,6 +464,8 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>[ctrlp]l :<C-u>CtrlPLine<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
+  " TODO:mdがダメ
+  nnoremap <SID>[ctrlp]t :<C-u>CtrlPBufTag<CR>
 endif " }}}
 
 if s:HasPlugin('neomru.vim') " {{{
@@ -612,6 +617,18 @@ if s:HasPlugin('switch.vim') " {{{
 
   nnoremap <SID>[switch] :<C-u>Switch<CR>
   nnoremap <SID>[Switch] :<C-u>SwitchReverse<CR>
+endif " }}}
+
+if s:HasPlugin('tagbar') " {{{
+  nnoremap <SID>[tagbar] :<C-u>TagbarToggle<CR>
+  let g:tagbar_type_markdown = {
+        \ 'ctagstype' : 'markdown',
+        \ 'kinds' : [
+        \   'h:Heading_L1',
+        \   'i:Heading_L2',
+        \   'k:Heading_L3'
+        \ ]
+        \ }
 endif " }}}
 
 if s:HasPlugin('tmux-complete.vim') " {{{

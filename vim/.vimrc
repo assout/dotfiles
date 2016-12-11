@@ -1015,7 +1015,10 @@ source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 " Colorshceme settings {{{
 if s:HasPlugin('vim-hybrid')
   function! s:DefineHighlight()
-    highlight clear SpellBad SpellCap SpellRare SpellLocal
+    highlight clear SpellBad
+    highlight clear SpellCap
+    highlight clear SpellRare
+    highlight clear SpellLocal
     highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta

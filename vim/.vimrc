@@ -344,7 +344,7 @@ call g:plug#begin(s:plugged_path)
 Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-Plug 'LeafCage/yankround.vim', {'on' : ['<Plug>(yankround-']}
+Plug 'LeafCage/yankround.vim'
 Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
       \ | Plug 'ujihisa/neco-look'
       \ | Plug 'Konfekt/FastFold'

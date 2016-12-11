@@ -256,6 +256,10 @@ nnoremap <C-m> i<CR><Esc>
 
 noremap gs              s
 map     s               <SID>[special]
+
+noremap <SID>[special]/ /\v
+noremap <SID>[special]? ?\v
+
 map     <SID>[special]a <SID>[surround-a]
 map     <SID>[special]d <SID>[surround-d]
 map     <SID>[special]r <SID>[surround-r]
@@ -264,9 +268,6 @@ map     <SID>[special]i <SID>[insert]
 map     <SID>[special]m <SID>[maximizer]
 nmap    <SID>[special]o <SID>[open]
 nmap    <SID>[special]t <SID>[tagbar]
-
-noremap <SID>[special]/ /\v
-noremap <SID>[special]? ?\v
 
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 if has('gui_running')
@@ -343,7 +344,7 @@ call g:plug#begin(s:plugged_path)
 Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-Plug 'LeafCage/yankround.vim'
+Plug 'LeafCage/yankround.vim', {'on' : ['<Plug>(yankround-']}
 Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
       \ | Plug 'ujihisa/neco-look'
       \ | Plug 'Konfekt/FastFold'
@@ -459,6 +460,7 @@ endif " }}}
 
 if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_map = '<Nop>'
+  let g:ctrlp_clear_cache_on_exit = 0
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
   nnoremap <SID>[ctrlp]b :<C-u>CtrlPBuffer<CR>
   nnoremap <SID>[ctrlp]l :<C-u>CtrlPLine<CR>

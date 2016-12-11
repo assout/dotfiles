@@ -466,19 +466,6 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>[ctrlp]t :<C-u>CtrlPBufTag<CR>
 endif " }}}
 
-if s:HasPlugin('neomru.vim') " {{{
-  " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
-  " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
-  " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
-  let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-  let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
-  let g:neomru#directory_mru_limit = 500
-  let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
-  let g:neomru#file_mru_limit = 500
-  let g:neomru#filename_format = ''
-  let g:neomru#follow_links = 1
-endif " }}}
-
 if s:HasPlugin('HybridText') " {{{
   autocmd vimrc BufRead,BufNewFile *.{txt,mindmap} nested setfiletype hybrid
 endif " }}}
@@ -512,6 +499,19 @@ endif " }}}
 if s:HasPlugin('neocomplete') " {{{
   let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
   let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
+endif " }}}
+
+if s:HasPlugin('neomru.vim') " {{{
+  " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
+  " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
+  " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
+  let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+  let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
+  let g:neomru#directory_mru_limit = 500
+  let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
+  let g:neomru#file_mru_limit = 500
+  let g:neomru#filename_format = ''
+  let g:neomru#follow_links = 1
 endif " }}}
 
 if s:HasPlugin('neosnippet.vim') " {{{

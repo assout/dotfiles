@@ -18,7 +18,6 @@
 "
 " ## TODOs
 " - TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
-" - TODO: neocompleteでたまに日本語入力が変になる
 " - TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
 " - TODO: GVim@officeで複数ファイルを開いたときの<C-w>h,lが遅い(プラグインなし、vimrc空でも再現)
 " }}}1
@@ -341,12 +340,10 @@ Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
-Plug 'Shougo/neocomplete', has('lua') ? {} : {'on' : []}
-      \ | Plug 'ujihisa/neco-look'
-      \ | Plug 'Konfekt/FastFold'
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' } " TODO:neco-look, tmux-comp, auto-pro
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'
@@ -382,6 +379,7 @@ Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
 Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
 " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
 " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
+Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
 Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
 Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
 Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
@@ -408,7 +406,6 @@ Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-'
       \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
 Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
 Plug 'vim-jp/vimdoc-ja'
-Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない
 Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
 Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
@@ -482,7 +479,6 @@ if has('kaoriya') " {{{
   let g:plugin_scrnmode_disable = 1 " scrnmode plugin無効
 else
   command! -nargs=0 CdCurrent cd %:p:h
-  command! DiffOrig vertical new | set buftype=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 endif " }}}
 
 if s:HasPlugin('memolist.vim') " {{{
@@ -503,21 +499,13 @@ if s:HasPlugin('memolist.vim') " {{{
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}
 
-if s:HasPlugin('neocomplete') " {{{
-  let g:neocomplete#enable_at_startup = g:is_linux ? 1 : 0 " TODO: win gvimでダイアログが一瞬出る。
-  let g:neocomplete#text_mode_filetypes = { 'markdown': 1 } " TODO: どうなる？
-endif " }}}
-
 if s:HasPlugin('neomru.vim') " {{{
   " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
   " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
-  " Note: Deprecatedだが(Uniteの関数呼ぶのが推奨)Unite未ロードの場合があるためこっちを使用
-  let g:neomru#file_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
   let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
   let g:neomru#directory_mru_limit = 500
   let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
-  let g:neomru#file_mru_limit = 500
-  let g:neomru#filename_format = ''
+  let g:neomru#file_mru_limit = 0
   let g:neomru#follow_links = 1
 endif " }}}
 

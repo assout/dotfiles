@@ -412,6 +412,7 @@ Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
 Plug 'wellle/tmux-complete.vim'
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
+" Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
 Plug 'xolox/vim-misc', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
       \ | Plug 'xolox/vim-shell', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
       \ | Plug 'xolox/vim-easytags', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
@@ -611,14 +612,13 @@ endif " }}}
 
 if s:HasPlugin('tagbar') " {{{
   nnoremap <SID>[tagbar] :<C-u>TagbarToggle<CR>
-  let g:tagbar_type_markdown = {
+    let g:tagbar_type_markdown = {
         \ 'ctagstype' : 'markdown',
         \ 'kinds' : [
-        \   'h:Heading_L1',
-        \   'i:Heading_L2',
-        \   'k:Heading_L3'
-        \ ]
-        \ }
+            \ 'h:headings'
+        \ ],
+    \ 'sort' : 0,
+    \ }
 endif " }}}
 
 if s:HasPlugin('tmux-complete.vim') " {{{

@@ -343,7 +343,7 @@ Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' } " TODO:neco-look, tmux-comp, auto-pro
+Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py' } " TODO:neco-look, tmux-comp, auto-pro
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'
@@ -411,9 +411,10 @@ Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
 Plug 'wellle/tmux-complete.vim'
-Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
-      \ | Plug 'xolox/vim-shell', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
-      \ | Plug 'xolox/vim-easytags', {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+" TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
+Plug 'xolox/vim-misc', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+      \ | Plug 'xolox/vim-shell', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+      \ | Plug 'xolox/vim-easytags', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
 " }}}
 
 " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる

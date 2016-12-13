@@ -412,6 +412,7 @@ Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
 Plug 'wellle/tmux-complete.vim'
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
+" Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
 Plug 'xolox/vim-misc', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
       \ | Plug 'xolox/vim-shell', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
       \ | Plug 'xolox/vim-easytags', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
@@ -614,10 +615,9 @@ if s:HasPlugin('tagbar') " {{{
   let g:tagbar_type_markdown = {
         \ 'ctagstype' : 'markdown',
         \ 'kinds' : [
-        \   'h:Heading_L1',
-        \   'i:Heading_L2',
-        \   'k:Heading_L3'
-        \ ]
+        \   'h:headings'
+        \ ],
+        \ 'sort' : 0,
         \ }
 endif " }}}
 
@@ -631,13 +631,6 @@ if s:HasPlugin('todo.txt-vim') " {{{
   nnoremap       <SID>[todo]L  :<C-u>edit ~/Documents/todo/done.txt<CR>
   nnoremap       <SID>[todo]r  :<C-u>edit ~/Documents/todo/report.txt<CR>
   nnoremap <expr><SID>[todo]g ':<C-u>TodoGrep ' . input('TodoGrep word: ') . '<CR>'
-endif " }}}
-
-if s:HasPlugin('vimfiler.vim') " {{{
-  " TODO: msys2でxでのシステム関連付けが開かない(uniteの箇所にもコメントしているがcygstart呼ばれているのが原因)
-  let g:vimfiler_safe_mode_by_default = 0 " This variable controls vimfiler enter safe mode by default.
-  " Caution: Uniteをオンデマンドにしている関係上有効にするとエラーが出るケースが出てくる
-  let g:vimfiler_as_default_explorer = 0 " If this variable is true, Vim use vimfiler as file manager instead of |netrw|.
 endif " }}}
 
 if s:HasPlugin('vim-auto-programming') " {{{

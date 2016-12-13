@@ -343,7 +343,7 @@ Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
-Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py' } " TODO:neco-look, tmux-comp, auto-pro
+Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py' } " TODO:neco-look, tmux-comp, auto-pro Note:slow in msys2
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'

@@ -229,7 +229,7 @@ nmap <SID>[plugin]]            [subN]
 
 " Normal, Visual mode basic mappings {{{
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
-nmap           K <Plug>(ref-keyword)        
+nmap           K <Plug>(ref-keyword)
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
 nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
 
@@ -243,7 +243,7 @@ nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
 nmap           p          <Plug>(yankround-p)
 nmap           P          <Plug>(yankround-P)
-nmap <expr>    <C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
+nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 nmap           <C-n>      <Plug>(yankround-next)
 
 nnoremap       Y y$

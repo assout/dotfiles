@@ -413,9 +413,10 @@ Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
 Plug 'wellle/tmux-complete.vim'
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
-Plug 'xolox/vim-misc', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
-      \ | Plug 'xolox/vim-shell', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
-      \ | Plug 'xolox/vim-easytags', g:is_win ? {'on' : []} : {'for' : ['vim', 'sh', 'javascript', 'markdown']}
+" Note: markdownは指定しなくてもtagbarで見れるので良い
+Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
+      \ | Plug 'xolox/vim-shell',  {'for' : ['vim', 'sh', 'javascript']}
+      \ | Plug 'xolox/vim-easytags',  {'for' : ['vim', 'sh', 'javascript']}
 " }}}
 
 " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる

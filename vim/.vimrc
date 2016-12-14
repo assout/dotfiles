@@ -9,7 +9,6 @@
 " ## Caution
 " - executeコマンドをキーマッピングするとき<C-u>をつけること(e.g. nnoremap hoge :<C-u>fuga)
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
-" - vim-emacscommandline pluginは使わない。(commandlineでのescがキー入力待ちになるため)
 " - '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
 " - 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
 " - vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
@@ -24,7 +23,6 @@
 
 " # Begin {{{1
 unlet! skip_defaults_vim
-" TODO:vrapperrcから読まれたときだめかも
 " TODO:filetype plugin onがここと、vim-plugの中の2回されて遅くなるかも
 source $VIMRUNTIME/defaults.vim
 

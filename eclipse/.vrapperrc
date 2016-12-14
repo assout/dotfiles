@@ -76,8 +76,13 @@ set regexsearch " Search Regex
 " vimrcでのマッピングを解除.
 unmap  <Space>
 nunmap l
+nunmap gf
+nunmap gF
+nunmap l
 nunmap p
 nunmap P
+nunmap y
+nunmap =
 
 " Normal mode mappings "
 nnoremap <SID>[shortcut]m :maximize<CR>

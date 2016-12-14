@@ -246,7 +246,7 @@ nmap           P          <Plug>(yankround-P)
 nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 nmap           <C-n>      <Plug>(yankround-next)
 
-map            y          <Plug>(operator-stay-cursor-yank)
+nmap           y          <Plug>(operator-stay-cursor-yank)
 nmap     <expr>=          operator#stay_cursor#wrapper("=")
 
 nnoremap       Y          y$
@@ -254,41 +254,33 @@ nmap           +          <SID>[switch]
 nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない
 nnoremap       <C-m>      i<CR><Esc>
-noremap        gs         s
-map            s          <SID>[special]
 
-noremap <SID>[special]/ /\v
-noremap <SID>[special]? ?\v
+noremap          gs               s
+map              s                <SID>[special]
+noremap          <SID>[special]/  /\v
+noremap          <SID>[special]?  ?\v
 
-map     <SID>[special]a <SID>[surround-a]
-map     <SID>[special]d <SID>[surround-d]
-map     <SID>[special]r <SID>[surround-r]
+map              <SID>[special]a  <SID>[surround-a]
+map              <SID>[special]d  <SID>[surround-d]
+map              <SID>[special]r  <SID>[surround-r]
 
-map     <SID>[special]i <SID>[insert]
-map     <SID>[special]m <SID>[maximizer]
-nmap    <SID>[special]o <SID>[open]
-nmap    <SID>[special]t <SID>[tagbar]
-
+map              <SID>[special]i  <SID>[insert]
+map              <SID>[special]m  <SID>[maximizer]
+nmap             <SID>[special]o  <SID>[open]
+nmap             <SID>[special]t  <SID>[tagbar]
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
-if has('gui_running')
-  nnoremap <silent><SID>[special]u :<C-u>source $MYVIMRC<Bar>:source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
-else
-  " TODO: DRY(map内でif文意外とうまくいかない)
-  nnoremap <silent><SID>[special]u :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
-endif
-nnoremap <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
-
+nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
-noremap       <SID>[insert]  <Nop>
-noremap <expr><SID>[insert]p ':Prefix ' . input('prefix:') . '<CR>'
-noremap       <SID>[insert]-  :Prefix - <CR>
-noremap       <SID>[insert]#  :Prefix # <CR>
-noremap       <SID>[insert]>  :Prefix > <CR>
-noremap <expr><SID>[insert]s ':Suffix ' . input('suffix:') . '<CR>'
-
-nnoremap <SID>[open] <Nop>
+noremap          <SID>[insert]    <Nop>
+noremap    <expr><SID>[insert]p   ':Prefix ' . input('prefix:') . '<CR>'
+noremap          <SID>[insert]-   :Prefix - <CR>
+noremap          <SID>[insert]#   :Prefix # <CR>
+noremap          <SID>[insert]>   :Prefix > <CR>
+noremap    <expr><SID>[insert]s  ':Suffix ' . input('suffix:') . '<CR>'
+nnoremap         <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
-nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 " }}}
 
 " Adding to unimpaired plugin mapping {{{

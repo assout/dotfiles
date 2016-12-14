@@ -171,7 +171,7 @@ function _history() {
   READLINE_POINT=${#l}
   HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
 }
-bind -x '"\e\C-r": _history' # Ctrl+Alt+r
+alias h=_history
 
 function jan {
   LANG_ESCAPE=$LANG

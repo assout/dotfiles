@@ -135,7 +135,7 @@ command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! SaveScrach execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '.md'
+command! -nargs=? SaveScrach execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
 command! ToggleExpandTab call <SID>ToggleExpandTab()

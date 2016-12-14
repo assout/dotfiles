@@ -229,9 +229,9 @@ nmap <SID>[plugin]] [subN]
 
 " Normal, Visual mode basic mappings {{{
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
-nmap           K <Plug>(ref-keyword)
+nmap           K          <Plug>(ref-keyword)
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
-nnoremap <expr>l foldclosed('.') != -1 ? 'zo' : 'l'
+nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 
 nmap           gf         <Plug>(gf-user-gf)
 nmap           gF         <Plug>(gf-user-gF)
@@ -247,7 +247,9 @@ nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<
 nmap           <C-n>      <Plug>(yankround-next)
 
 map            y          <Plug>(operator-stay-cursor-yank)
-nnoremap       Y y$
+nmap     <expr>=          operator#stay_cursor#wrapper("=")
+
+nnoremap       Y          y$
 nmap           +          <SID>[switch]
 nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない

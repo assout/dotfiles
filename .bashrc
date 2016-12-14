@@ -217,8 +217,8 @@ alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " "
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-alias r='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
-alias R='vi $(sed -n 2p ~/.cache/ctrlp/mru/cache.txt)'
+alias r='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
+alias R='vi $(cat ~/.cache/ctrlp/mru/cache.txt)'
 
 # }}}1
 

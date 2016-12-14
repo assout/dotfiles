@@ -251,10 +251,9 @@ nnoremap       Y y$
 nmap           +          <SID>[switch]
 nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない
-nnoremap <C-m> i<CR><Esc>
-
-noremap gs              s
-map     s               <SID>[special]
+nnoremap       <C-m>      i<CR><Esc>
+noremap        gs         s
+map            s          <SID>[special]
 
 noremap <SID>[special]/ /\v
 noremap <SID>[special]? ?\v
@@ -291,18 +290,17 @@ nnoremap <expr><SID>[open]v ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 " }}}
 
 " Adding to unimpaired plugin mapping {{{
-nnoremap [g     :tabprevious<CR>
-nnoremap ]g     :tabnext<CR>
-nnoremap [G     :tabfirst<CR>
-nnoremap ]G     :tablast<CR>
-nnoremap [w     :wincmd W<CR>
-nnoremap ]w     :wincmd w<CR>
-nnoremap [W     :wincmd t<CR>
-nnoremap ]W     :wincmd b<CR>
+nnoremap [g :tabprevious<CR>
+nnoremap ]g :tabnext<CR>
+nnoremap [G :tabfirst<CR>
+nnoremap ]G :tablast<CR>
+nnoremap [w :wincmd W<CR>
+nnoremap ]w :wincmd w<CR>
+nnoremap [W :wincmd t<CR>
+nnoremap ]W :wincmd b<CR>
 " }}}
 " }}}1
 
-" # 
 " Plug-ins {{{1
 if has('vim_starting')
   let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath

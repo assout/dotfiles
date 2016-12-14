@@ -95,13 +95,31 @@ nnoremap <C-w><C-h> <C-w>h
 nnoremap <C-w><C-j> <C-w>j
 
 " Insert mode mappings "
-" TODO: 以下3つ、vimrcで指定(<Home><End><Del>)しているが効かないのでworkaround.
+" TODO: a,e,dが<Home><End><Del>が効かないのでworkaround.
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$
 inoremap <C-d> <C-o>x
+inoremap <C-b> <Left>
+inoremap <C-f> <Right>
+inoremap <C-k> <C-o>D
+inoremap <M-b> <S-Left>
+inoremap <M-f> <S-Right>
+inoremap <M-d> <C-o>dw
+" TODO: <C-M-h>での一単語Backspace(<C-w>はできている)
+" }}}
 
-" Command-line mode mappings
+" Command-line mode mappings {{{
+" TODO: 一単語Delete
+cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <C-d> <Del>
+cnoremap <M-b> <S-Left>
+cnoremap <M-f> <S-Right>
+" }}}
 " }}}1
 
 " # Key-mappings {{{1

@@ -246,6 +246,7 @@ nmap           P          <Plug>(yankround-P)
 nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 nmap           <C-n>      <Plug>(yankround-next)
 
+map            y          <Plug>(operator-stay-cursor-yank)
 nnoremap       Y y$
 nmap           +          <SID>[switch]
 nmap           -          <SID>[Switch]
@@ -422,6 +423,7 @@ Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
 " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
 Plug 'kana/vim-operator-user'
       \ | Plug 'kana/vim-operator-replace'
+      \ | Plug 'osyo-manga/vim-operator-stay-cursor'
       \ | Plug 'rhysd/vim-operator-surround'
       \ | Plug 'tyru/operator-camelize.vim'
 " }}}
@@ -613,13 +615,7 @@ endif " }}}
 
 if s:HasPlugin('tagbar') " {{{
   nnoremap <SID>[tagbar] :<C-u>TagbarToggle<CR>
-  let g:tagbar_type_markdown = {
-        \ 'ctagstype' : 'markdown',
-        \ 'kinds' : [
-        \   'h:headings'
-        \ ],
-        \ 'sort' : 0,
-        \ }
+  let g:tagbar_type_markdown = { 'ctagstype' : 'markdown', 'kinds' : [ 'h:headings' ], 'sort' : 0 }
 endif " }}}
 
 if s:HasPlugin('tmux-complete.vim') " {{{
@@ -639,10 +635,7 @@ if s:HasPlugin('vim-auto-programming') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{
-  " Start interactive EasyAlign in visual mode (e.g. vipga)
   xmap <SID>[align] <Plug>(LiveEasyAlign)
-
-  " Start interactive EasyAlign for a motion/text object (e.g. gaip)
   nmap <SID>[align] <Plug>(LiveEasyAlign)
 endif " }}}
 
@@ -881,14 +874,6 @@ if s:HasPlugin('vim-textobj-between') " {{{
   xmap ad <Plug>(textobj-between-a)
 endif " }}}
 
-if s:HasPlugin('vim-textobj-entire') " {{{
-  " TODO: カーソル行位置は戻るが列位置が戻らない。<:help restore-position>もうまくいかない " TODO: カーソル行が戻ったときメッセージが消えてしまう
-  nmap yae yae``
-  nmap yie yie``
-  nmap =ae =ae``
-  nmap =ie =ie``
-endif " }}}
-
 if s:HasPlugin('vim-textobj-multiblock') " {{{
   let g:textobj_multiblock_blocks = [
         \  [ '`', '`', 1 ],
@@ -910,14 +895,6 @@ if s:HasPlugin('vim-textobj-parameter') " {{{
   omap aa <Plug>(textobj-parameter-a)
   xmap ia <Plug>(textobj-parameter-i)
   xmap aa <Plug>(textobj-parameter-a)
-endif " }}}
-
-if s:HasPlugin('vim-unimpaired') " {{{
-  autocmd vimrc VimEnter * nested
-        \   execute 'nunmap [u'
-        \ | execute 'nunmap [uu'
-        \ | execute 'nunmap ]u'
-        \ | execute 'nunmap ]uu'
 endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{

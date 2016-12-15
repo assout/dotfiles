@@ -162,6 +162,7 @@ alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
+# TODO:with history
 function _history() {
   local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
   HISTTIMEFORMAT=

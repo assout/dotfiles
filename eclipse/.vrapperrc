@@ -85,7 +85,7 @@ nunmap y
 nunmap =
 
 " Normal mode mappings "
-nnoremap <SID>[shortcut]m :maximize<CR>
+nnoremap <SID>[special]m :maximize<CR>
 
 " Note: tmux等と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
 " TODO: なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまう

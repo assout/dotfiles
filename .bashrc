@@ -199,6 +199,9 @@ alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${open
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
+alias r='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
+alias R='vi $(head -1 ~/.cache/ctrlp/mru/cache.txt)'
+
  # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
 function s() { local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"; }
 function S() {
@@ -217,9 +220,6 @@ alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " "
 
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
-
-alias r='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
-alias R='vi $(cat ~/.cache/ctrlp/mru/cache.txt)'
 
 # }}}1
 

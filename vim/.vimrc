@@ -244,8 +244,10 @@ nmap           P          <Plug>(yankround-P)
 nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 nmap           <C-n>      <Plug>(yankround-next)
 
-nmap           y          <Plug>(operator-stay-cursor-yank)
-nmap     <expr>=          operator#stay_cursor#wrapper("=")
+" FIXME: yyが効かない
+" nmap           y          <Plug>(operator-stay-cursor-yank)
+" FIXME: ==が効かない
+" nmap     <expr>=          operator#stay_cursor#wrapper("=")
 
 nnoremap       Y          y$
 nmap           +          <SID>[switch]

@@ -162,13 +162,12 @@ alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
-# TODO:with history
 function _history() {
   local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
   HISTTIMEFORMAT=
   local l # Note: local宣言だけしないとshellcheckエラーになる
   l=$(history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | ${selector})
-  ${l}
+  _with_history "${l}"
   HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
 }
 alias h=_history

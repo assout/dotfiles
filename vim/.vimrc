@@ -91,6 +91,11 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
   let &l:shiftwidth = a:size
 endfunction
 
+function! s:Grep(word, target)
+  " Note: a:wordはオプションが入ってくるかもなので""で囲まない
+  execute ':silent grep -r ' . a:word . ' ' . a:target . '/*'
+endfunction
+
 function! s:HasPlugin(plugin)
   return isdirectory(expand(s:plugged_path . '/' . a:plugin)) && &loadplugins
 endfunction
@@ -116,13 +121,6 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
-
-function! s:TodoGrep(word)
-  let l:todo_note_directory = expand('~/Documents/todo/notes')
-  call histadd('cmd', 'TodoGrep '  . a:word)
-  " Note: a:wordはオプションが入ってくるかもなので""で囲まない
-  execute ':silent grep -r ' . a:word . ' ' . l:todo_note_directory . '/*'
-endfunction
 " }}}1
 
 " # Commands {{{1
@@ -133,9 +131,10 @@ command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! -nargs=? SaveScrach execute 'save ~/Today/' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
+command! -nargs=? Scrach execute 'save ~/Documents/scrach' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
+command! -nargs=1 ScrachGrep call <SID>Grep(<q-args>, expand('~/Documents/scrach')) | call histadd('cmd', 'ScrachGrep <q-args>')
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
-command! -nargs=1 TodoGrep call <SID>TodoGrep(<q-args>)
+command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/notes')) | call histadd('cmd', 'TodoGrep <q-args>')
 command! ToggleExpandTab call <SID>ToggleExpandTab()
 command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
@@ -223,6 +222,8 @@ nmap <SID>[plugin]/ <SID>[migemo]
 " TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
 nmap <SID>[plugin][ [subP]
 nmap <SID>[plugin]] [subN]
+
+map  <SID>[plugin]<Space> <SID>[context]
 " }}}
 
 " Normal, Visual mode basic mappings {{{
@@ -654,6 +655,8 @@ if s:HasPlugin('vim-markdown') " {{{
     nnoremap <buffer><SID>[markdown_h]     :.HeaderDecrease<CR>
     vnoremap <buffer><SID>[markdown_h]      :HeaderDecrease<CR>`<v`>
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
+
+    nnoremap <buffer><SID>[context]    :<C-u>TableFormat<CR>
 
     " ファイルパスを開けなくなるので無効化
     unmap <buffer> gx

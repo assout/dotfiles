@@ -227,6 +227,33 @@ map  <SID>[plugin]<Space> <SID>[context]
 " }}}
 
 " Normal, Visual mode basic mappings {{{
+noremap          gs               s
+map              s                <SID>[special]
+noremap          <SID>[special]/  /\v
+noremap          <SID>[special]?  ?\v
+
+map              <SID>[special]a  <SID>[surround-a]
+map              <SID>[special]d  <SID>[surround-d]
+map              <SID>[special]r  <SID>[surround-r]
+
+map              <SID>[special]i  <SID>[insert]
+map              <SID>[special]m  <SID>[maximizer]
+nmap             <SID>[special]o  <SID>[open]
+nmap             <SID>[special]t  <SID>[tagbar]
+" Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
+nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
+" TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
+noremap          <SID>[insert]    <Nop>
+noremap    <expr><SID>[insert]p   ':Prefix ' . input('prefix:') . '<CR>'
+noremap          <SID>[insert]-   :Prefix - <CR>
+noremap          <SID>[insert]#   :Prefix # <CR>
+noremap          <SID>[insert]>   :Prefix > <CR>
+noremap    <expr><SID>[insert]s  ':Suffix ' . input('suffix:') . '<CR>'
+nnoremap         <SID>[open]      <Nop>
+" Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
+nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
 nmap           K          <Plug>(ref-keyword)
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
@@ -256,32 +283,6 @@ nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない
 nnoremap       <C-m>      i<CR><Esc>
 
-noremap          gs               s
-map              s                <SID>[special]
-noremap          <SID>[special]/  /\v
-noremap          <SID>[special]?  ?\v
-
-map              <SID>[special]a  <SID>[surround-a]
-map              <SID>[special]d  <SID>[surround-d]
-map              <SID>[special]r  <SID>[surround-r]
-
-map              <SID>[special]i  <SID>[insert]
-map              <SID>[special]m  <SID>[maximizer]
-nmap             <SID>[special]o  <SID>[open]
-nmap             <SID>[special]t  <SID>[tagbar]
-" Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
-nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
-nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
-" TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
-noremap          <SID>[insert]    <Nop>
-noremap    <expr><SID>[insert]p   ':Prefix ' . input('prefix:') . '<CR>'
-noremap          <SID>[insert]-   :Prefix - <CR>
-noremap          <SID>[insert]#   :Prefix # <CR>
-noremap          <SID>[insert]>   :Prefix > <CR>
-noremap    <expr><SID>[insert]s  ':Suffix ' . input('suffix:') . '<CR>'
-nnoremap         <SID>[open]      <Nop>
-" Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
-nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 " }}}
 
 " Adding to unimpaired plugin mapping {{{
@@ -315,6 +316,7 @@ Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'kaneshin/ctrlp-memolist'
+      \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}

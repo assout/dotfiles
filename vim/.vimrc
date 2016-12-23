@@ -438,8 +438,8 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>[ctrlp]l :<C-u>CtrlPLocate<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
-  " TODO:mdがダメ
-  nnoremap <SID>[ctrlp]t :<C-u>CtrlPBufTag<CR>
+  nnoremap <SID>[ctrlp]s :<C-u>CtrlP ~/Documents/scrach<CR>
+  nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{

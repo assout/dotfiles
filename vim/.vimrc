@@ -342,7 +342,7 @@ Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
 Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
-Plug 'maxbrunsfeld/vim-emacs-bindings'" TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
+Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
 Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
 Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
 Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 

@@ -272,9 +272,11 @@ nmap           P          <Plug>(yankround-P)
 nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
 nmap           <C-n>      <Plug>(yankround-next)
 
-" Note: nmapだとyy,==が効かない
-map           y           <Plug>(operator-stay-cursor-yank)
-map     <expr>=           operator#stay_cursor#wrapper("=")
+if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対応
+  " Note: nmapだとyy,==が効かない
+  map           y           <Plug>(operator-stay-cursor-yank)
+  map     <expr>=           operator#stay_cursor#wrapper("=")
+endif
 
 nnoremap       Y          y$
 nmap           +          <SID>[switch]

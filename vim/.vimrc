@@ -470,6 +470,7 @@ if s:HasPlugin('memolist.vim') " {{{
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
   nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
+  " TODO local配下も再帰的に。
   nnoremap       <SID>[memolist]l  :<C-u>CtrlPMemolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}

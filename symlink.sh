@@ -37,6 +37,8 @@ elif [ "${is_home}" ] && [ "${is_win}" ] ; then
   ln -sf "${HERE}/.gitconfig.home.win" ~/.gitconfig.env
 elif [ "${is_office}" ] ; then
   ln -sf "${HERE}/.gitconfig.office" ~/.gitconfig.env
+  ln -sf "${HERE}/.gitconfig" /c/Users/admin/ # for npm
+  ln -sf "${HERE}/.gitconfig.office" /c/Users/admin/.gitconfig.env # for npm
 fi
 ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/

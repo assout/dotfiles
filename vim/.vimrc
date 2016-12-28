@@ -728,7 +728,7 @@ if s:HasPlugin('vim-quickrun') " {{{
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
-  let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'outputter': 'browser'}
+  let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'cmdopt': '-d -s ~/.remark.css', 'outputter': 'browser'}
   if g:is_win
     let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/%s:t.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']

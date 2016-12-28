@@ -47,6 +47,7 @@ ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
+ln -sf "${HERE}/.remark.css" ~/
 
 if [ "${is_win}" ] ; then
   ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/

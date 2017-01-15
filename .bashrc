@@ -200,6 +200,7 @@ alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${open
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
+alias r='fr'
 alias R='vi $(head -1 ~/.cache/ctrlp/mru/cache.txt)'
 
  # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>

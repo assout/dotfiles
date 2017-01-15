@@ -127,8 +127,8 @@ function cdls {
 function __cd() { local dir; dir="$(find -L -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"; }
 alias c='__cd 1'
 alias C='__cd 10'
+alias cc='cg; C || cd -' # 'c'd to in 'c'urrent project.
 alias cg='cd "$(git rev-parse --show-toplevel)"' # 'c'd 'g'it root directory
-alias cpp='cg; C || cd -' # 'c'd to in git 'p'roject.
 alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}' #  'c'd to 'r'ecent directory
 
 alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
@@ -153,7 +153,8 @@ alias E='_explorer 10'
 function _file_with_vim() { local f; f=""$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && _with_history "vim ${f}"; }
 alias f='_file_with_vim 1' # 'f'ile open with vim
 alias F='_file_with_vim 10'
-alias fp='(cg; F)' # open file in git 'p'roject.
+alias fc='(cg; F)' # open 'f'ile in 'c'urrent git project.
+alias fr='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
 
 alias fun='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
@@ -195,12 +196,10 @@ alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memol
 function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
 alias o='_open 1'
 alias O='_open 10'
-
 alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
-alias r='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
 alias R='vi $(head -1 ~/.cache/ctrlp/mru/cache.txt)'
 
  # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>

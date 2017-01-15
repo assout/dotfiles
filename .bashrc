@@ -196,6 +196,8 @@ alias O='_open 10'
 
 alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
 
+alias p='(gr; F)' # open file in git 'p'roject.
+
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
 alias r='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim

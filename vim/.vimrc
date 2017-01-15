@@ -692,6 +692,7 @@ if s:HasPlugin('vim-operator-replace') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{
+  " Note: 行指定は`sasa`、1文字を`sal`と使い分ける。
   " TODO: 空白区切りがしたい(なぜか今でも2スペースならできる)
 
   map <SID>[surround-a] <Plug>(operator-surround-append)
@@ -710,10 +711,6 @@ if s:HasPlugin('vim-operator-surround') " {{{
   nmap <SID>[surround-a]d <Plug>(operator-surround-append)<Plug>(textobj-between-a)
   nmap <SID>[surround-d]d <Plug>(operator-surround-delete)<Plug>(textobj-between-a)
   nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
-
-  nmap <SID>[surround-a]l <Plug>(operator-surround-append)<Plug>(textobj-line-a)
-  nmap <SID>[surround-d]l <Plug>(operator-surround-delete)<Plug>(textobj-line-a)
-  nmap <SID>[surround-r]l <Plug>(operator-surround-replace)<Plug>(textobj-line-a)
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 endif " }}}

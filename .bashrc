@@ -127,6 +127,8 @@ function cdls {
 function __cd() { local dir; dir="$(find -L -maxdepth "$1" -name '.git' -prune -o -type d 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && _with_history "cd ${dir}"; }
 alias c='__cd 1'
 alias C='__cd 10'
+alias cg='cd "$(git rev-parse --show-toplevel)"' # 'c'd 'g'it root directory
+alias cpp='cg; C || cd -' # 'c'd to in git 'p'roject.
 alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}' #  'c'd to 'r'ecent directory
 
 alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
@@ -151,14 +153,14 @@ alias E='_explorer 10'
 function _file_with_vim() { local f; f=""$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && _with_history "vim ${f}"; }
 alias f='_file_with_vim 1' # 'f'ile open with vim
 alias F='_file_with_vim 10'
+alias fp='(cg; F)' # open file in git 'p'roject.
 
-alias fn='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
+alias fun='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function gu { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
 function gs { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
 alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
-alias gr='cd "$(git rev-parse --show-toplevel)"' # cd 'g'it 'r'oot directory
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
@@ -195,8 +197,6 @@ alias o='_open 1'
 alias O='_open 10'
 
 alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${opener} ${t}' # 'o'pen 'r'ecent file
-
-alias p='(gr; F)' # open file in git 'p'roject.
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 

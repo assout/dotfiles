@@ -320,6 +320,7 @@ Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
+Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
 Plug 'glidenote/memolist.vim', {'on' : ['MemoNew', 'MemoGrep']}

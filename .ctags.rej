@@ -1,0 +1,10 @@
+--- .vrapperrc.win
++++ .vrapperrc.win
+@@ -4,6 +4,6 @@ source D:/admin/.vimrc
+ " path to gvim executable.
+ " TODO: PATH通ってるとこから探してくれないか
+ " TODO: HOME直書き
+-set gvimpath=D:/admin/Tools/vim74-kaoriya-win64/gvim.exe
++set gvimpath=D:/admin/Tools/vim80-kaoriya-win64/gvim.exe
+ 
+ " vim: filetype=vim nofoldenable:

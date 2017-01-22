@@ -430,15 +430,17 @@ if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_map = '<Nop>'
   let g:ctrlp_clear_cache_on_exit = 0
   let g:ctrlp_prompt_mappings = {
-        \ 'PrtSelectMove("j")': ['<c-n>'],
-        \ 'PrtSelectMove("k")': ['<c-p>'],
-        \ 'PrtHistory(-1)':     ['<c-j>'],
-        \ 'PrtHistory(1)':      ['<c-k>'],
+        \ 'PrtCurLeft()':       ['<c-b>', '<left>'],
+        \ 'PrtCurRight()':      ['<c-f>', '<right>'],
+        \ 'PrtDelete()':        ['<del>', '<c-d>'],
+        \ 'ToggleByFname()':    [],
         \ }
+        " \ 'PrtSelectMove("j")': ['<c-n>'],
+        " \ 'PrtSelectMove("k")': ['<c-p>'],
+        " \ 'PrtHistory(-1)':     ['<c-j>'],
+        " \ 'PrtHistory(1)':      ['<c-k>'],
 
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
-  nnoremap <SID>[ctrlp]b :<C-u>CtrlPBuffer<CR>
-  nnoremap <SID>[ctrlp]l :<C-u>CtrlPLocate<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
   nnoremap <SID>[ctrlp]s :<C-u>CtrlP ~/Documents/scrach<CR>

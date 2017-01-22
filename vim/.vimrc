@@ -430,15 +430,17 @@ if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_map = '<Nop>'
   let g:ctrlp_clear_cache_on_exit = 0
   let g:ctrlp_prompt_mappings = {
-        \ 'PrtCurLeft()':       ['<c-b>', '<left>'],
-        \ 'PrtCurRight()':      ['<c-f>', '<right>'],
-        \ 'PrtDelete()':        ['<del>', '<c-d>'],
-        \ 'ToggleByFname()':    [],
+        \ 'PrtCurLeft()':         ['<c-b>', '<left>'],
+        \ 'PrtCurRight()':        ['<c-f>', '<right>'],
+        \ 'PrtDelete()':          ['<c-d>', '<del>'],
+        \ 'PrtHistory(-1)':       ['<down>'],
+        \ 'PrtHistory(1)':        ['<up>'],
+        \ 'PrtSelectMove("j")':   ['<c-n>'],
+        \ 'PrtSelectMove("k")':   ['<c-p>'],
+        \ 'ToggleByFname()':      [],
+        \ 'ToggleType(1)':        ['<c-j>'],
+        \ 'ToggleType(-1)':       ['<c-k>'],
         \ }
-        " \ 'PrtSelectMove("j")': ['<c-n>'],
-        " \ 'PrtSelectMove("k")': ['<c-p>'],
-        " \ 'PrtHistory(-1)':     ['<c-j>'],
-        " \ 'PrtHistory(1)':      ['<c-k>'],
 
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>

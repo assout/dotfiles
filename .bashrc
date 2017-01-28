@@ -99,6 +99,8 @@ elif [ "${is_win}" ] ; then
   opener='start'
 fi
 
+alias a='_with_history "eval $(t=$({ alias | sed -r "s/^alias //"; declare -F | cut -d" " -f3; } | ${selector}); echo ${t} | cut -d'=' -f 1)"'
+
 if [ "${is_unix}" ] ; then
   alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'
   alias B='hub browse'
@@ -157,8 +159,6 @@ alias f='_file_with_vim 1' # 'f'ile open with vim
 alias F='_file_with_vim 10'
 alias fc='(cg; F)' # open 'f'ile in 'c'urrent git project.
 alias fr='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open 'r'ecent file with vim
-
-alias fun='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g" | sed -r "s/^_.*$//g" | ${selector})"'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function gu { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.

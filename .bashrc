@@ -99,7 +99,8 @@ elif [ "${is_win}" ] ; then
   opener='start'
 fi
 
-alias a='_with_history "eval $(t=$({ alias | sed -r "s/^alias //"; declare -F | cut -d" " -f3; } | ${selector}); echo ${t} | cut -d'=' -f 1)"'
+# TODO ctrl+c
+alias a='_with_history "eval $(t=$({ alias | sed -r "s/^alias //"; declare -F | cut -d" " -f3; } | sort -f | ${selector}); echo ${t} | cut -d'=' -f 1)"'
 
 if [ "${is_unix}" ] ; then
   alias b='t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && _with_history "hub browse ${t}"'

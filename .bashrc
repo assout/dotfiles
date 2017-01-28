@@ -137,6 +137,7 @@ alias dr='docker rm $(docker ps -a -q)'
 alias drf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 alias drm='docker rmi $(docker images -q)'
 
+# TODO 日本語化けてそう
 [ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 [ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
@@ -162,7 +163,9 @@ alias fun='_with_history "eval $(declare -F | sed -r "s/declare -f.* (.*)$/\1/g"
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function gu { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
 function gs { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
-alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
+# TODO `ghq list` slow in msys2
+# alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
+alias gh='t=$(find ${GHQ_ROOT} -maxdepth 3 -mindepth 3 | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${t}"" ; fi'
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
@@ -204,8 +207,21 @@ alias or='t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${open
 alias r='fr'
 alias R='vi $(head -1 ~/.cache/ctrlp/mru/cache.txt)'
 
- # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-function s() { local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | xargs -n1 | egrep -v '[*?]' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"; }
+# Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+# Note msys2でxargs -n1が遅いためsed
+# ~/.ssh/pass -> pass host1 host2...
+function s() {
+  local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
+  [ -z "${t}" ] && return
+  if [ -f "${HOME}/.ssh/pass" ] ; then
+    local p=$(grep "${t}" ~/.ssh/pass | cut -d' ' -f1)
+    if [ -n "${p}" ] ; then
+      _with_history "sshpass -p ${p} ssh ${t}"; return
+    fi
+  fi
+  _with_history "ssh ${t}"
+}
+
 function S() {
   local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
   local configfile

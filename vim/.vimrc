@@ -430,6 +430,7 @@ endif " }}}
 if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_map = '<Nop>'
   let g:ctrlp_clear_cache_on_exit = 0
+  let g:ctrlp_show_hidden = 1
   let g:ctrlp_prompt_mappings = {
         \ 'PrtCurLeft()':         ['<c-b>', '<left>'],
         \ 'PrtCurRight()':        ['<c-f>', '<right>'],

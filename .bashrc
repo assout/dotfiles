@@ -165,8 +165,7 @@ alias fr='t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}' # open
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function gu { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
 function gs { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
-# TODO `ghq list` slow in msys2
-# alias gh='t=$(ghq list | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${GHQ_ROOT}/${t}"" ; fi'
+# Note `ghq list` slow in msys2
 alias gh='t=$(find ${GHQ_ROOT} -maxdepth 3 -mindepth 3 | ${selector}); if [ -n "${t}" ] ; then _with_history "cd "${t}"" ; fi'
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
@@ -216,7 +215,7 @@ function s() {
   local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
   [ -z "${t}" ] && return
   if [ -f "${HOME}/.ssh/pass" ] ; then
-    local p=$(grep "${t}" ~/.ssh/pass | cut -d' ' -f1)
+    local p; p=$(grep "${t}" ~/.ssh/pass | cut -d' ' -f1)
     if [ -n "${p}" ] ; then
       _with_history "sshpass -p ${p} ssh ${t}"; return
     fi

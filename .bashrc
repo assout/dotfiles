@@ -100,6 +100,7 @@ elif [ "${is_win}" ] ; then
 fi
 
 # TODO ctrl+c
+# TODO remove eval
 alias a='_with_history "eval $(t=$({ alias | sed -r "s/^alias //"; declare -F | cut -d" " -f3; } | sort -f | ${selector}); echo ${t} | cut -d'=' -f 1)"'
 
 if [ "${is_unix}" ] ; then

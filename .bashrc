@@ -196,8 +196,8 @@ if [ "${is_win}" ] ; then
   alias ll='ls -l --color=auto --show-control-chars'
 fi
 
-function n { vim -c ":Scrach $*"; }
-function ng { vim -c ":ScrachGrep $*"; }
+function n { vim -c ":Note $*"; }
+function ng { vim -c ":NoteGrep $*"; }
 
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 function mg { vim -c ":MemoGrep $*"; }

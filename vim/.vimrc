@@ -131,8 +131,8 @@ command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! -nargs=? Scrach execute 'save ~/Documents/scrach' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
-command! -nargs=1 ScrachGrep call <SID>Grep(<q-args>, expand('~/Documents/scrach')) | call histadd('cmd', 'ScrachGrep <q-args>')
+command! -nargs=? Note execute 'save ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
+command! -nargs=1 NoteGrep call <SID>Grep(<q-args>, expand('~/Documents/note')) | call histadd('cmd', 'NoteGrep <q-args>')
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/notes')) | call histadd('cmd', 'TodoGrep <q-args>')
 command! ToggleExpandTab call <SID>ToggleExpandTab()
@@ -447,7 +447,7 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
-  nnoremap <SID>[ctrlp]s :<C-u>CtrlP ~/Documents/scrach<CR>
+  nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/note<CR>
   nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>
 endif " }}}
 

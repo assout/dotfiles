@@ -555,8 +555,8 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['public',  'protected', 'private', ],
         \  ['Sun',     'Mon',       'Tue',     'Wed',       'Thu',      'Fri',    'Sut'],
         \  ['Sunday',  'Monday',    'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        \  ['Jan',     'Feb',       'Mar',     'Apr',       'May',      'Jun',    'Jul',       'Aug',    'Sep',       'Oct',     'Nov',      'Dec'],
-        \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'September', 'October', 'November', 'Decemer'],
+        \  ['Jan',     'Feb',       'Mar',     'Apr',       'May',      'JUn',    'Jul',       'Aug',    'Sep',       'Oct',     'Nov',      'Dec'],
+        \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'SePtember', 'October', 'November', 'Decemer'],
         \  ['日',      '月',        '火',      '水',        '木',       '金',     '土'],
         \  {
         \     '\v\$\{(.{-})\}' : '"${\1}"',

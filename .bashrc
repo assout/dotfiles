@@ -196,6 +196,9 @@ if [ "${is_win}" ] ; then
   alias ll='ls -l --color=auto --show-control-chars'
 fi
 
+function n { vim -c ":Scrach $*"; }
+function ng { vim -c ":ScrachGrep $*"; }
+
 alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
 function mg { vim -c ":MemoGrep $*"; }
 
@@ -217,9 +220,7 @@ function s() {
   [ -z "${t}" ] && return
   if [ -f "${HOME}/.ssh/pass" ] ; then
     local p; p=$(grep "${t}" ~/.ssh/pass | cut -d' ' -f1)
-    if [ -n "${p}" ] ; then
-      _with_history "sshpass -p ${p} ssh ${t}"; return
-    fi
+    [ -n "${p}" ] && _with_history "sshpass -p ${p} ssh ${t}"; return
   fi
   _with_history "ssh ${t}"
 }

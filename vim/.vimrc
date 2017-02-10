@@ -445,7 +445,7 @@ if s:HasPlugin('ctrlp.vim') " {{{
         \ }
 
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
-  nnoremap <SID>[ctrlp]m :<C-u>CtrlPMixed<CR>
+  nnoremap <SID>[ctrlp]m :<C-u>CtrlPMemo<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
   nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/note<CR>
   nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>

@@ -238,6 +238,7 @@ function S() {
 alias t='todo.sh'; complete -F _todo t
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
 alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
+function tg { vim -c ":TodoGrep $*"; }
 
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため

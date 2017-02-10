@@ -130,6 +130,7 @@ command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-ar
 command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
+command! -nargs=1 LogGrep call <SID>Grep(<q-args>, expand('~/.tmux/log/')) | call histadd('cmd', 'LogGrep <q-args>')
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
 command! -nargs=? Note execute 'save ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
 command! -nargs=1 NoteGrep call <SID>Grep(<q-args>, expand('~/Documents/note')) | call histadd('cmd', 'NoteGrep <q-args>')
@@ -245,7 +246,7 @@ nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype
 nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap          <SID>[insert]    <Nop>
-noremap    <expr><SID>[insert]p   ':Prefix ' . input('prefix:') . '<CR>'
+noremap    <expr><SID>[insert]p  ':Prefix ' . input('prefix:') . '<CR>'
 noremap          <SID>[insert]-   :Prefix - <CR>
 noremap          <SID>[insert]#   :Prefix # <CR>
 noremap          <SID>[insert]>   :Prefix > <CR>

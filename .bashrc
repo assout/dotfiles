@@ -196,14 +196,15 @@ if [ "${is_win}" ] ; then
   alias ll='ls -l --color=auto --show-control-chars'
 fi
 
-alias l='t=$(find ~/.tmux/log -type f -printf "%f\n" | ${selector}) && vi ~/.tmux/log/${t}'
-function logrep { vim -c ":LogGrep $*"; }
+alias l='t=$(find ~/.tmux/log/* -type f -printf "%f\n" | ${selector}) && vi ~/.tmux/log/${t}'
+function lg { vim -c ":LogGrep $*"; }
 
+function M { vim -c ":MemoNew $*"; }
 alias m='t=$(find ~/memolist.wiki/* -type f -printf "%f\n" | ${selector}) && vi ~/memolist.wiki/${t}'
 function mg { vim -c ":MemoGrep $*"; }
 
-alias n='t=$(find ~/Documents/note -type f -printf "%f\n" | ${selector}) && vi ~/Documents/note/${t}'
 function N { vim -c ":Note $*"; }
+alias n='t=$(find ~/Documents/note/* -type f -printf "%f\n" | ${selector}) && vi ~/Documents/note/${t}'
 function ng { vim -c ":NoteGrep $*"; }
 
 function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
@@ -239,9 +240,10 @@ function S() {
   local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}); [ -n "${t}" ] && _with_history "ssh ${t}"
 }
 
-alias t='todo.sh'; complete -F _todo t
+alias T='todo.sh add'
+alias t='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
-alias tn='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
+alias todo='todo.sh'; complete -F _todo todo
 function tg { vim -c ":TodoGrep $*"; }
 
 alias vi='vim'
@@ -294,6 +296,7 @@ PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`_
 [ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
+# shellcheck disable=SC2016
 tmux pipe-pane -o 'bash -c "while read -r LINE; do echo \"[\$(date +\"%%Y-%%m-%%dT%%H:%%M:%%S\")] \${LINE}\" >> \${HOME}/.tmux/log/term_\$(date +%Y%m%d_%H%M%S)_#S_#D.log; done "'
 
 # End profile

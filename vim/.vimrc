@@ -550,11 +550,14 @@ endif " }}}
 if s:HasPlugin('switch.vim') " {{{
   " Note: 定義順は優先度を考慮する(範囲の広い定義は後ろに定義する) " TODO: Dictionary定義はSwitchReverse効かない " TODO: 入れ子のときおかしくなる(e.g. [foo[bar]] ) " TODO: undoするとカーソル位置が行頭になっちゃう
   let g:switch_custom_definitions = [
-        \  ['foo', 'bar', 'baz', 'qux', 'quux', 'corge', 'grault', 'garply', 'waldo', 'fred', 'plugh', 'xyzzy', 'thud', ],
-        \  ['hoge', 'piyo', 'fuga', 'hogera', 'hogehoge', 'moge', 'hage', ],
-        \  ['public', 'protected', 'private', ],
-        \  ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sut'],
-        \  ['日', '月', '火', '水', '木', '金', '土'],
+        \  ['foo',     'bar',       'baz',     'qux',       'quux',     'corge',  'grault',    'garply', 'waldo',     'fred',    'plugh',    'xyzzy',    'thud', ],
+        \  ['hoge',    'piyo',      'fuga',    'hogera',    'hogehoge', 'moge',   'hage',      ],
+        \  ['public',  'protected', 'private', ],
+        \  ['Sun',     'Mon',       'Tue',     'Wed',       'Thu',      'Fri',    'Sut'],
+        \  ['Sunday',  'Monday',    'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        \  ['Jan',     'Feb',       'Mar',     'Apr',       'May',      'Jun',    'Jul',       'Aug',    'Sep',       'Oct',     'Nov',      'Dec'],
+        \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'September', 'October', 'November', 'Decemer'],
+        \  ['日',      '月',        '火',      '水',        '木',       '金',     '土'],
         \  {
         \     '\v\$\{(.{-})\}' : '"${\1}"',
         \     '\v"\$\{(.{-})\}"' : '''${\1}''',

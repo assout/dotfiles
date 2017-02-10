@@ -196,12 +196,14 @@ if [ "${is_win}" ] ; then
   alias ll='ls -l --color=auto --show-control-chars'
 fi
 
+alias l='t=$(find ~/.tmux/log -type f -printf "%f\n" | ${selector}) && vi ~/.tmux/log/${t}'
 function logrep { vim -c ":LogGrep $*"; }
 
-alias m='t=~/memolist.wiki/$(find ~/memolist.wiki/* -type f | sed -e "s?^.*memolist.wiki/??" | ${selector}) && vi ${t}'
+alias m='t=$(find ~/memolist.wiki/* -type f -printf "%f\n" | ${selector}) && vi ~/memolist.wiki/${t}'
 function mg { vim -c ":MemoGrep $*"; }
 
-function n { vim -c ":Note $*"; }
+alias n='t=$(find ~/Documents/note -type f -printf "%f\n" | ${selector}) && vi ~/Documents/note/${t}'
+function N { vim -c ":Note $*"; }
 function ng { vim -c ":NoteGrep $*"; }
 
 function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }

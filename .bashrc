@@ -287,6 +287,9 @@ PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`_
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
 [ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
 
+# TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
+tmux pipe-pane -o 'bash -c "while read -r LINE; do echo \"[\$(date +\"%%Y-%%m-%%dT%%H:%%M:%%S\")] \${LINE}\" >> \${HOME}/.tmux/log/term_\$(date +%Y%m%d_%H%M%S)_#S_#D.log; done "'
+
 # End profile
 if [ "${is_profile}" ] ; then
   set +x

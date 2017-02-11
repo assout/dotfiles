@@ -196,15 +196,24 @@ if [ "${is_win}" ] ; then
   alias ll='ls -l --color=auto --show-control-chars'
 fi
 
-alias l='t=$(find ~/.tmux/log/* -type f -printf "%f\n" | ${selector}) && vi ~/.tmux/log/${t}'
+# shellcheck disable=SC2034
+log_dir="${HOME}/.tmux/log" # alias内で使用
+alias l='t=$(find ${log_dir}/* -type f -printf "%f\n" | ${selector}) && vi ${log_dir}/${t}'
+alias lc='cd ${log_dir}'
 function lg { vim -c ":LogGrep $*"; }
 
+# shellcheck disable=SC2034
+memo_dir="${HOME}/memolist.wiki" # alias内で使用
 function M { vim -c ":MemoNew $*"; }
-alias m='t=$(find ~/memolist.wiki/* -type f -printf "%f\n" | ${selector}) && vi ~/memolist.wiki/${t}'
+alias m='t=$(find ${memo_dir}/* -type f -printf "%f\n" | ${selector}) && vi ${memo_dir}/${t}'
+alias mc='cd ${memo_dir}'
 function mg { vim -c ":MemoGrep $*"; }
 
-function N { vim -c ":Note $*"; }
-alias n='t=$(find ~/Documents/note/* -type f -printf "%f\n" | ${selector}) && vi ~/Documents/note/${t}'
+# shellcheck disable=SC2034
+note_dir="${HOME}/Documents/note" # alias内で使用
+function N { vim -c ":NoteNew $*"; }
+alias n='t=$(find ${note_dir}/* -type f -printf "%f\n" | ${selector}) && vi ${note_dir}/${t}'
+alias nc='cd ${note_dir}'
 function ng { vim -c ":NoteGrep $*"; }
 
 function _open() { local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' 2>/dev/null | sort | ${selector})"; [ -n "${t}" ] && _with_history "${opener} ${t}"; }
@@ -242,6 +251,7 @@ function S() {
 
 alias T='todo.sh add'
 alias t='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh note ${t}"'
+alias tc='cd ~/Documents/todo/'
 alias td='t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && _with_history "todo.sh do ${t}"'
 alias todo='todo.sh'; complete -F _todo todo
 function tg { vim -c ":TodoGrep $*"; }

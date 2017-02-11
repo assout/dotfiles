@@ -104,6 +104,10 @@ function! s:InsertString(pos, str) range " Note: 引数にスペースを含め�
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
 endfunction
 
+function! s:OrDefault(var, default)
+  return a:var ==# '' ? a:default : a:var
+endfunction
+
 function! s:ShowExplorer(...)
   let l:path = expand(a:0 == 0 ? '%:h' : a:1)
   if g:is_win
@@ -132,7 +136,8 @@ command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! -nargs=1 LogGrep call <SID>Grep(<q-args>, expand('~/.tmux/log/')) | call histadd('cmd', 'LogGrep <q-args>')
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! -nargs=? Note execute 'save ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <q-args> . '.md'
+command! -nargs=? NoteNew execute 'edit ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'scrach') . '.md'
+command! -nargs=? NoteSave execute 'save ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'scrach') . '.md'
 command! -nargs=1 NoteGrep call <SID>Grep(<q-args>, expand('~/Documents/note')) | call histadd('cmd', 'NoteGrep <q-args>')
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/notes')) | call histadd('cmd', 'TodoGrep <q-args>')
@@ -555,9 +560,7 @@ if s:HasPlugin('switch.vim') " {{{
         \  ['hoge',    'piyo',      'fuga',    'hogera',    'hogehoge', 'moge',   'hage',      ],
         \  ['public',  'protected', 'private', ],
         \  ['Sun',     'Mon',       'Tue',     'Wed',       'Thu',      'Fri',    'Sut'],
-        \  ['Sunday',  'Monday',    'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-        \  ['Jan',     'Feb',       'Mar',     'Apr',       'May',      'JUn',    'Jul',       'Aug',    'Sep',       'Oct',     'Nov',      'Dec'],
-        \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'SePtember', 'October', 'November', 'Decemer'],
+        \  ['Jan',     'Feb',       'Mar',     'Apr',       'May',      'Jun',    'Jul',       'Aug',    'Sep',       'Oct',     'Nov',      'Dec'],
         \  ['日',      '月',        '火',      '水',        '木',       '金',     '土'],
         \  {
         \     '\v\$\{(.{-})\}' : '"${\1}"',
@@ -582,6 +585,10 @@ if s:HasPlugin('switch.vim') " {{{
   " Note: 以下は""<->''より優先されてしまうので設定しない
   " \  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
   " \  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+
+  " Note: 以下は略称版と競合してしまうので設定しない
+  " \  ['Sunday',  'Monday',    'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  " \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'SePtember', 'October', 'November', 'Decemer'],
 
   " FIXME: 空白区切りの文字列をクォート切り替え
   " \  {

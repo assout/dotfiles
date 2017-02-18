@@ -200,7 +200,7 @@ fi
 
 # shellcheck disable=SC2034
 log_dir="${HOME}/.tmux/log" # alias内で使用
-alias l='t=$(find ${log_dir}/* -type f -printf "%f\n" | ${selector}) && vi ${log_dir}/${t}'
+alias l='t=$(find ${log_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && vi ${log_dir}/${t}'
 alias lc='cd ${log_dir}'
 function lg { ${vim} -c ":LogGrep $*"; }
 
@@ -214,7 +214,7 @@ function mg { ${vim} -c ":MemoGrep $*"; }
 # shellcheck disable=SC2034
 note_dir="${HOME}/Documents/note" # alias内で使用
 function N { ${vim} -c ":NoteNew $*"; }
-alias n='t=$(find ${note_dir}/* -type f -printf "%f\n" | ${selector}) && vi ${note_dir}/${t}'
+alias n='t=$(find ${note_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && vi ${note_dir}/${t}'
 alias nc='cd ${note_dir}'
 function ng { ${vim} -c ":NoteGrep $*"; }
 
@@ -229,15 +229,13 @@ alias r='fr'
 alias R='vi $(head -1 ~/.cache/ctrlp/mru/cache.txt)'
 
 # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-# Note msys2でxargs -n1が遅いためsed
-# ~/.ssh/pass -> pass host1 host2...
+# dirty..
 function s() {
+  [ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
   local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
   [ -z "${t}" ] && return
-  if [ -f "${HOME}/.ssh/pass" ] ; then
-    local p; p=$(grep "${t}" ~/.ssh/pass | cut -d' ' -f1)
-    [ -n "${p}" ] && _with_history "sshpass -p ${p} ssh ${t}"; return
-  fi
+  local p; p=$(pcregrep -M "${t}[\s\S]*?^$" ~/.ssh/config | grep Pass | sed 's/.*Pass //g');
+  [ -n "${p}" ] && _with_history "sshpass -p ${p} ssh ${t}" && return
   _with_history "ssh ${t}"
 }
 

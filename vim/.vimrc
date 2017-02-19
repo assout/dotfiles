@@ -608,6 +608,8 @@ endif " }}}
 
 if s:HasPlugin('tmux-complete.vim') " {{{
   let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
+  " Note. hack (ftplugin/html.vimで上書きされてしまうため)
+  autocmd vimrc FileType markdown setlocal omnifunc=tmuxcomplete#complete
 endif " }}}
 
 if s:HasPlugin('todo.txt-vim') " {{{

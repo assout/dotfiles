@@ -1,6 +1,7 @@
 ---
   rules:
     common-misspellings: true
+    ja-no-redundant-expression: true
     ja-no-weak-phrase: true
     # ja-yahoo-kousei: true # TODO 登録が必要
     # max-appearence-count-of-words: true # TODO 誤爆が多い

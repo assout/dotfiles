@@ -10,7 +10,7 @@
     no-dropping-the-ra: true
     no-start-duplicated-conjunction: true
     preset-japanese: true # Note: slow(no-mix-dearu-desumasuが遅そう)
-    # preset-jtf-style: true
+    # preset-jtf-style: true # TOOD フォーマット系の指摘が多いので一旦無効
     prh:
       rulePaths:
         - "~/.prh.yml"

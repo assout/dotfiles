@@ -2,7 +2,6 @@
   rules:
     common-misspellings: true
     ja-no-redundant-expression: true
-    ja-no-weak-phrase: true
     # ja-yahoo-kousei: true # TODO 登録が必要
     # max-appearence-count-of-words: true # TODO 誤爆が多い
     # max-number-of-lines: true # Note: 文書はしかたない
@@ -10,7 +9,7 @@
     no-dead-link: true
     no-dropping-the-ra: true
     no-start-duplicated-conjunction: true
-    preset-japanese: true # Note: slow(no-mix-dearu-desumasuが遅そう)
+    preset-ja-technical-writing: true
     # preset-jtf-style: true # TOOD フォーマット系の指摘が多いので一旦無効
     prh:
       rulePaths:

@@ -136,6 +136,7 @@ alias C='__cd 10'
 alias cc='cg; C || cd -' # 'c'd to in 'c'urrent project.
 alias cg='cd "$(git rev-parse --show-toplevel)"' # 'c'd 'g'it root directory
 alias cr='t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd ${t}' #  'c'd to 'r'ecent directory
+alias cu='t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo ${p}${d}; p=${p}../; done | fzy) && cd ${t}'
 
 alias di='docker inspect --format "{{ .NetworkSettings.IPAddress }}"'
 alias dp='docker ps -lq'

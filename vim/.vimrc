@@ -730,6 +730,8 @@ if s:HasPlugin('vim-operator-surround') " {{{
   nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+
+  nmap <SID>[surround-a]c <Plug>(operator-surround-append)<Plug>(textobj-multiblock-a))\n
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{

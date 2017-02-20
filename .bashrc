@@ -235,7 +235,7 @@ function s() {
   [ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
   local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
   [ -z "${t}" ] && return
-  local p; p=$(pcregrep -M "${t}[\s\S]*?^$" ~/.ssh/config | grep Pass | sed 's/.*Pass //g');
+  local p; p=$(pcregrep -M "${t}[\s\S]*?^\r?$" ~/.ssh/config | grep Pass | sed 's/.*Pass //g');
   [ -n "${p}" ] && _with_history "sshpass -p ${p} ssh ${t}" && return
   _with_history "ssh ${t}"
 }

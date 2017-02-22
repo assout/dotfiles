@@ -221,6 +221,7 @@ map  <SID>[plugin]O <SID>[Open-browser]
 nmap <SID>[plugin]p <SID>[ctrlp]
 nmap <SID>[plugin]q <SID>[quickrun]
 map  <SID>[plugin]r <SID>[replace]
+map  <SID>[plugin]R <SID>[Replace]
 map  <SID>[plugin]t <SID>[todo]
 nmap <SID>[plugin]w <SID>[watchdogs]
 nmap <SID>[plugin]W <SID>[Watchdogs]
@@ -434,7 +435,7 @@ if s:HasPlugin('calendar.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('ctrlp.vim') " {{{
-  let g:ctrlp_map = '<Nop>'
+  let g:ctrlp_map = '[Nop]' " Note: <Nop>にすると`<`入力時に待たされる
   let g:ctrlp_clear_cache_on_exit = 0
   let g:ctrlp_show_hidden = 1
   let g:ctrlp_prompt_mappings = {
@@ -708,6 +709,7 @@ if s:HasPlugin('vim-operator-replace') " {{{
   nmap <SID>[replace]l <Plug>(operator-replace)<Plug>(textobj-line-i)
   nmap <SID>[replace]b <Plug>(operator-replace)<Plug>(textobj-multiblock-i)
   nmap <SID>[replace]u <Plug>(operator-replace)<Plug>(textobj-url-i)
+  nmap <SID>[Replace]  <Plug>(operator-replace)$
 endif " }}}
 
 if s:HasPlugin('vim-operator-surround') " {{{

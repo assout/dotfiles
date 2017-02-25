@@ -209,7 +209,7 @@ function lg {
 }
 
 # shellcheck disable=SC2034
-memo_dir="${HOME}/memolist.wiki" # alias内で使用
+memo_dir="${HOME}/cheat-sheet" # alias内で使用
 function M { ${vim} -c ":MemoNew $*"; }
 alias m='t=${memo_dir}/$(find ${memo_dir}/* -type f | sed -e "s?${memo_dir}/??" | ${selector}) && vi ${t}'
 alias mc='cd ${memo_dir}'

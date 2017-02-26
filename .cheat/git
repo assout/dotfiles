@@ -151,3 +151,5 @@ git revert <commit SHA>
 git cherry-pick <commit SHA1>
 
 
+# バージョン間の差分を見る
+git diff <revision>

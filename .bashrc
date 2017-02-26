@@ -177,8 +177,8 @@ alias e='mybash::explorer 1'
 alias E='mybash::explorer 10'
 alias er='mybash::explorer_recent_dir'
 
-function mybash::select_function { mybash::with_history "eval $(t=$( declare -F | cut -d" " -f3 | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
-alias f='mybash::select_function' # TODO:SC2032の理由が不明
+function mybash::select_function { mybash::with_history "eval $(t=$( declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
+alias f='mybash::select_function'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
 function mybash::ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.

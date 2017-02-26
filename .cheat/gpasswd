@@ -1,0 +1,8 @@
+# gpasswd - グループ操作
+
+# ユーザを追加
+gpasswd -a guest7 testgrp
+
+# ユーザを削除
+gpasswd -d guest7 testgrp
+

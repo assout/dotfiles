@@ -1,0 +1,108 @@
+# Search a file for a pattern
+grep pattern file
+
+# Case insensitive search (with line numbers)
+grep -in pattern file
+
+# Recursively grep for string <pattern> in folder:
+grep -R pattern folder
+
+# Read search patterns from a file (one per line)
+grep -f pattern_file file
+
+# Find lines NOT containing pattern
+grep -v pattern file
+
+# You can grep with regular expressions
+grep "^00" file  #Match lines starting with 00
+grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" file  #Find IP add
+
+# Find all files which match {pattern} in {directory}
+# This will show: "file:line my research"
+grep -rnw 'directory' -e "pattern"
+
+# Exclude grep from your grepped output of ps.
+# Add [] to the first letter. Ex: sshd -> [s]shd
+ps aux | grep '[h]ttpd'
+
+# Colour in red {bash} and keep all other lines
+ps aux | grep -E --color 'bash|$'
+
+- 再帰的にgrep :
+
+        grep -r PATTERN target_directory
+
+- 複数条件指定
+
+        grep -e pattern1 -e pattern2
+        grep -e pattern1 | grep pattern2
+
+- マッチ箇所の行番号を表示
+
+        grep -n foo bar
+
+- file名のみを表示 :
+
+        grep -l
+
+- マッチ部分のみを表示 :
+
+        grep -o
+
+- バイナリを除外 :
+
+        grep -I
+
+- Perl Regexオプション使う（Note: もう正規表現はこれ限定にしてもよいかも）
+
+        grep -P pattern target
+
+- 特定のファイル名を除外
+
+        grep --exclude="*.swp" pattern target
+
+- 特定のディレクトリ名配下のファイルを除外
+
+        grep --exclude-dir=".git" pattern target
+
+- ディレクトリの扱いを指定する
+    - スキップする
+
+            grep hoge * -d skip
+
+    - 再帰的にたどる
+
+            grep hoge * -d recurese
+            grep hoge * -r
+
+- 隠しファイルを対象にする
+
+        grep hoge .*
+
+    - 隠しファイルも含めて全ファイルを対象
+
+            grep hoge .* *
+
+- 一致行の前後を表示する
+
+        -B, --before-context=NUM  print NUM lines of leading context
+        -A, --after-context=NUM   print NUM lines of trailing context
+        -C, --context=NUM         print NUM lines of output context
+
+- 複数行を対象とする
+    - pcregrepを使う(推奨)
+
+            pcregrep -M 'bbb[\s\S]*?ddd' test.txt
+
+    - 通常のgrepでやる(Caution: 結果の行番号が表示できない)
+
+            grep -Pzo 'Date.*\nTags' rest.md
+
+- `.(ドット)`を改行にもマッチさせる
+
+        (?s)
+        // e.g.
+        grep -Pzo "(?s)^(\s*)\N*main.*?{.*?^\1}" *.c
+
+    [linux - Regex (grep) for multi-line search needed - Stack Overflow](http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed/7167115)
+

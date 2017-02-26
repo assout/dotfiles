@@ -15,3 +15,10 @@ for i in `seq 1 10`
 do
   echo $i
 done
+
+# for文ワンライナー
+for name in $(ls) ; do echo ${name}; done
+for i in `seq 1 10` ; do echo $i; done
+
+# for文 - 一般的な記法 :
+for (( i=0; i<10; i++ ))

@@ -30,6 +30,7 @@ ln -sb "${HERE}/vim/.vimrc" ~/
 ln -sb "${HERE}/vim/snippets" ~/.vim/
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
+ln -sf "${HERE}/.cheat" ~/
 ln -sf "${HERE}/.gitconfig" ~/
 if [ "${is_home}" ] && [ "${is_unix}" ] ; then
   ln -sf "${HERE}/.gitconfig.home.linux" ~/.gitconfig.env

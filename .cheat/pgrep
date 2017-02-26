@@ -1,0 +1,14 @@
+# pgrep - プロセスをgrep
+pgrep -f fooProc
+
+# プロセス名も表示
+pgrep -fl fooProc
+
+# 最近のバージョンでは以下の通り（pgrep from procps-ng)
+# プロセス名表示
+pgrep -fl fooProc
+
+# プロセス名、コマンド全体表示
+pgrep -fa fooProc
+
+

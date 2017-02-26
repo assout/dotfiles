@@ -1,0 +1,5 @@
+# Lowercase all files and folders in current directory
+rename 'y/A-Z/a-z/' *
+
+# rename - ファイル名の一括変更（リネーム・一括置換） :
+rename from to file...

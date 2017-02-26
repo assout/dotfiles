@@ -1,0 +1,56 @@
+# check the file's charactor code
+nkf -g test.txt
+
+# convert charactor code to UTF-8
+nkf -w --overwrite test.txt
+
+# convert charactor code to EUC-JP
+nkf -e --overwrite test.txt
+
+# convert charactor code to Shift-JIS
+nkf -s --overwrite test.txt
+
+# convert charactor code to ISO-2022-JP
+nkf -j --overwrite test.txt
+
+# convert newline to LF
+nkf -Lu --overwrite test.txt
+
+# convert newline to CRLF
+nkf -Lw --overwrite test.txt
+
+# convert newline to CR
+nkf -Lm --overwrite test.txt
+
+# MIME encode
+echo テスト | nkf -WwMQ
+
+# MIME decode
+echo "=E3=83=86=E3=82=B9=E3=83=88" | nkf -WwmQ
+
+# 文字コード確認
+nkf -g filename
+nkf -g *.txt
+
+# UTF-8に変換
+nkf -w filename
+
+# SJISに変換
+nkf -s filename
+
+# UTF-8に変換し上書き
+nkf -w --overwrite *.java *.java
+
+# BOM追加
+nkf --overwrite --oc=UTF-8-BOM filename
+
+# BOM削除
+nkf --overwrite --oc=UTF-8 filename
+
+# 特定ファイルを一括変換
+nkf -w --overwrite *.java
+nkf -w --overwrite `find -name "*.java"`
+
+# Caution:
+# msysgitのだとnkf32.exe,nkfwin32.exeが入っていて後者はうまく動かなかった
+

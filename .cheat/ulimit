@@ -1,0 +1,23 @@
+# ulimit - コマンドに割り当てる資源を制限する :
+
+# すべての値を表示する
+ulimit -a
+
+# ファイル・記述子の数を最大N個に制限する
+ulimit -n 1024
+
+# ユーザー1人が起動できるプロセス数を最大N個に制限する（スレッド数も！)
+ulimit -u 1024
+
+# 永続的に変更する
+/etc/security/limits.conf
+
+# ファイル記述子
+@group soft nofile 4096
+@group hard nofile 4096
+
+# プロセス数
+@group soft nproc 4096
+@group hard nproc 4096
+
+

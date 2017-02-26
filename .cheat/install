@@ -1,0 +1,14 @@
+# install - ファイルをコピーし、その属性を設定する :
+install [options] [-s] [--strip] source dest
+
+Refs: [Man page of INSTALL](http://linuxjm.sourceforge.jp/html/gnumaniak/man1/install.1.html)
+
+# ディレクトリを作成
+install -d {directory}
+
+# 所有者、グループを設定
+install {source} {dest} -g {group} -o {user}
+
+# 権限を設定
+install {source} {dest} -m {permission(e.g. 600)}
+

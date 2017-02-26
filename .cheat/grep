@@ -28,81 +28,64 @@ ps aux | grep '[h]ttpd'
 # Colour in red {bash} and keep all other lines
 ps aux | grep -E --color 'bash|$'
 
-- 再帰的にgrep :
+# 再帰的にgrep :
+grep -r PATTERN target_directory
 
-        grep -r PATTERN target_directory
+# 複数条件指定
+grep -e pattern1 -e pattern2
+grep -e pattern1 | grep pattern2
 
-- 複数条件指定
+# マッチ箇所の行番号を表示
+grep -n foo bar
 
-        grep -e pattern1 -e pattern2
-        grep -e pattern1 | grep pattern2
+# file名のみを表示 :
+grep -l
 
-- マッチ箇所の行番号を表示
+# マッチ部分のみを表示 :
+grep -o
 
-        grep -n foo bar
+# バイナリを除外 :
+grep -I
 
-- file名のみを表示 :
+# Perl Regexオプション使う（Note: もう正規表現はこれ限定にしてもよいかも）
+grep -P pattern target
 
-        grep -l
+# 特定のファイル名を除外
+grep --exclude="*.swp" pattern target
 
-- マッチ部分のみを表示 :
+# 特定のディレクトリ名配下のファイルを除外
+grep --exclude-dir=".git" pattern target
 
-        grep -o
+# ディレクトリの扱いを指定する
+# スキップする
+grep hoge * -d skip
 
-- バイナリを除外 :
+# 再帰的にたどる
+grep hoge * -d recurese
+grep hoge * -r
 
-        grep -I
+# 隠しファイルを対象にする
+grep hoge .*
 
-- Perl Regexオプション使う（Note: もう正規表現はこれ限定にしてもよいかも）
+# 隠しファイルも含めて全ファイルを対象
+grep hoge .* *
 
-        grep -P pattern target
+# 一致行の前後を表示する
+-B, --before-context=NUM  print NUM lines of leading context
+-A, --after-context=NUM   print NUM lines of trailing context
+-C, --context=NUM         print NUM lines of output context
 
-- 特定のファイル名を除外
+# 複数行を対象とする
+# pcregrepを使う(推奨)
+pcregrep -M 'bbb[\s\S]*?ddd' test.txt
 
-        grep --exclude="*.swp" pattern target
+# 通常のgrepでやる(Caution: 結果の行番号が表示できない)
+grep -Pzo 'Date.*\nTags' rest.md
 
-- 特定のディレクトリ名配下のファイルを除外
+# `.(ドット)`を改行にもマッチさせる
+(?s)
+// e.g.
+grep -Pzo "(?s)^(\s*)\N*main.*?{.*?^\1}" *.c
 
-        grep --exclude-dir=".git" pattern target
-
-- ディレクトリの扱いを指定する
-    - スキップする
-
-            grep hoge * -d skip
-
-    - 再帰的にたどる
-
-            grep hoge * -d recurese
-            grep hoge * -r
-
-- 隠しファイルを対象にする
-
-        grep hoge .*
-
-    - 隠しファイルも含めて全ファイルを対象
-
-            grep hoge .* *
-
-- 一致行の前後を表示する
-
-        -B, --before-context=NUM  print NUM lines of leading context
-        -A, --after-context=NUM   print NUM lines of trailing context
-        -C, --context=NUM         print NUM lines of output context
-
-- 複数行を対象とする
-    - pcregrepを使う(推奨)
-
-            pcregrep -M 'bbb[\s\S]*?ddd' test.txt
-
-    - 通常のgrepでやる(Caution: 結果の行番号が表示できない)
-
-            grep -Pzo 'Date.*\nTags' rest.md
-
-- `.(ドット)`を改行にもマッチさせる
-
-        (?s)
-        // e.g.
-        grep -Pzo "(?s)^(\s*)\N*main.*?{.*?^\1}" *.c
-
-    [linux - Regex (grep) for multi-line search needed - Stack Overflow](http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed/7167115)
+[linux - Regex (grep) for multi-line search needed - Stack Overflow](http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed/7167115)
 

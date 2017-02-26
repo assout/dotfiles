@@ -1,0 +1,5 @@
+# usermod - ユーザ情報変更
+
+# グループに追加
+usermod -g group user
+

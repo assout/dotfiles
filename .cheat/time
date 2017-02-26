@@ -1,0 +1,3 @@
+# time - コマンドの時間計測やリソース使用量を表示する :
+time [options] command [arguments ...]
+

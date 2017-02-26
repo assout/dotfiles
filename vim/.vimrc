@@ -136,9 +136,9 @@ command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
 command! -nargs=1 LogGrep call <SID>Grep(<q-args>, expand('~/.tmux/log/')) | call histadd('cmd', 'LogGrep <q-args>')
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
-command! -nargs=? NoteNew execute 'edit ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'scrach') . '.md'
-command! -nargs=? NoteSave execute 'save ~/Documents/note' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'scrach') . '.md'
-command! -nargs=1 NoteGrep call <SID>Grep(<q-args>, expand('~/Documents/note')) | call histadd('cmd', 'NoteGrep <q-args>')
+command! -nargs=? NoteNew execute 'edit ~/Documents/notes' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'note') . '.md'
+command! -nargs=? NoteSave execute 'save ~/Documents/notes' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'note') . '.md'
+command! -nargs=1 NoteGrep call <SID>Grep(<q-args>, expand('~/Documents/notes')) | call histadd('cmd', 'NoteGrep <q-args>')
 command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/notes')) | call histadd('cmd', 'TodoGrep <q-args>')
 command! ToggleExpandTab call <SID>ToggleExpandTab()
@@ -319,7 +319,7 @@ Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
-Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py', 'for' : ['javascript'] } " TODO:neco-look, tmux-comp, auto-pro Note:slow in msys2 TODO:vim起動が遅くなるっぽい(500msec近くかかる)
+Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py', 'for' : ['javascript', 'sh'] } " TODO:neco-look, tmux-comp, auto-pro Note:slow in msys2 TODO:vim起動が遅くなるっぽい(500msec近くかかる)
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'
@@ -330,7 +330,7 @@ Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
-Plug 'glidenote/memolist.vim', {'on' : ['MemoNew', 'MemoGrep']}
+Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
 Plug 'godlygeek/tabular', {'for' : 'markdown'}
       \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
 " FIXME: windows(cui,gui)で動いてない。linuxはいけた。
@@ -454,7 +454,7 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
   nnoremap <SID>[ctrlp]m :<C-u>CtrlPMemo<CR>
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
-  nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/note<CR>
+  nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/notes<CR>
   nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>
 endif " }}}
 
@@ -472,7 +472,7 @@ endif " }}}
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_filename_prefix_none = 1
   let g:memolist_memo_suffix = 'md'
-  let g:memolist_path = expand('~/cheat-sheet')
+  let g:memolist_path = expand('~/memo')
   let g:memolist_template_dir_path = g:memolist_path
 
   function! s:MemoGrep(word)
@@ -482,8 +482,8 @@ if s:HasPlugin('memolist.vim') " {{{
   endfunction
   command! -nargs=1 -complete=command MemoGrep call <SID>MemoGrep(<q-args>)
 
-  nnoremap       <SID>[memolist]a  :<C-u>MemoNew<CR>
   " TODO local配下も再帰的に。
+  nnoremap       <SID>[memolist]n  :<C-u>MemoNew<CR>
   nnoremap       <SID>[memolist]l  :<C-u>CtrlPMemolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}

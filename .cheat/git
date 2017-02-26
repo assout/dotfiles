@@ -150,5 +150,24 @@ git revert <commit SHA>
 # this just applies a single commit from a branch to current branch
 git cherry-pick <commit SHA1>
 
-# バージョン間の差分を見る
-git diff <revision>
+### add - ステージングする
+
+# ファイルごとに対話的に選択する
+git add -i
+
+# 対象を範囲指定
+Update>> 1,2,4
+Update>> 1-4
+
+# 部分的に追加する
+# Refs. [Gitで部分的にコミットする方法 - Qiita](http://qiita.com/miyohide/items/79ab0ff3b3852289a6be)
+
+git add -p
+
+# 変更のみ追加する(新規追加はしない)
+# Refs: [git add -A と git add . と git add -u の違い - nekovaの日記](http://nekova.hatenablog.com/entry/2013/02/20/013909)
+git add -u
+
+- 無視されるファイルを強制的にインデックスに追加する
+
+        git add -f

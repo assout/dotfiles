@@ -39,7 +39,7 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
-export CHEATCOLORS=true
+# export CHEATCOLORS=true # TODO lessとかに渡せなくなる
 [ "${is_unix}" ] && export EDITOR='vimx'
 [ "${is_win}" ]  && export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"
@@ -147,9 +147,10 @@ alias cr='mybashrc::cd_recent_dir'
 alias c.='mybashrc::cd_upper_dir'
 
 function mybashrc::select_cheat() {
+  local tmp=${CHEATCOLORS}
   unset CHEATCOLORS
   tmux send-keys "$(cheat $1 | ${selector})"
-  export CHEATCOLORS=true
+  export CHEATCOLORS=${tmp}
 }
 alias ch='mybashrc::select_cheat'
 
@@ -210,7 +211,7 @@ if [ "${is_win}" ] ; then
 fi
 
 log_dir="${HOME}/.tmux/log"
-function mybashrc::log_open { t=$(find ${log_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && vi ${log_dir}/${t}; }
+function mybashrc::log_open { t=$(find ${log_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && ${vim} ${log_dir}/${t}; }
 function mybashrc::log_cd_dir { cd ${log_dir}; }
 function mybashrc::log_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":LogGrep ${a}"; }
 alias l='mybashrc::log_open'
@@ -219,7 +220,7 @@ alias lg='mybashrc::log_grep'
 
 memo_dir="${HOME}/memo"
 function mybashrc::memo_new { ${vim} -c ":MemoNew $*"; }
-function mybashrc::memo_list { t=$(find ${memo_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && vi ${memo_dir}/${t}; }
+function mybashrc::memo_list { t=$(find ${memo_dir}/* -type f -printf "%f\n" | sort -r | ${selector}) && ${vim} ${memo_dir}/${t}; }
 function mybashrc::memo_cd_dir { cd ${memo_dir}; }
 function mybashrc::memo_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":MemoGrep ${a}"; }
 alias M='mybashrc::memo_new'
@@ -229,7 +230,7 @@ alias mg='mybashrc::memo_grep'
 
 note_dir="${HOME}/Documents/notes"
 function mybashrc::note_new { ${vim} -c ":NoteNew $*"; }
-function mybashrc::note_list { t=${note_dir}/$(find ${note_dir}/* -type f | sed -e "s?${note_dir}/??" | ${selector}) && vi ${t}; }
+function mybashrc::note_list { t=${note_dir}/$(find ${note_dir}/* -type f | sed -e "s?${note_dir}/??" | ${selector}) && ${vim} ${t}; }
 function mybashrc::note_cd_dir { cd ${note_dir}; }
 function mybashrc::note_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":NoteGrep ${a}"; }
 alias N='mybashrc::note_new'
@@ -287,8 +288,8 @@ alias vi='vim'
 
 function mybashrc::vim() { local f; f=""$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type 'f' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector})''; [ -f "${f}" ] && mybashrc::with_history "${vim} ${f}"; }
 function mybashrc::vim_current_project { (cg; F); }
-function mybashrc::vim_recent_file { t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && vi ${t}; }
-function mybashrc::vim_most_recent_file { vi $(head -1 ~/.cache/ctrlp/mru/cache.txt); }
+function mybashrc::vim_recent_file { t=$(cat ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${vim} ${t}; }
+function mybashrc::vim_most_recent_file { ${vim} $(head -1 ~/.cache/ctrlp/mru/cache.txt); }
 alias v='mybashrc::vim 1'
 alias V='mybashrc::vim 10'
 alias vc='mybashrc::vim_current_project'

@@ -314,6 +314,8 @@ elif [ "${is_win}" ] ; then
   [ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 fi
 
+source ${GHQ_ROOT}/github.com/chrisallenlane/cheat/cheat/autocompletion/cheat.bash
+
 PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる

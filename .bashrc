@@ -39,6 +39,7 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
+export CHEATCOLORS=true
 [ "${is_unix}" ] && export EDITOR='vimx'
 [ "${is_win}" ]  && export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"

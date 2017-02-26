@@ -39,7 +39,8 @@ HISTFILESIZE=5000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
-export EDITOR='vim' # For todo.txt note, less +v
+[ "${is_unix}" ] && export EDITOR='vimx'
+[ "${is_win}" ]  && export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"
 export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/

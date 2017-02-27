@@ -219,8 +219,8 @@ git diff *main*
 
 ### branch, checkout - ブランチを操作する
 
-
-git branch new-feature # ブランチを作成する
+# ブランチを作成する
+git branch new-feature
 
 # ブランチを切り替える
 git checkout new-feature

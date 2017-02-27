@@ -172,7 +172,7 @@ function mybash::explorer() {
     local t; t="$(find -L -maxdepth "$1" -name '.git' -prune -o -name 'node_modules' -prune -o -type d 2>/dev/null | sort | ${selector} | if [ "${is_win}" ] ; then sed -e 's?/?\\?g' ; else cat ; fi)"; [ -n "${t}" ] && mybash::with_history "${opener} ${t}"
   fi
 }
-function mybash::explorer_recent_dir { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && e "${t}"; }
+function mybash::explorer_recent_dir { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && ${opener} "${t}"; }
 alias e='mybash::explorer 1'
 alias E='mybash::explorer 10'
 alias er='mybash::explorer_recent_dir'
@@ -278,7 +278,7 @@ function mybash::ssh_by_hosts() {
 alias s='mybash::ssh_by_config'
 alias S='mybash::ssh_by_hosts'
 
-function mybash::todo_add { todo.sh add; }
+function mybash::todo_add { todo.sh add $*; }
 function mybash::todo_open { t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && mybash::with_history "todo.sh note ${t}"; }
 function mybash::todo_cd_dir { cd ~/Documents/todo/; }
 function mybash::todo_do { t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && mybash::with_history "todo.sh do ${t}"; }

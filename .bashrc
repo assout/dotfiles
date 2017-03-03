@@ -278,7 +278,7 @@ function mybash::ssh_by_hosts() {
 alias s='mybash::ssh_by_config'
 alias S='mybash::ssh_by_hosts'
 
-function mybash::todo_add { todo.sh add $*; }
+function mybash::todo_add { todo.sh add "$*"; }
 function mybash::todo_open { t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && mybash::with_history "todo.sh note ${t}"; }
 function mybash::todo_cd_dir { cd ~/Documents/todo/; }
 function mybash::todo_do { t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1); [ -n "${t}" ] && mybash::with_history "todo.sh do ${t}"; }

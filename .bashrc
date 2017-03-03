@@ -227,7 +227,7 @@ alias lg='mybash::log_grep'
 
 memo_dir="${HOME}/memo"
 function mybash::memo_new { ${vim} -c ":MemoNew $*"; }
-function mybash::memo_list { t=$(find "${memo_dir}"/* -type 'f' -printf "%f\n" | sort -r | ${selector}) && ${vim} "${memo_dir}/${t}"; }
+function mybash::memo_list { t=$(find "${memo_dir}"/* -type 'f' -printf "%f\n" | ${selector}) && ${vim} "${memo_dir}/${t}"; }
 function mybash::memo_cd_dir { cd "${memo_dir}"; }
 function mybash::memo_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":MemoGrep ${a}"; }
 alias M='mybash::memo_new'
@@ -237,7 +237,7 @@ alias mg='mybash::memo_grep'
 
 note_dir="${HOME}/Documents/notes"
 function mybash::note_new { ${vim} -c ":NoteNew $*"; }
-function mybash::note_list { t=${note_dir}/$(find "${note_dir}"/* -type 'f' | sed -e "s?${note_dir}/??" | ${selector}) && ${vim} "${t}"; }
+function mybash::note_list { t=${note_dir}/$(find "${note_dir}"/* -type 'f' | sed -e "s?${note_dir}/??" | sort -r | ${selector}) && ${vim} "${t}"; }
 function mybash::note_cd_dir { cd "${note_dir}"; }
 function mybash::note_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":NoteGrep ${a}"; }
 alias N='mybash::note_new'

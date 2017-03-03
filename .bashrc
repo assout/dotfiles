@@ -82,6 +82,7 @@ PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
 PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
 PATH=${PATH}:${GOPATH}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
+PATH=${PATH}:/usr/local/go/bin
 
 export PATH
 

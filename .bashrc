@@ -185,10 +185,16 @@ alias f='mybash::select_function'
 function mybash::ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
 function mybash::ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
 function mybash::ghq_cd { t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}); if [ -n "${t}" ] ; then mybash::with_history "cd ${t}" ; fi } # Note deprecate `ghq list` because slow in msys2
-alias gu='mybash::ghq_update'
-alias gs='mybash::ghq_status'
+alias ghu='mybash::ghq_update'
+alias ghs='mybash::ghq_status'
 alias gh='mybash::ghq_cd'
 
+function mybash::grep {
+  t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}'));
+  [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}";
+}
+alias gr='mybash::grep "grep"'
+alias ggr='mybash::grep "git grep"'
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 
 function mybash::history() {

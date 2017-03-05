@@ -135,19 +135,6 @@ function mybash::cdls {
   ls --color=auto --show-control-chars
 }
 
-function mybash::dir { local dir; dir="$(find -L -maxdepth "$1" -type d ! -path '*/.git/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "cd ${dir}"; }
-# shellcheck disable=SC2015
-function mybash::dir_current_project { mybash::dir_git_root && mybash::dir 10 || cd -; }
-function mybash::dir_git_root { cd "$(git rev-parse --show-toplevel)"; }
-function mybash::dir_recent { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
-function mybash::dir_upper { t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
-alias d='mybash::dir_current_dir 1'
-alias D='mybash::dir_current_dir 10'
-alias dc='mybash::dir_current_project'
-alias dg='mybash::dir_git_root'
-alias dr='mybash::dir_recent'
-alias d.='mybash::dir_upper'
-
 function mybash::select_cheat() {
   local tmp=${CHEATCOLORS}
   unset CHEATCOLORS
@@ -160,7 +147,20 @@ function mybash::select_cheat() {
   tmux send-keys "$(cheat "${c}" | ${selector})"
   export CHEATCOLORS=${tmp}
 }
-alias ch='mybash::select_cheat'
+alias c='mybash::select_cheat'
+
+function mybash::dir { local dir; dir="$(find -L -maxdepth "$1" -type 'd' ! -path '*/.git/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "cd ${dir}"; }
+# shellcheck disable=SC2015
+function mybash::dir_current_project { mybash::dir_git_root && mybash::dir 10 || cd -; }
+function mybash::dir_git_root { cd "$(git rev-parse --show-toplevel)"; }
+function mybash::dir_recent { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
+function mybash::dir_upper { t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
+alias d='mybash::dir 1'
+alias D='mybash::dir 10'
+alias dc='mybash::dir_current_project'
+alias dg='mybash::dir_git_root'
+alias dr='mybash::dir_recent'
+alias d.='mybash::dir_upper'
 
 # TODO 日本語化けてそう
 [ "${is_win}" ] && function esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
@@ -170,7 +170,7 @@ function mybash::explorer() {
   if [ -n "$2" ] ; then
     mybash::with_history "${opener} $2";
   else
-    local t; t="$(find -L -maxdepth "$1" -type d ! -path '*/.git/*' ! -path '*/node_modules/*' 2>/dev/null | sort | ${selector} | if [ "${is_win}" ] ; then sed -e 's?/?\\?g' ; else cat ; fi)"; [ -n "${t}" ] && mybash::with_history "${opener} ${t}"
+    local t; t="$(find -L -maxdepth "$1" -type 'd' ! -path '*/.git/*' ! -path '*/node_modules/*' 2>/dev/null | sort | ${selector} | if [ "${is_win}" ] ; then sed -e 's?/?\\?g' ; else cat ; fi)"; [ -n "${t}" ] && mybash::with_history "${opener} ${t}"
   fi
 }
 function mybash::explorer_recent_dir { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && ${opener} "${t}"; }
@@ -182,7 +182,7 @@ function mybash::select_function { mybash::with_history "eval $(declare -F | cut
 alias fun='mybash::select_function'
 
 function mybash::file { local f; f=$(find -L "$@" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && tmux send-keys " ${f}" C-a; }
-function mybash::file_current_project { (mybash::cd_git_root; mybash::file); }
+function mybash::file_current_project { (mybash::dir_git_root; mybash::file -maxdepth 10); }
 function mybash::file_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && tmux send-keys " ${t}" C-a; }
 alias f='mybash::file -maxdepth 1'
 alias F='mybash::file'
@@ -309,7 +309,7 @@ alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 function mybash::vim { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '.git' ! -path 'node_modules' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
-function mybash::vim_current_project { (mybash::cd_git_root; mybash::vim 10); }
+function mybash::vim_current_project { (mybash::dir_git_root; mybash::vim 10); }
 function mybash::vim_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
 function mybash::vim_most_recent { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
 alias v='mybash::vim 1'

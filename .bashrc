@@ -110,11 +110,11 @@ function mybash::select_alias { mybash::with_history "eval $(t=$(alias | sed -r 
 alias a='mybash::select_alias'
 
 if [ "${is_unix}" ] ; then
-  function mybash::browse_by_ghq { t=$(ghq list | cut -d "/" -f 2,3 | ${selector}); [ -n "${t}" ] && mybash::with_history "hub browse ${t}"; }
+  function mybash::browse_by_ghq { t=$(ghq list | cut -d "/" -f 2,3 | ${selector}) && mybash::with_history "hub browse ${t}"; }
   function mybash::browse_current_project { hub browse; }
 elif [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
-  function mybash::browse_by_ghq { t=$(ghq list | ${selector}); [ -n "${t}" ] && (cd "${GHQ_ROOT}/${t}" && mybash::browse_current_project); }
+  function mybash::browse_by_ghq { t=$(ghq list | ${selector}) && (cd "${GHQ_ROOT}/${t}" && mybash::browse_current_project); }
   function mybash::browse_current_project { git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start; }
 fi
 alias b='mybash::browse_by_ghq'
@@ -135,7 +135,7 @@ function mybash::cdls {
   ls --color=auto --show-control-chars
 }
 
-function mybash::cd_current_dir() { local dir; dir="$(find -L -maxdepth "$1" -type d ! -path '*/.git/*' 2>/dev/null | sort | ${selector})"; [ -d "${dir}" ] && mybash::with_history "cd ${dir}"; }
+function mybash::cd_current_dir() { local dir; dir="$(find -L -maxdepth "$1" -type d ! -path '*/.git/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "cd ${dir}"; }
 # shellcheck disable=SC2015
 function mybash::cd_in_project { mybash::cd_git_root && mybash::cd_current_dir 10 || cd -; }
 function mybash::cd_git_root { cd "$(git rev-parse --show-toplevel)"; }

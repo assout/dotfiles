@@ -891,6 +891,7 @@ endif " }}}
 
 if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
+  " TODO: 再実行前のQuickfixStatusが残ってしまう
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/

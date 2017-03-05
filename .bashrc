@@ -157,7 +157,7 @@ function mybash::select_cheat() {
   else
     c=$1
   fi
-  tmux send-keys "$(cheat "${c}" | ${selector} --query="${c}")"
+  tmux send-keys "$(cheat "${c}" | ${selector})"
   export CHEATCOLORS=${tmp}
 }
 alias ch='mybash::select_cheat'

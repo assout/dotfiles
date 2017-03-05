@@ -140,7 +140,7 @@ function mybash::select_cheat() {
   unset CHEATCOLORS
   local c
   if [ $# == 0 ] ; then
-    c=$(cheat -l | cut -d' ' -f1 | ${selector})
+    c=$(cheat -l | cut -d' ' -f1 | ${selector}) || return
   else
     c=$1
   fi
@@ -237,7 +237,7 @@ function mybash::log_open { t=$(find "${log_dir}"/* -type 'f' -printf "%f\n" | s
 function mybash::log_cd_dir { cd "${log_dir}"; }
 function mybash::log_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":LogGrep ${a}"; }
 alias l='mybash::log_open'
-alias lc='mybash::log_cd_dir'
+alias ld='mybash::log_cd_dir'
 alias lg='mybash::log_grep'
 
 memo_dir="${HOME}/memo"
@@ -247,7 +247,7 @@ function mybash::memo_cd_dir { cd "${memo_dir}"; }
 function mybash::memo_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":MemoGrep ${a}"; }
 alias M='mybash::memo_new'
 alias m='mybash::memo_list'
-alias mc='mybash::memo_cd_dir'
+alias md='mybash::memo_cd_dir'
 alias mg='mybash::memo_grep'
 
 note_dir="${HOME}/Documents/notes"
@@ -257,7 +257,7 @@ function mybash::note_cd_dir { cd "${note_dir}"; }
 function mybash::note_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":NoteGrep ${a}"; }
 alias N='mybash::note_new'
 alias n='mybash::note_list'
-alias nc='mybash::note_cd_dir'
+alias nd='mybash::note_cd_dir'
 alias ng='mybash::note_grep'
 
 function mybash::open() { local t; t="$(find -L -maxdepth "$1" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "${opener} ${t}"; }
@@ -301,8 +301,8 @@ function mybash::todo_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:
 alias todo='todo.sh'; complete -F _todo todo
 alias T='mybash::todo_add'
 alias t='mybash::todo_open'
-alias tc='mybash::todo_cd_dir'
-alias td='mybash::todo_do'
+alias td='mybash::todo_cd_dir'
+alias tdo='mybash::todo_do'
 alias tg='mybash::todo_grep'
 
 alias vi='vim'

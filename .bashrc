@@ -178,7 +178,7 @@ alias e='mybash::explorer 1'
 alias E='mybash::explorer 10'
 alias er='mybash::explorer_recent_dir'
 
-function mybash::select_function { mybash::with_history "eval $(t=$( declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
+function mybash::select_function { mybash::with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }
 alias fun='mybash::select_function'
 
 function mybash::file { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}); [ -n "${f}" ] && tmux send-keys " ${f}" C-a; }

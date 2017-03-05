@@ -326,6 +326,7 @@ Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'kaneshin/ctrlp-memolist'
       \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
+Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}

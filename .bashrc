@@ -183,10 +183,12 @@ alias fun='mybash::select_function'
 
 function mybash::file { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && tmux send-keys " ${f}" C-a; }
 function mybash::file_current_project { (mybash::cd_git_root; mybash::file 10); }
+function mybash::file_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && tmux send-keys " ${t}" C-a; }
 function mybash::file_find { local f; f=$(find "$@" ! -path '*/.git/*' | ${selector}) && tmux send-keys " ${f}" C-a; }
 alias f='mybash::file 1'
 alias F='mybash::file 10'
 alias fc='mybash::file_current_project'
+alias fr='mybash::file_recent'
 alias fin='mybash::file_find'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
@@ -268,8 +270,8 @@ alias or='mybash::open_recent_file'
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
-alias r='mybash::vim_recent_file'
-alias R='mybash::vim_most_recent_file'
+alias r='mybash::vim_recent'
+alias R='mybash::vim_most_recent'
 
 # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
 # dirty..
@@ -310,13 +312,13 @@ alias vi='vim'
 
 function mybash::vim() { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '.git' ! -path 'node_modules' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
 function mybash::vim_current_project { (mybash::cd_git_root; mybash::vim 10); }
-function mybash::vim_recent_file { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
-function mybash::vim_most_recent_file { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
+function mybash::vim_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
+function mybash::vim_most_recent { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
 alias v='mybash::vim 1'
 alias V='mybash::vim 10'
 alias vc='mybash::vim_current_project'
-alias vr='mybash::vim_recent_file'
-alias vR='mybash::vim_most_recent_file'
+alias vr='mybash::vim_recent'
+alias vR='mybash::vim_most_recent'
 
 # }}}1
 

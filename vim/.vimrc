@@ -893,6 +893,8 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
+  nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
+  command! WatchdogsDisable execute ':QuickfixStatusDisable' | execute 'QfsignsClear'
 
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
   let g:quickrun_config['watchdogs_checker/_'] = {

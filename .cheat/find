@@ -53,6 +53,7 @@ find -name "include" ! -path "*exclude*"
 # 除く(ディレクトリを降りない)
 find -name "hoge" -prune
 find -name "exclude" -prune -o -name "include"
+find -name "include" ! -path "*/eclude/*"
 
 # ファイルの最終更新日が3日より前のファイルを検索する
 find . -mtime +3

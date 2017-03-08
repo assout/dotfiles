@@ -308,7 +308,7 @@ alias tg='mybash::todo_grep'
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-function mybash::vim { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '.git' ! -path 'node_modules' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
+function mybash::vim { local f; f=$(find -L -maxdepth "$1" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
 function mybash::vim_current_project { (mybash::dir_git_root; mybash::vim 10); }
 function mybash::vim_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
 function mybash::vim_most_recent { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }

@@ -1,0 +1,99 @@
+## General shortcut ##
+
+# ツールチップ説明の表示 (Show Tooltip Description) (マウスホバーで表示されるエラーや警告の表示) :
+F2
+
+# 定義位置へ :
+F3
+
+# クラス階層を開く・階層ビュー :
+F4
+
+# 次の注釈箇所へ(デフォルトはエラー、警告) :
+Ctrl + .
+
+# 前の注釈箇所へ(デフォルトはエラー、警告) :
+Ctrl + ,
+
+# クラス階層を開く・クイック型階層、実装クラスを探す :
+Ctrl + t
+
+# 変数名補足
+Ctrl + 2 -> l
+
+# サーチ
+Alt + h(Ctrl +h)
+
+# ブレークポイント切り替え :
+  Ctrl + Shift + b
+
+# コメントアウトトグル(xml も OK) :
+  Ctrl + Shift + c
+
+# 複数行のコメントアウト(xml も OK) :
+Ctrl + Shift + /
+
+# 複数行のコメントアウト解除(xml も OK) :
+Ctrl + Shift + \
+
+# References in Workspace - ワークスペース内を検索
+Ctrl + Shift + g
+
+# ショートカットキー一覧を表示 :
+Ctrl + Shift + l
+
+# インポートを編成
+Ctrl + Shift + o
+
+# クラスを開く :
+Ctrl + Shift + t
+
+# リソースを開く :
+Ctrl + Shift + r
+
+# クラス階層を開く・ダイアログ :
+Ctrl + Shift + h
+
+# 呼び出し階層を開く :
+Ctrl + Alt + h
+
+# 名前変更 :
+Alt + Shift + r
+
+# ソース編集関連のメニュー表示。メソッドのオーバーライドやコンストラクタ作成などをしたい時にメニューをこれで呼び出します。 :
+Alt + Shift + s
+
+# refactorメニュー表示
+Alt + Shift + t
+
+## JUnit ##
+
+# テストクラス行き来:
+Ctrl + 9
+
+# テスト実行(メソッド内:1テストのみ メソッド外:全テスト) :
+Ctrl + 0
+
+# テストデバッグ実行:
+Ctrl + Shift + 0
+
+### Rare
+# スネークケース、キャメルケース切り替え
+Ctrl + Alt + k
+
+# (templates挿入後)にカーソル移動
+### Unused (alternative in Vrapper)
+# 進む :
+Alt + → -> Ctrl + i
+
+# 戻る :
+Alt + ← -> Ctrl + o
+
+# Toggle Folding :
+Ctrl + Numpad_Divide
+
+# 折りたたみトグル :
+Ctrl + ;
+
+# エディタ最大化トグル :
+Ctrl + m -> sm

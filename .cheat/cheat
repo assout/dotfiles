@@ -1,0 +1,6 @@
+cheat -d # List directories on CHEATPATH
+cheat -e # Edit cheatsheet
+cheat -l # List cheatsheets
+cheat -s # Search cheatsheets for <keyword>
+cheat -v # Print the version number
+

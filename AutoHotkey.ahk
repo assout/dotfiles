@@ -110,7 +110,6 @@ vk1Csc079:: ;変換キー単独 = IMEオン
   {
     content = %Clipboard%
     StringReplace, content, content, `r`n, , All
-    ; content =: Trim(content,  OmitChars = " `t")
   }
   Run,  %content%
   Sleep, 200

@@ -7,6 +7,7 @@
 GroupAdd Terminal, ahk_class mintty ; cygwin
 GroupAdd TerminalVim, ahk_group Terminal
 GroupAdd TerminalVim, ahk_class Vim
+GroupAdd Chrome, ahk_class Chrome_WidgetWin_1
 
 Return
 
@@ -91,3 +92,28 @@ vk1Csc079:: ;変換キー単独 = IMEオン
     Send,^j
   }
   Return
+
+; ref. [クリップボードと選択範囲を見て文字列を一括入力するAutoHotkeyスクリプトの書き方 - 情報科学屋さんを目指す人のメモ（FC2ブログ版）](http://did2.blog64.fc2.com/blog-entry-422.html)
+#IfWInActive, ahk_group Chrome
+^e::
+  cb_bk = %ClipboardAll%
+  url = %Clipboard%
+  Clipboard =
+  Send, ^c
+  ClipWait, 2
+  if ErrorLevel <> 0
+  {
+    ; Error
+    content =
+  }
+  else
+  {
+    content = %Clipboard%
+    StringReplace, content, content, `r`n, , All
+    ; content =: Trim(content,  OmitChars = " `t")
+  }
+  Run,  %content%
+  Sleep, 200
+  Clipboard = %cb_bk%
+  Return
+

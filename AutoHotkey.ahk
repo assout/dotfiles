@@ -19,16 +19,16 @@ Return
 ;-----------------------------------------------------------
 IME_GET(WinTitle="")
 {
-    ifEqual WinTitle,,  SetEnv,WinTitle,A
-    WinGet,hWnd,ID,%WinTitle%
-    DefaultIMEWnd := DllCall("imm32\ImmGetDefaultIMEWnd", Uint,hWnd, Uint)
+  ifEqual WinTitle,,  SetEnv,WinTitle,A
+  WinGet,hWnd,ID,%WinTitle%
+  DefaultIMEWnd := DllCall("imm32\ImmGetDefaultIMEWnd", Uint,hWnd, Uint)
 
-    ;Message : WM_IME_CONTROL  wParam:IMC_GETOPENSTATUS
-    DetectSave := A_DetectHiddenWindows
-    DetectHiddenWindows,ON
-    SendMessage 0x283, 0x005,0,,ahk_id %DefaultIMEWnd%
-    DetectHiddenWindows,%DetectSave%
-    Return ErrorLevel
+  ;Message : WM_IME_CONTROL  wParam:IMC_GETOPENSTATUS
+  DetectSave := A_DetectHiddenWindows
+  DetectHiddenWindows,ON
+  SendMessage 0x283, 0x005,0,,ahk_id %DefaultIMEWnd%
+  DetectHiddenWindows,%DetectSave%
+  Return ErrorLevel
 }
 
 ;-----------------------------------------------------------
@@ -82,16 +82,6 @@ vk1Csc079:: ;変換キー単独 = IMEオン
 ;---
 ;Capslock::Ctrl
 ;sc03a::Ctrl
-
-;---
-; other
-;---
-^j:: ; Disable if IME ON
-  getIMEMode := IME_GET()
-  if (%getIMEMode% = 0) {
-    Send,^j
-  }
-  Return
 
 ; ref. [クリップボードと選択範囲を見て文字列を一括入力するAutoHotkeyスクリプトの書き方 - 情報科学屋さんを目指す人のメモ（FC2ブログ版）](http://did2.blog64.fc2.com/blog-entry-422.html)
 #IfWInActive, ahk_group Chrome

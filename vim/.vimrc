@@ -148,6 +148,7 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " }}}1
 
 " # Options {{{1
+set ambiwidth=double
 set background=dark
 set cindent
 set nobackup

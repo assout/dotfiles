@@ -349,6 +349,7 @@ Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
+Plug 'maralla/completor-neosnippet'
 Plug 'maralla/completor.vim'
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
@@ -392,7 +393,7 @@ Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
 Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
-Plug 'wellle/tmux-complete.vim'
+" Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
 " Note: markdownは指定しなくてもtagbarで見れるので良い
@@ -615,11 +616,11 @@ if s:HasPlugin('tagbar') " {{{
   let g:tagbar_type_markdown = { 'ctagstype' : 'markdown', 'kinds' : [ 'h:headings' ], 'sort' : 0 }
 endif " }}}
 
-if s:HasPlugin('tmux-complete.vim') " {{{
-  let g:tmuxcomplete#trigger = 'omnifunc' " Note: completefuncはvim-auto-programmingで使いたいので。
-  " Note. hack (ftplugin/html.vimで上書きされてしまうため)
-  autocmd vimrc FileType markdown setlocal omnifunc=tmuxcomplete#complete
-endif " }}}
+" if s:HasPlugin('tmux-complete.vim') " {{{
+"   let g:tmuxcomplete#trigger = 'completefunc' " Note: completefuncはvim-auto-programmingで使いたいので。
+"   " Note. hack (ftplugin/html.vimで上書きされてしまうため)
+"   autocmd vimrc FileType markdown setlocal omnifunc=tmuxcomplete#complete
+" endif " }}}
 
 if s:HasPlugin('todo.txt-vim') " {{{
   " TODO: Unite source化など
@@ -630,7 +631,8 @@ if s:HasPlugin('todo.txt-vim') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-auto-programming') " {{{
-  set completefunc=autoprogramming#complete " Note: tmux-complete.vimとかぶることに注意。omnifuncにしてみたら動かないケースあり
+  set omnifunc=autoprogramming#complete " Note: tmux-complete.vimとかぶることに注意。omnifuncにしてみたら動かないケースあり
+  autocmd vimrc FileType markdown setlocal omnifunc=autoprogramming#complete
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{

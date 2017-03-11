@@ -320,7 +320,6 @@ Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
-Plug 'Valloric/YouCompleteMe', g:is_win ? {'on' : []} : { 'do': './install.py', 'for' : ['javascript', 'sh'] } " TODO:neco-look, tmux-comp, auto-pro Note:slow in msys2 TODO:vim起動が遅くなるっぽい(500msec近くかかる)
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 Plug 'ctrlpvim/ctrlp.vim'
@@ -350,6 +349,7 @@ Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
+Plug 'maralla/completor.vim'
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
 Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
@@ -435,6 +435,10 @@ endif " }}}
 if s:HasPlugin('calendar.vim') " {{{
   let g:calendar_google_calendar = g:is_linux ? 1 : 0
   let g:calendar_google_task = g:is_linux ? 1 : 0
+endif " }}}
+
+if s:HasPlugin('completor.vim') " {{{
+  let g:completor_markdown_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
 endif " }}}
 
 if s:HasPlugin('ctrlp.vim') " {{{

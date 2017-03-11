@@ -448,6 +448,7 @@ if s:HasPlugin('ctrlp.vim') " {{{
   let g:ctrlp_prompt_mappings = {
         \ 'PrtCurLeft()':         ['<c-b>', '<left>'],
         \ 'PrtCurRight()':        ['<c-f>', '<right>'],
+        \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
         \ 'PrtDelete()':          ['<c-d>', '<del>'],
         \ 'PrtHistory(-1)':       ['<down>'],
         \ 'PrtHistory(1)':        ['<up>'],

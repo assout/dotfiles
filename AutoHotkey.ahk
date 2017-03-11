@@ -101,8 +101,13 @@ vk1Csc079:: ;変換キー単独 = IMEオン
     content = %Clipboard%
     StringReplace, content, content, `r`n, , All
   }
-  Run,  %content%
-  Sleep, 200
-  Clipboard = %cb_bk%
+  try
+  {
+    Run,  %content%
+    Sleep, 200
+  } finally
+  {
+    Clipboard = %cb_bk%
+  }
   Return
 

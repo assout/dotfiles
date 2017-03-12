@@ -636,7 +636,7 @@ if s:HasPlugin('vim-auto-programming') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{
-  xmap <SID>[align] <Plug>(LiveEasyAlign)
+  xmap <SID>[align] <Plug>(LiveEasyAlign)*
   nmap <SID>[align] <Plug>(LiveEasyAlign)
 endif " }}}
 

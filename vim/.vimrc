@@ -439,7 +439,7 @@ if s:HasPlugin('calendar.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('completor.vim') " {{{
-  let g:completor_markdown_omni_trigger = '([\w-]+|@[\w-]*|[\w-]+:\s*[\w-]*)$'
+  let g:completor_markdown_omni_trigger = '..'
 endif " }}}
 
 if s:HasPlugin('ctrlp.vim') " {{{

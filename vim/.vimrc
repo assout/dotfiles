@@ -191,7 +191,7 @@ let &spellfile = expand(g:is_linux ? '~/Dropbox/spell/en.utf-8.add' : '~/Documen
 set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
-let &swapfile = g:is_win ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
+set noswapfile
 let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
 set tabstop=2
 set title

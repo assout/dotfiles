@@ -1,0 +1,2 @@
+# 選択メニュー
+select canditate in a b c ; do echo select: index=[${REPLY}] value=[${canditate}]; done;

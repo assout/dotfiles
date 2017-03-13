@@ -193,16 +193,12 @@ set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
 let &swapfile = g:is_win ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
-let &tags = (has('path_extra') ? './.tags;'  : './.tags') . ',' . &tags
+set tags^=./.tags;
 set tabstop=2
 set title
 set ttimeoutlen=0
-if has('persistent_undo')
-  set undodir=~/.cache/undo
-  set undofile
-else
-  set noundofile
-endif
+set undodir=~/.cache/undo
+set undofile
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
 set nowrapscan

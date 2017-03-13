@@ -349,8 +349,8 @@ Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
-Plug 'maralla/completor-neosnippet'
-Plug 'maralla/completor.vim'
+Plug 'maralla/completor.vim', g:is_win_gui ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため暫定
+      " \ Plug 'maralla/completor-neosnippet' " Note: msys2で遅い
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
 Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/

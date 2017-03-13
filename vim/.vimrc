@@ -939,7 +939,6 @@ endif " }}}
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
-  autocmd BufWritePre * let &backupext = '.' . strftime("%Y%m%d_%H%M%S")
   " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   " Note: fugitive, AsyncRunの時にフォーカスが奪われるので暫定でwincmd pして戻してる
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | wincmd p | endif
@@ -947,6 +946,7 @@ augroup vimrc
   " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
   " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
+  autocmd BufWritePre * let &backupext = '.' . strftime("%Y%m%d_%H%M%S")
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
   autocmd BufNewFile,BufRead *.csv,*.CSV setfiletype csv " for rainbow plugin

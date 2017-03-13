@@ -245,6 +245,7 @@ alias lg='mybash::log_grep'
 
 memo_dir="${HOME}/memo"
 function mybash::memo_new { ${vim} -c ":MemoNew $*"; }
+# TODO: localディレクトリに対応してない
 function mybash::memo_list { t=$(find "${memo_dir}"/* -type 'f' -printf "%f\n" | ${selector}) && ${vim} "${memo_dir}/${t}"; }
 function mybash::memo_cd_dir { cd "${memo_dir}"; }
 function mybash::memo_grep { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -z "${a}" ] && return; ${vim} -c ":MemoGrep ${a}"; }

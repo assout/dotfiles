@@ -80,31 +80,26 @@ vk1Csc079:: ;変換キー単独 = IMEオン
 ; CapsLockキーにCtrlキーの仕事をさせる
 ; TODO: Windows7だと無理らしい(Windows8なら大丈夫らしい) Refs: http://syobochim.hatenablog.com/entry/2013/10/22/232444
 ;---
-;Capslock::Ctrl
-;sc03a::Ctrl
+; Capslock::Ctrl
+; sc03a::Ctrl
 
 ; ref. [クリップボードと選択範囲を見て文字列を一括入力するAutoHotkeyスクリプトの書き方 - 情報科学屋さんを目指す人のメモ（FC2ブログ版）](http://did2.blog64.fc2.com/blog-entry-422.html)
 #IfWInActive, ahk_group Chrome
 ^e::
   cb_bk = %ClipboardAll%
-  url = %Clipboard%
   Clipboard =
   Send, ^c
-  ClipWait, 2
+  ClipWait, 0
   if ErrorLevel <> 0
   {
-    ; Error
-    content =
+    Send, ^e
+    Return
   }
-  else
-  {
-    content = %Clipboard%
-    StringReplace, content, content, `r`n, , All
-  }
+  content = %Clipboard%
+  StringReplace, content, content, `r`n, , All
   try
   {
-    Run,  %content%
-    Sleep, 200
+    Run, %content%
   } finally
   {
     Clipboard = %cb_bk%

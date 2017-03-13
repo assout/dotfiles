@@ -151,7 +151,8 @@ command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 set ambiwidth=double
 set background=dark
 set cindent
-set nobackup
+set backup
+set backupdir=~/.vim/backup
 set clipboard=unnamed,unnamedplus
 set cmdheight=1
 " set cryptmethod=blowfish2 " Caution: Comment out for performance
@@ -938,6 +939,7 @@ endif " }}}
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
+  autocmd BufWritePre * let &backupext = '.' . strftime("%Y%m%d_%H%M%S")
   " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
   " Note: fugitive, AsyncRunの時にフォーカスが奪われるので暫定でwincmd pして戻してる
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | wincmd p | endif

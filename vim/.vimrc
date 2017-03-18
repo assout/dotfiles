@@ -208,7 +208,6 @@ set nowrapscan
 " Plugin prefix mappings {{{
 map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
-map  <SID>[plugin]A <SID>[Align]
 map  <SID>[plugin]c <SID>[camelize]
 map  <SID>[plugin]h <SID>[markdown_h]
 nmap <SID>[plugin]H <SID>[markdown_H]
@@ -636,9 +635,7 @@ endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{
   xmap <SID>[align] <Plug>(LiveEasyAlign)*
-  nmap <SID>[align] <Plug>(LiveEasyAlign)
-  " FIXME
-  nmap <SID>[Align] <Plug>(EasyAlign)<Plug>(textobj-indent-i)*,
+  nmap <SID>[align] <Plug>(LiveEasyAlign)<Plug>(textobj-indent-i)*
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{

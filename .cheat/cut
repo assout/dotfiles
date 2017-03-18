@@ -3,6 +3,9 @@ cut -d# -f3
 
 # 先頭から3文字カット
 cut -c 3 hoge.txt
+#
+# 3-5文字カット
+cut -c 3-5 hoge.txt
 
 # 末尾文字をカット
 echo hoge | head -c-3

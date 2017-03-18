@@ -83,6 +83,7 @@ nunmap gF
 nunmap l
 nunmap p
 nunmap P
+nunmap <C-p>
 
 " Normal mode mappings "
 nnoremap <SID>[special]m :maximize<CR>

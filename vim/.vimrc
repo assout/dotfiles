@@ -208,6 +208,7 @@ set nowrapscan
 " Plugin prefix mappings {{{
 map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
+map  <SID>[plugin]A <SID>[Align]
 map  <SID>[plugin]c <SID>[camelize]
 map  <SID>[plugin]h <SID>[markdown_h]
 nmap <SID>[plugin]H <SID>[markdown_H]
@@ -339,14 +340,14 @@ Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
 Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
 Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
 Plug 'itchyny/vim-parenmatch'
-Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)']}
+Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
 Plug 'kamichidu/vim-edit-properties'
 Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
-Plug 'maralla/completor.vim', g:is_win_gui ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため暫定
+Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため使えない TODO: msys2で`//`と入力すると固まる TODO: msysだと遅いから無効
 Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
@@ -636,6 +637,8 @@ endif " }}}
 if s:HasPlugin('vim-easy-align') " {{{
   xmap <SID>[align] <Plug>(LiveEasyAlign)*
   nmap <SID>[align] <Plug>(LiveEasyAlign)
+  " FIXME
+  nmap <SID>[Align] <Plug>(EasyAlign)<Plug>(textobj-indent-i)*,
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{

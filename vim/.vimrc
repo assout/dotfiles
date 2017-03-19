@@ -901,7 +901,6 @@ if s:HasPlugin('vim-watchdogs') " {{{
   " TODO: 再実行前のQuickfixStatusが残ってしまう
   nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
   nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
-  nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
   command! WatchdogsDisable execute ':QuickfixStatusDisable' | execute 'QfsignsClear'
 
   " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint

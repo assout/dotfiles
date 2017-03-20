@@ -251,6 +251,7 @@ nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap          <SID>[insert]    <Nop>
 noremap    <expr><SID>[insert]p  ':Prefix ' . input('prefix:') . '<CR>'
+" TODO: ↓らへんすべて汎用化
 noremap          <SID>[insert]-   :Prefix - <CR>
 noremap          <SID>[insert]#   :Prefix # <CR>
 noremap          <SID>[insert]>   :Prefix > <CR>

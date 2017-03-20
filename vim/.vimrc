@@ -746,6 +746,11 @@ if s:HasPlugin('vim-operator-surround') " {{{
   nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+
+  let g:operator#surround#blocks = {
+        \ 'markdown' : [
+        \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['`'] },
+        \ ] }
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{

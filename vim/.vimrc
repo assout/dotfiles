@@ -614,6 +614,10 @@ if s:HasPlugin('tagbar') " {{{
   let g:tagbar_type_markdown = { 'ctagstype' : 'markdown', 'kinds' : [ 'h:headings' ], 'sort' : 0 }
 endif " }}}
 
+if s:HasPlugin('tcomment_vim') " {{{
+  let g:tcommentTextObjectInlineComment=''
+endif " }}}
+
 " if s:HasPlugin('tmux-complete.vim') " {{{
 "   let g:tmuxcomplete#trigger = 'completefunc' " Note: completefuncはvim-auto-programmingで使いたいので。
 "   " Note. hack (ftplugin/html.vimで上書きされてしまうため)
@@ -880,6 +884,7 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
         \  [ '_', '_', 1 ],
         \  [ '\~', '\~', 1 ],
         \  [ '|', '|', 1 ],
+        \  [ '```\<.*\>', '```' ],
         \]
   omap ib <Plug>(textobj-multiblock-i)
   omap ab <Plug>(textobj-multiblock-a)

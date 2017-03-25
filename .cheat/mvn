@@ -1,74 +1,41 @@
-# Javadocスキップ
-mvn clean package -Dmaven.javadoc.skip=true
+# general
+mvn clean package -Dmaven.javadoc.skip=true                              # Javadocスキップ
+mvn clean package -DskipTests=true                                       # テストの実行のみをスキップする
+mvn clean pacakge -Dmaven.test.skip=true                                 # テストコードのコンパイル、およびテストの実行をスキップする
+mvn clean eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true # 依存するライブラリのソースをダウンロード
+mvn -P dev                                                               # プロファイルを指定
+mvn -P dev,test                                                          # プロファイルを複数指定
 
-# テストスキップ:
-# テストの実行のみをスキップする
-mvn clean package -DskipTests=true
+# Archetype
+mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge # クイックスタート
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo.archetypes -DarchetypeArtifactId=pom-root -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge # ルートプロジェクト
+mvn archetype:generate -DarchetypeGroupId=pl.org.miki -DarchetypeArtifactId=java8-quickstart-archetype -DinteractiveMode=false -DgroupId=com.sandbox -DartifactId=hello # Java 8
 
-# テストコードのコンパイル、およびテストの実行をスキップする
-mvn clean pacakge -Dmaven.test.skip=true
-
-# 依存するライブラリのソースをダウンロード
-mvn clean eclipse:eclipse -DdownloadSources=true -DdownloadJavadocs=true
-
-# プロファイルを指定
-mvn -P dev
-mvn -P dev,test
-
-## Archetype
-
-# クイックスタート
-mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge
-
-# ルートプロジェクト
-mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo.archetypes -DarchetypeArtifactId=pom-root -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge
-
-# Java 8
-mvn archetype:generate -DarchetypeGroupId=pl.org.miki -DarchetypeArtifactId=java8-quickstart-archetype -DinteractiveMode=false -DgroupId=com.sandbox -DartifactId=hello
-
-### Maven Dependency Plugin
-mvn dependency:tree
-
-# コマンドラインで指定したartifactを取得
-mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0
-
-# ソースコード取得
-mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0 -Dclassifier=sources
-
-# 取得ディレクトリ指定
-mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0 -Ddest=.
-
-# dependency の conflict を表示 Refs: [ApacheMavenDependencyPlugin&#x2013;Resolvingconflictsusingthedependencytree](https://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html)
-mvn dependency:tree -Dverbose -Dincludes=commons-collections
-
-# 依存関係を分析
+# Maven Dependency Plugin
+mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0                      # コマンドラインで指定したartifactを取得
+mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0 -Ddest=.             # 取得ディレクトリ指定
+mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0 -Dclassifier=sources # ソースコード取得
+mvn dependency:tree                                                                           # tree表示
+mvn dependency:tree -Dverbose -Dincludes=commons-collections                                  # dependency の conflict を表示 Refs: [ApacheMavenDependencyPlugin& # x2013;Resolvingconflictsusingthedependencytree](https://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html)
 mvn dependency:analyze           # analyzes the dependencies of this project and determines which are: used and declared; used and undeclared; unused and declared.
 mvn dependency:analyze-dep-mgt   # analyzes your projects dependencies and lists mismatches between resolved dependencies and those listed in your dependencyManagement section.
 mvn dependency:analyze-only      # is the same as analyze, but is meant to be bound in a pom. It does not fork the build and execute test-compile.
 mvn dependency:analyze-report    # analyzes the dependencies of this project and produces a report that summarises which are: used and declared; used and undeclared; unused and declared.
 mvn dependency:analyze-duplicate # analyzes the <dependencies/> and <dependencyManagement/> tags in the pom.xml and determines the duplicate declared dependencies.
 
-### Maven Eclipse Plugin
+# Maven Eclipse Plugin
 mvn eclipse:eclipse
 
-### Maven Graph Plugin
+# Maven Graph Plugin
+mvn org.fusesource.mvnplugins:maven-graph-plugin:reactor -Dhide-external=true # サブモジュール間の依存関係グラフ表示
 
-# サブモジュール間の依存関係グラフ表示
-mvn org.fusesource.mvnplugins:maven-graph-plugin:reactor -Dhide-external=true
+# Maven Help Plugin
+mvn help:effective-pom      # 有効なpomを表示
+mvn help:effective-settings # 有効なsettingsを表示
 
-### Maven Help Plugin
+# Maven Javadoc Plugin
+mvn javadoc:javadoc # javadoc生成
 
-# 有効なpomを表示
-mvn help:effective-pom
-
-# 有効なsettingsを表示
-mvn help:effective-settings
-
-### Maven Javadoc Plugin
-mvn javadoc:javadoc
-
-### Maven Surefire Plugin
-
-# 特定のクラス、メソッドのみ実行
-mvn test -Dtest=fooClass#barMethod
+# Maven Surefire Plugin
+mvn test -Dtest=fooClass #barMethod# 特定のクラス、メソッドのみ実行
 

@@ -275,6 +275,11 @@ git merge ${branch} --no-commit
 # git merge origin/master --no-commit
 git merge --abort
 
+# merge dry run
+git merge --no-commit --no-ff develop
+# 結果を確認した後、
+git reset --hard HEAD
+
 ### log # コミットログを見る
 
 # 変更のあったファイル名を表示する

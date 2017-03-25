@@ -1,0 +1,3 @@
+# JavaのプロセスID表示(JDK7以降はjcmd推奨)
+jps
+

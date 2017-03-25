@@ -1,0 +1,6 @@
+# jar解凍
+jar xvf hoge.jar
+
+# jarの中身を確認
+jar tf hoge.jar
+

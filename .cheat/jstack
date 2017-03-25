@@ -1,0 +1,3 @@
+# スレッドダンプ取得(JDK7以降はjcmd推奨)
+jstack {pid}
+

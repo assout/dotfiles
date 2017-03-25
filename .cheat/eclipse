@@ -81,7 +81,12 @@ Ctrl + Shift + 0
 # スネークケース、キャメルケース切り替え
 Ctrl + Alt + k
 
-# (templates挿入後)にカーソル移動
+# Toggle split editor - vertical
+Ctrl + {
+
+# Toggle split editor - horizonal
+Ctrl + Shift + -
+
 ### Unused (alternative in Vrapper)
 # 進む :
 Alt + → -> Ctrl + i

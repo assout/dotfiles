@@ -1,0 +1,6 @@
+# Javaプロセス表示
+jcmd
+
+# スレッドダンプ取得
+jcmd ${pid} Thread.print
+

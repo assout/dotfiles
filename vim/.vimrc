@@ -313,6 +313,7 @@ call g:plug#begin(s:plugged_path)
 " General {{{
 Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
+Plug 'Dkendal/fzy-vim', {'on' : ['FzyLsAg', 'FzyTag', 'FzyWorkingTree', 'FzyGem', 'FzyBuffer']}
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため

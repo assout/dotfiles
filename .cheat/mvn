@@ -7,9 +7,9 @@ mvn -P dev                                                               # プ�
 mvn -P dev,test                                                          # プロファイルを複数指定
 
 # Archetype
-mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge # クイックスタート
-mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo.archetypes -DarchetypeArtifactId=pom-root -DinteractiveMode=false -DgroupId=sandbox -DartifactId=hoge # ルートプロジェクト
-mvn archetype:generate -DarchetypeGroupId=pl.org.miki -DarchetypeArtifactId=java8-quickstart-archetype -DinteractiveMode=false -DgroupId=com.sandbox -DartifactId=hello # Java 8
+mvn archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DgroupId=jp.gr.java_conf.assout -DartifactId=hoge # クイックスタート
+mvn archetype:generate -DarchetypeGroupId=org.codehaus.mojo.archetypes -DarchetypeArtifactId=pom-root -DinteractiveMode=false -DgroupId=jp.gr.java_conf.assout -DartifactId=hoge # ルートプロジェクト
+mvn archetype:generate -DarchetypeGroupId=pl.org.miki -DarchetypeArtifactId=java8-quickstart-archetype -DinteractiveMode=false -DgroupId=jp.gr.java_conf.assout -DartifactId=hello # Java 8
 
 # Maven Dependency Plugin
 mvn dependency:get -DgroupId=javax -DartifactId=javaee-api -Dversion=7.0                      # コマンドラインで指定したartifactを取得

@@ -203,7 +203,7 @@ function mybash::grep {
 }
 function mybash::grep_recent {
   # shellcheck disable=SC2046
-  mybash::grep "grep" "${@}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
+  mybash::grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
 }
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias g='mybash::grep "grep"'

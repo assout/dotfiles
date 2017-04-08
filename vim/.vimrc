@@ -890,6 +890,7 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
         \  [ '_', '_', 1 ],
         \  [ '\~', '\~', 1 ],
         \  [ '|', '|', 1 ],
+        \  [ '```', '```' ],
         \  [ '```\<.*\>', '```' ],
         \]
   omap ib <Plug>(textobj-multiblock-i)

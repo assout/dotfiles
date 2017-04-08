@@ -210,8 +210,10 @@ alias g='mybash::grep "grep"'
 alias gr='mybash::grep_recent'
 
 function mybash::git_ls_files { t=$(git ls-files "${@}" | ${selector}) && tmux send-keys " ${t}" C-a; }
+function mybash::git_branch { t=$(git branch -a | ${selector}) && tmux send-keys " ${t}" C-a; }
 alias gig='mybash::grep "git grep"'
 alias gil='mybash::git_ls_files'
+alias gib='mybash::git_branch'
 
 function mybash::history() {
   local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"

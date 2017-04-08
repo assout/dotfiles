@@ -201,12 +201,16 @@ function mybash::grep {
   t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}'));
   [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}";
 }
+function mybash::grep_recent {
+  mybash::grep "grep" "${@}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
+}
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias g='mybash::grep "grep"'
+alias gr='mybash::grep_recent'
 
 function mybash::git_ls_files { t=$(git ls-files "${@}" | ${selector}) && tmux send-keys " ${t}" C-a; }
-alias gg='mybash::grep "git grep"'
-alias gl='mybash::git_ls_files'
+alias gig='mybash::grep "git grep"'
+alias gil='mybash::git_ls_files'
 
 function mybash::history() {
   local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"

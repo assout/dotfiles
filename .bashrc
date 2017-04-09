@@ -174,8 +174,10 @@ function mybash::explorer() {
   fi
 }
 function mybash::explorer_recent_dir { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && ${opener} "${t}"; }
+function mybash::explorer_in_project { (mybash::dir_git_root; mybash::explorer 1000); }
 alias e='mybash::explorer 1'
-alias E='mybash::explorer 10'
+alias E='mybash::explorer 1000'
+alias ep='mybash::explorer_in_project'
 alias er='mybash::explorer_recent_dir'
 
 function mybash::select_function { mybash::with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }

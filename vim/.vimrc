@@ -209,6 +209,7 @@ set nowrapscan
 map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
 map  <SID>[plugin]c <SID>[camelize]
+nmap <SID>[plugin]e <Plug>[emmet]
 map  <SID>[plugin]h <SID>[markdown_h]
 nmap <SID>[plugin]H <SID>[markdown_H]
 map  <SID>[plugin]l <SID>[markdown_l]
@@ -224,9 +225,9 @@ map  <SID>[plugin]t <SID>[todo]
 nmap <SID>[plugin]w <SID>[watchdogs]
 nmap <SID>[plugin]W <SID>[Watchdogs]
 nmap <SID>[plugin]/ <SID>[migemo]
-" TODO: <SID>つけれない(つけないと"[s"と入力した時にキー入力待ちが発生してしまう)
-nmap <SID>[plugin][ [subP]
-nmap <SID>[plugin]] [subN]
+" TODO: <SID>つけれない(つけないで[subP]とすると"[s"と入力した時にキー入力待ちが発生してしまう)
+nmap <SID>[plugin][ <subP>
+nmap <SID>[plugin]] <subN>
 
 map  <SID>[plugin]<Space> <SID>[context]
 " }}}
@@ -352,7 +353,8 @@ Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvi
 Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
-Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']} " markdownのurlタイトル取得:<C-y>a コメントアウトトグル : <C-y>/
+" Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']}
+Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
 Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
 Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
 Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
@@ -465,6 +467,11 @@ if s:HasPlugin('ctrlp.vim') " {{{
   nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
   nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/notes<CR>
   nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>
+endif " }}}
+
+if s:HasPlugin('emmet-vim') " {{{
+  let g:user_emmet_leader_key='<Nop>'
+  let g:user_emmet_anchorizeurl_key = '<Plug>[emmet]'
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{
@@ -829,23 +836,23 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
   call g:submode#map('scroll', 'n', '', 'H', '10zh')
   call g:submode#map('scroll', 'n', '', 'L', '10zl')
 
-  call g:submode#enter_with('buffer', 'n', '', '[subP]b', ':bprevious<CR>')
-  call g:submode#enter_with('buffer', 'n', '', '[subN]b', ':bnext<CR>')
+  call g:submode#enter_with('buffer', 'n', '', '<subP>b', ':bprevious<CR>')
+  call g:submode#enter_with('buffer', 'n', '', '<subN>b', ':bnext<CR>')
   call g:submode#map('buffer', 'n', '', 'k', ':bprevious<CR>')
   call g:submode#map('buffer', 'n', '', 'j', ':bnext<CR>')
   call g:submode#map('buffer', 'n', '', 'K', ':bfirst<CR>')
   call g:submode#map('buffer', 'n', '', 'J', ':blast<CR>')
 
   " TODO: args,quickfix,loclist,diff先頭と末尾に行き過ぎたときエラーでsubmode抜けたくない(循環するとややこしい?)
-  call g:submode#enter_with('args', 'n', '', '[subP]a', ':previous<CR>')
-  call g:submode#enter_with('args', 'n', '', '[subN]a', ':next<CR>')
+  call g:submode#enter_with('args', 'n', '', '<subP>a', ':previous<CR>')
+  call g:submode#enter_with('args', 'n', '', '<subN>a', ':next<CR>')
   call g:submode#map('args', 'n', '', 'k', ':previous<CR>')
   call g:submode#map('args', 'n', '', 'j', ':next<CR>')
   call g:submode#map('args', 'n', '', 'K', ':first<CR>')
   call g:submode#map('args', 'n', '', 'J', ':last<CR>')
 
-  call g:submode#enter_with('quickfix', 'n', '', '[subP]q', ':cprevious<CR>')
-  call g:submode#enter_with('quickfix', 'n', '', '[subN]q', ':cnext<CR>')
+  call g:submode#enter_with('quickfix', 'n', '', '<subP>q', ':cprevious<CR>')
+  call g:submode#enter_with('quickfix', 'n', '', '<subN>q', ':cnext<CR>')
   call g:submode#map('quickfix', 'n', '', 'k', ':cprevious<CR>')
   call g:submode#map('quickfix', 'n', '', 'j', ':cnext<CR>')
   call g:submode#map('quickfix', 'n', '', 'K', ':cfirst<CR>')
@@ -853,8 +860,8 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
   call g:submode#map('quickfix', 'n', '', '<C-k>', ':cpfile<CR>')
   call g:submode#map('quickfix', 'n', '', '<C-j>', ':cnfile<CR>')
 
-  call g:submode#enter_with('loclist', 'n', '', '[subP]l', ':lprevious<CR>')
-  call g:submode#enter_with('loclist', 'n', '', '[subN]l', ':lnext<CR>')
+  call g:submode#enter_with('loclist', 'n', '', '<subP>l', ':lprevious<CR>')
+  call g:submode#enter_with('loclist', 'n', '', '<subN>l', ':lnext<CR>')
   call g:submode#map('loclist', 'n', '', 'k', ':lprevious<CR>')
   call g:submode#map('loclist', 'n', '', 'j', ':lnext<CR>')
   call g:submode#map('loclist', 'n', '', 'K', ':lfirst<CR>')
@@ -862,8 +869,8 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
   call g:submode#map('loclist', 'n', '', '<C-k>', ':lpfile<CR>')
   call g:submode#map('loclist', 'n', '', '<C-j>', ':lnfile<CR>')
 
-  call g:submode#enter_with('diff', 'n', '', '[subP]c', '[c')
-  call g:submode#enter_with('diff', 'n', '', '[subN]c', ']c')
+  call g:submode#enter_with('diff', 'n', '', '<subP>c', '[c')
+  call g:submode#enter_with('diff', 'n', '', '<subN>c', ']c')
   call g:submode#map('diff', 'n', '', 'k', '[c')
   call g:submode#map('diff', 'n', '', 'j', ']c')
 endif " }}}

@@ -353,7 +353,6 @@ Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvi
 Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
 Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
 Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
-" Plug 'mattn/emmet-vim', {'for' : ['markdown', 'html']}
 Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
 Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
 Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}

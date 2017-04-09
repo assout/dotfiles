@@ -149,15 +149,15 @@ function mybash::select_cheat() {
 }
 alias c='mybash::select_cheat'
 
-function mybash::dir { local dir; dir="$(find -L -maxdepth "$1" -type 'd' ! -path '*/.git/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "cd ${dir}"; }
+function mybash::dir { local dir; dir="$(find -L -type 'd' "$@" ! -path '*/.git/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "cd ${dir}"; }
 # shellcheck disable=SC2015
-function mybash::dir_current_project { mybash::dir_git_root && mybash::dir 10 || cd -; }
+function mybash::dir_in_project { mybash::dir_git_root && mybash::dir "$@" || cd -; }
 function mybash::dir_git_root { cd "$(git rev-parse --show-toplevel)"; }
 function mybash::dir_recent { t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
 function mybash::dir_upper { t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
-alias d='mybash::dir 1'
-alias D='mybash::dir 10'
-alias dc='mybash::dir_current_project'
+alias d='mybash::dir -maxdepth 1'
+alias D='mybash::dir'
+alias dc='mybash::dir_in_project'
 alias dg='mybash::dir_git_root'
 alias dr='mybash::dir_recent'
 alias d.='mybash::dir_upper'
@@ -181,31 +181,29 @@ alias er='mybash::explorer_recent_dir'
 function mybash::select_function { mybash::with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }
 alias fun='mybash::select_function'
 
-function mybash::file { local f; f=$(find -L "$@" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && tmux send-keys " ${f}" C-a; }
-function mybash::file_current_project { (mybash::dir_git_root; mybash::file -maxdepth 10); }
+function mybash::file { local f; f=$(find -L -type 'f' "$@" ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && tmux send-keys " ${f}" C-a; }
+function mybash::file_in_project { (mybash::dir_git_root; mybash::file "$@"); }
 function mybash::file_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && tmux send-keys " ${t}" C-a; }
 alias f='mybash::file -maxdepth 1'
 alias F='mybash::file'
-alias fc='mybash::file_current_project'
+alias fp='mybash::file_in_project'
 alias fr='mybash::file_recent'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+function mybash::ghq_cd { t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) && mybash::with_history "cd ${t}"; } # Note deprecate `ghq list` because slow in msys2
 function mybash::ghq_update { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
 function mybash::ghq_status { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
-function mybash::ghq_cd { t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) && mybash::with_history "cd ${t}"; } # Note deprecate `ghq list` because slow in msys2
+alias gh='mybash::ghq_cd'
 alias ghu='mybash::ghq_update'
 alias ghs='mybash::ghq_status'
-alias gh='mybash::ghq_cd'
 
+alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 function mybash::grep {
   t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}'));
   [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}";
 }
-function mybash::grep_recent {
-  # shellcheck disable=SC2046
-  mybash::grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
-}
-alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
+# shellcheck disable=SC2046
+function mybash::grep_recent { mybash::grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null; }
 alias g='mybash::grep "grep"'
 alias gr='mybash::grep_recent'
 
@@ -270,10 +268,12 @@ alias n='mybash::note_list'
 alias nd='mybash::note_cd_dir'
 alias ng='mybash::note_grep'
 
-function mybash::open() { local t; t="$(find -L -maxdepth "$1" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "${opener} ${t}"; }
+function mybash::open { local t; t="$(find -L -type 'f' "$@" ! -path '*/.git/*' ! -path '*/node_modules/*' 2>/dev/null | sort | ${selector})" && mybash::with_history "${opener} ${t}"; }
+function mybash::open_in_project { (mybash::dir_git_root; mybash::open "$@"); }
 function mybash::open_recent_file { t=$(sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector}) && ${opener} "${t}"; }
-alias o='mybash::open 1'
-alias O='mybash::open 10'
+alias o='mybash::open -maxdepth 1'
+alias O='mybash::open'
+alias op='mybash::open_in_project'
 alias or='mybash::open_recent_file'
 
 [ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
@@ -318,13 +318,13 @@ alias tg='mybash::todo_grep'
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-function mybash::vim { local f; f=$(find -L "$@" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
-function mybash::vim_current_project { (mybash::dir_git_root; mybash::vim 10); }
+function mybash::vim { local f; f=$(find -L -type 'f' "$@" ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" 2>/dev/null | sort | ${selector}) && mybash::with_history "${vim} ${f}"; }
+function mybash::vim_in_project { (mybash::dir_git_root; mybash::vim "$@"); }
 function mybash::vim_recent { t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
 function mybash::vim_most_recent { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
 alias v='mybash::vim -maxdepth 1'
 alias V='mybash::vim'
-alias vc='mybash::vim_current_project'
+alias vp='mybash::vim_in_project'
 alias vr='mybash::vim_recent'
 alias vR='mybash::vim_most_recent'
 

@@ -652,6 +652,7 @@ endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
   let g:easytags_async = has('gui_running') ? 0 : 1 " TODO: GUIのときバックグラウンドプロセスがたまっていっちゃうっポイ
+  let g:easytags_auto_highlight = 0
   let g:easytags_dynamic_files = 2
 endif " }}}
 

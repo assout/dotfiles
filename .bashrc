@@ -289,9 +289,12 @@ function mybash::ssh_by_config() {
   [ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
   local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
   [ -z "${t}" ] && return
-  local p; p=$(pcregrep -M "${t}[\s\S]*?^\r?$" ~/.ssh/config | grep Pass | sed 's/.*Pass //g');
-  [ -n "${p}" ] && mybash::with_history "sshpass -p ${p} ssh ${t}" && return
-  mybash::with_history "ssh ${t}"
+  local p; p=$(pcregrep -M "${t}[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g');
+  if [ -n "${p}" ] ; then
+    mybash::with_history "sshpass -p ${p} ssh ${t}"
+  else
+    mybash::with_history "ssh ${t}"
+  fi
 }
 function mybash::ssh_by_hosts() {
   local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}

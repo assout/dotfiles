@@ -166,8 +166,8 @@ function mybash::select_cheat() {
 alias c='mybash::select_cheat'
 
 function mybash::dir() { local t; t="$(mybash::find_dir "$@")"; [ -d "${t}" ] && cd "${t}"; }
-# shellcheck disable=SC2015
 function mybash::dir_git_root() { cd "$(git rev-parse --show-toplevel)"; }
+# shellcheck disable=SC2015
 function mybash::dir_in_project() { mybash::dir_git_root && mybash::dir "$@" || cd -; }
 function mybash::dir_recent() { local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
 function mybash::dir_upper() { local t; t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
@@ -319,9 +319,9 @@ alias s='mybash::ssh_by_config'
 alias S='mybash::ssh_by_hosts'
 
 function mybash::todo_add() { todo.sh add "$*"; }
-function mybash::todo_open() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh note"; }
+function mybash::todo_open() { local t; t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1) && todo.sh note "${t}"; }
 function mybash::todo_cd_dir() { cd ~/Documents/todo/; }
-function mybash::todo_do() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh do"; }
+function mybash::todo_do() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh" "do"; }
 function mybash::todo_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":TodoGrep ${a}"; }
 alias todo='todo.sh'; complete -F _todo todo
 alias T='mybash::todo_add'

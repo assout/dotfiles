@@ -281,8 +281,8 @@ nmap           <C-n>      <Plug>(yankround-next)
 
 if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対応
   " Note: nmapだとyy,==が効かない
-  map           y           <Plug>(operator-stay-cursor-yank)
-  map     <expr>=           operator#stay_cursor#wrapper("=")
+  " map           y           <Plug>(operator-stay-cursor-yank)
+  " map     <expr>=           operator#stay_cursor#wrapper("=")
 endif
 
 nnoremap       Y          y$
@@ -406,9 +406,9 @@ Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
 " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
 Plug 'kana/vim-operator-user'
       \ | Plug 'kana/vim-operator-replace'
-      \ | Plug 'osyo-manga/vim-operator-stay-cursor'
       \ | Plug 'rhysd/vim-operator-surround'
       \ | Plug 'tyru/operator-camelize.vim'
+      " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
 " }}}
 
 " User Textobjects {{{

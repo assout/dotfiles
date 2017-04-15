@@ -130,7 +130,7 @@ if [ "${is_unix}" ] ; then
   function mybash::browse_current_project() { hub browse; }
 elif [ "${is_win}" ] ; then
   # Note: hub使えばできるがgitlabもあるのでこうしている
-  function mybash::browse_by_ghq() { ghq list | ${selector} | (xargs -rI{} cd "${GHQ_ROOT}/"{} && mybash::browse_current_project); }
+  function mybash::browse_by_ghq() { local t; t=$(ghq list | ${selector}) && (cd "${GHQ_ROOT}/${t}" && mybash::browse_current_project); }
   function mybash::browse_current_project() { git remote -v | head -1 | cut -d"	" -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start; }
 fi
 alias b='mybash::browse_by_ghq'

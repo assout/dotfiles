@@ -167,14 +167,14 @@ alias c='mybash::select_cheat'
 
 function mybash::dir() { local t; t="$(mybash::find_dir "$@")"; [ -d "${t}" ] && cd "${t}"; }
 # shellcheck disable=SC2015
-function mybash::dir_in_project() { mybash::dir_git_root && mybash::dir "$@" || cd -; }
 function mybash::dir_git_root() { cd "$(git rev-parse --show-toplevel)"; }
+function mybash::dir_in_project() { mybash::dir_git_root && mybash::dir "$@" || cd -; }
 function mybash::dir_recent() { local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
 function mybash::dir_upper() { local t; t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
 alias d='mybash::dir -maxdepth 1'
 alias D='mybash::dir'
-alias dc='mybash::dir_in_project'
 alias dg='mybash::dir_git_root'
+alias dp='mybash::dir_in_project'
 alias dr='mybash::dir_recent'
 alias d.='mybash::dir_upper'
 
@@ -231,7 +231,7 @@ alias gib='mybash::git_branch'
 function mybash::history() {
   local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
   HISTTIMEFORMAT=
-  history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | ${selector} | xargs -r tmux send-keys
+  history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | ${selector} | xargs -rI{} tmux send-keys {}
   HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
 }
 alias h='mybash::history'

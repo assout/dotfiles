@@ -121,6 +121,10 @@ function mybash::find_selector_reverse() {
   mybash::find "$@" | sort -r | ${selector}
 }
 
+function mybash::select_send_key() {
+  ${selector} | xargs -rI{} tmux send-keys " "{} C-a
+}
+
 # TODO remove eval
 function mybash::select_alias() { mybash::with_history "eval $(t=$(alias | sed -r "s/^alias //" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
 alias a='mybash::select_alias'
@@ -342,6 +346,8 @@ alias V='mybash::vim'
 alias vp='mybash::vim_in_project'
 alias vr='mybash::vim_recent'
 alias vR='mybash::vim_most_recent'
+
+alias z='mybash::select_send_key'
 
 # }}}1
 

@@ -36,7 +36,7 @@ function add_header {
 # Returns:
 #   None
 function mesure {
-  readonly OPTIONS=("-u ${MYVIMRC}" "-u ${MYVIMRC} --noplugin" "-u NONE")
+  OPTIONS=("-u ${MYVIMRC}" "-u ${MYVIMRC} --noplugin" "-u NONE")
   for option in "${OPTIONS[@]}" ; do
     if [ "${filetype}" != 'boot' ] ; then
       local openfile=${SAMPLE_FILE_PREFIX}.${filetype}

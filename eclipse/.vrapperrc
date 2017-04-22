@@ -89,11 +89,9 @@ nunmap <C-p>
 nnoremap <SID>[special]m :maximize<CR>
 
 " Note: tmux等と合わせると<M-h,l>でタブ移動だがEclipseでは退避したキーとかぶるのでCtrl+h,lとする
-" TODO: なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまうので暫定対応
-" nnoremap <C-h> <C-w>gT
-" nnoremap <C-l> <C-w>gt
-nnoremap <C-h> gT
-nnoremap <C-l> gt
+" TODO: なんか1ウィンドウのときタブ移動の挙動が順番でなくなってしまう(gt,gTにしてもだめっぽい)
+nnoremap <C-h> <C-w>gT
+nnoremap <C-l> <C-w>gt
 
 nnoremap <C-w>c :bdelete<CR>
 nnoremap <C-w>q :bdelete<CR>

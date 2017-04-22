@@ -188,9 +188,9 @@ alias d.='mybash::dir_upper'
 
 function mybash::explorer() {
   if [ -n "$2" ] ; then
-    mybash::with_history "${opener} $2";
+    "${opener}" $(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)
   else
-    mybash::find_dir -maxdepth "$1" | if [ "${is_win}" ] ; then sed -e 's?/?\\?g' ; else cat ; fi | xargs -r "${opener}"
+    mybash::find_dir -maxdepth "$1" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
   fi
 }
 function mybash::explorer_recent_dir() { sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}; }

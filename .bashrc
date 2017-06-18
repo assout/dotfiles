@@ -188,7 +188,7 @@ alias d.='mybash__dir_upper'
 
 function mybash__explorer() {
   if [ -n "$2" ] ; then
-    "${opener}" $(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)
+    "${opener}" "$(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)"
   else
     mybash__find_dir -maxdepth "$1" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
   fi

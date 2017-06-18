@@ -34,8 +34,8 @@ is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
 tools_dir="${HOME}/Tools"
 
 # History settings
-HISTSIZE=5000
-HISTFILESIZE=5000
+HISTSIZE=10000
+HISTFILESIZE=10000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 

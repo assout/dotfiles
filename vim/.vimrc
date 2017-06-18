@@ -398,6 +398,7 @@ Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
 " Note: markdownは指定しなくてもtagbarで見れるので良い
+"
 Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
       \ | Plug 'xolox/vim-shell',  {'for' : ['vim', 'sh', 'javascript']}
       \ | Plug 'xolox/vim-easytags',  {'for' : ['vim', 'sh', 'javascript']}

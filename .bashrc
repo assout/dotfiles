@@ -101,46 +101,46 @@ elif [ "${is_win}" ] ; then
 	vim='vim'
 fi
 
-function mybash__with_history() {
+mybash__with_history() {
 	history -s "$1"; $1
 }
 
-function mybash__find() {
+mybash__find() {
 	find -L "$@" -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
 }
 
-function mybash__find_dir() {
+mybash__find_dir() {
 	find -L "$@" -type 'd' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" | sort | ${selector}
 }
 
-function mybash__find_selector() {
+mybash__find_selector() {
 	mybash__find "$@" | sort | ${selector}
 }
 
-function mybash__find_selector_reverse() {
+mybash__find_selector_reverse() {
 	mybash__find "$@" | sort -r | ${selector}
 }
 
-function mybash__select_send_key() {
+mybash__select_send_key() {
 	${selector} | xargs -rI{} tmux send-keys " "{} C-a
 }
 
 # TODO remove eval
-function mybash__select_alias() { mybash__with_history "eval $(t=$(alias | sed -r "s/^alias //" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
+mybash__select_alias() { mybash__with_history "eval $(t=$(alias | sed -r "s/^alias //" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
 alias a='mybash__select_alias'
 
 if [ "${is_unix}" ] ; then
-	function mybash__browse_by_ghq() { ghq list | cut -d "/" -f 2,3 | ${selector} | xargs -r hub browse; }
-	function mybash__browse_current_project() { hub browse; }
+	mybash__browse_by_ghq() { ghq list | cut -d "/" -f 2,3 | ${selector} | xargs -r hub browse; }
+	mybash__browse_current_project() { hub browse; }
 elif [ "${is_win}" ] ; then
 	# Note: hub使えばできるがgitlabもあるのでこうしている
-	function mybash__browse_by_ghq() { local t; t=$(ghq list | ${selector}) && (cd "${GHQ_ROOT}/${t}" && mybash__browse_current_project); }
-	function mybash__browse_current_project() { git remote -v | head -1 | cut -d" " -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start; }
+	mybash__browse_by_ghq() { local t; t=$(ghq list | ${selector}) && (cd "${GHQ_ROOT}/${t}" && mybash__browse_current_project); }
+	mybash__browse_current_project() { git remote -v | head -1 | cut -d" " -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start; }
 fi
 alias b='mybash__browse_by_ghq'
 alias B='mybash__browse_current_project'
 
-function mybash__cd_parent() {
+mybash__cd_parent() {
 	local to=${1:-1}
 	local toStr=""
 	for _ in $(seq 1 "${to}") ; do
@@ -150,12 +150,12 @@ function mybash__cd_parent() {
 }
 alias ..='mybash__cd_parent'
 
-function mybash__cdls() {
+mybash__cdls() {
 	command cd "$1"; # cdが循環しないようにcommand
 	ls --color=auto --show-control-chars
 }
 
-function mybash__select_cheat() {
+mybash__select_cheat() {
 	local tmp=${CHEATCOLORS}
 	unset CHEATCOLORS
 	local c
@@ -169,12 +169,12 @@ function mybash__select_cheat() {
 }
 alias c='mybash__select_cheat'
 
-function mybash__dir() { local t; t="$(mybash__find_dir "$@")"; [ -d "${t}" ] && cd "${t}"; }
-function mybash__dir_git_root() { cd "$(git rev-parse --show-toplevel)"; }
+mybash__dir() { local t; t="$(mybash__find_dir "$@")"; [ -d "${t}" ] && cd "${t}"; }
+mybash__dir_git_root() { cd "$(git rev-parse --show-toplevel)"; }
 # shellcheck disable=SC2015
-function mybash__dir_in_project() { mybash__dir_git_root && mybash__dir "$@" || cd -; }
-function mybash__dir_recent() { local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
-function mybash__dir_upper() { local t; t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
+mybash__dir_in_project() { mybash__dir_git_root && mybash__dir "$@" || cd -; }
+mybash__dir_recent() { local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}"; }
+mybash__dir_upper() { local t; t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}"; }
 alias d='mybash__dir -maxdepth 1'
 alias D='mybash__dir'
 alias dg='mybash__dir_git_root'
@@ -186,53 +186,53 @@ alias d.='mybash__dir_upper'
 [ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 [ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
-function mybash__explorer() {
+mybash__explorer() {
 	if [ -n "$2" ] ; then
 		"${opener}" "$(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)"
 	else
 		mybash__find_dir -maxdepth "$1" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
 	fi
 }
-function mybash__explorer_recent_dir() { sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}; }
-function mybash__explorer_in_project() { (mybash__dir_git_root; mybash__explorer 1000); }
+mybash__explorer_recent_dir() { sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}; }
+mybash__explorer_in_project() { (mybash__dir_git_root; mybash__explorer 1000); }
 alias e='mybash__explorer 1'
 alias E='mybash__explorer 1000'
 alias ep='mybash__explorer_in_project'
 alias er='mybash__explorer_recent_dir'
 
-function mybash__select_function() { mybash__with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }
+mybash__select_function() { mybash__with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }
 alias fun='mybash__select_function'
 
-function mybash__file() { mybash__find_selector "$@" | xargs -rI{} tmux send-keys " "{} C-a; }
-function mybash__file_in_project() { (mybash__dir_git_root; mybash__file "$@"); }
-function mybash__file_recent() { ${selector} < ~/.cache/ctrlp/mru/cache.txt | xargs -rI{} tmux send-keys " "{} C-a; }
+mybash__file() { mybash__find_selector "$@" | xargs -rI{} tmux send-keys " "{} C-a; }
+mybash__file_in_project() { (mybash__dir_git_root; mybash__file "$@"); }
+mybash__file_recent() { ${selector} < ~/.cache/ctrlp/mru/cache.txt | xargs -rI{} tmux send-keys " "{} C-a; }
 alias f='mybash__file -maxdepth 1'
 alias F='mybash__file'
 alias fp='mybash__file_in_project'
 alias fr='mybash__file_recent'
 
 [ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-function mybash__ghq_cd() { local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) && mybash__with_history "cd ${t}"; } # Note deprecate `ghq list` because slow in msys2
-function mybash__ghq_update() { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
-function mybash__ghq_status() { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
+mybash__ghq_cd() { local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) && mybash__with_history "cd ${t}"; } # Note deprecate `ghq list` because slow in msys2
+mybash__ghq_update() { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
+mybash__ghq_status() { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
 alias gh='mybash__ghq_cd'
 alias ghu='mybash__ghq_update'
 alias ghs='mybash__ghq_status'
 
-function mybash__grep() { local t; t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}')); [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}"; }
+mybash__grep() { local t; t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}')); [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}"; }
 # shellcheck disable=SC2046
-function mybash__grep_recent() { mybash__grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null; }
+mybash__grep_recent() { mybash__grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null; }
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias g='mybash__grep "grep"'
 alias gr='mybash__grep_recent'
 
-function mybash__git_ls_files() { git ls-files "${@}" | ${selector} | xargs -rI{} tmux send-keys " "{} C-a; }
-function mybash__git_branch() { git branch -a | ${selector} | tr -d ' ' | tr -d '*' | xargs -rI{} tmux send-keys " "{} C-a; }
+mybash__git_ls_files() { git ls-files "${@}" | ${selector} | xargs -rI{} tmux send-keys " "{} C-a; }
+mybash__git_branch() { git branch -a | ${selector} | tr -d ' ' | tr -d '*' | xargs -rI{} tmux send-keys " "{} C-a; }
 alias gig='mybash__grep "git grep"'
 alias gil='mybash__git_ls_files'
 alias gib='mybash__git_branch'
 
-function mybash__history() {
+mybash__history() {
 	local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
 	HISTTIMEFORMAT=
 	history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | ${selector} | xargs -rI{} tmux send-keys {}
@@ -240,7 +240,7 @@ function mybash__history() {
 }
 alias h='mybash__history'
 
-function mybash__man_japanese() {
+mybash__man_japanese() {
 	LANG_ESCAPE=$LANG
 	LANG=ja_JP.UTF-8
 	man "$*"
@@ -257,36 +257,36 @@ if [ "${is_win}" ] ; then
 	alias ll='ls -l --color=auto --show-control-chars'
 fi
 log_dir="${HOME}/.tmux/log"
-function mybash__log_open() { local l; l=$(mybash__find_selector_reverse "${log_dir}"/* -printf "%f\n") && ${vim} "${log_dir}/${l}"; }
-function mybash__log_cd_dir() { cd "${log_dir}"; }
-function mybash__log_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":LogGrep ${a}"; }
+mybash__log_open() { local l; l=$(mybash__find_selector_reverse "${log_dir}"/* -printf "%f\n") && ${vim} "${log_dir}/${l}"; }
+mybash__log_cd_dir() { cd "${log_dir}"; }
+mybash__log_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":LogGrep ${a}"; }
 alias l='mybash__log_open'
 alias ld='mybash__log_cd_dir'
 alias lg='mybash__log_grep'
 
 memo_dir="${HOME}/memo"
-function mybash__memo_new() { ${vim} -c ":MemoNew $*"; }
-function mybash__memo_list() { local l; l=$(mybash__find_selector "${memo_dir}/"*) && ${vim} "${l}"; }
-function mybash__memo_cd_dir() { cd "${memo_dir}"; }
-function mybash__memo_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":MemoGrep ${a}"; }
+mybash__memo_new() { ${vim} -c ":MemoNew $*"; }
+mybash__memo_list() { local l; l=$(mybash__find_selector "${memo_dir}/"*) && ${vim} "${l}"; }
+mybash__memo_cd_dir() { cd "${memo_dir}"; }
+mybash__memo_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":MemoGrep ${a}"; }
 alias M='mybash__memo_new'
 alias m='mybash__memo_list'
 alias md='mybash__memo_cd_dir'
 alias mg='mybash__memo_grep'
 
 note_dir="${HOME}/Documents/notes"
-function mybash__note_new() { ${vim} -c ":NoteNew $*"; }
-function mybash__note_list() { local l; l=$(mybash__find_selector_reverse "${note_dir}/"*) && ${vim} "${l}"; }
-function mybash__note_cd_dir() { cd "${note_dir}"; }
-function mybash__note_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":NoteGrep ${a}"; }
+mybash__note_new() { ${vim} -c ":NoteNew $*"; }
+mybash__note_list() { local l; l=$(mybash__find_selector_reverse "${note_dir}/"*) && ${vim} "${l}"; }
+mybash__note_cd_dir() { cd "${note_dir}"; }
+mybash__note_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":NoteGrep ${a}"; }
 alias N='mybash__note_new'
 alias n='mybash__note_list'
 alias nd='mybash__note_cd_dir'
 alias ng='mybash__note_grep'
 
-function mybash__open() { mybash__find_selector "$@" | xargs -r "${opener}"; }
-function mybash__open_in_project() { (mybash__dir_git_root; mybash__open "$@"); }
-function mybash__open_recent_file() { sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}; }
+mybash__open() { mybash__find_selector "$@" | xargs -r "${opener}"; }
+mybash__open_in_project() { (mybash__dir_git_root; mybash__open "$@"); }
+mybash__open_recent_file() { sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}; }
 alias o='mybash__open -maxdepth 1'
 alias O='mybash__open'
 alias op='mybash__open_in_project'
@@ -299,7 +299,7 @@ alias R='mybash__vim_most_recent'
 
 # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
 # dirty..
-function mybash__ssh_by_config() {
+mybash__ssh_by_config() {
 	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
 	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
 	[ -z "${t}" ] && return
@@ -310,7 +310,7 @@ function mybash__ssh_by_config() {
 		mybash__with_history "ssh ${t}"
 	fi
 }
-function mybash__ssh_by_hosts() {
+mybash__ssh_by_hosts() {
 	local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
 	local configfile
 	type _ssh_configfile > /dev/null 2>&1 && _ssh_configfile # Note:completionのバージョンによって関数名が違うっポイ
@@ -322,11 +322,11 @@ function mybash__ssh_by_hosts() {
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
-function mybash__todo_add() { todo.sh add "$*"; }
-function mybash__todo_open() { local t; t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1) && todo.sh note "${t}"; }
-function mybash__todo_cd_dir() { cd ~/Documents/todo/; }
-function mybash__todo_do() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh" "do"; }
-function mybash__todo_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":TodoGrep ${a}"; }
+mybash__todo_add() { todo.sh add "$*"; }
+mybash__todo_open() { local t; t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1) && todo.sh note "${t}"; }
+mybash__todo_cd_dir() { cd ~/Documents/todo/; }
+mybash__todo_do() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh" "do"; }
+mybash__todo_grep() { local a; if [ $# -eq 0 ] ; then read -p "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":TodoGrep ${a}"; }
 alias todo='todo.sh'; complete -F _todo todo
 alias T='mybash__todo_add'
 alias t='mybash__todo_open'
@@ -337,10 +337,10 @@ alias tg='mybash__todo_grep'
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-function mybash__vim() { local t; t=$(mybash__find_selector "$@") && ${vim} "${t}"; }
-function mybash__vim_in_project() { (mybash__dir_git_root; mybash__vim "$@"); }
-function mybash__vim_recent() { local t; t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
-function mybash__vim_most_recent() { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
+mybash__vim() { local t; t=$(mybash__find_selector "$@") && ${vim} "${t}"; }
+mybash__vim_in_project() { (mybash__dir_git_root; mybash__vim "$@"); }
+mybash__vim_recent() { local t; t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
+mybash__vim_most_recent() { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
 alias v='mybash__vim -maxdepth 1'
 alias V='mybash__vim'
 alias vp='mybash__vim_in_project'

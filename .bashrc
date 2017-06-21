@@ -46,7 +46,7 @@ export GHG_ROOT="${HOME}/.ghg"
 export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
-export LESS='-R'
+export LESS='-R -x2'
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 if [ "${is_win}" ] ; then

@@ -990,6 +990,7 @@ augroup vimrc
   autocmd FileType markdown
         \   setlocal spell tabstop=4 shiftwidth=4 cinkeys=''
         \ | command! -buffer FixTextlint :call system("textlint --fix " . expand("%")) <BAR> :edit!
+  autocmd FileType sh setlocal noexpandtab
   " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
   autocmd FileType xml
         \   setlocal foldmethod=syntax foldlevel=99

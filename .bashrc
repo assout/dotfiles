@@ -297,18 +297,22 @@ alias or='mybash__open_recent_file'
 alias r='mybash__vim_recent'
 alias R='mybash__vim_most_recent'
 
-# Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-# dirty..
-mybash__ssh_by_config() {
-	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
-	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
-	[ -z "${t}" ] && return
+mybash__sshpass() {
+	local t; t=$1
 	local p; p=$(pcregrep -M "${t}\s[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g');
 	if [ -n "${p}" ] ; then
 		mybash__with_history "sshpass -p ${p} ssh ${t}"
 	else
 		mybash__with_history "ssh ${t}"
 	fi
+}
+# Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
+# dirty..
+mybash__ssh_by_config() {
+	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
+	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
+	[ -z "${t}" ] && return
+	mybash__sshpass "${t}"
 }
 mybash__ssh_by_hosts() {
 	local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
@@ -319,6 +323,7 @@ mybash__ssh_by_hosts() {
 
 	local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}) && mybash__with_history "ssh ${t}"
 }
+alias sshp='mybash__sshpass'
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 

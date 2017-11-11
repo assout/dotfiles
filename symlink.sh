@@ -28,6 +28,8 @@ ln -sf "${HERE}/lint/.prh.yml" ~/
 ln -sb "${HERE}/vim/.gvimrc" ~/
 ln -sb "${HERE}/vim/.vimrc" ~/
 ln -sb "${HERE}/vim/snippets" ~/.vim/
+ln -sf "${HERE}/intellij/.ideavimrc" ~/
+ln -sf "${HERE}/.config/" ~/
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.cheat" ~/
@@ -49,7 +51,6 @@ ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
 ln -sf "${HERE}/.remark.css" ~/
-ln -sf "${HERE}/intellij/.ideavimrc" ~/
 
 if [ "${is_win}" ] ; then
 	ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/

@@ -9,8 +9,7 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
 
     git clone https://github.com/assout/dotfiles
     cd dotfiles
-    ./symlink.sh
-
+    ./symlink.sh 
 ## Notes
 
 ### gitignore by gibo
@@ -26,5 +25,5 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
     Vim \
     Windows \
     JetBrains \
-    ; cat .gitignore.manual) > .gitignore
+    ; cat .gitignore.manual) > .config/git/ignore
 

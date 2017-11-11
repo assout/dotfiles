@@ -1,0 +1,194 @@
+
+-u /d/admin/.ghq/github.com/assout/dotfiles/vim/test/../../vim/.vimrc
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.000  000.000: --- VIM STARTING ---
+000.000  000.000: Allocated generic buffers
+000.000  000.000: locale set
+000.000  000.000: clipboard setup
+000.000  000.000: window checked
+002.000  002.000: inits 1
+002.000  000.000: parsing arguments
+002.000  000.000: expanding arguments
+002.000  000.000: shell init
+003.000  001.000: Termcap init
+003.000  000.000: inits 2
+003.000  000.000: init highlight
+008.000  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+008.000  002.000  001.000: sourcing /usr/share/vim/vim80/syntax/synload.vim
+025.001  016.001  016.001: sourcing /usr/share/vim/vim80/filetype.vim
+026.001  021.001  003.000: sourcing /usr/share/vim/vim80/syntax/syntax.vim
+027.001  000.000  000.000: sourcing /usr/share/vim/vim80/filetype.vim
+028.001  000.000  000.000: sourcing /usr/share/vim/vim80/ftplugin.vim
+029.002  000.000  000.000: sourcing /usr/share/vim/vim80/indent.vim
+029.002  025.002  004.001: sourcing /usr/share/vim/vim80/defaults.vim
+032.002  000.000  000.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+041.002  002.000  002.000: sourcing /d/admin/.vim/autoload/plug.vim
+055.003  002.000  002.000: sourcing /usr/share/vim/vim80/ftoff.vim
+057.003  000.000  000.000: sourcing /d/admin/.vim/plugged/plantuml-syntax/ftdetect/plantuml.vim
+059.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-log-syntax/ftdetect/log.vim
+060.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-json/ftdetect/json.vim
+061.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-go/ftdetect/gofiletype.vim
+063.003  000.000  000.000: sourcing /d/admin/.vim/plugged/todo.txt-vim/ftdetect/todo.vim
+065.004  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-markdown/ftdetect/markdown.vim
+067.004  000.000  000.000: sourcing /d/admin/.vim/plugged/aws-vim/ftdetect/aws.vim
+070.004  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-ltsv/ftdetect/ltsv.vim
+105.006  000.000  000.000: sourcing /d/admin/.vim/plugged/neosnippet.vim/ftdetect/neosnippet.vim
+109.006  021.001  021.001: sourcing /usr/share/vim/vim80/filetype.vim
+113.006  000.000  000.000: sourcing /usr/share/vim/vim80/ftplugin.vim
+118.007  000.000  000.000: sourcing /usr/share/vim/vim80/indent.vim
+127.007  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-submode/autoload/submode.vim
+148.008  001.000  001.000: sourcing /usr/share/vim/vim80/pack/dist/opt/matchit/plugin/matchit.vim
+148.008  003.000  002.000: sourcing /usr/share/vim/vim80/macros/matchit.vim
+157.009  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+162.009  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+164.009  012.000  010.000: sourcing /d/admin/.vim/plugged/vim-hybrid/colors/hybrid.vim
+164.009  160.009  095.006: sourcing /d/admin/.ghq/github.com/assout/dotfiles/vim/test/../../vim/.vimrc
+164.009  001.000: sourcing vimrc file(s)
+166.009  001.000  001.000: sourcing /d/admin/.vim/plugged/yankround.vim/plugin/yankround.vim
+167.009  000.000  000.000: sourcing /d/admin/.vim/plugged/neomru.vim/plugin/neomru.vim
+168.009  000.000  000.000: sourcing /d/admin/.vim/plugged/neosnippet.vim/plugin/neosnippet.vim
+171.010  000.000  000.000: sourcing /d/admin/.vim/plugged/ctrlp.vim/autoload/ctrlp/mrufiles.vim
+171.010  002.000  002.000: sourcing /d/admin/.vim/plugged/ctrlp.vim/plugin/ctrlp.vim
+173.010  000.000  000.000: sourcing /d/admin/.vim/plugged/ctrlp-memolist/plugin/ctrlp-memolist.vim
+174.010  000.000  000.000: sourcing /d/admin/.vim/plugged/ctrlp-codic/plugin/ctrlp-codic.vim
+175.010  000.000  000.000: sourcing /d/admin/.vim/plugged/ctrlp-locate/plugin/ctrlp-locate.vim
+176.010  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-parenmatch/plugin/parenmatch.vim
+177.010  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-edit-properties/plugin/edit-properties.vim
+178.010  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-emacs-bindings/plugin/emacs-bindings.vim
+183.010  004.000  004.000: sourcing /d/admin/.vim/plugged/tcomment_vim/plugin/tcomment.vim
+193.011  009.001  009.001: sourcing /d/admin/.vim/plugged/vim-fugitive/plugin/fugitive.vim
+198.011  004.000  004.000: sourcing /d/admin/.vim/plugged/gv.vim/plugin/gv.vim
+204.011  005.000  005.000: sourcing /d/admin/.vim/plugged/asyncrun.vim/plugin/asyncrun.vim
+206.012  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-speeddating/plugin/speeddating.vim
+209.012  002.000  002.000: sourcing /d/admin/.vim/plugged/vim-unimpaired/plugin/unimpaired.vim
+214.012  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-operator-user/autoload/operator/user.vim
+214.012  003.000  002.000: sourcing /d/admin/.vim/plugged/vim-operator-replace/plugin/operator/replace.vim
+215.012  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-operator-stay-cursor/plugin/operator/stay_cursor.vim
+217.012  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-operator-surround/plugin/operator/surround.vim
+218.012  000.000  000.000: sourcing /d/admin/.vim/plugged/operator-camelize.vim/plugin/operator/camelize.vim
+223.013  001.001  001.001: sourcing /d/admin/.vim/plugged/vim-textobj-user/autoload/textobj/user.vim
+239.013  019.001  018.000: sourcing /d/admin/.vim/plugged/vim-textobj-entire/plugin/textobj/entire.vim
+243.014  003.000  003.000: sourcing /d/admin/.vim/plugged/vim-textobj-function/plugin/textobj/function.vim
+247.014  003.000  003.000: sourcing /d/admin/.vim/plugged/vim-textobj-indent/plugin/textobj/indent.vim
+249.014  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-textobj-line/plugin/textobj/line.vim
+252.014  002.000  002.000: sourcing /d/admin/.vim/plugged/vim-textobj-url/plugin/textobj/url.vim
+255.014  002.000  002.000: sourcing /d/admin/.vim/plugged/vim-textobj-multiblock/plugin/textobj/multiblock.vim
+257.014  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-textobj-parameter/plugin/textobj/parameter.vim
+259.015  001.000  001.000: sourcing /d/admin/.vim/plugged/vim-textobj-between/plugin/textobj/between.vim
+262.015  002.000  002.000: sourcing /d/admin/.vim/plugged/vim-textobj-comment/plugin/textobj/comment.vim
+267.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/getscriptPlugin.vim
+268.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/gzip.vim
+269.015  001.000  001.000: sourcing /usr/share/vim/vim80/plugin/logiPat.vim
+269.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/manpager.vim
+270.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/matchparen.vim
+271.015  001.000  001.000: sourcing /usr/share/vim/vim80/plugin/netrwPlugin.vim
+272.015  001.000  001.000: sourcing /usr/share/vim/vim80/plugin/rrhelper.vim
+272.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/spellfile.vim
+273.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/tarPlugin.vim
+273.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/tohtml.vim
+274.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/vimballPlugin.vim
+274.015  000.000  000.000: sourcing /usr/share/vim/vim80/plugin/zipPlugin.vim
+276.016  000.000  000.000: sourcing /usr/share/vim/vim80/pack/dist/opt/matchit/plugin/matchit.vim
+276.016  042.005: loading plugins
+277.016  001.000: loading packages
+278.016  000.000  000.000: sourcing /d/admin/.vim/plugged/yankround.vim/after/plugin/yankround.vim
+278.016  001.000: loading after plugins
+278.016  000.000: inits 3
+279.016  001.000: reading viminfo
+279.016  000.000: setting raw mode
+279.016  000.000: start termcap
+285.016  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-parenmatch/autoload/parenmatch.vim
+285.016  006.000: opening buffers
+285.016  000.000: BufEnter autocommands
+285.016  000.000: editing files in windows
+290.016  001.000  001.000: sourcing /d/admin/.vim/plugged/neomru.vim/autoload/neomru.vim
+346.020  001.000  001.000: sourcing /d/admin/.vim/plugged/ctrlp.vim/autoload/ctrlp/utils.vim
+-u /d/admin/.ghq/github.com/assout/dotfiles/vim/test/../../vim/.vimrc --noplugin
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.000  000.000: --- VIM STARTING ---
+000.000  000.000: Allocated generic buffers
+000.000  000.000: locale set
+000.000  000.000: clipboard setup
+000.000  000.000: window checked
+003.000  003.000: inits 1
+003.000  000.000: parsing arguments
+003.000  000.000: expanding arguments
+003.000  000.000: shell init
+003.000  000.000: Termcap init
+003.000  000.000: inits 2
+004.000  001.000: init highlight
+008.000  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+009.000  003.000  002.000: sourcing /usr/share/vim/vim80/syntax/synload.vim
+026.001  016.001  016.001: sourcing /usr/share/vim/vim80/filetype.vim
+026.001  021.001  002.000: sourcing /usr/share/vim/vim80/syntax/syntax.vim
+027.001  000.000  000.000: sourcing /usr/share/vim/vim80/filetype.vim
+028.001  000.000  000.000: sourcing /usr/share/vim/vim80/ftplugin.vim
+029.001  000.000  000.000: sourcing /usr/share/vim/vim80/indent.vim
+030.001  025.001  004.000: sourcing /usr/share/vim/vim80/defaults.vim
+032.001  000.000  000.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+037.002  002.000  002.000: sourcing /d/admin/.vim/autoload/plug.vim
+048.002  001.000  001.000: sourcing /usr/share/vim/vim80/ftoff.vim
+050.002  000.000  000.000: sourcing /d/admin/.vim/plugged/plantuml-syntax/ftdetect/plantuml.vim
+052.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-log-syntax/ftdetect/log.vim
+053.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-json/ftdetect/json.vim
+055.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-go/ftdetect/gofiletype.vim
+056.003  000.000  000.000: sourcing /d/admin/.vim/plugged/todo.txt-vim/ftdetect/todo.vim
+058.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-markdown/ftdetect/markdown.vim
+061.003  000.000  000.000: sourcing /d/admin/.vim/plugged/aws-vim/ftdetect/aws.vim
+063.003  000.000  000.000: sourcing /d/admin/.vim/plugged/vim-ltsv/ftdetect/ltsv.vim
+098.005  000.000  000.000: sourcing /d/admin/.vim/plugged/neosnippet.vim/ftdetect/neosnippet.vim
+102.005  021.001  021.001: sourcing /usr/share/vim/vim80/filetype.vim
+106.006  000.000  000.000: sourcing /usr/share/vim/vim80/ftplugin.vim
+111.006  000.000  000.000: sourcing /usr/share/vim/vim80/indent.vim
+119.006  001.000  001.000: sourcing /usr/share/vim/vim80/pack/dist/opt/matchit/plugin/matchit.vim
+119.006  003.000  002.000: sourcing /usr/share/vim/vim80/macros/matchit.vim
+128.007  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+133.007  000.000  000.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+138.007  001.000  001.000: sourcing /usr/share/vim/vim80/syntax/syncolor.vim
+138.007  015.000  013.000: sourcing /usr/share/vim/vim80/colors/default.vim
+138.007  134.007  067.005: sourcing /d/admin/.ghq/github.com/assout/dotfiles/vim/test/../../vim/.vimrc
+138.007  000.000: sourcing vimrc file(s)
+138.007  000.000: inits 3
+139.007  001.000: reading viminfo
+139.007  000.000: setting raw mode
+139.007  000.000: start termcap
+143.008  004.001: opening buffers
+143.008  000.000: BufEnter autocommands
+143.008  000.000: editing files in windows
+-u NONE
+
+
+times in msec
+ clock   self+sourced   self:  sourced script
+ clock   elapsed:              other lines
+
+000.000  000.000: --- VIM STARTING ---
+000.000  000.000: Allocated generic buffers
+000.000  000.000: locale set
+000.000  000.000: clipboard setup
+000.000  000.000: window checked
+002.000  002.000: inits 1
+002.000  000.000: parsing arguments
+002.000  000.000: expanding arguments
+002.000  000.000: shell init
+003.000  001.000: Termcap init
+003.000  000.000: inits 2
+003.000  000.000: init highlight
+003.000  000.000: sourcing vimrc file(s)
+003.000  000.000: inits 3
+003.000  000.000: setting raw mode
+003.000  000.000: start termcap
+007.000  004.000: opening buffers
+007.000  000.000: BufEnter autocommands
+007.000  000.000: editing files in windows
+

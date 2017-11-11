@@ -100,7 +100,7 @@ nnoremap <C-w>q :bdelete<CR>
 nnoremap <C-w><C-h> <C-w>h
 nnoremap <C-w><C-j> <C-w>j
 
-" Insert mode mappings "
+" Insert mode mappings {{{
 " TODO: a,e,dが<Home><End><Del>が効かないのでworkaround.
 inoremap <C-a> <C-o>^
 inoremap <C-e> <C-o>$

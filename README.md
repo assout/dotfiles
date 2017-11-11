@@ -9,21 +9,21 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
 
     git clone https://github.com/assout/dotfiles
     cd dotfiles
-    ./symlink.sh 
+    ./symlink.sh
+
 ## Notes
 
 ### gitignore by gibo
 
     (gibo \
+    Eclipse \
     GitBook \
     Java \
+    JetBrains \
+    Linux \
     Maven \
     Node \
-    \
-    Eclipse \
-    Linux \
     Vim \
     Windows \
-    JetBrains \
     ; cat .gitignore.manual) > .config/git/ignore
 

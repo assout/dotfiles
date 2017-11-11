@@ -25,5 +25,6 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
     Linux \
     Vim \
     Windows \
+    JetBrains \
     ; cat .gitignore.manual) > .gitignore
 

@@ -49,6 +49,7 @@ ln -sf "${HERE}/.tmux.conf" ~/
 ln -sf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
 ln -sf "${HERE}/.remark.css" ~/
+ln -sf "${HERE}/intellij/.ideavimrc" ~/
 
 if [ "${is_win}" ] ; then
 	ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/

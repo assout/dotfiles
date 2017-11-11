@@ -29,7 +29,8 @@ ln -sb "${HERE}/vim/.gvimrc" ~/
 ln -sb "${HERE}/vim/.vimrc" ~/
 ln -sb "${HERE}/vim/snippets" ~/.vim/
 ln -sf "${HERE}/intellij/.ideavimrc" ~/
-ln -sf "${HERE}/.config/" ~/
+mkdir -p ~/.config
+ln -sf "${HERE}/.config/git/" ~/.config/git
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.cheat" ~/
@@ -43,7 +44,6 @@ elif [ "${is_office}" ] ; then
 	ln -sf "${HERE}/.gitconfig" /c/Users/admin/ # for npm
 	ln -sf "${HERE}/.gitconfig.office" /c/Users/admin/.gitconfig.env # for npm
 fi
-ln -sf "${HERE}/.gitignore" ~/
 ln -sf "${HERE}/.gitattributes" ~/
 ln -sf "${HERE}/.git_templates" ~/
 ln -sf "${HERE}/.inputrc" ~/

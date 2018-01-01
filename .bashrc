@@ -160,11 +160,11 @@ mybash__select_cheat() {
 	unset CHEATCOLORS
 	local c
 	if [ $# == 0 ] ; then
-		c=$(cheat -l | cut -d' ' -f1 | ${selector}) || return
+		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return
 	else
 		c=$1
 	fi
-	tmux send-keys "$(cheat "${c}" | ${selector} | sed -e "s/ \+#.*//")"
+	tmux send-keys "$(cheat show "${c}" | ${selector} | sed -e "s/ \+#.*//")"
 	export CHEATCOLORS=${tmp}
 }
 alias c='mybash__select_cheat'

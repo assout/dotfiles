@@ -39,7 +39,6 @@ HISTFILESIZE=10000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
-# export CHEATCOLORS=true # TODO lessとかに渡せなくなる
 [ "${is_unix}" ] && export EDITOR='vimx'
 [ "${is_win}" ]  && export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"
@@ -156,16 +155,13 @@ mybash__cdls() {
 }
 
 mybash__select_cheat() {
-	local tmp=${CHEATCOLORS}
-	unset CHEATCOLORS
 	local c
 	if [ $# == 0 ] ; then
 		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return
 	else
 		c=$1
 	fi
-	tmux send-keys "$(cheat show "${c}" | ${selector} | sed -e "s/ \+#.*//")"
-	export CHEATCOLORS=${tmp}
+	cheat show "${c}" | ${selector} | grep -oP "(?<=\().*(?=\))"  | xargs -i cheat show "${c}" --copy {}
 }
 alias c='mybash__select_cheat'
 

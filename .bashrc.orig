@@ -31,7 +31,6 @@ is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
 is_home=$(if [ "${USER}" =  oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
 is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
-is_gitbash=$(if [ "${MSYSTEM}" = MINGW32 ] ; then echo 0; fi)
 tools_dir="${HOME}/Tools"
 
 # History settings
@@ -40,6 +39,7 @@ HISTFILESIZE=10000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
+# export CHEATCOLORS=true # TODO lessとかに渡せなくなる
 [ "${is_unix}" ] && export EDITOR='vimx'
 [ "${is_win}" ]  && export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"
@@ -57,9 +57,30 @@ fi
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
 if [ "${is_win}" ] ; then
+<<<<<<< HEAD
+  PATH="${PATH}:${tools_dir}"
+  PATH="${PATH}:${tools_dir}/ansifilter-1.15"
+  PATH="${PATH}:${tools_dir}/apache-maven-3.3.9/bin"
+  PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
+  PATH="${PATH}:${tools_dir}/gron"
+  PATH="${PATH}:${tools_dir}/hub/bin"
+  PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+  PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
+  PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
+  PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
+  PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
+  PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
+  PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
+  PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
+  PATH="${PATH}:/c/Program Files/TortoiseSVN/bin"
+  PATH="${PATH}:/c/ProgramData/chocolatey/bin"
+  PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
+  PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
+  PATH="${PATH}:/usr/share/git/workdir"
+=======
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/ansifilter-1.15"
-	PATH="${PATH}:${tools_dir}/apache-maven-3.5.2/bin"
+	PATH="${PATH}:${tools_dir}/apache-maven-3.3.9/bin"
 	PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
 	PATH="${PATH}:${tools_dir}/gron"
 	PATH="${PATH}:${tools_dir}/hub/bin"
@@ -75,6 +96,7 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
 	PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
 	PATH="${PATH}:/usr/share/git/workdir"
+>>>>>>> 59fcc4c1829884bba861ea0b263e8d9a0f288ab9
 fi
 
 PATH=${PATH}:${GHG_ROOT}/bin
@@ -156,13 +178,16 @@ mybash__cdls() {
 }
 
 mybash__select_cheat() {
+	local tmp=${CHEATCOLORS}
+	unset CHEATCOLORS
 	local c
 	if [ $# == 0 ] ; then
-		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return
+		c=$(cheat -l | cut -d' ' -f1 | ${selector}) || return
 	else
 		c=$1
 	fi
-	cheat show "${c}" | ${selector} | grep -oP "(?<=\().*(?=\))"  | xargs -i cheat show "${c}" --copy {}
+	tmux send-keys "$(cheat "${c}" | ${selector} | sed -e "s/ \+#.*//")"
+	export CHEATCOLORS=${tmp}
 }
 alias c='mybash__select_cheat'
 
@@ -294,22 +319,18 @@ alias or='mybash__open_recent_file'
 alias r='mybash__vim_recent'
 alias R='mybash__vim_most_recent'
 
-mybash__sshpass() {
-	local t; t=$1
-	local p; p=$(pcregrep -M "${t}\s[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g');
-	if [ -n "${p}" ] ; then
-		mybash__with_history "sshpass -p ${p} ssh ${t}"
-	else
-		mybash__with_history "ssh ${t}"
-	fi
-}
 # Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
 # dirty..
 mybash__ssh_by_config() {
 	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
 	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
 	[ -z "${t}" ] && return
-	mybash__sshpass "${t}"
+	local p; p=$(pcregrep -M "${t}\s[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g');
+	if [ -n "${p}" ] ; then
+		mybash__with_history "sshpass -p ${p} ssh ${t}"
+	else
+		mybash__with_history "ssh ${t}"
+	fi
 }
 mybash__ssh_by_hosts() {
 	local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
@@ -320,7 +341,6 @@ mybash__ssh_by_hosts() {
 
 	local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}) && mybash__with_history "ssh ${t}"
 }
-alias sshp='mybash__sshpass'
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
@@ -361,9 +381,8 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
 	mkdir -p "${todayBackupPath}"
-	rm -f "${HOME}/Today"
 	ln -sfn "${todayBackupPath}" "${HOME}/Today"
-	[ "${is_win}" ] && rm -f "${HOME}/Desktop/Today"; ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
+	[ "${is_win}" ] && ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
 fi
 # }}}1
 
@@ -398,7 +417,7 @@ PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`_
 
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
-[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && [ ! "${is_gitbash}" ] && exec tmux
+[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
 # shellcheck disable=SC2016

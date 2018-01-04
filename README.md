@@ -16,14 +16,14 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
 ### gitignore by gibo
 
     (gibo \
+    Eclipse \
     GitBook \
     Java \
+    JetBrains \
+    Linux \
     Maven \
     Node \
-    \
-    Eclipse \
-    Linux \
     Vim \
     Windows \
-    ; cat .gitignore.manual) > .gitignore
+    ; cat .gitignore.manual) > .config/git/ignore
 

@@ -1,0 +1,8 @@
+{
+    "highlight": false,
+    "linewrap": 79,
+    "cheatdirs": [
+        "~/.cheatsheets"
+    ],
+    "editor": "vim"
+}

@@ -13,10 +13,14 @@ if [ "${is_win}" ] ; then
 	ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
 	ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.env"
 	ln -sb "${HERE}/eclipse/eclipse.ini.win" ~/Tools/eclipse-java-mars-2-win32-x86_64/eclipse/eclipse.ini
+	ln -sf "${HERE}/.cheatrc" ${USERPROFILE}/
+	ln -sf "${HERE}/.cheatsheets" ${USERPROFILE}/
 else
 	ln -sf "${HERE}/eclipse/.vrapperrc" ~/.vrapperrc
 	ln -sf "${HERE}/eclipse/.vrapperrc.linux" ~/.vrapperrc.env
 	# TODO eclipse.ini.linux
+	ln -sf "${HERE}/.cheatrc" ~/
+	ln -sf "${HERE}/.cheatsheets" ~/
 fi
 
 ln -sf "${HERE}/lint/.mdlrc" ~/
@@ -33,8 +37,6 @@ mkdir -p ~/.config
 ln -sf "${HERE}/.config/git/" ~/.config/git
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
-ln -sf "${HERE}/.cheatrc" ~/
-ln -sf "${HERE}/.cheatsheets" ~/
 ln -sf "${HERE}/.gitconfig" ~/
 if [ "${is_home}" ] && [ "${is_unix}" ] ; then
 	ln -sf "${HERE}/.gitconfig.home.linux" ~/.gitconfig.env
@@ -42,8 +44,8 @@ elif [ "${is_home}" ] && [ "${is_win}" ] ; then
 	ln -sf "${HERE}/.gitconfig.home.win" ~/.gitconfig.env
 elif [ "${is_office}" ] ; then
 	ln -sf "${HERE}/.gitconfig.office" ~/.gitconfig.env
-	ln -sf "${HERE}/.gitconfig" /c/Users/admin/ # for npm
-	ln -sf "${HERE}/.gitconfig.office" /c/Users/admin/.gitconfig.env # for npm
+	ln -sf "${HERE}/.gitconfig" ${USERPROFILE} # for npm
+	ln -sf "${HERE}/.gitconfig.office" ${USERPROFILE}/.gitconfig.env # for npm
 fi
 ln -sf "${HERE}/.gitattributes" ~/
 ln -sf "${HERE}/.git_templates" ~/

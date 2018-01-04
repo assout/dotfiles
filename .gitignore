@@ -193,6 +193,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# IDEA
+.idea
+*.iml
 
 # Manually add
 

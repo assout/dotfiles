@@ -1,26 +1,26 @@
 [init]
-  templatedir = ~/.git_templates/
+	templatedir = ~/.git_templates/
 [push]
-  default = simple
+	default = simple
 [core]
-  excludesfile = ~/.gitignore
-  quotepath = false
-  attributesfile = ~/.gitattributes
-  filemode = false # TODO `.gitconifg.officeには指定してるんだけど、各リポジトリごとのデフォルトがtrueになってしまう。もしかしてこのファイル上での設定が使われるかもなんで設定してみる。
+	excludesfile = ~/.gitignore
+	quotepath = false
+	attributesfile = ~/.gitattributes
+	filemode = false # TODO `.gitconifg.officeには指定してるんだけど、各リポジトリごとのデフォルトがtrueになってしまう。もしかしてこのファイル上での設定が使われるかもなんで設定してみる。
 [alias]
-  graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  wip = !git add -A && (echo WIP: && git diff --cached --no-ext-diff --stat) | git commit -F -
-  undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+	graph  = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	wip = !git add -A && (echo WIP: && git diff --cached --no-ext-diff --stat) | git commit -F -
+	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [color]
-  ui = true # 古いバージョンの場合defaultでないため
+	ui = true # 古いバージョンの場合defaultでないため
 [include]
-  path = .gitconfig.env
+	path = .gitconfig.env
 [hub]
-  protocol = https
+	protocol = https
 [user "git@github.com"] # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
-  name = assout
-  email = assout@users.noreply.github.com
+	name = assout
+	email = assout@users.noreply.github.com
 [user "https://github.com"] # Refs: <http://klabgames.tech.blog.jp.klab.com/archives/1033121546.html>
-  name = assout
-  email = assout@users.noreply.github.com
+	name = assout
+	email = assout@users.noreply.github.com
 

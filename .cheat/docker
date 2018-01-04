@@ -1,6 +1,5 @@
 # Start docker daemon
 docker -d
-
 # start a container with an interactive shell
 docker run -ti <image_name> /bin/bash
 
@@ -41,6 +40,9 @@ docker rm $(docker ps -a -q)
 docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)
 # todo
 docker rmi $(docker images -q)
-
+# <none>なイメージをすべて削除
+docker image rm $(docker image ls  --filter "dangling=true" -aq)
 # デタッチ
 [control-P] [control-Q]
+
+

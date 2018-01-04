@@ -31,6 +31,7 @@ is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
 is_home=$(if [ "${USER}" =  oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
 is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
+is_gitbash=$(if [ "${MSYSTEM}" = MINGW32 ] ; then echo 0; fi)
 tools_dir="${HOME}/Tools"
 
 # History settings
@@ -59,7 +60,7 @@ fi
 if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/ansifilter-1.15"
-	PATH="${PATH}:${tools_dir}/apache-maven-3.3.9/bin"
+	PATH="${PATH}:${tools_dir}/apache-maven-3.5.2/bin"
 	PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
 	PATH="${PATH}:${tools_dir}/gron"
 	PATH="${PATH}:${tools_dir}/hub/bin"
@@ -364,8 +365,9 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
 if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
 	mkdir -p "${todayBackupPath}"
+	rm -f "${HOME}/Today"
 	ln -sfn "${todayBackupPath}" "${HOME}/Today"
-	[ "${is_win}" ] && ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
+	[ "${is_win}" ] && rm -f "${HOME}/Desktop/Today"; ln -sfn "${todayBackupPath}" "${HOME}/Desktop/Today"
 fi
 # }}}1
 
@@ -400,7 +402,7 @@ PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`_
 
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
-[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
+[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && [ ! "${is_gitbash}" ] && exec tmux
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
 # shellcheck disable=SC2016

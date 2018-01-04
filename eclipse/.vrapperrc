@@ -143,6 +143,7 @@ nnoremap - <C-x>
 :AddCycleGroup hoge piyo fuga hogera hogehoge moge hage
 :AddCycleGroup public protected private
 :AddCycleGroup Sun Mon Tue Wed Thu Fri Sut
+:AddCycleGroup on off
 
 " Surround.vim
 nnoremap sa ys

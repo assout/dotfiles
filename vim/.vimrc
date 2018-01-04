@@ -326,7 +326,7 @@ Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'kaneshin/ctrlp-memolist'
       \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
-Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
+" Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
@@ -978,6 +978,7 @@ augroup vimrc
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c formatoptions-=t
+  autocmd FileType gitconfig setlocal noexpandtab
   autocmd FileType go setlocal noexpandtab
   autocmd FileType hybrid setlocal noexpandtab
   autocmd FileType java setlocal noexpandtab

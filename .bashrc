@@ -209,6 +209,7 @@ mybash__explorer_recent_dir() { sed -n 2,\$p ~/.cache/neomru/directory | ${selec
 mybash__explorer_in_project() { (mybash__dir_git_root; mybash__explorer 1000); }
 alias e='mybash__explorer 1'
 alias E='mybash__explorer 1000'
+
 alias ep='mybash__explorer_in_project'
 alias er='mybash__explorer_recent_dir'
 

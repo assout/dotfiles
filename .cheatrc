@@ -1,5 +1,5 @@
 {
-    "highlight": false,
+    "highlight": true,
     "linewrap": 79,
     "cheatdirs": [
         "~/.cheatsheets"

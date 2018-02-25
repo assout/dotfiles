@@ -85,7 +85,7 @@ vk1Csc079:: ;変換キー単独 = IMEオン
 
 ; ref. [クリップボードと選択範囲を見て文字列を一括入力するAutoHotkeyスクリプトの書き方 - 情報科学屋さんを目指す人のメモ（FC2ブログ版）](http://did2.blog64.fc2.com/blog-entry-422.html)
 #IfWInActive, ahk_group Chrome
-^e::
+!e::
   cb_bk = %ClipboardAll%
   Clipboard =
   Send, ^c

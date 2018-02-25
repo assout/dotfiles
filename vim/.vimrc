@@ -208,6 +208,7 @@ set nowrapscan
 " Plugin prefix mappings {{{
 map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
+map  <SID>[plugin]A <SID>[ale]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
 map  <SID>[plugin]h <SID>[markdown_h]
@@ -222,8 +223,6 @@ nmap <SID>[plugin]q <SID>[quickrun]
 map  <SID>[plugin]r <SID>[replace]
 map  <SID>[plugin]R <SID>[Replace]
 map  <SID>[plugin]t <SID>[todo]
-nmap <SID>[plugin]w <SID>[watchdogs]
-nmap <SID>[plugin]W <SID>[Watchdogs]
 nmap <SID>[plugin]/ <SID>[migemo]
 " TODO: <SID>つけれない(つけないで[subP]とすると"[s"と入力した時にキー入力待ちが発生してしまう)
 nmap <SID>[plugin][ <subP>
@@ -290,6 +289,9 @@ nmap           +          <SID>[switch]
 nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない
 nnoremap       <C-m>      i<CR><Esc>
+" Note: <C-;>は無理らしい
+nmap           <A-;>      <Plug>(fontzoom-larger)
+nmap           <A-->      <Plug>(fontzoom-smaller)
 
 " }}}
 
@@ -326,7 +328,7 @@ Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'kaneshin/ctrlp-memolist'
       \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
-" Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
+Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
@@ -367,13 +369,10 @@ Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうま�
 Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
 Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
 Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
+Plug 'thinca/vim-fontzoom', g:is_win_gui ? {} : {'on' : []}
 Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
 Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
-Plug 'thinca/vim-quickrun', {'on' : ['QuickRun', 'WatchdogsRun']}
-      \ | Plug 'osyo-manga/shabadou.vim', {'on' : ['QuickRun', 'WatchdogsRun']}
-      \ | Plug 'dannyob/quickfixstatus', {'on' : ['QuickRun', 'WatchdogsRun']}
-      \ | Plug 'KazuakiM/vim-qfsigns', {'on' : ['QuickRun', 'WatchdogsRun']}
-      \ | Plug 'osyo-manga/vim-watchdogs', {'on' : ['QuickRun', 'WatchdogsRun']}
+Plug 'thinca/vim-quickrun', {'on' : ['QuickRun']}
 Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
       \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
 Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
@@ -394,6 +393,7 @@ Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
 Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
+Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint']}
 " Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
@@ -430,6 +430,13 @@ Plug 'kana/vim-textobj-user'
 Plug 'w0ng/vim-hybrid'
 " }}}
 call g:plug#end()
+
+if s:HasPlugin('ale') " {{{
+  let g:ale_sign_column_always = 1
+  let g:ale_lint_on_text_changed = 'never'
+  nnoremap <SID>[ale] :<C-u>ALELint<CR>
+  autocmd vimrc User ALELintPost :unsilent echo "Lint done!"
+endif " }}}
 
 if s:HasPlugin('asyncrun.vim') " {{{
   command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
@@ -675,6 +682,7 @@ if s:HasPlugin('vim-gf-user') " {{{
     return { 'path': l:path, 'line': l:line, 'col': 0, }
   endfunction
   autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
+  autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
 endif " }}}
 
 if s:HasPlugin('vim-json') " {{{
@@ -917,50 +925,14 @@ if s:HasPlugin('vim-textobj-parameter') " {{{
   xmap aa <Plug>(textobj-parameter-a)
 endif " }}}
 
-if s:HasPlugin('vim-watchdogs') " {{{
-  " TODO: msys2からgvim開くとチェック時エラーはく(新規にgvim開いたときだけっぽい)(パスの解釈が変になってるぽい)
-  " TODO: 再実行前のQuickfixStatusが残ってしまう
-  nnoremap <SID>[watchdogs] :<C-u>WatchdogsRun<CR>
-  nnoremap <SID>[Watchdogs] :<C-u>WatchdogsRun watchdogs_checker/
-  command! WatchdogsDisable execute ':QuickfixStatusDisable' | execute 'QfsignsClear'
-
-  " TODO: quickfix開くとhookが動かない。暫定で開かないようにしている " TODO: xmllint
-  let g:quickrun_config['watchdogs_checker/_'] = {
-        \  'outputter/quickfix/open_cmd' : '',
-        \  'runner' : 'job',
-        \  'hook/echo/enable' : 1,
-        \  'hook/echo/output_success' : 'No Errors Found.',
-        \  'hook/echo/output_failure' : 'Errors Found!',
-        \  'hook/qfsigns_update/enable_exit': 1,
-        \}
-  " Note: 画面が小さいときにエラー出ると"Press Enter ..."が表示されうざいのでWorkaroundする
-  let g:quickrun_config['watchdogs_checker/_']['hook/quickfix_status_enable/enable_exit'] = has('gui_running') ? 1 : 0
-  let g:quickrun_config['sh/watchdogs_checker'] = { 'type' : 'watchdogs_checker/shellcheck' }
-  let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/mdl' }
-  " let g:quickrun_config['markdown/watchdogs_checker'] = { 'type' : 'watchdogs_checker/textlint' }
-  let g:quickrun_config['watchdogs_checker/eslint'] = {'command' : 'eslint_d' }
-
-  if g:is_win_gui
-    let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
-    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'cmd /c "chcp.com 65001 | %c %o %s:p"'}
-  elseif g:is_win_cui
-    let g:quickrun_config['watchdogs_checker/shellcheck'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
-    let g:quickrun_config['watchdogs_checker/mdl'] = {'exec' : 'chcp.com 65001 | %c %o %s:p'}
-  endif
-
-  autocmd vimrc User vim-watchdogs call g:watchdogs#setup(g:quickrun_config)
-endif " }}}
-" }}}1
-
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
-  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. watchdogs, syntastic)
+  " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. syntastic)
   " Note: fugitive, AsyncRunの時にフォーカスが奪われるので暫定でwincmd pして戻してる
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | wincmd p | endif
   autocmd QuickfixCmdPost l*    nested if len(getloclist(0)) != 0 | lopen | wincmd p | endif
-  " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、watchdogs, syntasticの結果表示時には呼ばれないため別で設定)
-  " TODO: quickfix表示されたままwatchdogs再実行するとnomodifiableのままとなることがある
+  " QuickFix内<CR>で選択できるようにする(上記QuickfixCmdPostでも設定できるが、syntasticの結果表示時には呼ばれないため別で設定)
   autocmd BufReadPost quickfix,loclist setlocal modifiable nowrap | nnoremap <silent><buffer>q :quit<CR>
   autocmd BufWritePre * let &backupext = '.' . strftime("%Y%m%d_%H%M%S")
   " Set freemaker filetype
@@ -993,7 +965,7 @@ augroup vimrc
         \ | command! -buffer FixTextlint :call system("textlint --fix " . expand("%")) <BAR> :edit!
   autocmd FileType sh setlocal noexpandtab
   " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
-  autocmd FileType xml
+  autocmd FileType xml,ant
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta

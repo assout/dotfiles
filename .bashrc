@@ -8,6 +8,9 @@
 
 # [Begin] {{{1
 
+is_gitbash=$(if [ "${GIT_BASH}" = 1 ] ; then echo 0; fi)
+[ "${is_gitbash}" ] && return 
+
 # Start profile
 is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
@@ -31,7 +34,6 @@ is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_win=$(if [ "${OSTYPE}" = msys ] ; then echo 0 ; fi)
 is_home=$(if [ "${USER}" =  oji ] || [ "${USERNAME}" = porinsan ] ; then echo 0 ; fi)
 is_office=$(if [ "${USERNAME}" = admin ] ; then echo 0 ; fi)
-is_gitbash=$(if [ "${MSYSTEM}" = MINGW32 ] ; then echo 0; fi)
 tools_dir="${HOME}/Tools"
 
 # History settings
@@ -59,7 +61,9 @@ fi
 if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/ansifilter-1.15"
+	PATH="${PATH}:${tools_dir}/apache-ant-1.7.0-bin/apache-ant-1.7.0/bin"
 	PATH="${PATH}:${tools_dir}/apache-maven-3.5.2/bin"
+	PATH="${PATH}:${tools_dir}/ghg_v0.1.2_windows_amd64"
 	PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
 	PATH="${PATH}:${tools_dir}/gron"
 	PATH="${PATH}:${tools_dir}/hub/bin"
@@ -71,10 +75,13 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
 	PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
 	PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
+	PATH="${PATH}:/c/Program Files/TortoiseSVN/bin"
 	PATH="${PATH}:/c/ProgramData/chocolatey/bin"
 	PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
+	PATH="${PATH}:/c/Users/admin/AppData/Roaming/cabal/bin"
 	PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
 	PATH="${PATH}:/usr/share/git/workdir"
+	# PATH="/c/Program Files/Git/mingw64/bin:${PATH}"
 fi
 
 PATH=${PATH}:${GHG_ROOT}/bin
@@ -84,7 +91,6 @@ PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
 PATH=${PATH}:${GOPATH}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:/usr/local/go/bin
-
 export PATH
 
 # }}}1
@@ -162,7 +168,7 @@ mybash__select_cheat() {
 	else
 		c=$1
 	fi
-	cheat show "${c}" | ${selector} | grep -oP "(?<=\().*(?=\))"  | xargs -i cheat show "${c}" --copy {}
+	cheat show "${c}" | ${selector} | grep -oP "(?<=\().*?(?=\))"  | xargs -i cheat show "${c}" --copy {}
 }
 alias c='mybash__select_cheat'
 
@@ -384,21 +390,32 @@ if [ "${is_unix}" ] ; then
 	# Note: デフォルトで読まれるがhubの補完有効にするために必要
 	source /usr/share/bash-completion/completions/git
 	source /etc/bash_completion.d/hub.bash_completion.sh
+
+	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 elif [ "${is_win}" ] ; then
 	source /usr/share/git/completion/git-prompt.sh
 	source /usr/share/git/completion/git-completion.bash
 
+	# TODO slow
+	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
+
+	# TODO slow
+	# fast_git_ps1() {
+	# 	printf -- "$(git branch 2>/dev/null | sed -ne '/^\* / s/^\* \(.*\)/ [\1] / p')"
+	# }
+	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`fast_git_ps1`'"\[\e[0m\]\n\$ "
+
 	todo_completion_path="${tools_dir}/todo.txt_cli-2.10/todo_completion"
 	[ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
+
+	[ -z "${TMUX}" ] && chcp.com 65001 # for shellcheck
 fi
 
 source "${GHQ_ROOT}/github.com/chrisallenlane/cheat/cheat/autocompletion/cheat.bash"
 
-PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
-[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && [ ! "${is_gitbash}" ] && exec tmux
+[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
 # shellcheck disable=SC2016

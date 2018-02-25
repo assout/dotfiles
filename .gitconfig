@@ -23,3 +23,7 @@
 	name = assout
 	email = assout@users.noreply.github.com
 
+[merge]
+	tool = vimdiff
+[credential]
+	helper = store

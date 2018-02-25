@@ -282,7 +282,7 @@ alias lg='mybash__log_grep'
 
 memo_dir="${HOME}/memo"
 mybash__memo_new() { ${vim} -c ":MemoNew $*"; }
-mybash__memo_list() { local l; l=$(mybash__find_selector "${memo_dir}/"*) && ${vim} "${l}"; }
+mybash__memo_list() { local l; l=$(echo "${memo_dir}/"* | mybash__find_selector) && ${vim} "${l}"; }
 mybash__memo_cd_dir() { cd "${memo_dir}" || return 1; }
 mybash__memo_grep() { local a; if [ $# -eq 0 ] ; then read -rp "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":MemoGrep ${a}"; }
 alias M='mybash__memo_new'
@@ -300,7 +300,7 @@ alias n='mybash__note_list'
 alias nd='mybash__note_cd_dir'
 alias ng='mybash__note_grep'
 
-mybash__open() { mybash__find_selector "$@" | xargs -r "${opener}"; }
+mybash__open() { echo "$@" | mybash__find_selector | xargs -r "${opener}"; }
 mybash__open_in_project() { (mybash__dir_git_root; mybash__open "$@"); }
 mybash__open_recent_file() { sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}; }
 alias o='mybash__open -maxdepth 1'

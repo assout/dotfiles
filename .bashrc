@@ -210,6 +210,7 @@ mybash__explorer_in_project() { (mybash__dir_git_root; mybash__explorer 1000); }
 alias e='mybash__explorer 1'
 alias E='mybash__explorer 1000'
 alias ep='mybash__explorer_in_project'
+
 alias er='mybash__explorer_recent_dir'
 
 mybash__select_function() { mybash__with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }

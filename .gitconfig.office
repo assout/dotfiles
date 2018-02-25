@@ -1,6 +1,7 @@
 [core]
 	filemode = false
 	fscache = true
+	autocrlf = false
 [gc]
 	auto = 256
 [ghq]

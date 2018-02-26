@@ -208,13 +208,11 @@ set nowrapscan
 " Plugin prefix mappings {{{
 map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
-map  <SID>[plugin]A <SID>[ale]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
 map  <SID>[plugin]h <SID>[markdown_h]
-nmap <SID>[plugin]H <SID>[markdown_H]
 map  <SID>[plugin]l <SID>[markdown_l]
-nmap <SID>[plugin]L <SID>[markdown_L]
+nmap <SID>[plugin]L <SID>[ale-lint]
 nmap <SID>[plugin]m <SID>[memolist]
 map  <SID>[plugin]o <SID>[open-browser]
 map  <SID>[plugin]O <SID>[Open-browser]
@@ -434,7 +432,7 @@ call g:plug#end()
 if s:HasPlugin('ale') " {{{
   let g:ale_sign_column_always = 1
   let g:ale_lint_on_text_changed = 'never'
-  nnoremap <SID>[ale] :<C-u>ALELint<CR>
+  nnoremap <SID>[ale-lint] :<C-u>ALELint<CR>
   autocmd vimrc User ALELintPost :unsilent echo "Lint done!"
 endif " }}}
 

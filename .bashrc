@@ -177,7 +177,7 @@ mybash__select_cheat() {
 	else
 		c=$1
 	fi
-	cheat show "${c}" | ${selector} | grep -oP "(?<=\().*?(?=\))"  | xargs -i cheat show "${c}" --copy {}
+	cheat show "${c}" | ${selector} | while read -r stdin; do echo "${stdin#* }"; done | mybash__clipborad
 }
 alias c='mybash__select_cheat'
 

@@ -1,5 +1,5 @@
 [core]
-	filemode = false
+	filemode = false # TODO: なぜかリポジトリごとのgitconfigでtrueになってることがある
 	fscache = true
 	autocrlf = false
 [gc]

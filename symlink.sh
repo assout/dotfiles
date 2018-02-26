@@ -13,8 +13,8 @@ if [ "${is_win}" ] ; then
 	ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
 	ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.env"
 	ln -sb "${HERE}/eclipse/eclipse.ini.win" ~/Tools/eclipse-java-mars-2-win32-x86_64/eclipse/eclipse.ini
-	ln -sf "${HERE}/.cheatrc" ${USERPROFILE}/
-	ln -sf "${HERE}/.cheatsheets" ${USERPROFILE}/
+	ln -sf "${HERE}/.cheatrc" "${USERPROFILE}"/
+	ln -sf "${HERE}/.cheatsheets" "${USERPROFILE}"/
 else
 	ln -sf "${HERE}/eclipse/.vrapperrc" ~/.vrapperrc
 	ln -sf "${HERE}/eclipse/.vrapperrc.linux" ~/.vrapperrc.env

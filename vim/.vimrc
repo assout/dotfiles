@@ -654,6 +654,29 @@ endif " }}}
 if s:HasPlugin('vim-easy-align') " {{{
   xmap <SID>[align] <Plug>(LiveEasyAlign)*
   nmap <SID>[align] <Plug>(LiveEasyAlign)<Plug>(textobj-indent-i)*
+
+  let g:easy_align_delimiters = {
+        \ '-': { 'pattern': '-' },
+        \ '>': { 'pattern': '>>\|=>\|>' },
+        \ '/': {
+        \     'pattern':         '//\+\|/\*\|\*/',
+        \     'delimiter_align': 'l',
+        \     'ignore_groups':   ['!Comment'] },
+        \ ']': {
+        \     'pattern':       '[[\]]',
+        \   },
+        \ ')': {
+        \     'pattern':       '[()]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ 'd': {
+        \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+        \     'left_margin':  0,
+        \     'right_margin': 0
+        \   }
+        \ }
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{

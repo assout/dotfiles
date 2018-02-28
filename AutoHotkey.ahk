@@ -106,3 +106,6 @@ vk1Csc079:: ;変換キー単独 = IMEオン
   }
   Return
 
+; #IfWInActive, ahk_group Terminal
+; ^s&]::Send, +insert
+  

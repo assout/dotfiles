@@ -125,9 +125,17 @@ mybash__with_history() {
 	${a}
 }
 
+mybash__git_lsfiles_seclect() {
+	git ls-files | ${selector}
+}
+
 mybash__find() {
-	# shellcheck disable=SC2046
-	find -L $(cat -) -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
+	if [ -z "$(git rev-parse --git-dir 2> /dev/null)" ] ; then
+		# shellcheck disable=SC2046
+		find -L $(cat -) -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
+	else
+		git ls-files
+	fi
 }
 
 mybash__find_dir() {
@@ -218,7 +226,6 @@ mybash__dir_git_root() {
 	cd "$(git rev-parse --show-toplevel)" || return 1
 }
 
-# shellcheck disable=SC2015
 mybash__dir_in_project() {
 	mybash__dir_git_root && mybash__dir "$@" || cd - || return 1
 }
@@ -443,7 +450,7 @@ mybash__open() {
 }
 
 mybash__open_in_project() {
-	(mybash__dir_git_root; mybash__open "$@")
+	(mybash__dir_git_root; mybash__git_lsfiles_seclect | xargs -r "${opener}")
 }
 
 mybash__open_recent_file() {
@@ -536,7 +543,7 @@ mybash__vim() {
 }
 
 mybash__vim_in_project() {
-	(mybash__dir_git_root; mybash__vim "$@")
+	(mybash__dir_git_root; local t; t=$(mybash__git_lsfiles_seclect) && ${vim} "${t}")
 }
 
 mybash__vim_recent() {

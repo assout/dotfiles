@@ -106,6 +106,23 @@ vk1Csc079:: ;変換キー単独 = IMEオン
   }
   Return
 
+; tmux+clipboard paste
+; TODO だめ。c-s押した後ちょっとしてからvimのタグジャンプのつもりでc-]押したらペーストになっちゃう
+
+; global is_pre_s = 0
 ; #IfWInActive, ahk_group Terminal
-; ^s&]::Send, +insert
-  
+; ^s::
+;   Send %A_ThisHotkey%
+;   global is_pre_s = 1
+;   Return
+;  ]::
+; ^]::
+;   If (is_pre_s) {
+;     Send ^g
+;     Send ^+v
+;   } else {
+;     Send %A_ThisHotkey%
+;   }
+;   global is_pre_s = 0
+;   Return
+;

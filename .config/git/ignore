@@ -305,6 +305,8 @@ $RECYCLE.BIN/
 .fbExcludeFilterFile
 .pmd
 target
+.project
+.classpath
 
 ### Vim ###
 tags

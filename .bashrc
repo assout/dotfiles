@@ -3,16 +3,23 @@
 # [Index] {{{1
 # Notes:
 # - 基本デフォルト厨とする(aliasとかもあんま作らない)
-# - which使うと遅い
+# - tmuxで頻繁にpane作るのでパフォーマンス気にする
+# 	- which使うと遅い
+# 	- 外部コマンドより組み込みコマンドを使用する
+# 		- dateつかわずprintf '%T'つかう
+# 	- unameも遅い
+#		- msys2でghq listが若干遅いのでfindにする
+#	- TODO: C-]でのタグジャンプが結構バグる(tmux,mintty,autohotkeyあたりが怪しい -> autohotkey無効にしたら治った)
 # }}}1
 
 # [Begin] {{{1
+set -u
 
-is_gitbash=$(if [ "${GIT_BASH}" = 1 ] ; then echo 0; fi)
-[ "${is_gitbash}" ] && return 
+is_gitbash=$(if [ "${GIT_BASH:-0}" = 1 ] ; then echo 0; fi) # /c/Program Files/Git/etc/msystem に自分で定義
+[ "${is_gitbash}" ] && return
 
 # Start profile
-is_profile=$(if [ "$1" = "-p" ] ; then echo 0; fi)
+is_profile=$(if [ "${1:-}" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
 	PS4='+ $(date "+%S.%3N")\011 '
 	exec 3>&2 2>/tmp/bashstart.$$.log
@@ -96,18 +103,26 @@ export PATH
 
 # [Functions & Aliases] {{{1
 
+selector='fzy -l 50'
 if [ "${is_unix}" ] ; then
-	selector='fzy -l 50'
 	opener='gnome-open'
 	vim='vimx' # aliasもしてるがfunction内で使用したいため
 elif [ "${is_win}" ] ; then
-	selector='fzy -l 50'
 	opener='start'
 	vim='vim'
 fi
 
+# Note: パイプの先はサブシェルなのでパイプで呼び出した場合呼び出した側でhistory -rが必要
+mybash__add_history() {
+	local a; read -r a
+	history -s "${a}"
+}
+
+# Note: パイプの先はサブシェルなのでパイプで呼び出した場合呼び出した側でhistory -rが必要
 mybash__with_history() {
-	history -s "$1"; $1
+	local a; read -r a
+	history -s "${a}"
+	${a}
 }
 
 mybash__find() {
@@ -129,10 +144,9 @@ mybash__find_selector_reverse() {
 }
 
 mybash__clipborad() {
-	local stdin
-	stdin=$(cat -)
+	local stdin; read -r stdin
 	[ -z "${stdin}" ] && return 1
-	echo "${stdin}" | tee >(xargs -I{} tmux set-buffer "{}") > /dev/clipboard
+	echo "${stdin}" | tr -d '\n' | tee >(xargs -I{} tmux set-buffer "{}") > /dev/clipboard
 	echo "Copied to Clipboard: ${stdin}" >&2
 }
 
@@ -140,17 +154,30 @@ mybash__selector() {
 	cat - | ${selector}
 }
 
-# TODO remove eval
-mybash__select_alias() { mybash__with_history "eval $(t=$(alias | sed -r "s/^alias //" | sort -f | ${selector}); echo "${t}" | cut -d'=' -f 1)"; }
+mybash__select_alias() {
+	mybash__with_history < <(alias | sed -r "s/^alias //" | sort -f | ${selector} | cut -d'=' -f 2 | tr -d "'")
+}
 alias a='mybash__select_alias'
 
 if [ "${is_unix}" ] ; then
-	mybash__browse_by_ghq() { ghq list | cut -d "/" -f 2,3 | ${selector} | xargs -r hub browse; }
-	mybash__browse_current_project() { hub browse; }
+	mybash__browse_by_ghq() {
+		ghq list | cut -d "/" -f 2,3 | ${selector} | xargs -r hub browse
+	}
+
+	mybash__browse_current_project() {
+		hub browse
+	}
+
 elif [ "${is_win}" ] ; then
 	# Note: hub使えばできるがgitlabもあるのでこうしている
-	mybash__browse_by_ghq() { local t; t=$(ghq list | ${selector}) && (cd "${GHQ_ROOT}/${t}" && mybash__browse_current_project); }
-	mybash__browse_current_project() { git remote -v | head -1 | cut -d" " -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start; }
+	mybash__browse_by_ghq() {
+		find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector} | ( read -r t; [ "${t}" ] && cd "${t}" && mybash__browse_current_project)
+	}
+
+	mybash__browse_current_project() {
+		git remote -v | head -1 | cut -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start
+	}
+
 fi
 alias b='mybash__browse_by_ghq'
 alias B='mybash__browse_current_project'
@@ -173,95 +200,154 @@ mybash__cdls() {
 mybash__select_cheat() {
 	local c
 	if [ $# == 0 ] ; then
-		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return
+		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return 1
 	else
 		c=$1
 	fi
+	local stdin
 	cheat show "${c}" | ${selector} | while read -r stdin; do echo "${stdin#* }"; done | mybash__clipborad
 }
 alias c='mybash__select_cheat'
 
-mybash__dir() { local t; t="$(echo "$@" | mybash__find_dir)"; [ -d "${t}" ] && cd "${t}" || return 1; }
-mybash__dir_git_root() { cd "$(git rev-parse --show-toplevel)" || return 1; }
+mybash__dir() {
+	local t; t="$(echo "$@" | mybash__find_dir)";
+	[ -d "${t}" ] && cd "${t}" || return 1
+}
+
+mybash__dir_git_root() {
+	cd "$(git rev-parse --show-toplevel)" || return 1
+}
+
 # shellcheck disable=SC2015
-mybash__dir_in_project() { mybash__dir_git_root && mybash__dir "$@" || cd - || return 1; }
-mybash__dir_recent() { local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}" || return 1; }
-mybash__dir_upper() { local t; t=$(p="../../"; for d in $(pwd | tr -s "/" "\n" | tac | sed "1d") ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}" || return 1; }
-alias d='mybash__dir -maxdepth 1'
-alias D='mybash__dir'
-alias dg='mybash__dir_git_root'
-alias dp='mybash__dir_in_project'
-alias dr='mybash__dir_recent'
-alias d.='mybash__dir_upper'
-
-# TODO 日本語化けてそう
-[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
-[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
-
-mybash__explorer() {
-	if [ -n "$2" ] ; then
-		"${opener}" "$(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)"
-	else
-		echo "-maxdepth $1" | mybash__find_dir | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
-	fi
+mybash__dir_in_project() {
+	mybash__dir_git_root && mybash__dir "$@" || cd - || return 1
 }
-mybash__explorer_recent_dir() { sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}; }
-mybash__explorer_in_project() { (mybash__dir_git_root; mybash__explorer 1000); }
-alias e='mybash__explorer 1'
-alias E='mybash__explorer 1000'
-alias ep='mybash__explorer_in_project'
 
-alias er='mybash__explorer_recent_dir'
-
-mybash__select_function() { mybash__with_history "eval $(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)"; }
-alias fun='mybash__select_function'
-
-mybash__file() { 
-	depth=$1
-	target=$2
-	echo "${target}" "-maxdepth ${depth}" | mybash__find_selector | mybash__clipborad; 
+mybash__dir_recent() {
+	local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}" || return 1
 }
-mybash__file_in_project() { (mybash__dir_git_root; mybash__file 999 "$@"); }
-mybash__file_recent() { ${selector} < ~/.cache/ctrlp/mru/cache.txt | mybash__clipborad; }
-alias f='mybash__file 1'
-alias F='mybash__file 999'
-alias fp='mybash__file_in_project'
-alias fr='mybash__file_recent'
 
-[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-mybash__ghq_cd() { local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) && mybash__with_history "cd ${t}"; } # Note deprecate `ghq list` because slow in msys2
-mybash__ghq_update() { ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"; } # 'g'hq 'u'pdate.
-mybash__ghq_status() { for t in $(ghq list -p "$@") ; do (cd "${t}" && echo "${t}" && git status) done; } # 'g'hq 's'tatus.
+mybash__dir_upper() {
+	local t; t=$(p="../../"; pwd | tr -s "/" "\n" | tac | sed "1d" |
+		while read -r d ; do
+			echo "${p}${d}"
+			p=${p}../
+		done | fzy) &&
+			cd "${t}" || return 1
+	}
+	alias d='mybash__dir -maxdepth 1'
+	alias D='mybash__dir'
+	alias dg='mybash__dir_git_root'
+	alias dp='mybash__dir_in_project'
+	alias dr='mybash__dir_recent'
+	alias d.='mybash__dir_upper'
+
+	# TODO 日本語化けてそう
+	[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
+	[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+
+	mybash__explorer() {
+		if [ -n "$2" ] ; then
+			"${opener}" "$(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)"
+		else
+			echo "-maxdepth $1" | mybash__find_dir | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
+		fi
+	}
+
+	mybash__explorer_recent_dir() {
+		sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}
+	}
+
+	mybash__explorer_in_project() {
+		(mybash__dir_git_root; mybash__explorer 1000)
+	}
+	alias e='mybash__explorer 1'
+	alias E='mybash__explorer 1000'
+	alias ep='mybash__explorer_in_project'
+	alias er='mybash__explorer_recent_dir'
+
+	mybash__select_function() {
+		mybash__with_history < <(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)
+	}
+	alias fun='mybash__select_function'
+
+	mybash__file() {
+		local depth=$1
+		local target=$2
+		echo "${target}" "-maxdepth ${depth}" | mybash__find_selector | mybash__clipborad;
+	}
+
+	mybash__file_in_project() {
+		(mybash__dir_git_root; mybash__file 999 "$@")
+	}
+
+	mybash__file_recent() {
+		${selector} < ~/.cache/ctrlp/mru/cache.txt | mybash__clipborad
+	}
+
+	alias f='mybash__file 1'
+	alias F='mybash__file 999'
+	alias fp='mybash__file_in_project'
+	alias fr='mybash__file_recent'
+
+	[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+
+	mybash__ghq_cd() {
+		local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) &&
+			mybash__with_history <<<"cd ${t}"
+	}
+
+	mybash__ghq_update() {
+		ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"
+	}
+
+	mybash__ghq_status() {
+		local t
+		ghq list -p "$@" | while read -r t; do
+		(cd "${t}" && echo "${t}" && git status)
+	done
+}
+
 alias gh='mybash__ghq_cd'
-alias ghu='mybash__ghq_update'
-alias ghs='mybash__ghq_status'
+alias ghu='mybash__ghq_update' # 'gh'q 'u'pdate.
+alias ghs='mybash__ghq_status' # 'gh'q 's'tatus.
 
-mybash__grep() { local t; t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}')); [ "${#t[@]}" != 0 ] && ${vim} "${t[@]}"; }
-# shellcheck disable=SC2046
-mybash__grep_recent() { mybash__grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null; }
+mybash__grep() {
+	local t; t=($($1 -n "${@:2}" | ${selector} | awk -F : '{print "-c " $2 " " $1}'))
+	[ "${#t[@]}" != 0 ] && ${vim} "${t[@]}"
+}
+
+mybash__grep_recent() {
+	# shellcheck disable=SC2046
+	mybash__grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
+}
+
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
 alias g='mybash__grep "grep"'
 alias gr='mybash__grep_recent'
 
-mybash__git_ls_files() { git ls-files "${@}" | ${selector} | mybash__clipborad; }
-mybash__git_branch() { git branch -a | ${selector} | tr -d ' ' | tr -d '*' | mybash__clipborad; }
+mybash__git_ls_files() {
+	git ls-files "${@}" | ${selector} | mybash__clipborad
+}
+
+mybash__git_branch() {
+	git branch -a | ${selector} | tr -d ' ' | tr -d '*' | mybash__clipborad
+}
+
 alias gig='mybash__grep "git grep"'
 alias gil='mybash__git_ls_files'
 alias gib='mybash__git_branch'
 
 mybash__history() {
 	local HISTTIMEFORMAT_ESC="${HISTTIMEFORMAT}"
-	HISTTIMEFORMAT=
+	HISTTIMEFORMAT=""
 	history | sort -k1,1nr | perl -ne 'BEGIN { my @lines = (); } s/^\s*\d+\s*//; $in=$_; if (!(grep {$in eq $_} @lines)) { push(@lines, $in); print $in; }' | ${selector} | mybash__clipborad
 	HISTTIMEFORMAT=${HISTTIMEFORMAT_ESC}
 }
 alias h='mybash__history'
 
 mybash__man_japanese() {
-	LANG_ESCAPE=$LANG
-	LANG=ja_JP.UTF-8
-	man "$*"
-	LANG=$LANG_ESCAPE
+	(LANG=ja_JP.UTF-8; man "$*")
 }
 alias jan='mybash__man_japanese'
 
@@ -273,37 +359,97 @@ if [ "${is_win}" ] ; then
 	alias ls='ls --color=auto --show-control-chars'
 	alias ll='ls -l --color=auto --show-control-chars'
 fi
+
 log_dir="${HOME}/.tmux/log"
-mybash__log_open() { local l; l=$(mybash__find_selector_reverse "${log_dir}"/* -printf "%f\n") && ${vim} "${log_dir}/${l}"; }
-mybash__log_cd_dir() { cd "${log_dir}" || return 1; }
-mybash__log_grep() { local a; if [ $# -eq 0 ] ; then read -rp "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":LogGrep ${a}"; }
+mybash__log_open() {
+	local t; t=$(echo "${log_dir}/"* | mybash__find_selector_reverse) && ${vim} "${log_dir}/${t}"
+}
+
+mybash__log_cd_dir() {
+	cd "${log_dir}" || return 1
+}
+
+mybash__log_grep() {
+	local a;
+	if [ $# -eq 0 ] ; then
+		read -rp "Grep word:" a
+	else
+		a=$*
+	fi
+	[ -n "${a}" ] && ${vim} -c ":LogGrep ${a}"
+}
 alias l='mybash__log_open'
 alias ld='mybash__log_cd_dir'
 alias lg='mybash__log_grep'
 
 memo_dir="${HOME}/memo"
-mybash__memo_new() { ${vim} -c ":MemoNew $*"; }
-mybash__memo_list() { local l; l=$(echo "${memo_dir}/"* | mybash__find_selector) && ${vim} "${l}"; }
-mybash__memo_cd_dir() { cd "${memo_dir}" || return 1; }
-mybash__memo_grep() { local a; if [ $# -eq 0 ] ; then read -rp "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":MemoGrep ${a}"; }
+mybash__memo_new() {
+	${vim} -c ":MemoNew $*"
+}
+
+mybash__memo_list() {
+	local l; l=$(echo "${memo_dir}/"* | mybash__find_selector) && ${vim} "${l}"
+}
+
+mybash__memo_cd_dir() {
+	cd "${memo_dir}" || return 1
+}
+
+mybash__memo_grep() {
+	local a
+	if [ $# -eq 0 ] ; then
+		read -rp "Grep word:" a
+	else
+		a=$*
+	fi
+	[ -n "${a}" ] && ${vim} -c ":MemoGrep ${a}"
+}
+
 alias M='mybash__memo_new'
 alias m='mybash__memo_list'
 alias md='mybash__memo_cd_dir'
 alias mg='mybash__memo_grep'
 
 note_dir="${HOME}/Documents/notes"
-mybash__note_new() { ${vim} -c ":NoteNew $*"; }
-mybash__note_list() { local l; l=$(mybash__find_selector_reverse "${note_dir}/"*) && ${vim} "${l}"; }
-mybash__note_cd_dir() { cd "${note_dir}" || return 1; }
-mybash__note_grep() { local a; if [ $# -eq 0 ] ; then read -rp "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":NoteGrep ${a}"; }
+mybash__note_new() {
+	${vim} -c ":NoteNew $*"
+}
+
+mybash__note_list() {
+	local l; l=$(echo "${note_dir}/"* | mybash__find_selector_reverse) && ${vim} "${l}"
+}
+
+mybash__note_cd_dir() {
+	cd "${note_dir}" || return 1
+}
+
+mybash__note_grep() {
+	local a
+	if [ $# -eq 0 ] ; then
+		read -rp "Grep word:" a
+	else
+		a=$*
+	fi
+	[ -n "${a}" ] && ${vim} -c ":NoteGrep ${a}"
+}
+
 alias N='mybash__note_new'
 alias n='mybash__note_list'
 alias nd='mybash__note_cd_dir'
 alias ng='mybash__note_grep'
 
-mybash__open() { echo "$@" | mybash__find_selector | xargs -r "${opener}"; }
-mybash__open_in_project() { (mybash__dir_git_root; mybash__open "$@"); }
-mybash__open_recent_file() { sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}; }
+mybash__open() {
+	echo "$@" | mybash__find_selector | xargs -r "${opener}"
+}
+
+mybash__open_in_project() {
+	(mybash__dir_git_root; mybash__open "$@")
+}
+
+mybash__open_recent_file() {
+	sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}
+}
+
 alias o='mybash__open -maxdepth 1'
 alias O='mybash__open'
 alias op='mybash__open_in_project'
@@ -315,22 +461,25 @@ alias r='mybash__vim_recent'
 alias R='mybash__vim_most_recent'
 
 mybash__sshpass() {
-	local t; t=$1
-	local p; p=$(pcregrep -M "${t}\s[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g');
+	local t=$1
+	local p; p=$(pcregrep -M "${t}\s[\s\S]*?^\r?$" ~/.ssh/config | grep "Pass " | sed 's/.*Pass //g')
+
 	if [ -n "${p}" ] ; then
-		mybash__with_history "sshpass -p ${p} ssh ${t}"
+		sshpass -p "${p}" ssh "${t}"
+		mybash__add_history <<<"sshpass -p ${p} ssh ${t}" # TODO with_historyだとログイン先の制御がとれない
 	else
-		mybash__with_history "ssh ${t}"
+		ssh "${t}"
+		mybash__add_history <<<"ssh ${t}" # TODO with_historyだとログイン先の制御がとれない
 	fi
 }
-# Refs: <http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38>
-# dirty..
+
+# Refs: <[pecoでsshするやつ - Qiita](http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38)>
 mybash__ssh_by_config() {
-	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return
-	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector});
-	[ -z "${t}" ] && return
+	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return 1
+	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector}) || return
 	mybash__sshpass "${t}"
 }
+
 mybash__ssh_by_hosts() {
 	local src=/usr/share/bash-completion/completions/ssh && [ -r ${src} ] && source ${src}
 	local configfile
@@ -338,17 +487,40 @@ mybash__ssh_by_hosts() {
 	unset COMPREPLY
 	_known_hosts_real -a -F "$configfile" ""
 
-	local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}) && mybash__with_history "ssh ${t}"
+	local t; t=$(echo "${COMPREPLY[@]}" | tr ' ' '\n' | sort -u | ${selector}) && mybash__with_history <<<"ssh ${t}"
 }
+
 alias sshp='mybash__sshpass'
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
-mybash__todo_add() { todo.sh add "$*"; }
-mybash__todo_open() { local t; t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1) && todo.sh note "${t}"; }
-mybash__todo_cd_dir() { cd ~/Documents/todo/ || return 1; }
-mybash__todo_do() { todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh" "do"; }
-mybash__todo_grep() { local a; if [ $# -eq 0 ] ; then read -rp "Grep word:" a ; else a=$* ; fi; [ -n "${a}" ] && ${vim} -c ":TodoGrep ${a}"; }
+mybash__todo_add() {
+	todo.sh add "$*"
+}
+
+mybash__todo_open() {
+	local t; t=$(todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1)
+	[ -n "${t}" ] && todo.sh note "${t}"
+}
+
+mybash__todo_cd_dir() {
+	cd ~/Documents/todo/ || return 1
+}
+
+mybash__todo_do() {
+	todo.sh -p list | sed "\$d" | sed "\$d" | ${selector} | cut -d " " -f 1 | xargs -r "todo.sh" "do"
+}
+
+mybash__todo_grep() {
+	local a;
+	if [ $# -eq 0 ] ; then
+		read -rp "Grep word:" a
+	else
+		a=$*
+	fi
+	[ -n "${a}" ] && ${vim} -c ":TodoGrep ${a}"
+}
+
 alias todo='todo.sh'; complete -F _todo todo
 alias T='mybash__todo_add'
 alias t='mybash__todo_open'
@@ -359,10 +531,22 @@ alias tg='mybash__todo_grep'
 alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
-mybash__vim() { local t; t=$(echo "$@" | mybash__find_selector) && ${vim} "${t}"; }
-mybash__vim_in_project() { (mybash__dir_git_root; mybash__vim "$@"); }
-mybash__vim_recent() { local t; t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"; }
-mybash__vim_most_recent() { ${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"; }
+mybash__vim() {
+	local t; t=$(echo "$@" | mybash__find_selector) && ${vim} "${t}"
+}
+
+mybash__vim_in_project() {
+	(mybash__dir_git_root; mybash__vim "$@")
+}
+
+mybash__vim_recent() {
+	local t; t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"
+}
+
+mybash__vim_most_recent() {
+	${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"
+}
+
 alias v='mybash__vim -maxdepth 1'
 alias V='mybash__vim'
 alias vp='mybash__vim_in_project'
@@ -378,7 +562,7 @@ alias z='mybash__selector'
 stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有効(端末ロックを無効化)
 
 # CreateToday backup directory
-todayBackupPath=${HOME}/Backup/$(date +%Y%m%d)
+todayBackupPath=${HOME}/Backup/$(printf '%(%Y%m%d)T')
 if [ ! -d "${todayBackupPath}" ] && ([ "${is_home}" ] || [ "${is_office}" ]) ; then
 	mkdir -p "${todayBackupPath}"
 	rm -f "${HOME}/Today"
@@ -407,38 +591,33 @@ if [ "${is_unix}" ] ; then
 
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 elif [ "${is_win}" ] ; then
-	source /usr/share/git/completion/git-prompt.sh
+	# TODO slow?
 	source /usr/share/git/completion/git-completion.bash
 
-	# TODO slow
+	# TODO slow. ls後一瞬stackする。
+	# source /usr/share/git/completion/git-prompt.sh
 	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-
-	# TODO slow
-	# fast_git_ps1() {
-	# 	printf -- "$(git branch 2>/dev/null | sed -ne '/^\* / s/^\* \(.*\)/ [\1] / p')"
-	# }
-	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`fast_git_ps1`'"\[\e[0m\]\n\$ "
 
 	todo_completion_path="${tools_dir}/todo.txt_cli-2.10/todo_completion"
 	[ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
 
-	[ -z "${TMUX}" ] && chcp.com 65001 # for shellcheck
+	[ -z "${TMUX:-}" ] && chcp.com 65001 # for shellcheck
 fi
 
-source "${GHQ_ROOT}/github.com/chrisallenlane/cheat/cheat/autocompletion/cheat.bash"
-
+set +u
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
 [ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
+# TODO slow. TODO printf構文
 # shellcheck disable=SC2016
-tmux pipe-pane -o 'bash -c "while read -r LINE; do echo \"[\$(date +\"%%Y-%%m-%%dT%%H:%%M:%%S\")] \${LINE}\" >> \${HOME}/.tmux/log/term_\$(date +%Y%m%d_%H%M%S)_#S_#D.log; done "'
+# tmux pipe-pane -o 'bash -c "while read -r LINE; do echo \"[\$(printf \"%%(%%F %%T)T\")] \${LINE}\" >> \${HOME}/.tmux/log/term_\$(printf \"%(%%Y%%m%%d_%%H%%M%%S)%T\")_#S_#D.log; done "'
 
 # End profile
 if [ "${is_profile}" ] ; then
 	set +x
-	exec 2>&3 3>&-
+	exec 2>&3 3>&- # これなんだ。。
 fi
 # }}}1
 

@@ -364,6 +364,7 @@ Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGu
 " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
 Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
 Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
+" Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
 Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
 Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
 Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
@@ -432,6 +433,7 @@ call g:plug#end()
 if s:HasPlugin('ale') " {{{
   let g:ale_sign_column_always = 1
   let g:ale_lint_on_text_changed = 'never'
+  " TODO 実行後カーソル位置が変わってしまう
   nnoremap <SID>[ale-lint] :<C-u>ALELint<CR>
   autocmd vimrc User ALELintPost :unsilent echo "Lint done!"
 endif " }}}

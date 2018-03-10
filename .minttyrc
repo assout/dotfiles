@@ -34,3 +34,7 @@ Cyan=138,190,183
 ClicksPlaceCursor=no
 ClicksTargetApp=yes
 MiddleClickAction=enter
+AllowSetSelection=yes # https://qiita.com/kesoji/items/7f6264f5a4c4e354f9f2
+
+# vim: filetype=config:
+

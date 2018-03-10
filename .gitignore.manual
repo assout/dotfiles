@@ -6,6 +6,8 @@
 .fbExcludeFilterFile
 .pmd
 target
+.project
+.classpath
 
 ### Vim ###
 tags

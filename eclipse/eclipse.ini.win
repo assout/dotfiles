@@ -21,4 +21,3 @@ openFile
 ; 以下はfindbugsプラグインのメニューが一部日本語になってしまうことへの対策
 -Duser.language=en
 -Duser.country=US
-

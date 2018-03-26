@@ -29,6 +29,7 @@ ln -sf "${HERE}/lint/.eslintrc.yml" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.textlintrc" ~/
 ln -sf "${HERE}/lint/.prh.yml" ~/
+# ln -sf "${HERE}/memo" ~/.config/
 ln -sb "${HERE}/vim/.gvimrc" ~/
 ln -sb "${HERE}/vim/.vimrc" ~/
 ln -sb "${HERE}/vim/snippets" ~/.vim/

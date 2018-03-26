@@ -192,6 +192,7 @@ let &spellfile = expand(g:is_linux ? '~/Dropbox/spell/en.utf-8.add' : '~/Documen
 set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
+set nostartofline " [vim - vimでカーソル位置を維持しつつ最終行へ移動 - スタック・オーバーフロー](https://ja.stackoverflow.com/questions/17908/vim%E3%81%A7%E3%82%AB%E3%83%BC%E3%82%BD%E3%83%AB%E4%BD%8D%E7%BD%AE%E3%82%92%E7%B6%AD%E6%8C%81%E3%81%97%E3%81%A4%E3%81%A4%E6%9C%80%E7%B5%82%E8%A1%8C%E3%81%B8%E7%A7%BB%E5%8B%95)
 let &swapfile = g:is_win ? 0 : &swapfile " swapfile作成有無(offにするとvimfilerでのネットワークフォルダ閲覧が高速化するかも(効果は不明))(共有ディレクトリ等にswapファイル残さないように)
 set tags^=./.tags;
 set tabstop=2
@@ -317,6 +318,7 @@ Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aで�
 Plug 'Dkendal/fzy-vim', {'on' : ['FzyLsAg', 'FzyTag', 'FzyWorkingTree', 'FzyGem', 'FzyBuffer']}
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
+" TODO Vim終了が遅くなる
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
@@ -326,7 +328,7 @@ Plug 'ctrlpvim/ctrlp.vim'
       \ | Plug 'kaneshin/ctrlp-memolist'
       \ | Plug 'mattn/ctrlp-codic'
       \ | Plug 'ompugao/ctrlp-locate' " Slow..
-Plug 'dzeban/vim-log-syntax', {'for' : 'log'}
+" Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
 Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
@@ -342,7 +344,9 @@ Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
 Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
 Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
 Plug 'itchyny/vim-parenmatch'
-Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
+" TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
+" Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
+Plug 'junegunn/vim-easy-align'
 Plug 'kamichidu/vim-edit-properties'
 Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 Plug 'kana/vim-submode'
@@ -397,7 +401,6 @@ Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint']}
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
 " Note: markdownは指定しなくてもtagbarで見れるので良い
-"
 Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
       \ | Plug 'xolox/vim-shell',  {'for' : ['vim', 'sh', 'javascript']}
       \ | Plug 'xolox/vim-easytags',  {'for' : ['vim', 'sh', 'javascript']}
@@ -478,6 +481,9 @@ endif " }}}
 
 if s:HasPlugin('emmet-vim') " {{{
   let g:user_emmet_leader_key='<Nop>'
+
+  let g:user_emmet_next_key = '<C-y>n'
+  let g:user_emmet_prev_key = '<C-y>N'
   let g:user_emmet_anchorizeurl_key = '<Plug>[emmet]'
 endif " }}}
 
@@ -679,6 +685,11 @@ if s:HasPlugin('vim-easy-align') " {{{
         \     'right_margin': 0
         \   }
         \ }
+
+  function! s:CsvSettings()
+    nmap <buffer><SID>[context] <Plug>(EasyAlign)<Plug>(textobj-indent-i)*,,
+  endfunction
+  autocmd vimrc FileType csv call s:CsvSettings()
 endif " }}}
 
 if s:HasPlugin('vim-easytags') " {{{
@@ -718,8 +729,8 @@ if s:HasPlugin('vim-localrc') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-markdown') " {{{
+  let g:vim_markdown_no_default_key_mappings = 1
   let g:vim_markdown_folding_disabled = 1
-  let g:vim_markdown_emphasis_multiline = 0
 
   function! s:VimMarkdownSettings() " Refs: <:help restore-position>
     " Note: commentsを空にして箇条書きの継続を無効、indentexprを空にして不要な箇条書きのインデント補正を無効にする
@@ -734,11 +745,6 @@ if s:HasPlugin('vim-markdown') " {{{
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
 
     nnoremap <buffer><SID>[context]    :<C-u>TableFormat<CR>
-
-    " ファイルパスを開けなくなるので無効化
-    unmap <buffer> gx
-    " デフォルト変えたくないので無効化
-    unmap <buffer> ge
   endfunction
   autocmd vimrc FileType markdown call s:VimMarkdownSettings()
 endif " }}}
@@ -804,9 +810,9 @@ if s:HasPlugin('vim-quickrun') " {{{
   let g:quickrun_config['html'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['plantuml'] = { 'command': g:is_linux ? 'google-chrome' : 'chrome', 'outputter': 'null' }
   let g:quickrun_config['markdown'] = { 'type': 'markdown/markdown-to-slides' }
-  let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'cmdopt': '-d -s ~/.remark.css', 'outputter': 'browser'}
+  let g:quickrun_config['markdown/markdown-to-slides'] = { 'command': 'markdown-to-slides', 'cmdopt': '-w -d -s ~/.remark.css', 'outputter': 'browser'}
   if g:is_win
-    let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'shell'
+    let g:quickrun_config['markdown/markdown-to-slides']['runner'] = 'job'
     let g:quickrun_config['markdown/markdown-to-slides']['exec'] = ['tmp=/tmp/%s:t.html \&\& %c %s -o \$tmp %o \&\& chrome.exe \$tmp']
   endif
 endif " }}}

@@ -7,8 +7,11 @@
 [ghq]
 	root = D:\\admin\\.ghq # Note: GOPATHと一緒にするとghq listが出力増えすぎるので別にしている
 
-# [url "https://"] # refs: [gitコマンドのプロトコルをhttpsに固定する(社内環境でよくある話) - Qiita](http://qiita.com/nntsugu/items/38dc49a47d1b658325e8)
-# 	insteadOf = git://
+[url "https://"] # refs: [gitコマンドのプロトコルをhttpsに固定する(社内環境でよくある話) - Qiita](http://qiita.com/nntsugu/items/38dc49a47d1b658325e8)
+	insteadOf = git://
+
+[url "https://github.com/"] # [go get で取得したreposのデフォルトremoteパスをhttpsではなくsshにする - Qiita](https://qiita.com/jpshadowapps/items/6111addbe65762665977)
+	insteadOf = git@github.com:
 
 # vim: filetype=gitconfig:
 

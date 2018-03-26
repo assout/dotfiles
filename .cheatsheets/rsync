@@ -19,3 +19,7 @@ rsync -ra hogeFile fooHost:/fugaDir/
 # 特定ディレクトリを除外
 rsync -ra --exclude 'hoge' fugaFile fooHost:/piyoDir/
 
+# [rsyncでサブディレクトリ含む特定パターンのファイルのみコピーする - Qiita](https://qiita.com/niku4i/items/449ebd3d7d529bbffd64)
+rsync -arm --include="*/" --include="*.conf" --include="*.xml" --include="*.properties" --exclude="*" dona3:/srv/local/donadona/lo
+ngrun .
+

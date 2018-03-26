@@ -9,11 +9,10 @@
 # 		- dateつかわずprintf '%T'つかう
 # 	- unameも遅い
 #		- msys2でghq listが若干遅いのでfindにする
-#	- TODO: C-]でのタグジャンプが結構バグる(tmux,mintty,autohotkeyあたりが怪しい -> autohotkey無効にしたら治った)
 # }}}1
 
 # [Begin] {{{1
-set -u
+set -Cu
 
 is_gitbash=$(if [ "${GIT_BASH:-0}" = 1 ] ; then echo 0; fi) # /c/Program Files/Git/etc/msystem に自分で定義
 [ "${is_gitbash}" ] && return
@@ -88,6 +87,7 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:/c/Users/admin/AppData/Roaming/cabal/bin"
 	PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
 	PATH="${PATH}:/usr/share/git/workdir"
+	PATH="${PATH}:/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
 fi
 
 PATH=${PATH}:${GHG_ROOT}/bin
@@ -102,7 +102,6 @@ export PATH
 # }}}1
 
 # [Functions & Aliases] {{{1
-
 selector='fzy -l 50'
 if [ "${is_unix}" ] ; then
 	opener='gnome-open'
@@ -125,41 +124,25 @@ mybash__with_history() {
 	${a}
 }
 
-mybash__git_lsfiles_seclect() {
-	git ls-files | ${selector}
-}
-
 mybash__find() {
-	if [ -z "$(git rev-parse --git-dir 2> /dev/null)" ] ; then
-		# shellcheck disable=SC2046
-		find -L $(cat -) -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
-	else
-		git ls-files
-	fi
+	# shellcheck disable=SC2046
+	find -L $(cat -) -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
 }
 
 mybash__find_dir() {
 	# shellcheck disable=SC2046
-	find -L $(cat -) -type 'd' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png" | sort | ${selector}
-}
-
-mybash__find_selector() {
-	cat - | mybash__find | sort | ${selector}
-}
-
-mybash__find_selector_reverse() {
-	cat - | mybash__find | sort -r | ${selector}
+	find -L $(cat -) -type 'd' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
 }
 
 mybash__clipborad() {
 	local stdin; read -r stdin
-	[ -z "${stdin}" ] && return 1
+	[ -z "${stdin}" ] && return 64
 	echo "${stdin}" | tr -d '\n' | tee >(xargs -I{} tmux set-buffer "{}") > /dev/clipboard
 	echo "Copied to Clipboard: ${stdin}" >&2
 }
 
-mybash__selector() {
-	cat - | ${selector}
+mybash__select_clipborad() {
+	${selector} < /dev/stdin | mybash__clipborad
 }
 
 mybash__select_alias() {
@@ -208,7 +191,7 @@ mybash__cdls() {
 mybash__select_cheat() {
 	local c
 	if [ $# == 0 ] ; then
-		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return 1
+		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return 64
 	else
 		c=$1
 	fi
@@ -217,47 +200,51 @@ mybash__select_cheat() {
 }
 alias c='mybash__select_cheat'
 
-mybash__dir() {
-	local t; t="$(echo "$@" | mybash__find_dir)";
-	[ -d "${t}" ] && cd "${t}" || return 1
+mybash__cd() {
+	local t; t="$(echo "$@" | mybash__find_dir | sort | ${selector})";
+	[ -d "${t}" ] && cd "${t}" || return 64
 }
 
-mybash__dir_git_root() {
-	cd "$(git rev-parse --show-toplevel)" || return 1
+mybash__cd_git_root() {
+	cd "$(git rev-parse --show-toplevel)" || return 64
 }
 
-mybash__dir_in_project() {
-	mybash__dir_git_root && mybash__dir "$@" || cd - || return 1
+mybash__cd_in_project() {
+	mybash__cd_git_root && local t; t=$(git ls-files | xargs -r dirname | uniq | ${selector}) && cd "${t}" || cd - >/dev/null || return 64
 }
 
-mybash__dir_recent() {
-	local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}" || return 1
+mybash__cd_recent() {
+	local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}" || return 64
 }
 
-mybash__dir_upper() {
+mybash__cd_upper() {
 	local t; t=$(p="../../"; pwd | tr -s "/" "\n" | tac | sed "1d" |
 		while read -r d ; do
 			echo "${p}${d}"
 			p=${p}../
 		done | fzy) &&
-			cd "${t}" || return 1
+			cd "${t}" || return 64
 	}
-	alias d='mybash__dir -maxdepth 1'
-	alias D='mybash__dir'
-	alias dg='mybash__dir_git_root'
-	alias dp='mybash__dir_in_project'
-	alias dr='mybash__dir_recent'
-	alias d.='mybash__dir_upper'
+	alias d='mybash__cd -maxdepth 1'
+	alias D='mybash__cd'
+	alias dg='mybash__cd_git_root'
+	alias dp='mybash__cd_in_project'
+	alias dr='mybash__cd_recent'
+	alias d.='mybash__cd_upper'
 
 	# TODO 日本語化けてそう
 	[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 	[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
 	mybash__explorer() {
+			cat - | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
+	}
+
+	mybash__explorer_find() {
 		if [ -n "$2" ] ; then
-			"${opener}" "$(echo "$2" | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi)"
+			mybash__explorer <<< "$2"
 		else
-			echo "-maxdepth $1" | mybash__find_dir | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
+			mybash__find_dir <<< "-maxdepth $1" | sort | ${selector} | mybash__explorer
 		fi
 	}
 
@@ -266,10 +253,10 @@ mybash__dir_upper() {
 	}
 
 	mybash__explorer_in_project() {
-		(mybash__dir_git_root; mybash__explorer 1000)
+		(mybash__cd_git_root; git ls-files | xargs -r dirname | uniq | ${selector} | mybash__explorer)
 	}
-	alias e='mybash__explorer 1'
-	alias E='mybash__explorer 1000'
+	alias e='mybash__explorer_find 1'
+	alias E='mybash__explorer_find 1000'
 	alias ep='mybash__explorer_in_project'
 	alias er='mybash__explorer_recent_dir'
 
@@ -281,11 +268,12 @@ mybash__dir_upper() {
 	mybash__file() {
 		local depth=$1
 		local target=$2
-		echo "${target}" "-maxdepth ${depth}" | mybash__find_selector | mybash__clipborad;
+		# Note: ここをechoでなくヒアストリングで渡すとなぜかその先のfunction内で/dev/stdinが取れない
+		echo "${target}" "-maxdepth ${depth}" | mybash__find | sort | ${selector} | mybash__clipborad;
 	}
 
 	mybash__file_in_project() {
-		(mybash__dir_git_root; mybash__file 999 "$@")
+		(mybash__cd_git_root; git ls-files | ${selector} | mybash__clipborad)
 	}
 
 	mybash__file_recent() {
@@ -310,10 +298,8 @@ mybash__dir_upper() {
 
 	mybash__ghq_status() {
 		local t
-		ghq list -p "$@" | while read -r t; do
-		(cd "${t}" && echo "${t}" && git status)
-	done
-}
+		ghq list -p "$@" | while read -r t; do (cd "${t}" && echo "${t}" && git status) done
+	}
 
 alias gh='mybash__ghq_cd'
 alias ghu='mybash__ghq_update' # 'gh'q 'u'pdate.
@@ -369,11 +355,11 @@ fi
 
 log_dir="${HOME}/.tmux/log"
 mybash__log_open() {
-	local t; t=$(echo "${log_dir}/"* | mybash__find_selector_reverse) && ${vim} "${log_dir}/${t}"
+	local t; t=$(echo "${log_dir}/"* | mybash__find | sort -r | ${selector}) && ${vim} "${log_dir}/${t}"
 }
 
 mybash__log_cd_dir() {
-	cd "${log_dir}" || return 1
+	cd "${log_dir}" || return 64
 }
 
 mybash__log_grep() {
@@ -395,11 +381,11 @@ mybash__memo_new() {
 }
 
 mybash__memo_list() {
-	local l; l=$(echo "${memo_dir}/"* | mybash__find_selector) && ${vim} "${l}"
+	local l; l=$(echo "${memo_dir}/"* | mybash__find | sort | ${selector}) && ${vim} "${l}"
 }
 
 mybash__memo_cd_dir() {
-	cd "${memo_dir}" || return 1
+	cd "${memo_dir}" || return 64
 }
 
 mybash__memo_grep() {
@@ -423,11 +409,11 @@ mybash__note_new() {
 }
 
 mybash__note_list() {
-	local l; l=$(echo "${note_dir}/"* | mybash__find_selector_reverse) && ${vim} "${l}"
+	local l; l=$(echo "${note_dir}/"* | mybash__find | sort -r | ${selector}) && ${vim} "${l}"
 }
 
 mybash__note_cd_dir() {
-	cd "${note_dir}" || return 1
+	cd "${note_dir}" || return 64
 }
 
 mybash__note_grep() {
@@ -446,11 +432,11 @@ alias nd='mybash__note_cd_dir'
 alias ng='mybash__note_grep'
 
 mybash__open() {
-	echo "$@" | mybash__find_selector | xargs -r "${opener}"
+	echo "$@" | mybash__find | sort | ${selector} | xargs -r "${opener}"
 }
 
 mybash__open_in_project() {
-	(mybash__dir_git_root; mybash__git_lsfiles_seclect | xargs -r "${opener}")
+	(mybash__cd_git_root; git ls-files | ${selector} | xargs -r "${opener}")
 }
 
 mybash__open_recent_file() {
@@ -482,7 +468,7 @@ mybash__sshpass() {
 
 # Refs: <[pecoでsshするやつ - Qiita](http://qiita.com/d6rkaiz/items/46e9c61c412c89e84c38)>
 mybash__ssh_by_config() {
-	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return 1
+	[ ! -r "${HOME}/.ssh/config" ] && echo "Faild to read ssh conifg file." >&2 && return 64
 	local t; t=$(awk 'tolower($1)=="host"{$1="";print}' ~/.ssh/config | sed -e "s/ \+/\n/g" | egrep -v '[*?]' | sort -u | ${selector}) || return
 	mybash__sshpass "${t}"
 }
@@ -501,6 +487,14 @@ alias sshp='mybash__sshpass'
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
+if [ "${is_win}" ] ; then
+	svn() {
+		chcp.com 932 >& /dev/null
+		command svn "$@"
+		chcp.com 65001 >& /dev/null
+	}
+fi
+
 mybash__todo_add() {
 	todo.sh add "$*"
 }
@@ -511,7 +505,7 @@ mybash__todo_open() {
 }
 
 mybash__todo_cd_dir() {
-	cd ~/Documents/todo/ || return 1
+	cd ~/Documents/todo/ || return 64
 }
 
 mybash__todo_do() {
@@ -539,11 +533,11 @@ alias vi='vim'
 [ "${is_unix}" ] && alias vim='vimx' # クリップボード共有するため
 
 mybash__vim() {
-	local t; t=$(echo "$@" | mybash__find_selector) && ${vim} "${t}"
+	local t; t=$(echo "$@" | mybash__find | sort | ${selector}) && ${vim} "${t}"
 }
 
 mybash__vim_in_project() {
-	(mybash__dir_git_root; local t; t=$(mybash__git_lsfiles_seclect) && ${vim} "${t}")
+	(mybash__cd_git_root; local t; t=$(git ls-files | ${selector} ) && ${vim} "${t}")
 }
 
 mybash__vim_recent() {
@@ -560,7 +554,7 @@ alias vp='mybash__vim_in_project'
 alias vr='mybash__vim_recent'
 alias vR='mybash__vim_most_recent'
 
-alias z='mybash__selector'
+alias z='mybash__select_clipborad'
 
 # }}}1
 
@@ -601,9 +595,9 @@ elif [ "${is_win}" ] ; then
 	# TODO slow?
 	source /usr/share/git/completion/git-completion.bash
 
-	# TODO slow. ls後一瞬stackする。
-	# source /usr/share/git/completion/git-prompt.sh
-	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
+	# Note たまにslow. ls後一瞬stackする。再起動後はまた早くなったりする。
+	source /usr/share/git/completion/git-prompt.sh
+	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
 	todo_completion_path="${tools_dir}/todo.txt_cli-2.10/todo_completion"
 	[ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
@@ -611,7 +605,7 @@ elif [ "${is_win}" ] ; then
 	[ -z "${TMUX:-}" ] && chcp.com 65001 # for shellcheck
 fi
 
-set +u
+set +Cu
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
 [ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux

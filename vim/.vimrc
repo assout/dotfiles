@@ -125,6 +125,22 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
     execute '%substitute@^\v(%( {' . &l:tabstop . '})+)@\=repeat("\t", len(submatch(1))/' . &l:tabstop . ')@e' | normal! 'tzt`s
   endif
 endfunction
+
+" Refs: [vim - Jump to next tag in pom.xml - Stack Overflow](https://stackoverflow.com/questions/42867955/jump-to-next-tag-in-pom-xml)
+function! s:JumpToNextTagText(dir)
+    call search('<[^/][^>]\{-}>.', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+function! s:JumpToNextTag(dir)
+    call search('<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+function! s:JumpToNextTagSameIndent(dir)
+    call search('^' . matchstr(getline('.'), '\(^\s*\)') . '<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+" Refs: [Move to next/previous line with same indentation | Vim Tips Wiki | FANDOM powered by Wikia](http://vim.wikia.com/wiki/Move_to_next/previous_line_with_same_indentation)
+function! s:MapJumpToNextTag()
+  nnoremap <silent><buffer>) :call <SID>JumpToNextTagSameIndent('forward')<CR>
+  nnoremap <silent><buffer>( :call <SID>JumpToNextTagSameIndent('backward')<CR>
+endfunction
 " }}}1
 
 " # Commands {{{1
@@ -794,10 +810,10 @@ if s:HasPlugin('vim-operator-surround') " {{{
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 
-  let g:operator#surround#blocks = {
-        \ 'markdown' : [
-        \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['`'] },
-        \ ] }
+  " let g:operator#surround#blocks = {
+  "       \ 'markdown' : [
+  "       \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['`'] },
+  "       \ ] }
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{
@@ -997,6 +1013,7 @@ augroup vimrc
   autocmd FileType xml,ant
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
+  autocmd FileType xml,html,ant call s:MapJumpToNextTag()
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END

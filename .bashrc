@@ -63,7 +63,7 @@ if [ "${is_win}" ] ; then
 	export NODE_PATH="/mingw64/lib/node_modules"
 fi
 
-# Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck)
+# Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck, fzy)
 if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/ansifilter-1.15"

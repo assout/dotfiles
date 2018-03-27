@@ -91,6 +91,18 @@ function! s:ChangeTabstep(size) " Caution: undoしても&tabstopの値は戻ら�
   let &l:shiftwidth = a:size
 endfunction
 
+function! s:FzyCommand(choice_command, vim_command)
+  try
+    let output = system(a:choice_command . " | fzy")
+  catch /Vim:Interrupt/
+    " Swallow errors from ^C, allow redraw! below
+  endtry
+  redraw!
+  if v:shell_error == 0 && !empty(output)
+    exe a:vim_command . ' ' . output
+  endif
+endfunction
+
 function! s:Grep(word, target)
   " Note: a:wordはオプションが入ってくるかもなので""で囲まない
   execute ':silent grep -r ' . a:word . ' ' . a:target . '/*'
@@ -102,6 +114,20 @@ endfunction
 
 function! s:InsertString(pos, str) range " Note: 引数にスペースを含めるにはバックスラッシュを前置します Refs: <:help f-args>
   execute a:firstline . ',' . a:lastline . 'substitute/' . a:pos . '/' . substitute(a:str, '/', '\\/', 'g')
+endfunction
+
+function! s:JumpToNextTagSameIndent(dir)
+    call search('^' . matchstr(getline('.'), '\(^\s*\)') . '<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+function! s:JumpToNextTagText(dir) " Refs: [vim - Jump to next tag in pom.xml - Stack Overflow](https://stackoverflow.com/questions/42867955/jump-to-next-tag-in-pom-xml)
+    call search('<[^/][^>]\{-}>.', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+function! s:JumpToNextTag(dir)
+    call search('<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+endfunction
+function! s:JumpToNextMapping() " Refs: [Move to next/previous line with same indentation | Vim Tips Wiki | FANDOM powered by Wikia](http://vim.wikia.com/wiki/Move_to_next/previous_line_with_same_indentation)
+  nnoremap <silent><buffer>) :call <SID>JumpToNextTagSameIndent('forward')<CR>
+  nnoremap <silent><buffer>( :call <SID>JumpToNextTagSameIndent('backward')<CR>
 endfunction
 
 function! s:OrDefault(var, default)
@@ -126,30 +152,20 @@ function! s:ToggleExpandTab() " Caution: undoしても&expandtabの値は戻ら�
   endif
 endfunction
 
-" Refs: [vim - Jump to next tag in pom.xml - Stack Overflow](https://stackoverflow.com/questions/42867955/jump-to-next-tag-in-pom-xml)
-function! s:JumpToNextTagText(dir)
-    call search('<[^/][^>]\{-}>.', a:dir == 'backward' ? 'web' : 'we')
-endfunction
-function! s:JumpToNextTag(dir)
-    call search('<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
-endfunction
-function! s:JumpToNextTagSameIndent(dir)
-    call search('^' . matchstr(getline('.'), '\(^\s*\)') . '<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
-endfunction
-" Refs: [Move to next/previous line with same indentation | Vim Tips Wiki | FANDOM powered by Wikia](http://vim.wikia.com/wiki/Move_to_next/previous_line_with_same_indentation)
-function! s:MapJumpToNextTag()
-  nnoremap <silent><buffer>) :call <SID>JumpToNextTagSameIndent('forward')<CR>
-  nnoremap <silent><buffer>( :call <SID>JumpToNextTagSameIndent('backward')<CR>
-endfunction
 " }}}1
 
 " # Commands {{{1
-command! -range -nargs=1 Prefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
-command! -range -nargs=1 Suffix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 
+command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
+command! FzyMemo call <SID>FzyCommand('ls ~/memo/*', ':e')
+command! FzyNote call <SID>FzyCommand('ls ~/Documents/notes/*', ':e')
+command! FzyMru call <SID>FzyCommand('sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt', ':e')
+command! FzyInProject call <SID>FzyCommand('git ls-files', ':e')
+command! -range -nargs=1 InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
+command! -range -nargs=1 InsertSufix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 command! -nargs=1 LogGrep call <SID>Grep(<q-args>, expand('~/.tmux/log/')) | call histadd('cmd', 'LogGrep <q-args>')
 command! -nargs=? -range=% Mattertee :<line1>,<line2>write !mattertee <args>
 command! -nargs=? NoteNew execute 'edit ~/Documents/notes' . strftime('/%Y%m%d_%H%M%S') . '_' . <SID>OrDefault(<q-args>, 'note') . '.md'
@@ -233,7 +249,6 @@ nmap <SID>[plugin]L <SID>[ale-lint]
 nmap <SID>[plugin]m <SID>[memolist]
 map  <SID>[plugin]o <SID>[open-browser]
 map  <SID>[plugin]O <SID>[Open-browser]
-nmap <SID>[plugin]p <SID>[ctrlp]
 nmap <SID>[plugin]q <SID>[quickrun]
 map  <SID>[plugin]r <SID>[replace]
 map  <SID>[plugin]R <SID>[Replace]
@@ -247,8 +262,8 @@ map  <SID>[plugin]<Space> <SID>[context]
 " }}}
 
 " Normal, Visual mode basic mappings {{{
-noremap          gs               s
-map              s                <SID>[special]
+noremap gs       s
+map     s        <SID>[special]
 noremap          <SID>[special]/  /\v
 noremap          <SID>[special]?  ?\v
 
@@ -258,19 +273,28 @@ map              <SID>[special]r  <SID>[surround-r]
 
 map              <SID>[special]i  <SID>[insert]
 map              <SID>[special]m  <SID>[maximizer]
+nmap             <SID>[special]f  <SID>[fzy]
 nmap             <SID>[special]o  <SID>[open]
 nmap             <SID>[special]t  <SID>[tagbar]
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
+
+nnoremap <SID>[fzy]  <Nop>
+nnoremap <SID>[fzy]m :<C-u>FzyMemo<CR>
+nnoremap <SID>[fzy]n :<C-u>FzyNote<CR>
+nnoremap <SID>[fzy]r :<C-u>FzyMru<CR>
+nnoremap <SID>[fzy]p :<C-u>FzyInProject<CR>
+
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
-noremap          <SID>[insert]    <Nop>
-noremap    <expr><SID>[insert]p  ':Prefix ' . input('prefix:') . '<CR>'
+noremap       <SID>[insert]   <Nop>
+noremap <expr><SID>[insert]p ':InsertPrefix ' . input('prefix:') . '<CR>'
+noremap <expr><SID>[insert]s ':InsertSufix ' . input('suffix:') . '<CR>'
 " TODO: ↓らへんすべて汎用化
-noremap          <SID>[insert]-   :Prefix - <CR>
-noremap          <SID>[insert]#   :Prefix # <CR>
-noremap          <SID>[insert]>   :Prefix > <CR>
-noremap    <expr><SID>[insert]s  ':Suffix ' . input('suffix:') . '<CR>'
+noremap       <SID>[insert]-  :InsertPrefix - <CR>
+noremap       <SID>[insert]#  :InsertPrefix # <CR>
+noremap       <SID>[insert]>  :InsertPrefix > <CR>
+
 nnoremap         <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
@@ -290,7 +314,7 @@ nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
 nmap           p          <Plug>(yankround-p)
 nmap           P          <Plug>(yankround-P)
-nmap     <expr><C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
+nmap           <C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : ""
 nmap           <C-n>      <Plug>(yankround-next)
 
 if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対応
@@ -331,7 +355,6 @@ call g:plug#begin(s:plugged_path)
 " General {{{
 Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
-Plug 'Dkendal/fzy-vim', {'on' : ['FzyLsAg', 'FzyTag', 'FzyWorkingTree', 'FzyGem', 'FzyBuffer']}
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 " TODO Vim終了が遅くなる
@@ -340,10 +363,6 @@ Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
-Plug 'ctrlpvim/ctrlp.vim'
-      \ | Plug 'kaneshin/ctrlp-memolist'
-      \ | Plug 'mattn/ctrlp-codic'
-      \ | Plug 'ompugao/ctrlp-locate' " Slow..
 " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
 Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
 Plug 'fatih/vim-go', {'for' : 'go'}
@@ -470,31 +489,6 @@ if s:HasPlugin('completor.vim') " {{{
   let g:completor_markdown_omni_trigger = '..'
 endif " }}}
 
-if s:HasPlugin('ctrlp.vim') " {{{
-  let g:ctrlp_map = '[Nop]' " Note: <Nop>にすると`<`入力時に待たされる
-  let g:ctrlp_clear_cache_on_exit = 0
-  let g:ctrlp_show_hidden = 1
-  let g:ctrlp_prompt_mappings = {
-        \ 'PrtCurLeft()':         ['<c-b>', '<left>'],
-        \ 'PrtCurRight()':        ['<c-f>', '<right>'],
-        \ 'PrtBS()':              ['<bs>', '<c-]>', '<c-h>'],
-        \ 'PrtDelete()':          ['<c-d>', '<del>'],
-        \ 'PrtHistory(-1)':       ['<down>'],
-        \ 'PrtHistory(1)':        ['<up>'],
-        \ 'PrtSelectMove("j")':   ['<c-n>'],
-        \ 'PrtSelectMove("k")':   ['<c-p>'],
-        \ 'ToggleByFname()':      [],
-        \ 'ToggleType(1)':        ['<c-j>'],
-        \ 'ToggleType(-1)':       ['<c-k>'],
-        \ }
-
-  nnoremap <SID>(ctrlp)  :<C-u>CtrlP<CR>
-  nnoremap <SID>[ctrlp]m :<C-u>CtrlPMemo<CR>
-  nnoremap <SID>[ctrlp]r :<C-u>CtrlPMRUFiles<CR>
-  nnoremap <SID>[ctrlp]n :<C-u>CtrlP ~/Documents/notes<CR>
-  nnoremap <SID>[ctrlp]t :<C-u>CtrlP ~/Documents/todo/notes<CR>
-endif " }}}
-
 if s:HasPlugin('emmet-vim') " {{{
   let g:user_emmet_leader_key='<Nop>'
 
@@ -529,7 +523,6 @@ if s:HasPlugin('memolist.vim') " {{{
 
   " TODO local配下も再帰的に。
   nnoremap       <SID>[memolist]n  :<C-u>MemoNew<CR>
-  nnoremap       <SID>[memolist]l  :<C-u>CtrlPMemolist<CR>
   nnoremap <expr><SID>[memolist]g ':<C-u>MemoGrep ' . input('MemoGrep word: ') . '<CR>'
 endif " }}}
 
@@ -1011,9 +1004,9 @@ augroup vimrc
   autocmd FileType sh setlocal noexpandtab
   " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
   autocmd FileType xml,ant
-        \   setlocal foldmethod=syntax foldlevel=99
+        \   setlocal foldmethod=syntax foldlevel=99 noexpandtab
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
-  autocmd FileType xml,html,ant call s:MapJumpToNextTag()
+  autocmd FileType xml,html,ant call s:JumpToNextMapping()
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
   autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
 augroup END

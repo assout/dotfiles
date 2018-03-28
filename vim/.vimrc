@@ -243,6 +243,7 @@ map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
+nmap <SID>[plugin]f <SID>[fzy]
 map  <SID>[plugin]h <SID>[markdown_h]
 map  <SID>[plugin]l <SID>[markdown_l]
 nmap <SID>[plugin]L <SID>[ale-lint]
@@ -273,18 +274,25 @@ map              <SID>[special]r  <SID>[surround-r]
 
 map              <SID>[special]i  <SID>[insert]
 map              <SID>[special]m  <SID>[maximizer]
-nmap             <SID>[special]f  <SID>[fzy]
 nmap             <SID>[special]o  <SID>[open]
 nmap             <SID>[special]t  <SID>[tagbar]
 " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
 nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 
-nnoremap <SID>[fzy]  <Nop>
-nnoremap <SID>[fzy]m :<C-u>FzyMemo<CR>
-nnoremap <SID>[fzy]n :<C-u>FzyNote<CR>
-nnoremap <SID>[fzy]r :<C-u>FzyMru<CR>
-nnoremap <SID>[fzy]p :<C-u>FzyInProject<CR>
+if has('gui_running')
+  nnoremap <SID>[fzy]  <Nop>
+  nnoremap <SID>[fzy]m :Denite file:~/memo" -highlight-mode-insert=Search<CR>
+  nnoremap <SID>[fzy]n :Denite file:~/Documents/note -highlight-mode-insert=Search<CR>
+  nnoremap <SID>[fzy]r :Denite file_mru -highlight-mode-insert=Search<CR>
+  nnoremap <SID>[fzy]p :Denite file:~/Documents/note -highlight-mode-insert=Search<CR>
+else
+  nnoremap <SID>[fzy]  <Nop>
+  nnoremap <SID>[fzy]m :<C-u>FzyMemo<CR>
+  nnoremap <SID>[fzy]n :<C-u>FzyNote<CR>
+  nnoremap <SID>[fzy]r :<C-u>FzyMru<CR>
+  nnoremap <SID>[fzy]p :<C-u>FzyInProject<CR>
+endif
 
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
 noremap       <SID>[insert]   <Nop>
@@ -314,7 +322,7 @@ nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
 nmap           p          <Plug>(yankround-p)
 nmap           P          <Plug>(yankround-P)
-nmap           <C-p>      yankround#is_active() ? "\<Plug>(yankround-prev)" : ""
+nmap           <C-p>      <Plug>(yankround-prev)
 nmap           <C-n>      <Plug>(yankround-next)
 
 if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対応
@@ -357,6 +365,8 @@ Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
+" Plug 'Shougo/denite.nvim', g:is_win_gui ? {} : {'on' : []}
+Plug 'Shougo/denite.nvim'
 " TODO Vim終了が遅くなる
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
@@ -397,7 +407,7 @@ Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' �
 Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
 Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
 Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
-Plug 'moznion/vim-ltsv', {'for' : 'ltsv'} 
+Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
 Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
 " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
 " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
@@ -803,10 +813,10 @@ if s:HasPlugin('vim-operator-surround') " {{{
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 
-  " let g:operator#surround#blocks = {
-  "       \ 'markdown' : [
-  "       \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['`'] },
-  "       \ ] }
+  let g:operator#surround#blocks = {
+        \ 'markdown' : [
+        \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['f'] },
+        \ ] }
 endif " }}}
 
 if s:HasPlugin('vim-quickrun') " {{{

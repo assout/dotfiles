@@ -74,10 +74,12 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}/gron"
 	PATH="${PATH}:${tools_dir}/hub/bin"
 	PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+	PATH="${PATH}:${tools_dir}/pandoc-2.1.3"
 	PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
 	PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
 	PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
 	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
+	PATH="${PATH}:${tools_dir}/win32yank-x64"
 	PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
 	PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
 	PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
@@ -277,7 +279,7 @@ mybash__cd_upper() {
 	}
 
 	mybash__file_recent() {
-		${selector} < ~/.cache/ctrlp/mru/cache.txt | mybash__clipborad
+		sed -n 2,\$p ~/.cache/neomru/file | ${selector}  | mybash__clipborad
 	}
 
 	alias f='mybash__file 1'
@@ -312,7 +314,7 @@ mybash__grep() {
 
 mybash__grep_recent() {
 	# shellcheck disable=SC2046
-	mybash__grep "grep" "${@:-.}" $(cat ~/.cache/ctrlp/mru/cache.txt) 2>/dev/null
+	mybash__grep "grep" "${@:-.}" $(sed -n 2,\$p ~/.cache/neomru/file) 2>/dev/null
 }
 
 alias grep='grep --color=auto --binary-files=without-match --exclude-dir=.git'
@@ -440,7 +442,7 @@ mybash__open_in_project() {
 }
 
 mybash__open_recent_file() {
-	sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt | ${selector} | xargs -r ${opener}
+	sed -n 2,\$p ~/.cache/neomru/file | ${selector} | xargs -r ${opener}
 }
 
 alias o='mybash__open -maxdepth 1'
@@ -541,11 +543,11 @@ mybash__vim_in_project() {
 }
 
 mybash__vim_recent() {
-	local t; t=$(${selector} < ~/.cache/ctrlp/mru/cache.txt) && ${vim} "${t}"
+	local t; t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${vim} "${t}"
 }
 
 mybash__vim_most_recent() {
-	${vim} "$(head -1 ~/.cache/ctrlp/mru/cache.txt)"
+	${vim} "$(sed -n 2,\$p ~/.cache/neomru/file | head -1)"
 }
 
 alias v='mybash__vim -maxdepth 1'

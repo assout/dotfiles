@@ -160,10 +160,10 @@ command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
-command! FzyMemo call <SID>FzyCommand('ls ~/memo/*', ':e')
-command! FzyNote call <SID>FzyCommand('ls ~/Documents/notes/*', ':e')
-command! FzyMru call <SID>FzyCommand('sed -n 2,\$p ~/.cache/ctrlp/mru/cache.txt', ':e')
-command! FzyInProject call <SID>FzyCommand('git ls-files', ':e')
+command! FzyMemo call <SID>FzyCommand('ls ~/memo/*', ':edit')
+command! FzyNote call <SID>FzyCommand('ls ~/Documents/notes/*', ':edit')
+command! FzyMru call <SID>FzyCommand('sed -n 2,\$p ~/.cache/neomru/file', ':edit')
+command! FzyInProject call <SID>FzyCommand('git ls-files', ':edit')
 command! -range -nargs=1 InsertPrefix <line1>,<line2>call <SID>InsertString('^', <f-args>)
 command! -range -nargs=1 InsertSufix <line1>,<line2>call <SID>InsertString('$', <f-args>)
 command! -nargs=1 LogGrep call <SID>Grep(<q-args>, expand('~/.tmux/log/')) | call histadd('cmd', 'LogGrep <q-args>')
@@ -243,7 +243,6 @@ map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
-nmap <SID>[plugin]f <SID>[fzy]
 map  <SID>[plugin]h <SID>[markdown_h]
 map  <SID>[plugin]l <SID>[markdown_l]
 nmap <SID>[plugin]L <SID>[ale-lint]
@@ -272,26 +271,28 @@ map              <SID>[special]a  <SID>[surround-a]
 map              <SID>[special]d  <SID>[surround-d]
 map              <SID>[special]r  <SID>[surround-r]
 
+map              <SID>[special]A  <SID>[surround-A]
+map              <SID>[special]D  <SID>[surround-D]
+map              <SID>[special]R  <SID>[surround-R]
+
 map              <SID>[special]i  <SID>[insert]
 map              <SID>[special]m  <SID>[maximizer]
 nmap             <SID>[special]o  <SID>[open]
 nmap             <SID>[special]t  <SID>[tagbar]
-" Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれないため、指定している。
-nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+if has('gui_running')
+  " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれない。呼び出い場合はsetfiletypeなどする。
+  nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>source $MYGVIMRC<CR>
+else
+  nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<CR>
+endif
 nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 
-if has('gui_running')
-  nnoremap <SID>[fzy]  <Nop>
-  nnoremap <SID>[fzy]m :Denite file:~/memo" -highlight-mode-insert=Search<CR>
-  nnoremap <SID>[fzy]n :Denite file:~/Documents/note -highlight-mode-insert=Search<CR>
-  nnoremap <SID>[fzy]r :Denite file_mru -highlight-mode-insert=Search<CR>
-  nnoremap <SID>[fzy]p :Denite file:~/Documents/note -highlight-mode-insert=Search<CR>
-else
-  nnoremap <SID>[fzy]  <Nop>
-  nnoremap <SID>[fzy]m :<C-u>FzyMemo<CR>
-  nnoremap <SID>[fzy]n :<C-u>FzyNote<CR>
-  nnoremap <SID>[fzy]r :<C-u>FzyMru<CR>
-  nnoremap <SID>[fzy]p :<C-u>FzyInProject<CR>
+if ! has('gui_running')
+  nnoremap <Plug>[fzy]  <Nop>
+  nnoremap <Plug>[fzy]m :<C-u>FzyMemo<CR>
+  nnoremap <Plug>[fzy]n :<C-u>FzyNote<CR>
+  nnoremap <Plug>[fzy]r :<C-u>FzyMru<CR>
+  nnoremap <Plug>[fzy]p :<C-u>FzyInProject<CR>
 endif
 
 " TODO: To plugin or function " TODO: .(dot) repeat " TODO: Refactor
@@ -306,6 +307,13 @@ noremap       <SID>[insert]>  :InsertPrefix > <CR>
 nnoremap         <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+
+" TODO: fzyかdeniteに寄せる (できればterminalと同じfzyに寄せたいがGVimで動かない)
+" Note: <SID>だとvim-plugのオンデマンドロードができない
+nmap <SID>[open]m <Plug>[fzy]m
+nmap <SID>[open]n <Plug>[fzy]n
+nmap <SID>[open]r <Plug>[fzy]r
+nmap <SID>[open]p <Plug>[fzy]p
 
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
 nmap           K          <Plug>(ref-keyword)
@@ -365,9 +373,9 @@ Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
-" Plug 'Shougo/denite.nvim', g:is_win_gui ? {} : {'on' : []}
-Plug 'Shougo/denite.nvim'
+Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'on' : []}
 " TODO Vim終了が遅くなる
+" TODO GVim用にパッチを当ててる。。`'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
@@ -497,6 +505,29 @@ endif " }}}
 
 if s:HasPlugin('completor.vim') " {{{
   let g:completor_markdown_omni_trigger = '..'
+endif " }}}
+
+if s:HasPlugin('denite.nvim') " {{{
+  function! s:DeniteSettings()
+    call denite#custom#option('_', 'highlight_matched_char', 'SpellBad')
+
+    call denite#custom#map('insert', '<C-n>', '<denite:move_to_next_line>')
+    call denite#custom#map('insert', '<C-p>', '<denite:move_to_previous_line>')
+    call denite#custom#map('insert', '<C-a>', '<Home>')
+    call denite#custom#map('insert', '<C-e>', '<End>')
+    call denite#custom#map('insert', '<C-f>', '<Right>')
+    call denite#custom#map('insert', '<C-b>', '<Left>')
+
+    call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+    call denite#custom#var('file_rec/git', 'command',['git', 'ls-files', '-co', '--exclude-standard'])
+
+    nnoremap <Plug>[fzy]        <Nop>
+    nnoremap <expr><Plug>[fzy]m ':<C-u>Denite file:' . expand('~/memo/') . '<CR>'
+    nnoremap <expr><Plug>[fzy]n ':<C-u>Denite file:' . expand('~/Documents/notes') . '<CR>'
+    nnoremap <expr><Plug>[fzy]r ':<C-u>Denite file_mru<CR>'
+    nnoremap <expr><Plug>[fzy]p ':<C-u>Denite file_rec/git<CR>'
+  endfunction
+  autocmd vimrc User denite.nvim call s:DeniteSettings()
 endif " }}}
 
 if s:HasPlugin('emmet-vim') " {{{
@@ -675,7 +706,7 @@ endif " }}}
 
 if s:HasPlugin('vim-auto-programming') " {{{
   set omnifunc=autoprogramming#complete " Note: tmux-complete.vimとかぶることに注意。omnifuncにしてみたら動かないケースあり
-  autocmd vimrc FileType markdown setlocal omnifunc=autoprogramming#complete
+  autocmd vimrc User vim-auto-programming setlocal omnifunc=autoprogramming#complete
 endif " }}}
 
 if s:HasPlugin('vim-easy-align') " {{{
@@ -765,7 +796,7 @@ if s:HasPlugin('vim-markdown') " {{{
 
     nnoremap <buffer><SID>[context]    :<C-u>TableFormat<CR>
   endfunction
-  autocmd vimrc FileType markdown call s:VimMarkdownSettings()
+  autocmd vimrc User vim-markdown call s:VimMarkdownSettings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{
@@ -812,6 +843,10 @@ if s:HasPlugin('vim-operator-surround') " {{{
   nmap <SID>[surround-r]d <Plug>(operator-surround-replace)<Plug>(textobj-between-a)
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
+
+  nmap <SID>[surround-A]  <Plug>(operator-surround-append)$
+  nmap <SID>[surround-D]  <Plug>(operator-surround-delete)$
+  nmap <SID>[surround-R]  <Plug>(operator-surround-replace)$
 
   let g:operator#surround#blocks = {
         \ 'markdown' : [

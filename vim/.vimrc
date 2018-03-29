@@ -795,8 +795,12 @@ if s:HasPlugin('vim-markdown') " {{{
     nnoremap <buffer><SID>[markdown_H] msHmt:HeaderDecrease<CR>'tzt`s
 
     nnoremap <buffer><SID>[context]    :<C-u>TableFormat<CR>
+
+    nmap <buffer>( <Plug>Markdown_MoveToPreviousHeader
+    nmap <buffer>) <Plug>Markdown_MoveToNextHeader
+
   endfunction
-  autocmd vimrc User vim-markdown call s:VimMarkdownSettings()
+  autocmd vimrc FileType markdown call s:VimMarkdownSettings()
 endif " }}}
 
 if s:HasPlugin('vim-maximizer') " {{{

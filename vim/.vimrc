@@ -848,6 +848,9 @@ if s:HasPlugin('vim-operator-surround') " {{{
 
   nmap <SID>[surround-a]u <Plug>(operator-surround-append)<Plug>(textobj-url-a)
 
+  nmap <SID>[surround-a]4 <Plug>(operator-surround-append)$
+  nmap <SID>[surround-d]4 <Plug>(operator-surround-delete)$
+  nmap <SID>[surround-r]4 <Plug>(operator-surround-replace)$
   nmap <SID>[surround-A]  <Plug>(operator-surround-append)$
   nmap <SID>[surround-D]  <Plug>(operator-surround-delete)$
   nmap <SID>[surround-R]  <Plug>(operator-surround-replace)$

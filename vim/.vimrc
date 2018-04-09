@@ -475,9 +475,9 @@ Plug 'kana/vim-textobj-user'
       \ | Plug 'kana/vim-textobj-line'
       \ | Plug 'mattn/vim-textobj-url'
       \ | Plug 'osyo-manga/vim-textobj-multiblock'
+      \ | Plug 'pocke/vim-textobj-markdown'
       \ | Plug 'sgur/vim-textobj-parameter'
       \ | Plug 'thinca/vim-textobj-between'
-      \ | Plug 'thinca/vim-textobj-comment'
       \ | Plug 'thinca/vim-textobj-function-javascript'
 " }}}
 
@@ -687,7 +687,7 @@ if s:HasPlugin('tagbar') " {{{
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
-  let g:tcommentTextObjectInlineComment=''
+  let g:tcomment_textoject_inlinecomment='C' " cはtextobj-markdownで使用。
 endif " }}}
 
 " if s:HasPlugin('tmux-complete.vim') " {{{
@@ -857,7 +857,7 @@ if s:HasPlugin('vim-operator-surround') " {{{
 
   let g:operator#surround#blocks = {
         \ 'markdown' : [
-        \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['f'] },
+        \       { 'block' : ["```\n", "\n```"], 'motionwise' : ['line'], 'keys' : ['c'] },
         \ ] }
 endif " }}}
 
@@ -982,7 +982,7 @@ if s:HasPlugin('vim-textmanip') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-between') " {{{
-  " textobj-functionとかぶるので変更(textobj-functionのマッピングはVrapperと合わせたいのでこちらを変える)
+  " デフォルトのfはtextobj-functionとかぶるので変更(textobj-functionのマッピングはVrapperと合わせたいのでこちらを変える)
   let g:textobj_between_no_default_key_mappings = 1 " 'd'istanceに変える。。
   omap id <Plug>(textobj-between-i)
   omap ad <Plug>(textobj-between-a)
@@ -1007,7 +1007,7 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-textobj-parameter') " {{{
-  " Vrapper textobj-argsと合わせる('a'rguments)
+  " Vrapper textobj-argsと合わせる('a'rguments) デフォルトは','
   let g:textobj_parameter_no_default_key_mappings = 1
   omap ia <Plug>(textobj-parameter-i)
   omap aa <Plug>(textobj-parameter-a)

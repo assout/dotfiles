@@ -208,7 +208,6 @@ mybash__cd() {
 	[ -d "${t}" ] && cd "${t}" || return 64
 }
 
-
 mybash__cd_git_root() {
 	cd "$(git rev-parse --show-toplevel)" || return 64
 }

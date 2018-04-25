@@ -379,6 +379,7 @@ Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
+Plug 'airblade/vim-gitgutter'
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
@@ -436,7 +437,9 @@ Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!---
 " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
 Plug 'tpope/vim-fugitive'
       \ | Plug 'junegunn/gv.vim'
+      \ | Plug 'shumphrey/fugitive-gitlab.vim'
       \ | Plug 'skywind3000/asyncrun.vim'
+      \ | Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-unimpaired'
@@ -536,6 +539,11 @@ if s:HasPlugin('emmet-vim') " {{{
   let g:user_emmet_next_key = '<C-y>n'
   let g:user_emmet_prev_key = '<C-y>N'
   let g:user_emmet_anchorizeurl_key = '<Plug>[emmet]'
+endif " }}}
+
+if s:HasPlugin('fugitive-gitlab.vim') " {{{
+  " Note: .vimrc.localで指定する
+  " let g:fugitive_gitlab_domains = ['https://my.gitlab.com']
 endif " }}}
 
 if s:HasPlugin('HybridText') " {{{

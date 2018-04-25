@@ -78,8 +78,9 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
 	PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
 	PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
-	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
+	PATH="${PATH}:${tools_dir}/vim80-kaoriya-win64"
 	PATH="${PATH}:${tools_dir}/win32yank-x64"
+	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
 	PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
 	PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
 	PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
@@ -128,7 +129,7 @@ mybash__with_history() {
 
 mybash__find() {
 	# shellcheck disable=SC2046
-	find -L $(cat -) -type 'f' ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
+	find -L $(cat -) ! -path '*/.git/*' ! -path '*/node_modules/*' ! -name "*jpg" ! -name "*png"
 }
 
 mybash__find_dir() {
@@ -203,9 +204,10 @@ mybash__select_cheat() {
 alias c='mybash__select_cheat'
 
 mybash__cd() {
-	local t; t="$(echo "$@" | mybash__find_dir | sort | ${selector})";
+	local t; t="$({ echo '..'; echo "$@" | mybash__find_dir; } | sort | ${selector})";
 	[ -d "${t}" ] && cd "${t}" || return 64
 }
+
 
 mybash__cd_git_root() {
 	cd "$(git rev-parse --show-toplevel)" || return 64
@@ -219,89 +221,128 @@ mybash__cd_recent() {
 	local t; t=$(sed -n 2,\$p ~/.cache/neomru/directory | ${selector}) && cd "${t}" || return 64
 }
 
+mybash__cd_recurcive() {
+	local t; t=$(mybash__recurcive_directory "$@")
+	cd "${t}" || return 64
+}
+
 mybash__cd_upper() {
-	local t; t=$(p="../../"; pwd | tr -s "/" "\n" | tac | sed "1d" |
-		while read -r d ; do
-			echo "${p}${d}"
-			p=${p}../
-		done | fzy) &&
-			cd "${t}" || return 64
-	}
-	alias d='mybash__cd -maxdepth 1'
-	alias D='mybash__cd'
-	alias dg='mybash__cd_git_root'
-	alias dp='mybash__cd_in_project'
-	alias dr='mybash__cd_recent'
-	alias d.='mybash__cd_upper'
+	local t; t=$(local p="../../"; pwd | tr -s "/" "\n" | tac | sed "1d" | while read -r d ; do echo "${p}${d}"; p=${p}../; done | fzy) && cd "${t}" || return 64
+}
 
-	# TODO 日本語化けてそう
-	[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
-	[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+alias d='mybash__cd_recurcive'
+alias D='mybash__cd'
+alias dg='mybash__cd_git_root'
+alias dp='mybash__cd_in_project'
+alias dr='mybash__cd_recent'
+alias d.='mybash__cd_upper'
 
-	mybash__explorer() {
-			cat - | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
-	}
+# TODO 日本語化けてそう
+[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
+[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
 
-	mybash__explorer_find() {
-		if [ -n "$2" ] ; then
-			mybash__explorer <<< "$2"
-		else
-			mybash__find_dir <<< "-maxdepth $1" | sort | ${selector} | mybash__explorer
-		fi
-	}
+mybash__explorer() {
+	cat - | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
+}
 
-	mybash__explorer_recent_dir() {
-		sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}
-	}
+mybash__explorer_find() {
+	if [ -n "$2" ] ; then
+		mybash__explorer <<< "$2"
+	else
+		mybash__find_dir <<< "-maxdepth $1" | sort | ${selector} | mybash__explorer
+	fi
+}
+mybash__explorer_recurcive() {
+	[ "$1" = "." ] && mybash__explorer <<< "." && return 0 # dirty.
+	mybash__recurcive_directory | mybash__explorer
+}
 
-	mybash__explorer_in_project() {
-		(mybash__cd_git_root; git ls-files | xargs -r dirname | uniq | ${selector} | mybash__explorer)
-	}
-	alias e='mybash__explorer_find 1'
-	alias E='mybash__explorer_find 1000'
-	alias ep='mybash__explorer_in_project'
-	alias er='mybash__explorer_recent_dir'
+mybash__explorer_recent_dir() {
+	sed -n 2,\$p ~/.cache/neomru/directory | ${selector} | xargs -r ${opener}
+}
 
-	mybash__select_function() {
-		mybash__with_history < <(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)
-	}
-	alias fun='mybash__select_function'
+mybash__explorer_in_project() {
+	(mybash__cd_git_root; git ls-files | xargs -r dirname | uniq | ${selector} | mybash__explorer)
+}
+alias e='mybash__explorer_recurcive'
+alias E='mybash__explorer_find 1000'
+alias ep='mybash__explorer_in_project'
+alias er='mybash__explorer_recent_dir'
 
-	mybash__file() {
-		local depth=$1
-		local target=$2
-		# Note: ここをechoでなくヒアストリングで渡すとなぜかその先のfunction内で/dev/stdinが取れない
-		echo "${target}" "-maxdepth ${depth}" | mybash__find | sort | ${selector} | mybash__clipborad;
-	}
+mybash__recurcive() {
+	local s; s=$1
+	local t
+	# shellcheck disable=SC2086
+	t=$({ echo "${s:-./}../"; find ${s} -maxdepth 1 -mindepth 1 -printf "%p %Y\n" | sed -e "s? d\$?/?" -e "s? f\$??"; } | ${selector}) || return 64
+	if [ -f "${t}" ] ; then
+		echo "${t}"
+	elif [[ "${t}" =~ /\./$ ]] ; then
+		cd "${t}" || return 64
+	elif [ -d "${t}" ] ; then
+		mybash__recurcive "${t}"
+	else
+		echo "Unexpect. ${t}" 2>&1 ; return 64
+	fi
+}
 
-	mybash__file_in_project() {
-		(mybash__cd_git_root; git ls-files | ${selector} | mybash__clipborad)
-	}
+mybash__recurcive_directory() {
+	local s; s=$1
+	local t
+	# shellcheck disable=SC2086
+	t=$({ echo "${s:-.}/."; echo "${s:-.}/.."; find ${s} -maxdepth 1 -mindepth 1 -type 'd'; } | ${selector}) || return 64
+	if [[ "${t}" =~ /\.$ ]] ; then
+		echo "${t}"
+	elif [ -d "${t}" ] ; then
+		mybash__recurcive_directory "${t}"
+	else
+		echo "Unexpect. ${t}" 2>&1 ; return 64
+	fi
+}
 
-	mybash__file_recent() {
-		sed -n 2,\$p ~/.cache/neomru/file | ${selector}  | mybash__clipborad
-	}
+mybash__select_function() {
+	mybash__with_history < <(declare -F | cut -d" " -f3 | grep -v "^_" | sort -f | ${selector} | cut -d'=' -f 1)
+}
+alias fun='mybash__select_function'
 
-	alias f='mybash__file 1'
-	alias F='mybash__file 999'
-	alias fp='mybash__file_in_project'
-	alias fr='mybash__file_recent'
+mybash__file() {
+	local depth=$1
+	local target=$2
+	# Note: ここをechoでなくヒアストリングで渡すとなぜかその先のfunction内で/dev/stdinが取れない
+	echo "${target}" "-mindepth 1 -maxdepth ${depth}" | mybash__find | sort | ${selector} | mybash__clipborad;
+}
 
-	[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+mybash__file_recurcive() {
+	mybash__recurcive "$@" | mybash__clipborad
+}
 
-	mybash__ghq_cd() {
-		local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) &&
-			mybash__with_history <<<"cd ${t}"
-	}
+mybash__file_in_project() {
+	(mybash__cd_git_root; git ls-files | ${selector} | mybash__clipborad)
+}
 
-	mybash__ghq_update() {
-		ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"
-	}
+mybash__file_recent() {
+	sed -n 2,\$p ~/.cache/neomru/file | ${selector}  | mybash__clipborad
+}
 
-	mybash__ghq_status() {
-		local t
-		ghq list -p "$@" | while read -r t; do (cd "${t}" && echo "${t}" && git status) done
-	}
+alias f='mybash__file_recurcive'
+alias F='mybash__file 999'
+alias fp='mybash__file_in_project'
+alias fr='mybash__file_recent'
+
+[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
+
+mybash__ghq_cd() {
+	local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) &&
+		mybash__with_history <<<"cd ${t}"
+}
+
+mybash__ghq_update() {
+	ghq list "$@" | sed -e "s?^?https://?" | xargs -n 1 -P 10 -I% sh -c "ghq get -u %"
+}
+
+mybash__ghq_status() {
+	local t
+	ghq list -p "$@" | while read -r t; do (cd "${t}" && echo "${t}" && git status) done
+}
 
 alias gh='mybash__ghq_cd'
 alias ghu='mybash__ghq_update' # 'gh'q 'u'pdate.
@@ -542,6 +583,11 @@ mybash__vim_in_project() {
 	(mybash__cd_git_root; local t; t=$(git ls-files | ${selector} ) && ${vim} "${t}")
 }
 
+mybash__vim_recurcive() {
+	local t; t=$(mybash__recurcive "$@")
+	${vim} "${t}"
+}
+
 mybash__vim_recent() {
 	local t; t=$(sed -n 2,\$p ~/.cache/neomru/file | ${selector}) && ${vim} "${t}"
 }
@@ -550,7 +596,7 @@ mybash__vim_most_recent() {
 	${vim} "$(sed -n 2,\$p ~/.cache/neomru/file | head -1)"
 }
 
-alias v='mybash__vim -maxdepth 1'
+alias v='mybash__vim_recurcive'
 alias V='mybash__vim'
 alias vp='mybash__vim_in_project'
 alias vr='mybash__vim_recent'

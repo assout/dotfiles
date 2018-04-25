@@ -12,7 +12,7 @@ if [ "${is_win}" ] ; then
 	# Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
 	ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
 	ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.env"
-	ln -sb "${HERE}/eclipse/eclipse.ini.win" ~/Tools/eclipse-java-mars-2-win32-x86_64/eclipse/eclipse.ini
+	ln -sb "${HERE}/eclipse/eclipse.ini.win" ~/Tools/eclipse/eclipse.ini
 	ln -sf "${HERE}/.cheatrc" "${USERPROFILE}"/
 	ln -sf "${HERE}/.cheatsheets" "${USERPROFILE}"/
 else
@@ -32,10 +32,10 @@ ln -sf "${HERE}/lint/.prh.yml" ~/
 # ln -sf "${HERE}/memo" ~/.config/
 ln -sb "${HERE}/vim/.gvimrc" ~/
 ln -sb "${HERE}/vim/.vimrc" ~/
-ln -sb "${HERE}/vim/snippets" ~/.vim/
+ln -snb "${HERE}/vim/snippets" ~/.vim/
 ln -sf "${HERE}/intellij/.ideavimrc" ~/
 mkdir -p ~/.config
-ln -sf "${HERE}/.config/git/" ~/.config/git
+ln -snf "${HERE}/.config/git/" ~/.config/
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/
@@ -49,10 +49,10 @@ elif [ "${is_office}" ] ; then
 	ln -sf "${HERE}/.gitconfig.office" ${USERPROFILE}/.gitconfig.env # for npm
 fi
 ln -sf "${HERE}/.gitattributes" ~/
-ln -sf "${HERE}/.git_templates" ~/
+ln -snf "${HERE}/.git_templates" ~/
 ln -sf "${HERE}/.inputrc" ~/
 ln -sf "${HERE}/.tmux.conf" ~/
-ln -sf "${HERE}/.todo" ~/
+ln -snf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
 ln -sf "${HERE}/.remark.css" ~/
 

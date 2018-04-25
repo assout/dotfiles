@@ -1,23 +1,30 @@
--vm
-C:/Program Files/Java/jdk1.8.0_73/bin
 -startup
-plugins/org.eclipse.equinox.launcher_1.3.100.v20150511-1540.jar
+plugins/org.eclipse.equinox.launcher_1.4.0.v20161219-1356.jar
 --launcher.library
-plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.300.v20150602-1417
+plugins/org.eclipse.equinox.launcher.win32.win32.x86_64_1.1.551.v20171108-1834
 -product
 org.eclipse.epp.package.java.product
 -showsplash
-org.eclipse.platform
-; --launcher.XXMaxPermSize
-; 256m
+org.eclipse.epp.package.common
+--launcher.defaultAction
+openFile
 --launcher.defaultAction
 openFile
 --launcher.appendVmargs
+-vm
+C:/Program Files/Java/jdk1.8.0_73/jre/bin/server/jvm.dll
 -vmargs
--Dosgi.requiredJavaVersion=1.7
--Xms1024m
+-Dosgi.requiredJavaVersion=1.8
+-Dosgi.instance.area.default=@user.home/eclipse-workspace
+-XX:+UseG1GC
+-XX:+UseStringDeduplication
+--add-modules=ALL-SYSTEM
+-Dosgi.requiredJavaVersion=1.8
+-Xms256m
 -Xmx2048m
+--add-modules=ALL-SYSTEM
 -Dfile.encoding=utf-8
-; 以下はfindbugsプラグインのメニューが一部日本語になってしまうことへの対策
--Duser.language=en
--Duser.country=US
+# Refs: [314805 – [Win32] Eclipse icon is duplicated in taskbar](https://bugs.eclipse.org/bugs/show_bug.cgi?id=314805)
+-vm
+C:\Program Files\Java\jdk1.8.0_73\jre\bin\server\jvm.dll
+# vim: filetype=dosini:

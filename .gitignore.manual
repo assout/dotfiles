@@ -23,4 +23,11 @@ build
 gitignore/
 *.orig
 logs
+*.zip
+*.gz
+*.tar
+*.jar
+
+### Whitelist ###
+!bin # gibo Eclipseで無効になってしまうが管理したいケースも多いため)
 

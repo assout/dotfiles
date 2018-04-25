@@ -1056,7 +1056,7 @@ augroup vimrc
   autocmd FileType sh setlocal noexpandtab
   " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
   autocmd FileType xml,ant
-        \   setlocal foldmethod=syntax foldlevel=99 noexpandtab
+        \   setlocal foldmethod=syntax foldlevelstart=99 foldlevel=99 noexpandtab
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   autocmd FileType xml,html,ant call s:JumpToNextMapping()
   autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta

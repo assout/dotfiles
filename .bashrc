@@ -73,6 +73,7 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
 	PATH="${PATH}:${tools_dir}/gron"
 	PATH="${PATH}:${tools_dir}/hub/bin"
+	PATH="${PATH}:${tools_dir}/instantclient_12_2"
 	PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
 	PATH="${PATH}:${tools_dir}/pandoc-2.1.3"
 	PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
@@ -530,6 +531,8 @@ alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
 if [ "${is_win}" ] ; then
+	alias sqlplus="winpty sqlplus"
+
 	svn() {
 		chcp.com 932 >& /dev/null
 		command svn "$@"

@@ -251,6 +251,8 @@ map  <SID>[plugin]o <SID>[open-browser]
 map  <SID>[plugin]O <SID>[Open-browser]
 nmap <SID>[plugin]q <SID>[quickrun]
 map  <SID>[plugin]r <SID>[replace]
+map  <SID>[plugin]s <SID>[swap]
+map  <SID>[plugin]S <SID>[Swap]
 map  <SID>[plugin]R <SID>[Replace]
 map  <SID>[plugin]t <SID>[todo]
 nmap <SID>[plugin]/ <SID>[migemo]
@@ -405,6 +407,7 @@ Plug 'kamichidu/vim-edit-properties'
 Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 Plug 'kana/vim-submode'
 Plug 'koron/codic-vim', {'on' : ['Codic']}
+Plug 'kurkale6ka/vim-swap'
 Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
 Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
 Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため使えない TODO: msys2で`//`と入力すると固まる TODO: msysだと遅いから無効
@@ -980,6 +983,14 @@ if s:HasPlugin('vim-submode') " {{{ Caution: prefix含めsubmode nameが長す�
   call g:submode#enter_with('diff', 'n', '', '<subN>c', ']c')
   call g:submode#map('diff', 'n', '', 'k', '[c')
   call g:submode#map('diff', 'n', '', 'j', ']c')
+endif " }}}
+
+if s:HasPlugin('vim-swap') " {{{
+  let g:swap_custom_ops = ['<-', '->']
+  vmap <SID>[swap] <plug>SwapSwapOperands
+  vmap <SID>[Swap] <plug>SwapSwapPivotOperands
+  nmap <SID>[swap] <plug>SwapSwapWithR_WORD
+  nmap <SID>[Swap] <plug>SwapSwapWithL_WORD
 endif " }}}
 
 if s:HasPlugin('vim-textmanip') " {{{

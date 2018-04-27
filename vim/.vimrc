@@ -249,6 +249,7 @@ nmap <SID>[plugin]L <SID>[ale-lint]
 nmap <SID>[plugin]m <SID>[memolist]
 map  <SID>[plugin]o <SID>[open-browser]
 map  <SID>[plugin]O <SID>[Open-browser]
+nmap <SID>[plugin]p <SID>[previm]
 nmap <SID>[plugin]q <SID>[quickrun]
 map  <SID>[plugin]r <SID>[replace]
 map  <SID>[plugin]s <SID>[swap]
@@ -638,6 +639,13 @@ endif " }}}
 
 if s:HasPlugin('operator-camelize.vim') " {{{
   map <SID>[camelize] <Plug>(operator-camelize-toggle)
+endif " }}}
+
+if s:HasPlugin('previm') " {{{
+  function! s:PrevimSettings()
+    nnoremap <buffer><SID>[previm] :<C-u>PrevimOpen<CR>
+  endfunction
+  autocmd vimrc user previm call s:PrevimSettings()
 endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{

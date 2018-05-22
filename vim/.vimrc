@@ -220,7 +220,7 @@ set shortmess& shortmess+=atTOI
 set sidescrolloff=5
 set smartcase
 set softtabstop=0
-let &spellfile = expand(g:is_linux ? '~/Dropbox/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
+" set spellfile = '~/spell/en.utf-8.add' : '~/Documents/spell/en.utf-8.add')
 set spelllang=en,cjk " スペルチェックで日本語は除外する
 set splitbelow
 set splitright
@@ -378,7 +378,7 @@ Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGenerator
 Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
 Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'on' : []}
 " TODO Vim終了が遅くなる
-" TODO GVim用にパッチを当ててる。。`'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
+" TODO GVim用にパッチを当ててる。。` file_mru.py#L19 'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
@@ -441,9 +441,9 @@ Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!---
 " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
 Plug 'tpope/vim-fugitive'
       \ | Plug 'junegunn/gv.vim'
-      \ | Plug 'shumphrey/fugitive-gitlab.vim'
       \ | Plug 'skywind3000/asyncrun.vim'
       \ | Plug 'tpope/vim-rhubarb'
+      \ | Plug 'shumphrey/fugitive-gitlab.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-unimpaired'
@@ -788,6 +788,12 @@ if s:HasPlugin('vim-gf-user') " {{{
   autocmd vimrc User vim-gf-user call g:gf#user#extend('GfFile', 1000)
 endif " }}}
 
+if s:HasPlugin('vim-gitgutter') " {{{
+  let g:gitgutter_map_keys = 0 " ic, acはvim-textobj-markdown用に取っておきたいため
+  nmap ]c <Plug>GitGutterNextHunk
+  nmap [c <Plug>GitGutterPrevHunk
+endif " }}}
+
 if s:HasPlugin('vim-json') " {{{
   let g:vim_json_syntax_conceal = 0
 endif " }}}
@@ -1024,6 +1030,7 @@ if s:HasPlugin('vim-textobj-multiblock') " {{{
         \  [ '_', '_', 1 ],
         \  [ '\~', '\~', 1 ],
         \  [ '|', '|', 1 ],
+        \  [ '>', '<', 1 ],
         \  [ '```', '```' ],
         \  [ '```\<.*\>', '```' ],
         \]
@@ -1116,6 +1123,12 @@ else
   if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
+"
+if has('vim_starting') && has('reltime')
+    let g:startuptime = reltime()
+    autocmd vimrc VimEnter * let g:startuptime = reltime(g:startuptime) | redraw | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+endif
+
 " }}}1
 
 " vim:nofoldenable:

@@ -14,9 +14,6 @@
 # [Begin] {{{1
 set -Cu
 
-is_gitbash=$(if [ "${GIT_BASH:-0}" = 1 ] ; then echo 0; fi) # /c/Program Files/Git/etc/msystem に自分で定義
-[ "${is_gitbash}" ] && return
-
 # Start profile
 is_profile=$(if [ "${1:-}" = "-p" ] ; then echo 0; fi)
 if [ "${is_profile}" ] ; then
@@ -84,8 +81,9 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
 	PATH="${PATH}:/c/Program Files (x86)/Google/Chrome/Application"
 	PATH="${PATH}:/c/Program Files (x86)/Graphviz 2.28/bin"
-	PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_73/bin"
+	PATH="${PATH}:/c/Program Files/Java/jdk1.8.0_172/bin"
 	PATH="${PATH}:/c/Program Files/TortoiseSVN/bin"
+	PATH="${PATH}:/c/Program Files/Docker Toolbox"
 	PATH="${PATH}:/c/ProgramData/chocolatey/bin"
 	PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
 	PATH="${PATH}:/c/Users/admin/AppData/Roaming/cabal/bin"
@@ -645,7 +643,7 @@ elif [ "${is_win}" ] ; then
 	# TODO slow?
 	source /usr/share/git/completion/git-completion.bash
 
-	# Note たまにslow. ls後一瞬stackする。再起動後はまた早くなったりする。
+	# Note たまにslow. ls後一瞬stackする。再起動後はまた早くなったりする。 __git_ps1の中の`git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null`で時間かかってそう
 	source /usr/share/git/completion/git-prompt.sh
 	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 
@@ -655,10 +653,9 @@ elif [ "${is_win}" ] ; then
 	[ -z "${TMUX:-}" ] && chcp.com 65001 # for shellcheck
 fi
 
-set +Cu
 # TODO gnome wanelandじゃないとログインできなくなる。いったんgnome terminalの設定でやる
 # [ -z "${TMUX}" ] && ( [ "${is_home}" ] || [ "${is_office}" ] ) && exec tmux
-[ -z "${TMUX}" ] && [ ! "${is_unix}" ] && exec tmux
+[ -z "${TMUX:-}" ] && [ ! "${is_unix}" ] && which tmux &> /dev/null && exec tmux # TODO which遅い
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
 # TODO slow. TODO printf構文
@@ -671,6 +668,8 @@ if [ "${is_profile}" ] ; then
 	exec 2>&3 3>&- # これなんだ。。
 fi
 # }}}1
+
+set +u # タブ補完時にunboundとなる
 
 # vim:nofoldenable:
 

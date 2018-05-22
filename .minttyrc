@@ -11,7 +11,6 @@ CursorType=block
 CursorBlinks=yes
 Term=xterm-256color
 BellTaskbar=yes
-AppID=MSYS2.Shell.MINGW64.9
 ClipShortcuts=yes
 Columns=146
 CtrlShiftShortcuts=yes

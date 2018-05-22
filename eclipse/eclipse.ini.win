@@ -11,11 +11,6 @@ openFile
 --launcher.defaultAction
 openFile
 --launcher.appendVmargs
--vm
-C:/Program Files/Java/jdk1.8.0_73/jre/bin/server/jvm.dll
--vmargs
--Dosgi.requiredJavaVersion=1.8
--Dosgi.instance.area.default=@user.home/eclipse-workspace
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
 --add-modules=ALL-SYSTEM
@@ -24,7 +19,13 @@ C:/Program Files/Java/jdk1.8.0_73/jre/bin/server/jvm.dll
 -Xmx2048m
 --add-modules=ALL-SYSTEM
 -Dfile.encoding=utf-8
-# Refs: [314805 â€“ [Win32] Eclipse icon is duplicated in taskbar](https://bugs.eclipse.org/bugs/show_bug.cgi?id=314805)
+; Refs. [java - Unable to download plugin for eclipse - Stack Overflow](https://stackoverflow.com/questions/40667733/unable-to-download-plugin-for-eclipse)
+-Dorg.eclipse.ecf.provider.filetransfer.excludeContributors=org.eclipse.ecf.provider.filetransfer.httpclient4
+; Refs. [314805 â€? [Win32] Eclipse icon is duplicated in taskbar](https://bugs.eclipse.org/bugs/show_bug.cgi?id=314805)
 -vm
-C:\Program Files\Java\jdk1.8.0_73\jre\bin\server\jvm.dll
+C:/Program Files/Java/jdk1.8.0_172/jre/bin/server/jvm.dll
+-vmargs
+-Dosgi.requiredJavaVersion=1.8
+-Dosgi.instance.area.default=@user.home/eclipse-workspace
+-Dhttps.protocols=TLSv1.2
 # vim: filetype=dosini:

@@ -89,3 +89,6 @@ grep -Pzo "(?s)^(\s*)\N*main.*?{.*?^\1}" *.c
 
 [linux - Regex (grep) for multi-line search needed - Stack Overflow](http://stackoverflow.com/questions/3717772/regex-grep-for-multi-line-search-needed/7167115)
 
+# マッチ回数を指定(ファイル内で最初のマッチのみ)
+grep -m 1 hoge fuga.txt
+

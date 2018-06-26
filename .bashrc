@@ -52,6 +52,7 @@ export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(perfo
 export GOPATH=${HOME}/.go/
 export LANG=en_US.UTF-8
 export LESS='-R -x2'
+export PYTHONIOENCODING=utf-8
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 if [ "${is_win}" ] ; then
@@ -416,17 +417,17 @@ alias l='mybash__log_open'
 alias ld='mybash__log_cd_dir'
 alias lg='mybash__log_grep'
 
-memo_dir="${HOME}/memo"
+memo_dirs=( "${HOME}/memo" "${HOME}/memo_internal" )
 mybash__memo_new() {
 	${vim} -c ":MemoNew $*"
 }
 
 mybash__memo_list() {
-	local l; l=$(echo "${memo_dir}/"* | mybash__find | sort | ${selector}) && ${vim} "${l}"
+	local l; l=$(for d in ${memo_dirs[@]}; do echo "${d}/"*; done | mybash__find | sort | ${selector}) && ${vim} "${l}"
 }
 
 mybash__memo_cd_dir() {
-	cd "${memo_dir}" || return 64
+	cd "${memo_dirs[0]}" || return 64
 }
 
 mybash__memo_grep() {

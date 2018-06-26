@@ -29,5 +29,5 @@ logs
 *.jar
 
 ### Whitelist ###
-!bin # gibo Eclipseで無効になってしまうが管理したいケースも多いため)
+!bin # gibo Eclipseで無効になってしまうが管理したいケースも多いため
 

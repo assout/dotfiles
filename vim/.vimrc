@@ -160,7 +160,7 @@ command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -bang BufClear %bdelete<bang>
 command! -nargs=1 ChangeTabstep call <SID>ChangeTabstep(<q-args>)
 command! -range=% DeleteBlankLine <line1>,<line2>v/\S/d | nohlsearch
-command! FzyMemo call <SID>FzyCommand('ls ~/memo/*', ':edit')
+command! FzyMemo call <SID>FzyCommand('ls ~/memo/* ~/memo_internal', ':edit')
 command! FzyNote call <SID>FzyCommand('ls ~/Documents/notes/*', ':edit')
 command! FzyMru call <SID>FzyCommand('sed -n 2,\$p ~/.cache/neomru/file', ':edit')
 command! FzyInProject call <SID>FzyCommand('git ls-files', ':edit')
@@ -243,9 +243,10 @@ map  <Space>        <SID>[plugin]
 map  <SID>[plugin]a <SID>[align]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
-map  <SID>[plugin]h <SID>[markdown_h]
-map  <SID>[plugin]l <SID>[markdown_l]
-nmap <SID>[plugin]L <SID>[ale-lint]
+nmap <SID>[plugin]f <SID>[ale-fix]
+map  <SID>[plugin]H <SID>[markdown_h]
+map  <SID>[plugin]L <SID>[markdown_l]
+nmap <SID>[plugin]l <SID>[ale-lint]
 nmap <SID>[plugin]m <SID>[memolist]
 map  <SID>[plugin]o <SID>[open-browser]
 map  <SID>[plugin]O <SID>[Open-browser]
@@ -350,6 +351,15 @@ nnoremap       <C-m>      i<CR><Esc>
 " Note: <C-;>は無理らしい
 nmap           <A-;>      <Plug>(fontzoom-larger)
 nmap           <A-->      <Plug>(fontzoom-smaller)
+nnoremap <C-PageUp>   :tabprevious<CR>
+nnoremap <C-PageDown> :tabnext<CR>
+nnoremap ]g :tabnext<CR>
+nnoremap [G :tabfirst<CR>
+nnoremap ]G :tablast<CR>
+nnoremap [w :wincmd W<CR>
+nnoremap ]w :wincmd w<CR>
+nnoremap [W :wincmd t<CR>
+nnoremap ]W :wincmd b<CR>
 
 " }}}
 
@@ -382,6 +392,7 @@ Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'
 Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
 Plug 'Shougo/neosnippet.vim'
       \ | Plug 'Shougo/neosnippet-snippets'
+Plug 'Vimjas/vim-python-pep8-indent', {'for' : ['python']}
 Plug 'airblade/vim-gitgutter'
 Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
 Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
@@ -423,7 +434,7 @@ Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: た�
 Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
 Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
 " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
-" Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない TODO es6対応されてない？
+Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない? TODO es6対応されてない？ Note: 入れないとhtml内の埋め込みscriptがindent崩れる
 Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
 Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
 " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
@@ -456,7 +467,7 @@ Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
 Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
 Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
-Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint']}
+Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix']}
 " Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
 " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
 " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
@@ -496,8 +507,11 @@ call g:plug#end()
 if s:HasPlugin('ale') " {{{
   let g:ale_sign_column_always = 1
   let g:ale_lint_on_text_changed = 'never'
+  let b:ale_fixers = {'python': ['autopep8']}
+  let g:ale_python_autopep8_options = '--aggressive --aggressive'
   " TODO 実行後カーソル位置が変わってしまう
   nnoremap <SID>[ale-lint] :<C-u>ALELint<CR>
+  nnoremap <SID>[ale-fix] :<C-u>ALEFix<CR>
   autocmd vimrc User ALELintPost :unsilent echo "Lint done!"
 endif " }}}
 
@@ -529,7 +543,7 @@ if s:HasPlugin('denite.nvim') " {{{
     call denite#custom#var('file_rec/git', 'command',['git', 'ls-files', '-co', '--exclude-standard'])
 
     nnoremap <Plug>[fzy]        <Nop>
-    nnoremap <expr><Plug>[fzy]m ':<C-u>Denite file:' . expand('~/memo/') . '<CR>'
+    nnoremap <expr><Plug>[fzy]m ':<C-u>Denite file:' . expand('~/memo/') . ' file:' . expand('~/memo_internal/') . '<CR>'
     nnoremap <expr><Plug>[fzy]n ':<C-u>Denite file:' . expand('~/Documents/notes') . '<CR>'
     nnoremap <expr><Plug>[fzy]r ':<C-u>Denite file_mru<CR>'
     nnoremap <expr><Plug>[fzy]p ':<C-u>Denite file_rec/git<CR>'
@@ -706,7 +720,7 @@ if s:HasPlugin('tagbar') " {{{
 endif " }}}
 
 if s:HasPlugin('tcomment_vim') " {{{
-  let g:tcomment_textoject_inlinecomment='C' " cはtextobj-markdownで使用。
+  let g:tcomment_textobject_inlinecomment='iC' " cはtextobj-markdownで使用。
 endif " }}}
 
 " if s:HasPlugin('tmux-complete.vim') " {{{
@@ -1123,7 +1137,7 @@ else
   if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
 endif
 " }}}
-"
+
 if has('vim_starting') && has('reltime')
     let g:startuptime = reltime()
     autocmd vimrc VimEnter * let g:startuptime = reltime(g:startuptime) | redraw | echomsg 'startuptime: ' . reltimestr(g:startuptime)

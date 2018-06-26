@@ -12,7 +12,12 @@ if [ "${is_win}" ] ; then
 	# Note: Eclipse Marsは%USERPROFILE%の".vrapperrc"を見る。
 	ln -sf "${HERE}/eclipse/.vrapperrc" "$(cygpath "${USERPROFILE}")/.vrapperrc"
 	ln -sf "${HERE}/eclipse/.vrapperrc.win" "$(cygpath "${USERPROFILE}")/.vrapperrc.env"
-	ln -sb "${HERE}/eclipse/eclipse.ini.win" ~/Tools/eclipse/eclipse.ini
+	ln -sb "${HERE}/eclipse/eclipse_mars.ini" ~/Tools/eclipse-java-mars-2-win32-x86_64/eclipse/eclipse.ini
+	ln -sb "${HERE}/eclipse/eclipse_oxygen.ini" ~/Tools/eclipse-java-oxygen-3a-win32-x86_64/eclipse/eclipse.ini
+	ln -sb "${HERE}/eclipse/eclipse_photon.ini" ~/Tools/eclipse-java-photon-RC1-win32-x86_64/eclipse/eclipse.ini
+	ln -sb "${HERE}/eclipse/clean.bat" ~/Tools/eclipse-java-mars-2-win32-x86_64/eclipse/
+	ln -sb "${HERE}/eclipse/clean.bat" ~/Tools/eclipse-java-oxygen-3a-win32-x86_64/eclipse/
+	ln -sb "${HERE}/eclipse/clean.bat" ~/Tools/eclipse-java-photon-RC1-win32-x86_64/eclipse/
 	ln -sf "${HERE}/.cheatrc" "${USERPROFILE}"/
 	ln -sf "${HERE}/.cheatsheets" "${USERPROFILE}"/
 else
@@ -36,6 +41,7 @@ ln -snb "${HERE}/vim/snippets" ~/.vim/
 ln -sf "${HERE}/intellij/.ideavimrc" ~/
 mkdir -p ~/.config
 ln -snf "${HERE}/.config/git/" ~/.config/
+ln -sb "${HERE}/.flake8" ~/
 ln -sb "${HERE}/.bashrc" ~/
 ln -sf "${HERE}/.ctags" ~/
 ln -sf "${HERE}/.gitconfig" ~/

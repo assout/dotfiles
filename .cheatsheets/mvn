@@ -38,4 +38,6 @@ mvn javadoc:javadoc # javadoc生成
 
 # Maven Surefire Plugin
 mvn test -Dtest=fooClass #barMethod# 特定のクラス、メソッドのみ実行
+mvn test -Dmaven.test.failure.ignore=true # 失敗しても継続
+
 

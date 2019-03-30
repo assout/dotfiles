@@ -3,7 +3,7 @@
   email = assout@users.noreply.github.com
 
 [credential]
-  helper = gnome-keyring
+  helper = store
 
 # vim: filetype=gitconfig:
 

@@ -185,7 +185,8 @@ set background=dark
 set cindent
 set backup
 set backupdir=~/.vim/backup
-set clipboard=unnamed,unnamedplus
+set clipboard&
+set clipboard^=unnamedplus,unnamed
 set cmdheight=1
 " set cryptmethod=blowfish2 " Caution: Comment out for performance
 set diffopt& diffopt+=vertical
@@ -361,6 +362,8 @@ nnoremap ]w :wincmd w<CR>
 nnoremap [W :wincmd t<CR>
 nnoremap ]W :wincmd b<CR>
 
+nnoremap <silent>p :r !win32yank.exe -o<CR>
+vnoremap <silent>p :r !win32yank.exe -o<CR>
 " }}}
 
 " Adding to unimpaired plugin mapping {{{
@@ -1107,8 +1110,8 @@ augroup vimrc
         \   setlocal foldmethod=syntax foldlevelstart=99 foldlevel=99 noexpandtab
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   autocmd FileType xml,html,ant call s:JumpToNextMapping()
-  autocmd Colorscheme * highlight DoubleByteSpace term=underline ctermbg=LightMagenta guibg=LightMagenta
-  autocmd VimEnter,WinEnter * match DoubleByteSpace /　/
+
+  autocmd TextYankPost * :call system('win32yank.exe -i', @")
 augroup END
 " }}}1
 
@@ -1117,25 +1120,25 @@ nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 
 " Colorshceme settings {{{
-if s:HasPlugin('vim-hybrid')
-  function! s:DefineHighlight()
-    highlight clear SpellBad
-    highlight clear SpellCap
-    highlight clear SpellRare
-    highlight clear SpellLocal
-    highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
-    highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
-    highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
-    highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
-    if g:is_linux " TODO: workaround. 見づらいため.
-      highlight Normal ctermbg=none
-    endif
-  endfunction
-  autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
-  colorscheme hybrid
-else
-  if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
-endif
+" if s:HasPlugin('vim-hybrid')
+"   function! s:DefineHighlight()
+"     highlight clear SpellBad
+"     highlight clear SpellCap
+"     highlight clear SpellRare
+"     highlight clear SpellLocal
+"     highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
+"     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
+"     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
+"     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
+"     if g:is_linux " TODO: workaround. 見づらいため.
+"       highlight Normal ctermbg=none
+"     endif
+"   endfunction
+"   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
+"   colorscheme hybrid
+" else
+"   if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
+" endif
 " }}}
 
 if has('vim_starting') && has('reltime')

@@ -48,7 +48,7 @@ ln -snf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
 ln -sf "${HERE}/.remark.css" ~/
 
-ln -sf "${HERE}/wsltty/config" "${APPDATA}/wsltty/config"
+# ln -sf "${HERE}/wsltty/config" "${APPDATA}/wsltty/config"
 
 if [ "${is_win}" ] ; then
 	ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/

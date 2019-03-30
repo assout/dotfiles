@@ -210,6 +210,7 @@ set list
 set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 set lazyredraw " マクロなどを実行中は描画を中断
+set modeline
 set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやすい
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定

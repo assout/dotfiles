@@ -1120,28 +1120,6 @@ augroup END
 nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 source $VIMRUNTIME/macros/matchit.vim " Enable matchit
 
-" Colorshceme settings {{{
-" if s:HasPlugin('vim-hybrid')
-"   function! s:DefineHighlight()
-"     highlight clear SpellBad
-"     highlight clear SpellCap
-"     highlight clear SpellRare
-"     highlight clear SpellLocal
-"     highlight SpellBad   cterm=underline ctermfg=Red gui=undercurl guisp=Red
-"     highlight SpellCap   cterm=underline ctermfg=Blue gui=undercurl guisp=Blue
-"     highlight SpellRare  cterm=underline ctermfg=Magenta gui=undercurl guisp=Magenta
-"     highlight SpellLocal cterm=underline ctermfg=Cyan gui=undercurl guisp=Cyan
-"     if g:is_linux " TODO: workaround. 見づらいため.
-"       highlight Normal ctermbg=none
-"     endif
-"   endfunction
-"   autocmd vimrc ColorScheme hybrid :call <SID>DefineHighlight()
-"   colorscheme hybrid
-" else
-"   if g:is_win | colorscheme default | endif " Caution: 明示実行しないと全角ハイライトがされない
-" endif
-" }}}
-
 if has('vim_starting') && has('reltime')
     let g:startuptime = reltime()
     autocmd vimrc VimEnter * let g:startuptime = reltime(g:startuptime) | redraw | echomsg 'startuptime: ' . reltimestr(g:startuptime)

@@ -44,7 +44,7 @@ let g:is_win       = has('win32') || has('win32unix')
 let g:is_win_gui   = g:is_win && has('gui_running')
 let g:is_win_cui   = g:is_win && !has('gui_running')
 let g:is_jenkins   = exists('$BUILD_NUMBER')
-let g:is_home      = $USERNAME ==# 'oji' || $USERNAME ==# 'porinsan'
+let g:is_home      = $USERNAME ==# 'assout' || $USERNAME ==# 'porinsan'
 let g:is_office    = $USERNAME ==# 'admin'
 
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')

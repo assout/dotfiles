@@ -57,7 +57,7 @@ export PYTHONIOENCODING=utf-8
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck, fzy)
-tools_dir="${USERPROFILE}/Tools"
+tools_dir="${HOME}/Tools"
 if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/bin"

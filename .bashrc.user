@@ -12,8 +12,9 @@
 # }}}1
 
 # [Begin] {{{1
-[ -n "${is_loaded}" ] && return
-export is_loaded="true"
+# XXX aliasが効かなくなる。。
+# [ -n "${is_loaded}" ] && return
+# export is_loaded="true"
 
 set -Cu
 
@@ -58,7 +59,7 @@ export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck, fzy)
 tools_dir="${HOME}/Tools"
-if [ "${is_win}" ] ; then
+# if [ "${is_win}" ] ; then
 	PATH="${PATH}:${tools_dir}"
 	PATH="${PATH}:${tools_dir}/bin"
 	PATH="${PATH}:${tools_dir}/ansifilter-1.15"
@@ -83,7 +84,7 @@ if [ "${is_win}" ] ; then
 	PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
 	PATH="${PATH}:/usr/share/git/workdir"
 	PATH="${PATH}:/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
-fi
+# fi
 
 PATH=${PATH}:${GHG_ROOT}/bin
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts

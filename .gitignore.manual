@@ -27,6 +27,7 @@ logs
 *.gz
 *.tar
 *.jar
+.history
 
 ### Whitelist ###
 !bin # gibo Eclipseで無効になってしまうが管理したいケースも多いため

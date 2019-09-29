@@ -322,17 +322,17 @@ nmap <SID>[open]r <Plug>[fzy]r
 nmap <SID>[open]p <Plug>[fzy]p
 
 " Caution: K,gf系はデフォルトなので定義不要だがプラグインの遅延ロードのため定義している
-nmap           K          <Plug>(ref-keyword)
+" nmap           K          <Plug>(ref-keyword)
 " Open folding. Note: デフォルトでも'foldopen'に"hor"があればlで開くがカーソル移動できないとき(jsonなどでよくある)にうまくいかないのでここで指定。 Refs: <http://leafcage.hateblo.jp/entry/2013/04/24/053113>
 nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 
-nmap           gf         <Plug>(gf-user-gf)
-nmap           gF         <Plug>(gf-user-gF)
-nmap           <C-w>f     <Plug>(gf-user-<C-w>f)
-nmap           <C-w><C-f> <Plug>(gf-user-<C-w><C-f>)
-nmap           <C-w>F     <Plug>(gf-user-<C-w>F)
-nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
-nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
+" nmap           gf         <Plug>(gf-user-gf)
+" nmap           gF         <Plug>(gf-user-gF)
+" nmap           <C-w>f     <Plug>(gf-user-<C-w>f)
+" nmap           <C-w><C-f> <Plug>(gf-user-<C-w><C-f>)
+" nmap           <C-w>F     <Plug>(gf-user-<C-w>F)
+" nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
+" nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
 " nmap           p          <Plug>(yankround-p)
 " nmap           P          <Plug>(yankround-P)
@@ -346,13 +346,13 @@ if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対�
 endif
 
 nnoremap       Y          y$
-nmap           +          <SID>[switch]
-nmap           -          <SID>[Switch]
+" nmap           +          <SID>[switch]
+" nmap           -          <SID>[Switch]
 " Note: <CR>でマッピングするとVrapperで有効にならない
 nnoremap       <C-m>      i<CR><Esc>
 " Note: <C-;>は無理らしい
-nmap           <A-;>      <Plug>(fontzoom-larger)
-nmap           <A-->      <Plug>(fontzoom-smaller)
+" nmap           <A-;>      <Plug>(fontzoom-larger)
+" nmap           <A-->      <Plug>(fontzoom-smaller)
 nnoremap <C-PageUp>   :tabprevious<CR>
 nnoremap <C-PageDown> :tabnext<CR>
 nnoremap ]g :tabnext<CR>
@@ -402,8 +402,8 @@ call g:plug#begin(s:plugged_path)
 " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
 " Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-" Plug 'fatih/vim-go', {'for' : 'go'}
-Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
+Plug 'fatih/vim-go', {'for' : 'go'}
+" Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 " Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
 " Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
 " Plug 'godlygeek/tabular', {'for' : 'markdown'}
@@ -421,7 +421,7 @@ Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 " Plug 'junegunn/vim-easy-align'
 " Plug 'kamichidu/vim-edit-properties'
 " Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
-Plug 'kana/vim-submode'
+" Plug 'kana/vim-submode'
 " Plug 'koron/codic-vim', {'on' : ['Codic']}
 " Plug 'kurkale6ka/vim-swap'
 " Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない

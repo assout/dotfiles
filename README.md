@@ -15,9 +15,10 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
 
 ### gitignore by gibo
 
-    (gibo \
+    (gibo dump \
     Eclipse \
     GitBook \
+    Go \
     Java \
     JetBrains \
     Linux \
@@ -25,7 +26,7 @@ Configuration files for editors and other UNIX tools. This is to make it easier 
     Node \
     Vim \
     Windows \
-    ; cat .gitignore.manual) > .config/git/ignore
+    ; cat .gitignore.manual) > ${HOME}/.config/git/ignore
 
 ### WSL tty
 

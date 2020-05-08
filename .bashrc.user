@@ -78,12 +78,13 @@ tools_dir="${HOME}/Tools"
 	PATH="${PATH}:${tools_dir}/vim80-kaoriya-win64"
 	PATH="${PATH}:${tools_dir}/win32yank-x64"
 	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
-	PATH="${PATH}:/c/ProgramData/chocolatey/bin"
-	PATH="${PATH}:/c/Users/admin/AppData/Local/Pandoc"
-	PATH="${PATH}:/c/Users/admin/AppData/Roaming/cabal/bin"
-	PATH="${PATH}:/c/HashiCorp/Vagrant/bin"
+	PATH="${PATH}:/mnt/c/ProgramData/chocolatey/bin"
+	PATH="${PATH}:/mnt/c/Users/admin/AppData/Local/Pandoc"
+	PATH="${PATH}:/mnt/c/Users/admin/AppData/Roaming/cabal/bin"
+	PATH="${PATH}:/mnt/c/HashiCorp/Vagrant/bin"
 	PATH="${PATH}:/usr/share/git/workdir"
-	PATH="${PATH}:/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
+	PATH="${PATH}:/mnt/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
+	PATH="${PATH}:/mnt/c/Program Files (x86)/Google/Chrome/Application/"
 # fi
 
 PATH=${PATH}:${GHG_ROOT}/bin
@@ -94,7 +95,7 @@ PATH=${PATH}:${GOPATH}/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:/usr/local/go/bin
 export PATH
-APPDATA=$(wslpath ${APPDATA}) # TODO
+# APPDATA=$(wslpath ${APPDATA}) # TODO
 
 # }}}1
 

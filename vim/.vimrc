@@ -334,6 +334,9 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 " nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
 " nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
+" win32yank内の文字を一旦vimのレジスタに登録してからペイストする
+noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
+
 " nmap           p          <Plug>(yankround-p)
 " nmap           P          <Plug>(yankround-P)
 " nmap           <C-p>      <Plug>(yankround-prev)
@@ -1112,7 +1115,7 @@ augroup vimrc
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   autocmd FileType xml,html,ant call s:JumpToNextMapping()
 
-  " autocmd TextYankPost * :call system('win32yank.exe -i', @")
+  autocmd TextYankPost * :call system('win32yank.exe -i', @")
 augroup END
 " }}}1
 

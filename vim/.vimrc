@@ -405,12 +405,12 @@ call g:plug#begin(s:plugged_path)
 " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
 " Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-Plug 'fatih/vim-go', {'for' : 'go'}
+" Plug 'fatih/vim-go', {'for' : 'go'}
 " Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 " Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
 " Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
-" Plug 'godlygeek/tabular', {'for' : 'markdown'}
-"       \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
+Plug 'godlygeek/tabular', {'for' : 'markdown'}
+      \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
 " FIXME: windows(cui,gui)で動いてない。linuxはいけた。
 " Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
 " Plug 'haya14busa/vim-auto-programming'

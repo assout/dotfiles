@@ -577,7 +577,7 @@ mybash__vim_in_project() {
 }
 
 mybash__vim_recurcive() {
-	local t; t=$(mybash__recurcive "$@")
+	local t; t=$(mybash__recurcive "$@") || return 64
 	${vim} "${t}"
 }
 
@@ -612,6 +612,8 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 
 if [ "${is_unix}" ] ; then
 	# source /usr/share/git-core/contrib/completion/git-prompt.sh
+	# source /etc/bash_completion.d/git-prompt
+	# source /usr/lib/git-core/git-sh-prompt
 
 	# Caution: 以下4つmsys2だと遅い
 	export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
@@ -624,6 +626,8 @@ if [ "${is_unix}" ] ; then
 	# source /etc/bash_completion.d/hub.bash_completion.sh
 
 	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
+# export PS1='\[\033[01;32m\]\u@\h\[\033[01;33m\] \w$(__git_ps1) \n\[\033[01;34m\]\$\[\033[00m\] '
+
 elif [ "${is_win}" ] ; then
 	# TODO slow?
 	source /usr/share/git/completion/git-completion.bash

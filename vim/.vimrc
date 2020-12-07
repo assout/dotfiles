@@ -175,6 +175,7 @@ command! -nargs=? -complete=dir ShowExplorer call <SID>ShowExplorer(<f-args>)
 command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/notes')) | call histadd('cmd', 'TodoGrep <q-args>')
 command! ToggleExpandTab call <SID>ToggleExpandTab()
 command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
+command! -range=% TrimCR <line1>,<line2>s/\r// | nohlsearch | normal! ``
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
 command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " }}}1
@@ -211,7 +212,7 @@ set listchars=tab:>.,trail:_,extends:\
 set laststatus=2
 set lazyredraw " マクロなどを実行中は描画を中断
 set modeline
-set nonumber " Note: tmuxなどでのコピペ時にないほうがやりやすい
+set number " Note: tmuxなどでのコピペ時にないほうがやりやすいけど
 " Caution: Windowsでgrep時バックスラッシュだとパスと解釈されないことがあるために設定
 " Caution: GUI, CUIでのtags利用時のパスセパレータ統一のために設定
 " Caution: 副作用があることに注意(Refs: <https://github.com/vim-jp/issues/issues/43>)
@@ -405,7 +406,7 @@ call g:plug#begin(s:plugged_path)
 " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
 " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
 " Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-" Plug 'fatih/vim-go', {'for' : 'go'}
+Plug 'fatih/vim-go', {'for' : 'go'}
 " Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
 " Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
 " Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}

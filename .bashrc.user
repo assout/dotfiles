@@ -643,6 +643,7 @@ elif [ "${is_win}" ] ; then
 fi
 
 [ -z "${TMUX:-}" ] && which tmux &> /dev/null && exec tmux # TODO which遅い
+# [ -z "${TMUX:-}" ] && which tmux &> /dev/null && exec tmux -u # TODO which遅い
 
 # TODO ここに書きたくないが暫定 TODO send-keysとかでいけないか
 # TODO slow. TODO printf構文

@@ -93,7 +93,7 @@ _book
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 
 
 ### https://raw.github.com/github/gitignore/e92f8db7a027af8cc25da2dc0758317e39697684/Java.gitignore

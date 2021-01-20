@@ -19,6 +19,9 @@ tags
 deploy.env
 build
 
+### Go ###
+vendor/
+
 ### Other ###
 gitignore/
 *.orig

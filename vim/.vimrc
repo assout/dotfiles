@@ -337,6 +337,7 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 
 " win32yank内の文字を一旦vimのレジスタに登録してからペイストする
 noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
+noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
 
 " nmap           p          <Plug>(yankround-p)
 " nmap           P          <Plug>(yankround-P)
@@ -390,7 +391,7 @@ endif
 call g:plug#begin(s:plugged_path)
 " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
 " General {{{
-" Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
+Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
 " Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
 " Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
 " Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
@@ -418,11 +419,12 @@ Plug 'godlygeek/tabular', {'for' : 'markdown'}
 " Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
 " Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
 " Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
 " Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
 " Plug 'itchyny/vim-parenmatch'
 " TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
 " Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
-" Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-easy-align'
 " Plug 'kamichidu/vim-edit-properties'
 " Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
 " Plug 'kana/vim-submode'
@@ -436,7 +438,7 @@ Plug 'godlygeek/tabular', {'for' : 'markdown'}
 " Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
 " Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
 " Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
-" Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
+Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
 " Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
 " Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
 " Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
@@ -447,6 +449,7 @@ Plug 'godlygeek/tabular', {'for' : 'markdown'}
 " Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
 " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
 " Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
+" Plug 'skanehira/preview-markdown.vim', {'for' : 'markdown'}
 " Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
 " Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
 " Plug 'thinca/vim-fontzoom', g:is_win_gui ? {} : {'on' : []}
@@ -465,10 +468,11 @@ Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!---
 "       \ | Plug 'shumphrey/fugitive-gitlab.vim'
 " Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-speeddating'
-" Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-unimpaired'
 " Plug 'tyru/capture.vim', {'on' : 'Capture'}
-" Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-"       \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+      \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+      " \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
 " Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
 " Plug 'vim-jp/vimdoc-ja'
 " Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
@@ -508,7 +512,7 @@ Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!---
 " }}}
 
 " Colorschemes {{{
-Plug 'w0ng/vim-hybrid'
+" Plug 'w0ng/vim-hybrid'
 " }}}
 call g:plug#end()
 
@@ -664,6 +668,8 @@ if s:HasPlugin('operator-camelize.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
+  let g:previm_open_cmd = '/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+  let g:previm_wsl_mode = 1
   function! s:PrevimSettings()
     nnoremap <buffer><SID>[previm] :<C-u>PrevimOpen<CR>
   endfunction
@@ -814,6 +820,14 @@ if s:HasPlugin('vim-gitgutter') " {{{
   let g:gitgutter_map_keys = 0 " ic, acはvim-textobj-markdown用に取っておきたいため
   nmap ]c <Plug>GitGutterNextHunk
   nmap [c <Plug>GitGutterPrevHunk
+endif " }}}
+
+if s:HasPlugin('vim-go') " {{{
+  let g:go_fmt_command = "goimports"
+endif " }}}
+
+if s:HasPlugin('vim-swap') " {{{
+  let g:go_fmt_command = "goimports"
 endif " }}}
 
 if s:HasPlugin('vim-json') " {{{
@@ -1104,7 +1118,8 @@ augroup vimrc
   " Note: aws.json を考慮して*jsonとしている
   autocmd FileType *json
         \   setlocal foldmethod=syntax foldlevel=99
-        \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
+        \ | command! -buffer -range=% FormatJson <line1>,<line2>!jq "."
+        " \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown
         \   setlocal spell tabstop=4 shiftwidth=4 cinkeys=''

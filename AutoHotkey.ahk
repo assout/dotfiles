@@ -27,14 +27,15 @@ vk1C & j::Left
 vk1C & l::Right
 vk1C & i::Up
 vk1C & k::Down
-
 vk1C & h::Home
 vk1C & n::End
 vk1C & u::PgUp
 vk1C & o::PgDn
 
-vk1C & z::RButton
 
+; その他
+vk1C & vkBA::Del
+vk1C & z::RButton
 vkF3::Esc
 vkF4::Esc
 

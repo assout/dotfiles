@@ -489,10 +489,10 @@ if !has('gui_running')
 
   " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
   " Plug 'kana/vim-operator-user'
-  "       \ | Plug 'rhysd/vim-operator-surround'
-  "       \ | Plug 'tyru/operator-camelize.vim'
-        " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
+        " \ | Plug 'rhysd/vim-operator-surround'
         " \ | Plug 'kana/vim-operator-replace'
+        " \ | Plug 'tyru/operator-camelize.vim'
+        " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
   " }}}
 
   " User Textobjects {{{

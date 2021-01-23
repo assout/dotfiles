@@ -330,7 +330,7 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 " nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
 " nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
-" win32yank内の文字を一旦vimのレジスタに登録してからペイストする
+" win32yank内の文字を一旦vimのレジスタに登録してからペイストする. おもいからやめよう
 if !has('gui_running')
   noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
   noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P

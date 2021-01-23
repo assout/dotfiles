@@ -11,7 +11,7 @@
 "   (誤って範囲指定しないようにするためなので、範囲指定してほしい場合はつけないこと) <http://d.hatena.ne.jp/e_v_e/20150101/1420067539>
 " - '|' は :normal コマンドの一部として処理されるので、このコマンドの後に他のコマンドを続けて書けません。Refs. <:help normal>
 " - 'noremap <expr> {lhs} {rhs}'のようにするとVrapperが有効にならない(noremap <expr>{lhs} {rhs}とするとOK、またはnoremap <silent><expr> {lhs} {rhs}もOK)
-" - vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。(MSYS2も考慮するため)
+" - vimrcの設定ファイルはLinuxでは~/.vim, ~/.vimrcにする。Windowsでは~/vimfiles,~/_vimrcにする。
 " - IME offはLinuxはim_control.vimで、WindowsはAutoHotKeyを使う(kaoriya GVimはデフォルトでなる)
 " - executable()は遅いらしいので使わない
 "
@@ -52,10 +52,6 @@ let s:plugged_path = s:dotvim_path . '/plugged'
 
 let g:is_bash = 1 " shellのハイライトをbash基準にする。Refs: <:help sh.vim>
 let g:maplocalleader = ',' " For todo.txt TODO: <Space> or s にしたい
-" Note: msys2でリンク、ファイルパス開けるようにする " TODO: ファイルパスの形式によって開けない(OK:<file:\\D:\admin\Desktop>, NG:<file:\\d/admin/Desktop>)
-if g:is_win_cui
-  let g:netrw_browsex_viewer = 'start rundll32 url.dll,FileProtocolHandler'
-endif
 let g:netrw_liststyle = 3 " netrwのデフォルト表示スタイル変更
 let g:xml_syntax_folding = 1
 
@@ -202,7 +198,6 @@ set helplang=ja,en " keywordprgで日本語優先にしたいため
 set hidden
 set hlsearch
 set ignorecase
-set iminsert=1 " Note: msys2 gvim で挿入モードでIMEオンになってしまうのを防ぐため
 set incsearch
 " set iskeyword-=_ " TODO: やっぱやめるので_区切りのテキストオブジェクトが別途ほしい
 set indentkeys-=0# " <<,>>で#をインデントできるようにする
@@ -449,8 +444,8 @@ if !has('gui_running')
   " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
   " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない? TODO es6対応されてない？ Note: 入れないとhtml内の埋め込みscriptがindent崩れる
   " Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
-  " Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
-  " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
+  " Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " vim-scripts/AnsiEsc.vim`でも試してみる？
+  " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
   " Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   " Plug 'skanehira/preview-markdown.vim', {'for' : 'markdown'}
   " Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
@@ -474,8 +469,7 @@ if !has('gui_running')
   Plug 'tpope/vim-unimpaired'
   " Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-        \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
-        " \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+        \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
   " Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   " Plug 'vim-jp/vimdoc-ja'
   " Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
@@ -484,7 +478,6 @@ if !has('gui_running')
   "       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
   " Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix']}
   " Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
-  " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
   " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
   " Note: markdownは指定しなくてもtagbarで見れるので良い
   " Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
@@ -517,6 +510,7 @@ if !has('gui_running')
   " Colorschemes {{{
   " Plug 'w0ng/vim-hybrid'
   " }}}
+
   call g:plug#end()
 
 endif
@@ -611,8 +605,7 @@ if s:HasPlugin('memolist.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('neomru.vim') " {{{
-  " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？(msys2は大丈夫っぽい) -> '^\(\/\/\|fugitive\)'
-  " Note: Windows(msys2)で、ネットワーク上のファイルを開くと変になる
+  " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？ -> '^\(\/\/\|fugitive\)'
   let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
   let g:neomru#directory_mru_limit = 500
   let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
@@ -949,7 +942,7 @@ if s:HasPlugin('vim-ref') " {{{
   let g:ref_man_lang = 'ja_JP.UTF-8'
   let g:ref_noenter = 1
   let g:ref_cache_dir = expand('~/.cache/.vim_ref_cache')
-  " TODO: デフォルトに一括追加の指定方法(現状は上書き) " TODO: shでman呼ばれない @msys2 " TODO: Windows gvimでshのman開けない
+  " TODO: デフォルトに一括追加の指定方法(現状は上書き) " TODO: Windows gvimでshのman開けない
   let g:ref_detect_filetype = {
         \  'markdown' : 'gene',
         \  'sh' : 'man',
@@ -979,7 +972,6 @@ if s:HasPlugin('vim-ref') " {{{
 endif " }}}
 
 if s:HasPlugin('vim-singleton') " {{{
-  let g:singleton#group = $USERNAME " For MSYS2 (グループ名はなんでもよい？)
   let g:singleton#opener = 'vsplit'
   if has('gui_running') | call g:singleton#enable() | endif
 endif " }}}

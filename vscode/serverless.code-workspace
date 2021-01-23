@@ -1,25 +1,28 @@
 {
 	"folders": [
 		{
-			"path": "ghq/github.com/assout/serverless-node"
+			"path": "../../serverless-node"
 		},
 		{
-			"path": "ghq/github.com/assout/serverless-express"
+			"path": "../../serverless-express"
 		},
 		{
-			"path": "ghq/github.com/assout/aws-nodejs"
+			"path": "../../aws-nodejs"
 		},
 		{
-			"path": "ghq/github.com/vendia/serverless-express"
+			"path": "../../../vendia/serverless-express"
 		},
 		{
-			"path": "ghq/git-codecommit.ap-northeast-1.amazonaws.com/v1_repos/HirokawaExpress"
+			"path": "../../../../git-codecommit.ap-northeast-1.amazonaws.com/v1_repos/HirokawaExpress"
 		},
 		{
-			"path": "ghq/github.com/assout/codestar-express"
+			"path": "../../codestar-express"
 		},
 		{
-			"path": "ghq/github.com/jalbertsr/TODO-APP"
+			"path": "../../../jalbertsr/TODO-APP"
+		},
+		{
+			"path": "../../codestar-express"
 		}
 	],
 	"remoteAuthority": "wsl+Ubuntu",

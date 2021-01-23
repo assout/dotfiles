@@ -388,133 +388,138 @@ nnoremap ]W :wincmd b<CR>
 if has('vim_starting')
   let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
 endif
-call g:plug#begin(s:plugged_path)
-" Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
-" General {{{
-Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
-" Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
-" Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
-" Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
-" Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'on' : []}
-" TODO Vim終了が遅くなる
-" TODO GVim用にパッチを当ててる。。` file_mru.py#L19 'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
-" Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
-" Plug 'Shougo/neosnippet.vim'
-"       \ | Plug 'Shougo/neosnippet-snippets'
-" Plug 'Vimjas/vim-python-pep8-indent', {'for' : ['python']}
-" Plug 'airblade/vim-gitgutter'
-" Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
-" Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
-" Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
-" Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
-Plug 'fatih/vim-go', {'for' : 'go'}
-" Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
-" Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
-" Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
-Plug 'godlygeek/tabular', {'for' : 'markdown'}
-      \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
-" FIXME: windows(cui,gui)で動いてない。linuxはいけた。
-" Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
-" Plug 'haya14busa/vim-auto-programming'
-" Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
-" Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
-" Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
-" Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
-" Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
-" Plug 'itchyny/vim-parenmatch'
-" TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
-" Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
-Plug 'junegunn/vim-easy-align'
-" Plug 'kamichidu/vim-edit-properties'
-" Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
-" Plug 'kana/vim-submode'
-" Plug 'koron/codic-vim', {'on' : ['Codic']}
-" Plug 'kurkale6ka/vim-swap'
-" Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
-" Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
-" Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため使えない TODO: msys2で`//`と入力すると固まる TODO: msysだと遅いから無効
-" Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
-" Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
-" Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
-" Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
-" Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
-Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
-" Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
-" Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
-" Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
-" Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
-" Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
-" Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない? TODO es6対応されてない？ Note: 入れないとhtml内の埋め込みscriptがindent崩れる
-" Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
-" Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
-" Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
-" Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
-" Plug 'skanehira/preview-markdown.vim', {'for' : 'markdown'}
-" Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
-" Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
-" Plug 'thinca/vim-fontzoom', g:is_win_gui ? {} : {'on' : []}
-" Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
-" Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
-" Plug 'thinca/vim-quickrun', {'on' : ['QuickRun']}
-" Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
-"       \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
-" Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
-Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
-" Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
-" Plug 'tpope/vim-fugitive'
-"       \ | Plug 'junegunn/gv.vim'
-"       \ | Plug 'skywind3000/asyncrun.vim'
-"       \ | Plug 'tpope/vim-rhubarb'
-"       \ | Plug 'shumphrey/fugitive-gitlab.vim'
-" Plug 'tpope/vim-repeat'
-" Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-unimpaired'
-" Plug 'tyru/capture.vim', {'on' : 'Capture'}
-Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-      \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
-      " \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
-" Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
-" Plug 'vim-jp/vimdoc-ja'
-" Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
-" Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
-" Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
-"       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
-" Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix']}
-" Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
-" TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
-" Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
-" Note: markdownは指定しなくてもtagbarで見れるので良い
-" Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
-"       \ | Plug 'xolox/vim-shell',  {'for' : ['vim', 'sh', 'javascript']}
-"       \ | Plug 'xolox/vim-easytags',  {'for' : ['vim', 'sh', 'javascript']}
-" }}}
 
-" User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
-" Plug 'kana/vim-operator-user'
-"       \ | Plug 'rhysd/vim-operator-surround'
-"       \ | Plug 'tyru/operator-camelize.vim'
-      " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
-      " \ | Plug 'kana/vim-operator-replace'
-" }}}
+if !has('gui_running')
+  call g:plug#begin(s:plugged_path)
 
-" User Textobjects {{{
-" Plug 'kana/vim-textobj-user'
-"       \ | Plug 'kana/vim-textobj-function'
-"       \ | Plug 'kana/vim-textobj-indent'
-"       \ | Plug 'kana/vim-textobj-line'
-"       \ | Plug 'mattn/vim-textobj-url'
-"       \ | Plug 'osyo-manga/vim-textobj-multiblock'
-"       \ | Plug 'pocke/vim-textobj-markdown'
-"       \ | Plug 'sgur/vim-textobj-parameter'
-"       \ | Plug 'thinca/vim-textobj-between'
-"       \ | Plug 'thinca/vim-textobj-function-javascript'
-      " \ | Plug 'kana/vim-textobj-entire'
-" }}}
+  " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
+  " General {{{
+  Plug 'AndrewRadev/linediff.vim', {'on' : ['Linediff']}
+  " Plug 'AndrewRadev/switch.vim', {'on' : ['Switch', 'SwitchReverse']} " Ctrl+aでやりたいが不可。できたとしてもspeeddating.vimと競合
+  " Plug 'LeafCage/vimhelpgenerator', {'on' : ['VimHelpGenerator', 'VimHelpGeneratorVirtual']}
+  " Plug 'LeafCage/yankround.vim' " TODO:<C-p>もなのでlazy不可
+  " Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'on' : []}
+  " TODO Vim終了が遅くなる
+  " TODO GVim用にパッチを当ててる。。` file_mru.py#L19 'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
+  " Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
+  " Plug 'Shougo/neosnippet.vim'
+  "       \ | Plug 'Shougo/neosnippet-snippets'
+  " Plug 'Vimjas/vim-python-pep8-indent', {'for' : ['python']}
+  " Plug 'airblade/vim-gitgutter'
+  " Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
+  " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
+  " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
+  " Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
+  Plug 'fatih/vim-go', {'for' : 'go'}
+  " Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
+  " Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
+  " Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
+  Plug 'godlygeek/tabular', {'for' : 'markdown'}
+        \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
+  " FIXME: windows(cui,gui)で動いてない。linuxはいけた。
+  " Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
+  " Plug 'haya14busa/vim-auto-programming'
+  " Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
+  " Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
+  " Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
+  " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
+  " Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
+  " Plug 'itchyny/vim-parenmatch'
+  " TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
+  " Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
+  Plug 'junegunn/vim-easy-align'
+  " Plug 'kamichidu/vim-edit-properties'
+  " Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
+  " Plug 'kana/vim-submode'
+  " Plug 'koron/codic-vim', {'on' : ['Codic']}
+  " Plug 'kurkale6ka/vim-swap'
+  " Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
+  " Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
+  " Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため使えない TODO: msys2で`//`と入力すると固まる TODO: msysだと遅いから無効
+  " Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
+  " Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
+  " Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
+  " Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
+  " Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
+  Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
+  " Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  " Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
+  " Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
+  " Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
+  " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
+  " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない? TODO es6対応されてない？ Note: 入れないとhtml内の埋め込みscriptがindent崩れる
+  " Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
+  " Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " TODO: msysだとうまく動かない。`vim-scripts/AnsiEsc.vim`でも試してみる？
+  " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " TODO: msys2でうまく動かず。slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
+  " Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
+  " Plug 'skanehira/preview-markdown.vim', {'for' : 'markdown'}
+  " Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
+  " Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
+  " Plug 'thinca/vim-fontzoom', g:is_win_gui ? {} : {'on' : []}
+  " Plug 'thinca/vim-localrc', g:is_win ? {'on' :[]} : {'for' : 'vim'}
+  " Plug 'thinca/vim-qfreplace', {'on' : 'Qfreplace'} " grepした結果を置換
+  " Plug 'thinca/vim-quickrun', {'on' : ['QuickRun']}
+  " Plug 'thinca/vim-ref', {'on' : ['Ref', '<Plug>(ref-']}
+  "       \ | Plug 'Jagua/vim-ref-gene', {'on' : ['Ref', '<Plug>(ref-']} " TODO: Unite sourceの遅延ロード
+  " Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
+  Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
+  " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
+  " Plug 'tpope/vim-fugitive'
+  "       \ | Plug 'junegunn/gv.vim'
+  "       \ | Plug 'skywind3000/asyncrun.vim'
+  "       \ | Plug 'tpope/vim-rhubarb'
+  "       \ | Plug 'shumphrey/fugitive-gitlab.vim'
+  " Plug 'tpope/vim-repeat'
+  " Plug 'tpope/vim-speeddating'
+  Plug 'tpope/vim-unimpaired'
+  " Plug 'tyru/capture.vim', {'on' : 'Capture'}
+  Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
+        \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+        " \ | Plug 'kannokanno/previm', {'tag' : '1.7.1', 'for' : 'markdown', 'on' : 'PrevimOpen'} " TODO: Pending: 最新(2db88f0e0577620cb9fd484f6a33602385bdd6ac)だとmsys2で開けない
+  " Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
+  " Plug 'vim-jp/vimdoc-ja'
+  " Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
+  " Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
+  " Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
+  "       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
+  " Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix']}
+  " Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
+  " TODO:slow on msys2.(あとたまにプロセス暴走してるっポイ)
+  " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
+  " Note: markdownは指定しなくてもtagbarで見れるので良い
+  " Plug 'xolox/vim-misc', {'for' : ['vim', 'sh', 'javascript']}
+  "       \ | Plug 'xolox/vim-shell',  {'for' : ['vim', 'sh', 'javascript']}
+  "       \ | Plug 'xolox/vim-easytags',  {'for' : ['vim', 'sh', 'javascript']}
+  " }}}
 
-" Colorschemes {{{
-" Plug 'w0ng/vim-hybrid'
-" }}}
-call g:plug#end()
+  " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
+  " Plug 'kana/vim-operator-user'
+  "       \ | Plug 'rhysd/vim-operator-surround'
+  "       \ | Plug 'tyru/operator-camelize.vim'
+        " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
+        " \ | Plug 'kana/vim-operator-replace'
+  " }}}
+
+  " User Textobjects {{{
+  " Plug 'kana/vim-textobj-user'
+  "       \ | Plug 'kana/vim-textobj-function'
+  "       \ | Plug 'kana/vim-textobj-indent'
+  "       \ | Plug 'kana/vim-textobj-line'
+  "       \ | Plug 'mattn/vim-textobj-url'
+  "       \ | Plug 'osyo-manga/vim-textobj-multiblock'
+  "       \ | Plug 'pocke/vim-textobj-markdown'
+  "       \ | Plug 'sgur/vim-textobj-parameter'
+  "       \ | Plug 'thinca/vim-textobj-between'
+  "       \ | Plug 'thinca/vim-textobj-function-javascript'
+        " \ | Plug 'kana/vim-textobj-entire'
+  " }}}
+
+  " Colorschemes {{{
+  " Plug 'w0ng/vim-hybrid'
+  " }}}
+  call g:plug#end()
+
+endif
 
 if s:HasPlugin('ale') " {{{
   let g:ale_sign_column_always = 1

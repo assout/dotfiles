@@ -37,8 +37,6 @@ fi
 # [Define, Export variables] {{{1
 
 # Note: readonlyにしない(当ファイルの処理時間見るためにsoucreすることがある)
-is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
-is_win=$(if [[ `uname -a` =~ Linux && `uname -a` =~ Microsoft ]]; then echo 0 ; fi)
 is_home=$(if [ "${USER}" =  assout ] ; then echo 0 ; fi)
 
 # History settings
@@ -47,8 +45,7 @@ HISTFILESIZE=10000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
-[ "${is_unix}" ] && export EDITOR='vim'
-[ "${is_win}" ]  && export EDITOR='vim'
+export EDITOR='vim'
 export GHG_ROOT="${HOME}/.ghg"
 export GHQ_ROOT="${HOME}/.ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
 export GOPATH=${HOME}/.go/
@@ -59,33 +56,31 @@ export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck, fzy)
 tools_dir="${HOME}/Tools"
-# if [ "${is_win}" ] ; then
-	PATH="${PATH}:${tools_dir}"
-	PATH="${PATH}:${tools_dir}/bin"
-	PATH="${PATH}:${tools_dir}/ansifilter-1.15"
-	PATH="${PATH}:${tools_dir}/apache-ant-1.7.0-bin/apache-ant-1.7.0/bin"
-	PATH="${PATH}:${tools_dir}/apache-maven-3.5.2/bin"
-	PATH="${PATH}:${tools_dir}/ghg_v0.1.2_windows_amd64"
-	PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
-	PATH="${PATH}:${tools_dir}/gron"
-	PATH="${PATH}:${tools_dir}/hub/bin"
-	PATH="${PATH}:${tools_dir}/instantclient_12_2"
-	PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
-	PATH="${PATH}:${tools_dir}/pandoc-2.1.3"
-	PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
-	PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
-	PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
-	PATH="${PATH}:${tools_dir}/vim80-kaoriya-win64"
-	PATH="${PATH}:${tools_dir}/win32yank-x64"
-	PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
-	PATH="${PATH}:/mnt/c/ProgramData/chocolatey/bin"
-	PATH="${PATH}:/mnt/c/Users/admin/AppData/Local/Pandoc"
-	PATH="${PATH}:/mnt/c/Users/admin/AppData/Roaming/cabal/bin"
-	PATH="${PATH}:/mnt/c/HashiCorp/Vagrant/bin"
-	PATH="${PATH}:/usr/share/git/workdir"
-	PATH="${PATH}:/mnt/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
-	PATH="${PATH}:/mnt/c/Program Files (x86)/Google/Chrome/Application/"
-# fi
+PATH="${PATH}:${tools_dir}"
+PATH="${PATH}:${tools_dir}/bin"
+PATH="${PATH}:${tools_dir}/ansifilter-1.15"
+PATH="${PATH}:${tools_dir}/apache-ant-1.7.0-bin/apache-ant-1.7.0/bin"
+PATH="${PATH}:${tools_dir}/apache-maven-3.5.2/bin"
+PATH="${PATH}:${tools_dir}/ghg_v0.1.2_windows_amd64"
+PATH="${PATH}:${tools_dir}/ghq" # Note: Eclipse workspaceの.metadataがあると遅くなるので注意
+PATH="${PATH}:${tools_dir}/gron"
+PATH="${PATH}:${tools_dir}/hub/bin"
+PATH="${PATH}:${tools_dir}/instantclient_12_2"
+PATH="${PATH}:${tools_dir}/nkfwin/vc2005/win32(98,Me,NT,2000,XP,Vista,7)Windows-31J"
+PATH="${PATH}:${tools_dir}/pandoc-2.1.3"
+PATH="${PATH}:${tools_dir}/seq2gif/seq2gif-0.10.3"
+PATH="${PATH}:${tools_dir}/tar-1.13-1-bin/bin"
+PATH="${PATH}:${tools_dir}/todo.txt_cli-2.10"
+PATH="${PATH}:${tools_dir}/vim80-kaoriya-win64"
+PATH="${PATH}:${tools_dir}/win32yank-x64"
+PATH="${PATH}:${tools_dir}/xz-5.2.1-windows/bin_x86-64"
+PATH="${PATH}:/mnt/c/ProgramData/chocolatey/bin"
+PATH="${PATH}:/mnt/c/Users/admin/AppData/Local/Pandoc"
+PATH="${PATH}:/mnt/c/Users/admin/AppData/Roaming/cabal/bin"
+PATH="${PATH}:/mnt/c/HashiCorp/Vagrant/bin"
+PATH="${PATH}:/usr/share/git/workdir"
+PATH="${PATH}:/mnt/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
+PATH="${PATH}:/mnt/c/Program Files (x86)/Google/Chrome/Application/"
 
 PATH=${PATH}:${GHG_ROOT}/bin
 PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
@@ -101,13 +96,8 @@ export PATH
 
 # [Functions & Aliases] {{{1
 selector='fzy -l 50'
-if [ "${is_unix}" ] ; then
-	opener='gnome-open'
-	vim='vim' # aliasもしてるがfunction内で使用したいため
-elif [ "${is_win}" ] ; then
-	opener='start'
-	vim='vim'
-fi
+opener='explorer.exe'
+vim='vim' # aliasもしてるがfunction内で使用したいため
 
 # Note: パイプの先はサブシェルなのでパイプで呼び出した場合呼び出した側でhistory -rが必要
 mybash__add_history() {
@@ -148,7 +138,6 @@ mybash__select_alias() {
 }
 alias a='mybash__select_alias'
 
-if [ "${is_unix}" ] ; then
 	mybash__browse_by_ghq() {
 		ghq list | cut -d "/" -f 2,3 | ${selector} | xargs -r hub browse
 	}
@@ -157,17 +146,15 @@ if [ "${is_unix}" ] ; then
 		hub browse
 	}
 
-elif [ "${is_win}" ] ; then
-	# Note: hub使えばできるがgitlabもあるのでこうしている
-	mybash__browse_by_ghq() {
-		find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector} | ( read -r t; [ "${t}" ] && cd "${t}" && mybash__browse_current_project)
-	}
+	# # Note: hub使えばできるがgitlabもあるのでこうしている
+	# mybash__browse_by_ghq() {
+	# 	find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector} | ( read -r t; [ "${t}" ] && cd "${t}" && mybash__browse_current_project)
+	# }
+  #
+	# mybash__browse_current_project() {
+	# 	git remote -v | head -1 | cut -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start
+	# }
 
-	mybash__browse_current_project() {
-		git remote -v | head -1 | cut -f 2 | cut -d" " -f 1 | sed "s?\.git\$??" | sed "s?\.wiki\$?/wikis/home?" | xargs start
-	}
-
-fi
 alias b='mybash__browse_by_ghq'
 alias B='mybash__browse_current_project'
 
@@ -232,11 +219,10 @@ alias dr='mybash__cd_recent'
 alias d.='mybash__cd_upper'
 
 # TODO 日本語化けてそう
-[ "${is_win}" ] && esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
-[ "${is_unix}" ] && alias eclipse='eclipse --launcher.GTK_version 2' # TODO: workaround. ref. <https://hedayatvk.wordpress.com/2015/07/16/eclipse-problems-on-fedora-22/>
+esu() { es "$1" | sed 's/\\/\\\\/g' | xargs cygpath; }
 
 mybash__explorer() {
-	cat - | if [ "${is_win}" ] ; then sed -e 's?/?\\\\?g' ; else cat ; fi | xargs -r "${opener}"
+	cat - | sed -e 's?/?\\\\?g' | xargs -r "${opener}"
 }
 
 mybash__explorer_find() {
@@ -247,7 +233,10 @@ mybash__explorer_find() {
 	fi
 }
 mybash__explorer_recurcive() {
-	[ "$1" = "." ] && mybash__explorer <<< "." && return 0 # dirty.
+	if [ "$1" = "." ] ; then
+	 	mybash__explorer <<< "."
+		return 0
+	fi
 	mybash__recurcive_directory | mybash__explorer
 }
 
@@ -322,8 +311,6 @@ alias F='mybash__file 999'
 alias fp='mybash__file_in_project'
 alias fr='mybash__file_recent'
 
-[ "${is_win}" ] && alias ghq='COMSPEC=${SHELL} ghq' # For msys2 <http://qiita.com/dojineko/items/3dd4090dee0a02aa1fb4>
-
 mybash__ghq_cd() {
 	local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) &&
 		mybash__with_history <<<"cd ${t}"
@@ -384,11 +371,9 @@ alias jan='mybash__man_japanese'
 alias jp='LANG=ja_JP.UTF8'
 alias en='LANG=en_US.UTF8'
 
-if [ "${is_win}" ] ; then
-	alias l.='ls -d .* --color=auto --show-control-chars'
-	alias ls='ls --color=auto --show-control-chars'
-	alias ll='ls -l --color=auto --show-control-chars'
-fi
+# alias l.='ls -d .* --color=auto --show-control-chars'
+# alias ls='ls --color=auto --show-control-chars'
+# alias ll='ls -l --color=auto --show-control-chars'
 
 log_dir="${HOME}/.tmux/log"
 mybash__log_open() {
@@ -485,7 +470,7 @@ alias O='mybash__open'
 alias op='mybash__open_in_project'
 alias or='mybash__open_recent_file'
 
-[ "${is_win}" ] && [ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
+[ "${is_home}" ] && alias plantuml='java -jar /c/ProgramData/chocolatey/lib/plantuml/tools/plantuml.jar'
 
 alias r='mybash__vim_recent'
 alias R='mybash__vim_most_recent'
@@ -524,15 +509,13 @@ alias sshp='mybash__sshpass'
 alias s='mybash__ssh_by_config'
 alias S='mybash__ssh_by_hosts'
 
-if [ "${is_win}" ] ; then
-	alias sqlplus="winpty sqlplus"
+alias sqlplus="winpty sqlplus"
 
-	svn() {
-		chcp.com 932 >& /dev/null
-		command svn "$@"
-		chcp.com 65001 >& /dev/null
-	}
-fi
+svn() {
+	chcp.com 932 >& /dev/null
+	command svn "$@"
+	chcp.com 65001 >& /dev/null
+}
 
 mybash__todo_add() {
 	todo.sh add "$*"
@@ -610,37 +593,22 @@ stty stop undef 2> /dev/null # Ctrl + s でコマンド実行履歴検索を有�
 # added by travis gem
 [ -f /home/oji/.travis/travis.sh ] && source /home/oji/.travis/travis.sh
 
-if [ "${is_unix}" ] ; then
-	# source /usr/share/git-core/contrib/completion/git-prompt.sh
-	# source /etc/bash_completion.d/git-prompt
-	# source /usr/lib/git-core/git-sh-prompt
+# source /usr/share/git-core/contrib/completion/git-prompt.sh
+# source /etc/bash_completion.d/git-prompt
+# source /usr/lib/git-core/git-sh-prompt
 
-	# Caution: 以下4つmsys2だと遅い
-	export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
-	export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
-	export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
-	export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
+# Caution: 以下4つmsys2だと遅い
+export GIT_PS1_SHOWDIRTYSTATE=true # addされてない変更があるとき"*",commitされていない変更があるとき"+"を表示
+export GIT_PS1_SHOWSTASHSTATE=true # stashされているとき"$"を表示
+export GIT_PS1_SHOWUNTRACKEDFILES=true # addされてない新規ファイルがあるとき%を表示
+export GIT_PS1_SHOWUPSTREAM=auto # 現在のブランチのUPSTREAMに対する進み具合を">","<","="で表示
 
-	# Note: デフォルトで読まれるがhubの補完有効にするために必要
-	# source /usr/share/bash-completion/completions/git
-	# source /etc/bash_completion.d/hub.bash_completion.sh
+# Note: デフォルトで読まれるがhubの補完有効にするために必要
+# source /usr/share/bash-completion/completions/git
+# source /etc/bash_completion.d/hub.bash_completion.sh
 
-	# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
+# PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
 # export PS1='\[\033[01;32m\]\u@\h\[\033[01;33m\] \w$(__git_ps1) \n\[\033[01;34m\]\$\[\033[00m\] '
-
-elif [ "${is_win}" ] ; then
-	# TODO slow?
-	source /usr/share/git/completion/git-completion.bash
-
-	# Note たまにslow. ls後一瞬stackする。再起動後はまた早くなったりする。 __git_ps1の中の`git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree --short HEAD 2>/dev/null`で時間かかってそう
-	source /usr/share/git/completion/git-prompt.sh
-	PS1="\[\e]0;\w\a\]\n\[\e[32m\]\u@\h \[\e[35m\]$MSYSTEM\[\e[0m\] \[\e[33m\]\w"'`__git_ps1`'"\[\e[0m\]\n\$ "
-
-	todo_completion_path="${tools_dir}/todo.txt_cli-2.10/todo_completion"
-	[ -r "${todo_completion_path}" ] && source "${todo_completion_path}"
-
-	[ -z "${TMUX:-}" ] && chcp.com 65001 # for shellcheck
-fi
 
 [ -z "${TMUX:-}" ] && which tmux &> /dev/null && exec tmux # TODO which遅い
 # [ -z "${TMUX:-}" ] && which tmux &> /dev/null && exec tmux -u # TODO which遅い

@@ -34,7 +34,7 @@ vk1C & o::PgDn
 
 ; その他
 vk1C & vkBA::Del
-vk1C & z::RButton
+vk1C & z::+F10
 vk1C & vkF3::Esc
 vk1C & vkF4::Esc
 

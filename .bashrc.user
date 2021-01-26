@@ -46,8 +46,8 @@ HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
 export EDITOR='vim'
-export GHG_ROOT="${HOME}/ghg"
-export GHQ_ROOT="${HOME}/ghq" # Note: ghq rootコマンドは使わない(performance) Note: vimrcからも参照するのでexport
+export GHG_HOME="${HOME}/ghg"
+export GHQ_HOME="${HOME}/ghq" #Note: vimrcからも参照するのでexport #Note: GHQ_ROOTにしてしまうとghqコマンドで複数指定できなくなる
 export LANG=en_US.UTF-8
 export LESS='-R -x2'
 export PYTHONIOENCODING=utf-8
@@ -81,10 +81,10 @@ PATH="${PATH}:/usr/share/git/workdir"
 PATH="${PATH}:/mnt/c/Program Files/Microsoft Visual Studio 8/VC/vcpackages"
 PATH="${PATH}:/mnt/c/Program Files (x86)/Google/Chrome/Application/"
 
-PATH=${PATH}:${GHG_ROOT}/bin
-PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts
-PATH=${PATH}:${GHQ_ROOT}/github.com/assout/scripts/local
-PATH=${PATH}:${GHQ_ROOT}/github.com/chrismdp/p
+PATH=${PATH}:${GHG_HOME}/bin
+PATH=${PATH}:${GHQ_HOME}/github.com/assout/scripts
+PATH=${PATH}:${GHQ_HOME}/github.com/assout/scripts/local
+PATH=${PATH}:${GHQ_HOME}/github.com/chrismdp/p
 PATH=${PATH}:${HOME}/go/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:/usr/local/go/bin
@@ -147,7 +147,7 @@ alias a='mybash__select_alias'
 
 	# # Note: hub使えばできるがgitlabもあるのでこうしている
 	# mybash__browse_by_ghq() {
-	# 	find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector} | ( read -r t; [ "${t}" ] && cd "${t}" && mybash__browse_current_project)
+	# 	find "${GHQ_HOME}" -maxdepth 3 -mindepth 3 | ${selector} | ( read -r t; [ "${t}" ] && cd "${t}" && mybash__browse_current_project)
 	# }
   #
 	# mybash__browse_current_project() {
@@ -311,7 +311,8 @@ alias fp='mybash__file_in_project'
 alias fr='mybash__file_recent'
 
 mybash__ghq_cd() {
-	local t; t=$(find "${GHQ_ROOT}" -maxdepth 3 -mindepth 3 | ${selector}) &&
+	# local t; t=$(find "${GHQ_HOME}" -maxdepth 3 -mindepth 3 | ${selector}) &&
+		local t; t=$(ghq list -p | ${selector}) &&
 		mybash__with_history <<<"cd ${t}"
 }
 

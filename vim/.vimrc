@@ -38,14 +38,10 @@ augroup END
 " # Let defines {{{1
 " Caution: script localだとPlugの設定に渡せない。buffer localだとうまく行かないことがある
 let g:is_linux     = has('unix') && !has('win32unix')
-let g:is_linux_gui = g:is_linux && has('gui_running')
-let g:is_linux_cui = g:is_linux && !has('gui_running')
 let g:is_win       = has('win32') || has('win32unix')
 let g:is_win_gui   = g:is_win && has('gui_running')
 let g:is_win_cui   = g:is_win && !has('gui_running')
 let g:is_jenkins   = exists('$BUILD_NUMBER')
-let g:is_home      = $USERNAME ==# 'assout' || $USERNAME ==# 'porinsan'
-let g:is_office    = $USERNAME ==# 'admin'
 
 let s:dotvim_path = g:is_jenkins ? expand('$WORKSPACE/.vim') : expand('~/.vim')
 let s:plugged_path = s:dotvim_path . '/plugged'
@@ -68,12 +64,6 @@ let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
 " }}}
 
-if g:is_win_cui " For mintty. Note: Gnome terminalでは不可なので別途autocomdで実施している。
-  let &t_ti .= "\e[1 q"
-  let &t_SI .= "\e[5 q"
-  let &t_EI .= "\e[1 q"
-  let &t_te .= "\e[0 q"
-endif
 " }}}1
 
 " # Functions {{{1
@@ -281,6 +271,7 @@ map              <SID>[special]i  <SID>[insert]
 map              <SID>[special]m  <SID>[maximizer]
 nmap             <SID>[special]o  <SID>[open]
 nmap             <SID>[special]t  <SID>[tagbar]
+
 if has('gui_running')
   " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれない。呼び出い場合はsetfiletypeなどする。
   nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>source $MYGVIMRC<CR>
@@ -306,9 +297,9 @@ noremap       <SID>[insert]-  :InsertPrefix - <CR>
 noremap       <SID>[insert]#  :InsertPrefix # <CR>
 noremap       <SID>[insert]>  :InsertPrefix > <CR>
 
-nnoremap         <SID>[open]      <Nop>
+nnoremap       <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
-nnoremap   <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
+nnoremap <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 
 " TODO: fzyかdeniteに寄せる (できればterminalと同じfzyに寄せたいがGVimで動かない)
 " Note: <SID>だとvim-plugのオンデマンドロードができない
@@ -330,11 +321,13 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 " nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
 " nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
-" win32yank内の文字を一旦vimのレジスタに登録してからペイストする. おもいからやめよう
+" win32yank内の文字を一旦vimのレジスタに登録してからペイストする.
 if !has('gui_running')
   noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
   noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
 endif
+" nnoremap <silent>p :r !win32yank.exe -o<CR>
+" vnoremap <silent>p :r !win32yank.exe -o<CR>
 
 " nmap           p          <Plug>(yankround-p)
 " nmap           P          <Plug>(yankround-P)
@@ -365,8 +358,6 @@ nnoremap ]w :wincmd w<CR>
 nnoremap [W :wincmd t<CR>
 nnoremap ]W :wincmd b<CR>
 
-" nnoremap <silent>p :r !win32yank.exe -o<CR>
-" vnoremap <silent>p :r !win32yank.exe -o<CR>
 " }}}
 
 " Adding to unimpaired plugin mapping {{{
@@ -420,7 +411,6 @@ if !has('gui_running')
   " Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   " Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
-  " Plug 'itchyny/calendar.vim', {'on' : 'Calendar'}
   " Plug 'itchyny/vim-parenmatch'
   " TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
   " Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
@@ -432,8 +422,6 @@ if !has('gui_running')
   " Plug 'kurkale6ka/vim-swap'
   " Plug 'https://github.com/m-kat/aws-vim', {'for' : 'template'} " Note: `user/reponam`形式だとPlugInstall時に取得できない
   " Plug 'majutsushi/tagbar', {'on' : ['TagbarToggle']}
-  " Plug 'maralla/completor.vim', g:is_office ? {'on' : []} : {} " TODO officeのgvimでif pythonが1にならないため使えない TODO: msys2で`//`と入力すると固まる TODO: msysだと遅いから無効
-  " Plug 'maralla/completor-neosnippet', g:is_office ? {'on' : []} : {} " Note: msys2で遅い Note:auto-programmingと併用できない
   " Plug 'marijnh/tern_for_vim', g:is_linux ? {'do' : 'npm install', 'for' : ['javascript']} : {'on' : []} " Note: windowsで動かない
   " Plug 'mattn/benchvimrc-vim', {'on' : 'BenchVimrc'}
   " Plug 'mattn/emmet-vim', {'on' : ['<Plug>[emmet]']}
@@ -530,11 +518,6 @@ endif " }}}
 
 if s:HasPlugin('asyncrun.vim') " {{{
   command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
-endif " }}}
-
-if s:HasPlugin('calendar.vim') " {{{
-  let g:calendar_google_calendar = g:is_linux ? 1 : 0
-  let g:calendar_google_task = g:is_linux ? 1 : 0
 endif " }}}
 
 if s:HasPlugin('completor.vim') " {{{
@@ -826,10 +809,6 @@ if s:HasPlugin('vim-go') " {{{
   let g:go_fmt_command = "goimports"
 endif " }}}
 
-if s:HasPlugin('vim-swap') " {{{
-  let g:go_fmt_command = "goimports"
-endif " }}}
-
 if s:HasPlugin('vim-json') " {{{
   let g:vim_json_syntax_conceal = 0
 endif " }}}
@@ -1097,15 +1076,6 @@ augroup vimrc
   " Set freemaker filetype
   autocmd BufNewFile,BufRead *.ftl nested setlocal filetype=html.ftl " Caution: setfiletypeだとuniteから開いた時に有効にならない
   autocmd BufNewFile,BufRead *.csv,*.CSV setfiletype csv " for rainbow plugin
-
-  " Change cursor shape in different modes. Refs: <http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes>
-  if g:is_linux_cui
-    autocmd VimEnter,InsertLeave * silent execute '!echo -ne "\e[2 q"' | redraw!
-    autocmd InsertEnter,InsertChange *
-          \ if     v:insertmode == 'i' | silent execute '!echo -ne "\e[6 q"' | redraw! |
-          \ elseif v:insertmode == 'r' | silent execute '!echo -ne "\e[4 q"' | redraw! | endif
-    autocmd VimLeave * silent execute '!echo -ne "\e[ q"' | redraw!
-  endif
 
   " Note: ftpluginで上書きされてしまうことがあるためここで設定している" Note: formatoptionsにo含むべきか難しい
   autocmd FileType * setlocal formatoptions-=c formatoptions-=t

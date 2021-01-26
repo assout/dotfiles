@@ -3,6 +3,10 @@
 #InstallKeybdHook ;キーボードフックを有効にする(スクリプトが常駐する)
 #UseHook
 
+F1::
+  Suspend, Toggle
+Return
+
 ; MD600ライクな設定
 ; vk1C 変換
 ; vk1D 無変換

@@ -62,6 +62,12 @@ let g:loaded_vimball         = 1
 let g:loaded_vimballPlugin   = 1
 let g:loaded_zip             = 1
 let g:loaded_zipPlugin       = 1
+
+" カーソル形状変更
+let &t_ti = "\e[1 q"
+let &t_SI = "\e[5 q"
+let &t_EI = "\e[1 q"
+let &t_te = "\e[0 q"
 " }}}
 
 " }}}1
@@ -323,8 +329,9 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 
 " win32yank内の文字を一旦vimのレジスタに登録してからペイストする.
 if !has('gui_running')
-  noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
-  noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
+  " TODO 遅いからいったんやめる(クリップボードからペーストしたければtmuxのpaste使う)
+  " noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
+  " noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
 endif
 " nnoremap <silent>p :r !win32yank.exe -o<CR>
 " vnoremap <silent>p :r !win32yank.exe -o<CR>
@@ -1100,8 +1107,13 @@ augroup vimrc
         \ | command! -buffer -range=% FormatXml <line1>,<line2>!xmllint --encode utf-8 --format --recover - 2>/dev/null
   autocmd FileType xml,html,ant call s:JumpToNextMapping()
 
+  function! Yank(ch, msg)
+    call system('win32yank.exe -i', @")
+  endfunction
+
   if !has('gui_running')
-    autocmd TextYankPost * :call system('win32yank.exe -i', @")
+    " autocmd TextYankPost * :call system('win32yank.exe -i', @") "XXX 同期だと遅い
+    autocmd TextYankPost * :call job_start(['echo'], { "callback" : "Yank"})
   endif
 augroup END
 " }}}1

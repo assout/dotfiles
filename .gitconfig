@@ -21,7 +21,7 @@
 [credential]
 	helper = store
 [ghq]
-	root = ~/ghq
 	root = ~/go/src
+	root = ~/ghq
 
 

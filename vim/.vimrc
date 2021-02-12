@@ -25,7 +25,8 @@
 unlet! skip_defaults_vim
 " TODO:filetype plugin onがここと、vim-plugの中の2回されて遅くなるかも
 source $VIMRUNTIME/defaults.vim
-
+set t_ks=""
+set t_ke=""
 set encoding=utf-8 " inner encoding(before the scriptencoding)
 scriptencoding utf-8 " before multi byte
 if filereadable(expand('~/.vimrc.local')) | source ~/.vimrc.local | endif

@@ -4,27 +4,63 @@
 			"path": "../../serverless-node"
 		},
 		{
-			"path": "../../serverless-express"
-		},
-		{
-			"path": "../../aws-nodejs"
-		},
-		{
 			"path": "../../../vendia/serverless-express"
 		},
 		{
 			"path": "../../../../git-codecommit.ap-northeast-1.amazonaws.com/v1_repos/HirokawaExpress"
 		},
 		{
-			"path": "../../codestar-express"
-		},
-		{
 			"path": "../../../jalbertsr/TODO-APP"
 		},
 		{
-			"path": "../../codestar-express"
+			"path": "../../codestar-sls-express"
+		},
+		{
+			"path": "../../codestar-sls-express-spa"
+		},
+		{
+			"path": "../../nuxt_sandox"
+		},
+		{
+			"path": "../../vuespa"
 		}
 	],
 	"remoteAuthority": "wsl+Ubuntu",
-	"settings": {}
+	"settings": {},
+	"launch": {
+		"configurations": [
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "assout:index.handler (nodejs12.x)",
+				"invokeTarget": {
+					"target": "code",
+					"projectRoot": "",
+					"lambdaHandler": "index.handler"
+				},
+				"lambda": {
+					"runtime": "nodejs12.x",
+					"payload": {},
+					"environmentVariables": {}
+				}
+			},
+			{
+				"type": "aws-sam",
+				"request": "direct-invoke",
+				"name": "API codestar-express:HelloWorld",
+				"invokeTarget": {
+					"target": "api",
+					"templatePath": "template.yml",
+					"logicalId": "HelloWorld"
+				},
+				"api": {
+					"path": "/",
+					"httpMethod": "get",
+					"payload": {
+						"json": {}
+					}
+				}
+			}
+		]
+	}
 }

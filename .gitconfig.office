@@ -12,5 +12,8 @@
 [url "https://github.com/"] # [go get で取得したreposのデフォルトremoteパスをhttpsではなくsshにする - Qiita](https://qiita.com/jpshadowapps/items/6111addbe65762665977)
 	insteadOf = git@github.com:
 
+[include]
+	path = .gitconfig.local
+
 # vim: filetype=gitconfig:
 

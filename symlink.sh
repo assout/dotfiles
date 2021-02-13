@@ -3,18 +3,12 @@
 readonly CMD_NAME=$(basename "${0}")
 readonly HERE=$(cd "$(dirname "$0")" || exit 1; pwd)
 
-is_unix=$(if [ "${OSTYPE}" = linux-gnu ] ; then echo 0 ; fi)
 is_home=$(if [ "${USER}" = assout ] ; then echo 0 ; fi)
-is_office=$(if [ "${USER}" = admin ] ; then echo 0 ; fi)
+is_office=$(if [ "${USER}" = hirokawak ] ; then echo 0 ; fi)
 
-if [ "${is_win}" ] ; then
-	ln -sf "${HERE}/.cheatrc" "${USERPROFILE}"/
-	ln -sf "${HERE}/.cheatsheets" "${USERPROFILE}"/
-else
-	# TODO eclipse.ini.linux
-	ln -sf "${HERE}/.cheatrc" ~/
-	ln -sf "${HERE}/.cheatsheets" ~/
-fi
+# TODO eclipse.ini.linux
+ln -sf "${HERE}/.cheatrc" ~/
+ln -sf "${HERE}/.cheatsheets" ~/
 
 ln -sf "${HERE}/lint/.mdlrc" ~/
 ln -sf "${HERE}/lint/.mdlrc.style.rb" ~/
@@ -47,10 +41,4 @@ ln -sf "${HERE}/.tmux.conf" ~/
 ln -snf "${HERE}/.todo" ~/
 ln -sf "${HERE}/.tern-project" ~/
 ln -sf "${HERE}/.remark.css" ~/
-
-# ln -sf "${HERE}/wsltty/config" "${APPDATA}/wsltty/config"
-
-if [ "${is_win}" ] ; then
-	ln -sf "${HERE}/AutoHotKey.ahk" ~/Documents/
-fi
 

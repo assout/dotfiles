@@ -1,18 +1,24 @@
 ---
   rules:
-    common-misspellings: true
-    ja-no-redundant-expression: true
+    # common-misspellings: true
+    # ja-no-redundant-expression: true
+
     # ja-yahoo-kousei: true # TODO 登録が必要
     # max-appearence-count-of-words: true # TODO 誤爆が多い
     # max-number-of-lines: true # Note: 文書はしかたない
-    max-length-of-title: true
-    no-dead-link: true
-    no-dropping-the-ra: true
-    no-start-duplicated-conjunction: true
-    preset-ja-technical-writing: true
+    # max-length-of-title: true
+    # no-dead-link: true
+    # no-dropping-the-ra: true # presetに入っているはず
+    # no-start-duplicated-conjunction: true
+    preset-ja-technical-writing:
+      no-exclamation-question-mark: false
+      ja-no-mixed-period:
+          allowPeriodMarks: [.]
+    # preset-japanese: true
     # preset-jtf-style: true # TOOD フォーマット系の指摘が多いので一旦無効
-    prh:
-      rulePaths:
-        - "~/.prh.yml"
+    # prh:
+    #   rulePaths:
+    #     - "~/.prh.yml"
 
 # vim:ft=yaml
+

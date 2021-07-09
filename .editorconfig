@@ -1,0 +1,10 @@
+root = true
+
+# すべてのファイルに適用
+[*]
+indent_size = 2
+
+# Markdown
+[*.md]
+indent_size = 4
+

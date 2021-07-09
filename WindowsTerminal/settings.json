@@ -240,7 +240,7 @@
             "padding" : "0, 0, 0, 0",
             "snapOnInput" : true,
             // "startingDirectory" : "%USERPROFILE%",
-            "startingDirectory" : "//wsl$/Ubuntu/home/assout",
+            "startingDirectory" : "//wsl$/Ubuntu/home/hirokawak",
 
             "useAcrylic" : false
         },
@@ -260,7 +260,7 @@
             "adding" : "0, 0, 0, 0",
             "snapOnInput" : true,
             // "startingDirectory" : "%USERPROFILE%",
-            "startingDirectory" : "//wsl$/Ubuntu/home/assout",
+            "startingDirectory" : "//wsl$/Ubuntu/home/hirokawak",
             "useAcrylic" : true
         },
         {
@@ -280,18 +280,20 @@
             "padding" : "0, 0, 0, 0",
             "snapOnInput" : true,
             // "startingDirectory" : "%USERPROFILE%",
-            "startingDirectory" : "//wsl$/Ubuntu/home/assout",
+            "startingDirectory" : "//wsl$/Ubuntu/home/hirokawak",
             "useAcrylic" : true
         },
         {
             "acrylicOpacity" : 0.5,
             "closeOnExit" : true,
-            "colorScheme" : "Campbell",
+            // "colorScheme" : "Campbell",
+            // "colorScheme" : "Hybrid",
+            "colorScheme" : "One Half Dark",
             "commandline" : "wsl.exe -d Ubuntu",
             "cursorColor" : "#FFFFFF",
             "cursorShape" : "bar",
-            "fontFace" : "Consolas",
-            // "fontFace" : "HackGenNerd", // tmuxのborderでなくなる
+            // "fontFace" : "Consolas",
+            "fontFace" : "HackGenNerd Console", // HackGenNerdだとtmuxのborderでなくなるけどこれならOK
             "fontSize" : 10,
             "guid" : "{2c4de342-38b7-51cf-b940-2309a097f518}",
             "historySize" : 9001,
@@ -300,7 +302,7 @@
             "padding" : "0, 0, 0, 0",
             "snapOnInput" : true,
             // "startingDirectory" : "%USERPROFILE%",
-            "startingDirectory" : "//wsl$/Ubuntu/home/assout",
+            "startingDirectory" : "//wsl$/Ubuntu/home/hirokawak",
             "useAcrylic" : false
         }
     ],
@@ -431,6 +433,29 @@
             "red" : "#DC322F",
             "white" : "#EEE8D5",
             "yellow" : "#B58900"
+        },
+        {
+            "name": "Hybrid",
+            "black": "#2a2e33",
+            "red": "#b84d51",
+            "green": "#b3bf5a",
+            "yellow": "#e4b55e",
+            "blue": "#6e90b0",
+            "purple": "#a17eac",
+            "cyan": "#7fbfb4",
+            "white": "#b5b9b6",
+            "brightBlack": "#1d1f22",
+            "brightRed": "#8d2e32",
+            "brightGreen": "#798431",
+            "brightYellow": "#e58a50",
+            "brightBlue": "#4b6b88",
+            "brightPurple": "#6e5079",
+            "brightCyan": "#4d7b74",
+            "brightWhite": "#5a626a",
+            "background": "#161719",
+            "foreground": "#b7bcba",
+            "selectionBackground": "#1e1f22",
+            "cursorColor": "#b7bcba"
         }
     ]
 }

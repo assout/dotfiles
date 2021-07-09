@@ -16,8 +16,6 @@
 " - executable()は遅いらしいので使わない
 "
 " ## TODOs
-" - TODO: たまにIMEで変換候補確定後に先頭の一文字消えることがある @win
-" - TODO: setでワンライナーでIF文書くと以降のsetがVrapperで適用されない
 " - TODO: GVim@officeで複数ファイルを開いたときの<C-w>h,lが遅い(プラグインなし、vimrc空でも再現)
 " }}}1
 
@@ -169,6 +167,7 @@ command! -nargs=1 TodoGrep call <SID>Grep(<q-args>, expand('~/Documents/todo/not
 command! ToggleExpandTab call <SID>ToggleExpandTab()
 command! -range=% TrimSpace <line1>,<line2>s/[ \t]\+$// | nohlsearch | normal! ``
 command! -range=% TrimCR <line1>,<line2>s/\r// | nohlsearch | normal! ``
+command! -range=% TrimLF <line1>,<line2>s/\n// | nohlsearch | normal! ``
 " Show highlight item name under a cursor. Refs: [Vimでハイライト表示を調べる](http://rcmdnk.github.io/blog/2013/12/01/computer-vim/)
 command! VimShowHlItem echomsg synIDattr(synID(line("."), col("."), 1), "name")
 " }}}1
@@ -181,7 +180,7 @@ set backup
 set backupdir=~/.vim/backup
 set clipboard&
 set clipboard^=unnamedplus,unnamed
-set cmdheight=1
+set cmdheight=2 " hit-enterプロンプトの出現を避ける
 " set cryptmethod=blowfish2 " Caution: Comment out for performance
 set diffopt& diffopt+=vertical
 set expandtab
@@ -227,9 +226,16 @@ set title
 set ttimeoutlen=0
 set undodir=~/.cache/undo
 set undofile
+set visualbell t_vb=
 " set wildmode=list:longest " Caution: 微妙なのでやめる
 set nowrap
 set nowrapscan
+
+" refs. https://github.com/microsoft/WSL/issues/1154
+set <Up>=[A
+set <Down>=[B
+set <Right>=[C
+set <Left>=[D
 " }}}1
 
 " # Key-mappings {{{1
@@ -279,11 +285,16 @@ map              <SID>[special]m  <SID>[maximizer]
 nmap             <SID>[special]o  <SID>[open]
 nmap             <SID>[special]t  <SID>[tagbar]
 
+" 削除キーでyankしない(大きいデータをclipboardに入れるとき重くなるのをこれで防ぐ)
+noremap          x "_x
+noremap          X "_X
+
 if has('gui_running')
-  " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれない。呼び出い場合はsetfiletypeなどする。
-  nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>source $MYGVIMRC<CR>
-else
-  nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<CR>
+  " Note: autocmd FileTypeイベントを発効する。本来setfiletypeは不要だがプラグインが設定するファイルタイプのとき(e.g. aws.json)、FileType autocmdが呼ばれない。呼び出されない場合はsetfiletypeなどする。markdownもダメなので必須。
+  " TODO ファイル開いていない状態でやるとエラーになる
+  nnoremap <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>source $MYGVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
+els
+  nnorema <silent><SID>[special]u  :<C-u>source $MYVIMRC<Bar>execute "setfiletype " . &l:filetype<Bar>:filetype detect<CR>
 endif
 nnoremap   <expr><SID>[special]] ':ptag ' . expand("<cword>") . '<CR>'
 
@@ -303,6 +314,7 @@ noremap <expr><SID>[insert]s ':InsertSufix ' . input('suffix:') . '<CR>'
 noremap       <SID>[insert]-  :InsertPrefix - <CR>
 noremap       <SID>[insert]#  :InsertPrefix # <CR>
 noremap       <SID>[insert]>  :InsertPrefix > <CR>
+noremap <expr><SID>[insert]n ':InsertSufix ' . strftime('%Y-%m-%d %H:%M:%S') . '<CR>'
 
 nnoremap       <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
@@ -330,9 +342,9 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 
 " win32yank内の文字を一旦vimのレジスタに登録してからペイストする.
 if !has('gui_running')
-  " TODO 遅いからいったんやめる(クリップボードからペーストしたければtmuxのpaste使う)
-  " noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
-  " noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
+  " TODO 遅い。クリップボードからペーストしたければtmuxのpaste使えばよいが。(set pasteするのがめんどいけど)
+  noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
+  noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
 endif
 " nnoremap <silent>p :r !win32yank.exe -o<CR>
 " vnoremap <silent>p :r !win32yank.exe -o<CR>
@@ -385,8 +397,10 @@ if has('vim_starting')
   let &runtimepath = g:is_win_gui || g:is_jenkins ? s:dotvim_path . ',' . &runtimepath : &runtimepath
 endif
 
+" if !has('dummy') " XXX Windowsだと遅い
 if !has('gui_running')
   call g:plug#begin(s:plugged_path)
+  " silent! call g:plug#begin(s:plugged_path)
 
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
   " General {{{
@@ -397,7 +411,7 @@ if !has('gui_running')
   " Plug 'Shougo/denite.nvim', g:is_win_gui ? {'on' : ['<Plug>[fzy', 'Denite']} : {'on' : []}
   " TODO Vim終了が遅くなる
   " TODO GVim用にパッチを当ててる。。` file_mru.py#L19 'fnamemodify': ':~:s?/d/?D:/?:s?/c/?C:/?',`
-  " Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ディレクトリ履歴のみのため
+  Plug 'Shougo/neomru.vim', g:is_jenkins ? {'on' : []} : {} " Note: ファイル/ディレクトリ履歴のみのため
   " Plug 'Shougo/neosnippet.vim'
   "       \ | Plug 'Shougo/neosnippet-snippets'
   " Plug 'Vimjas/vim-python-pep8-indent', {'for' : ['python']}
@@ -405,24 +419,24 @@ if !has('gui_running')
   " Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
+  Plug 'editorconfig/editorconfig-vim'
   " Plug 'elzr/vim-json', {'for' : 'json'} " For json filetype.
   Plug 'fatih/vim-go', {'for' : 'go'}
+  Plug 'ferrine/md-img-paste.vim', {'for' : 'markdown'}
   " Plug 'fuenor/im_control.vim', g:is_linux ? {} : {'on' : []}
   " Plug 'freitass/todo.txt-vim', {'for' : 'todo'}
-  " Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
+  Plug 'glidenote/memolist.vim', {'on' : ['MemoNew']}
   Plug 'godlygeek/tabular', {'for' : 'markdown'}
         \ | Plug 'plasticboy/vim-markdown', {'for' : 'markdown'} " TODO 最近のvimではset ft=markdown不要なのにしているため、autocmdが2回呼ばれてしまう TODO いろいろ不都合有るけどcodeブロックのハイライトが捨てがたい TODO syntaxで箇条書きのネストレベル2のコードブロックの後もコードブロック解除されない
   " FIXME: windows(cui,gui)で動いてない。linuxはいけた。
-  " Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
+  Plug 'haya14busa/vim-migemo', {'on' : ['Migemo', '<Plug>(migemo-']}
   " Plug 'haya14busa/vim-auto-programming'
   " Plug 'heavenshell/vim-jsdoc', {'for' : 'javascript'}
   " Plug 'hyiltiz/vim-plugins-profile', {'on' : []} " It's not vim plugin.
   " Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
   " Plug 'itchyny/vim-parenmatch'
-  " TODO 遅延初期化するとVim起動して最初の一回目呼ばれないっポイ
-  " Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
-  Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
   " Plug 'kamichidu/vim-edit-properties'
   " Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
   " Plug 'kana/vim-submode'
@@ -436,9 +450,10 @@ if !has('gui_running')
   " Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
   Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
   " Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
+  " Plug 'mnishz/colorscheme-preview.vim', {'on' : 'ColorschemePreview'}
   " Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
   " Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
-  " Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
+  Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
   " Plug 'othree/yajs.vim' " Note: vim-jaavascriptのようにシンタックスエラーをハイライトしてくれない
   " Plug 'pangloss/vim-javascript' " Note: syntax系のプラグインはlazyできない? TODO es6対応されてない？ Note: 入れないとhtml内の埋め込みscriptがindent崩れる
   " Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
@@ -467,14 +482,17 @@ if !has('gui_running')
   Plug 'tpope/vim-unimpaired'
   " Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
-        \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen'}
+        \ | Plug 'halkn/previm', {'for' : 'markdown', 'on' : 'PrevimOpen', 'branch': 'fix-img-path-in-wslmode' }
+        " \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
+        " \ | Plug 'previm/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
+        " \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
   " Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
-  " Plug 'vim-jp/vimdoc-ja'
+  Plug 'vim-jp/vimdoc-ja'
   " Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
-  " Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
+  Plug 'vim-scripts/HybridText', {'for' : 'hybrid'}
   " Plug 'vim-scripts/SQLUtilities', {'for' : 'sql'}
   "       \ | Plug 'vim-scripts/Align', {'for' : 'sql'}
-  " Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix']}
+  Plug 'w0rp/ale', g:is_win_gui ? {'on' : []} : {'on' : ['ALELint', 'ALEFix'], 'for' : ['sh', 'markdown']}
   " Plug 'wellle/tmux-complete.vim' " Note: auto-progurammingと競合するので一旦やめる
   " Note: Windows以外はvim-misc,vim-shell不要そうだが、無いとtags作られなかった
   " Note: markdownは指定しなくてもtagbarで見れるので良い
@@ -484,29 +502,29 @@ if !has('gui_running')
   " }}}
 
   " User Operators {{{ Caution: 遅延ロードするといろいろ動かなくなる
-  " Plug 'kana/vim-operator-user'
-        " \ | Plug 'rhysd/vim-operator-surround'
-        " \ | Plug 'kana/vim-operator-replace'
-        " \ | Plug 'tyru/operator-camelize.vim'
-        " \ | Plug 'osyo-manga/vim-operator-stay-cursor'
+  Plug 'kana/vim-operator-user'
+        \ | Plug 'rhysd/vim-operator-surround'
+        \ | Plug 'kana/vim-operator-replace'
+        \ | Plug 'tyru/operator-camelize.vim'
+        \ | Plug 'osyo-manga/vim-operator-stay-cursor'
   " }}}
 
   " User Textobjects {{{
-  " Plug 'kana/vim-textobj-user'
-  "       \ | Plug 'kana/vim-textobj-function'
-  "       \ | Plug 'kana/vim-textobj-indent'
-  "       \ | Plug 'kana/vim-textobj-line'
-  "       \ | Plug 'mattn/vim-textobj-url'
-  "       \ | Plug 'osyo-manga/vim-textobj-multiblock'
-  "       \ | Plug 'pocke/vim-textobj-markdown'
-  "       \ | Plug 'sgur/vim-textobj-parameter'
-  "       \ | Plug 'thinca/vim-textobj-between'
-  "       \ | Plug 'thinca/vim-textobj-function-javascript'
-        " \ | Plug 'kana/vim-textobj-entire'
+  Plug 'kana/vim-textobj-user'
+        \ | Plug 'kana/vim-textobj-function'
+        \ | Plug 'kana/vim-textobj-indent'
+        \ | Plug 'kana/vim-textobj-line'
+        \ | Plug 'mattn/vim-textobj-url'
+        \ | Plug 'osyo-manga/vim-textobj-multiblock'
+        \ | Plug 'pocke/vim-textobj-markdown'
+        \ | Plug 'sgur/vim-textobj-parameter'
+        \ | Plug 'thinca/vim-textobj-between'
+        \ | Plug 'thinca/vim-textobj-function-javascript'
+        \ | Plug 'kana/vim-textobj-entire'
   " }}}
 
   " Colorschemes {{{
-  " Plug 'w0ng/vim-hybrid'
+  Plug 'w0ng/vim-hybrid'
   " }}}
 
   call g:plug#end()
@@ -522,6 +540,7 @@ if s:HasPlugin('ale') " {{{
   nnoremap <SID>[ale-lint] :<C-u>ALELint<CR>
   nnoremap <SID>[ale-fix] :<C-u>ALEFix<CR>
   autocmd vimrc User ALELintPost :unsilent echo "Lint done!"
+  " autocmd vimrc User ALELintPost :silent echo "Lint done!"
 endif " }}}
 
 if s:HasPlugin('asyncrun.vim') " {{{
@@ -579,6 +598,10 @@ else
   command! -nargs=0 CdCurrent cd %:p:h
 endif " }}}
 
+if s:HasPlugin('md-img-paste.vim') " {{{
+  autocmd vimrc FileType markdown command! PasteImage :call mdip#MarkdownClipboardImage()
+endif " }}}
+
 if s:HasPlugin('memolist.vim') " {{{
   let g:memolist_filename_prefix_none = 1
   let g:memolist_memo_suffix = 'md'
@@ -601,7 +624,7 @@ if s:HasPlugin('neomru.vim') " {{{
   " Note: Windows GVimで、ネットワーク上のファイルがあるとUnite候補表示時に遅くなる？ -> '^\(\/\/\|fugitive\)'
   let g:neomru#directory_mru_ignore_pattern = '^\(\/\/\|fugitive\)' " or '^fugitive'
   let g:neomru#directory_mru_limit = 500
-  let g:neomru#do_validate = 0 " Cautioin: 有効にしちゃうとvim終了時結構遅くなる TODO たまに正常なファイルも消えちゃうっポイ
+  let g:neomru#do_validate = 1 " Cautioin: 有効にしちゃうとvim終了時結構遅くなるかも。 TODO たまに正常なファイルも消えちゃうっポイ
   let g:neomru#file_mru_limit = 0
   let g:neomru#follow_links = 1
 endif " }}}
@@ -659,12 +682,13 @@ if s:HasPlugin('operator-camelize.vim') " {{{
 endif " }}}
 
 if s:HasPlugin('previm') " {{{
-  let g:previm_open_cmd = '/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+  " let g:previm_open_cmd = '/mnt/c/Program\ Files\ \(x86\)/Google/Chrome/Application/chrome.exe'
+  let g:previm_open_cmd = '/mnt/c/Program\ Files/Google/Chrome/Application/chrome.exe'
   let g:previm_wsl_mode = 1
   function! s:PrevimSettings()
     nnoremap <buffer><SID>[previm] :<C-u>PrevimOpen<CR>
   endfunction
-  autocmd vimrc user previm call s:PrevimSettings()
+  autocmd vimrc User previm call s:PrevimSettings()
 endif " }}}
 
 if s:HasPlugin('restart.vim') " {{{
@@ -771,7 +795,8 @@ if s:HasPlugin('vim-easy-align') " {{{
         \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
         \     'left_margin':  0,
         \     'right_margin': 0
-        \   }
+        \   },
+        \ 't': { 'pattern': '\t' }
         \ }
 
   function! s:CsvSettings()
@@ -815,6 +840,10 @@ endif " }}}
 
 if s:HasPlugin('vim-go') " {{{
   let g:go_fmt_command = "goimports"
+endif " }}}
+
+if s:HasPlugin('vim-hybrid') " {{{
+  " colorscheme hybrid " 基本的にはTerminal(WSL)のカラースキーマ側で設定するので設定しない
 endif " }}}
 
 if s:HasPlugin('vim-json') " {{{
@@ -1074,6 +1103,11 @@ endif " }}}
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
+  " WSLでリフレッシュされないので..
+  if !has('gui_running')
+    autocmd VimLeave * :!clear
+  endif
+
   " QuickFixを自動で開く " Caution: grep, makeなど以外では呼ばれない (e.g. syntastic)
   " Note: fugitive, AsyncRunの時にフォーカスが奪われるので暫定でwincmd pして戻してる
   autocmd QuickfixCmdPost [^l]* nested if len(getqflist()) != 0  | copen | wincmd p | endif
@@ -1099,7 +1133,7 @@ augroup vimrc
         " \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown
-        \   setlocal spell tabstop=4 shiftwidth=4 cinkeys=''
+        \   setlocal nospell tabstop=4 shiftwidth=4 cinkeys=''
         \ | command! -buffer FixTextlint :call system("textlint --fix " . expand("%")) <BAR> :edit!
   autocmd FileType sh setlocal noexpandtab
   " Note: Windowsでxmllintはencode指定しないとうまくいかないことがある
@@ -1114,7 +1148,9 @@ augroup vimrc
 
   if !has('gui_running')
     " autocmd TextYankPost * :call system('win32yank.exe -i', @") "XXX 同期だと遅い
-    autocmd TextYankPost * :call job_start(['echo'], { "callback" : "Yank"})
+    " autocmd TextYankPost * if v:event.operator == 'y' | :call job_start(['echo'], { "callback" : "Yank"}) | endif " TODO vim内でd,xしたのがpasteできなくなる...
+
+    autocmd TextYankPost * :call job_start(['echo'], { "callback" : "Yank"}) " XXX 非同期でも大きいと重くなる
   endif
 augroup END
 " }}}1
@@ -1129,6 +1165,5 @@ if has('vim_starting') && has('reltime')
 endif
 
 " }}}1
-
 " vim:nofoldenable:
 

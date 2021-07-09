@@ -2,8 +2,8 @@ scriptencoding utf-8
 
 let g:did_install_default_menus = 1 " メニューバー非表示の場合この設定で起動が高速化するらしい.
 
-set guifont=HackGenNerd:h9
-set guifontwide=HackGenNerd:h9:cSHIFTJIS
+set guifont=HackGenNerd:h10
+set guifontwide=HackGenNerd:h10:cSHIFTJIS
 
 set background=light " TODO: kaoriya版の場合vimrcに定義していても再定義が必要
 set columns=120

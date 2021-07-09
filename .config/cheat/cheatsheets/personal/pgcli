@@ -1,0 +1,3 @@
+# login
+pgcli -U root -h localhost root
+

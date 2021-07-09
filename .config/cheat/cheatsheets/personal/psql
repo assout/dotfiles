@@ -1,0 +1,40 @@
+---
+tags [ database ]
+---
+# psql is the PostgreSQL terminal interface. The following commands were tested on version 9.5.
+# Connection options:
+# -U username (if not specified current OS user is used).
+# -p port.
+# -h server hostname/address.
+
+# Connect to a specific database:
+psql -U <username> -h <host> -d <database>
+
+# Get databases on a server:
+psql -U <username> -h <host> --list
+
+# Execute sql query and save output to file:
+psql -U <username> -d <database> -c 'select * from tableName;' -o <outfile>
+
+# Execute query and get tabular html output:
+psql -U <username> -d <database> -H -c 'select * from tableName;'
+
+# Execute query and save resulting rows to csv file:
+# (if column names in the first row are not needed, remove the word 'header')
+psql -U <username> -d <database> -c 'copy (select * from tableName) to stdout with csv header;' -o <outfile>
+
+# Read commands from file:
+psql -f <outfile>
+
+# Restore databases from file:
+psql -f <outfile> <username>
+
+# テーブル一覧確認
+\d
+
+# テーブル定義確認
+\d <tablename>
+
+# テーブルサイズ確認(TOAST含む)
+# https://qiita.com/awakia/items/99c3d114aa16099e825d
+SELECT pgn.nspname, relname, pg_size_pretty(relpages::bigint * 8 * 1024) AS size, CASE WHEN relkind = 't' THEN (SELECT pgd.relname FROM pg_class pgd WHERE pgd.reltoastrelid = pg.oid) WHEN nspname = 'pg_toast' AND relkind = 'i' THEN (SELECT pgt.relname FROM pg_class pgt WHERE SUBSTRING(pgt.relname FROM 10) = REPLACE(SUBSTRING(pg.relname FROM 10), '_index', '')) ELSE (SELECT pgc.relname FROM pg_class pgc WHERE pg.reltoastrelid = pgc.oid) END::varchar AS refrelname, CASE WHEN nspname = 'pg_toast' AND relkind = 'i' THEN (SELECT pgts.relname FROM pg_class pgts WHERE pgts.reltoastrelid = (SELECT pgt.oid FROM pg_class pgt WHERE SUBSTRING(pgt.relname FROM 10) = REPLACE(SUBSTRING(pg.relname FROM 10), '_index', ''))) END AS relidxrefrelname, relfilenode, relkind, reltuples::bigint, relpages FROM pg_class pg, pg_namespace pgn WHERE pg.relnamespace = pgn.oid AND pgn.nspname NOT IN ('information_schema', 'pg_catalog') ORDER BY relpages DESC;

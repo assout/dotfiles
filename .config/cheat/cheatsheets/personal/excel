@@ -1,0 +1,51 @@
+# 繰り返し :
+F4
+
+# 日付入力 :
+Ctrl + ;
+
+# 時刻入力 :
+Ctrl + :
+
+# 行を非表示 :
+Ctrl + 9
+
+# 行を表示 :
+Ctrl + Shift + 9
+
+# 列を非表示 :
+Ctrl + 0
+
+# 列を表示 :
+Ctrl + Shift + 0
+
+# 数式を表示 :
+Ctrl + Shift + @
+
+# 取り消し線トグル
+Ctrl + 5
+
+# 参照先へジャンプ
+Ctrl + ]
+
+# 表示しているセルだけ選択
+Alt + ;
+
+# 罫線 - 外枠
+Ctrl + Shift + 6 (Ctrl + &)
+
+# 罫線 - 外枠消す
+Ctrl + Shift + \ (Ctrl + _)
+
+# グループ化
+Shift + Alt + →
+
+# グループ解除
+Shift + Alt + ←
+
+# 折り畳み
+グループ化されている行選択して、右クリックメニュー + Shift + H
+
+# セル範囲一括で、一つ上のセルを参照させる
+https://leafytree.info/excel-fill-blank-cells-with-same-value-as-above-cell/
+

@@ -1,6 +1,0 @@
-# pkill - プロセスをkill
-pkill -f fooProc
-
-# シグナル指定
-pkill -9 -f fooProc
-

@@ -45,6 +45,10 @@ HISTFILESIZE=10000
 HISTCONTROL=ignoredups # 重複を排除
 HISTTIMEFORMAT='%FT%T ' # コマンド実行時刻を記録する
 
+# export TERM='xterm'
+
+export http_proxy="${HTTP_PROXY}"
+export https_proxy="${HTTPS_PROXY}"
 export EDITOR='vim'
 export GHG_HOME="${HOME}/ghg"
 export GHQ_HOME="${HOME}/ghq" #Note: vimrcからも参照するのでexport #Note: GHQ_ROOTにしてしまうとghqコマンドで複数指定できなくなる
@@ -52,6 +56,7 @@ export LANG=en_US.UTF-8
 export LESS='-R -x2'
 export PYTHONIOENCODING=utf-8
 export SHELLCHECK_OPTS='--external-sources --exclude=SC1090,SC1091'
+export JDK_HOME='/usr/lib/jvm/java-11-openjdk-amd64'
 
 # Export tools path # Note: Gvimから実行するものはOSの環境変数に入れる(e.g. shellcheck, fzy)
 tools_dir="${HOME}/tools"
@@ -88,6 +93,8 @@ PATH=${PATH}:${GHQ_HOME}/github.com/chrismdp/p
 PATH=${PATH}:${HOME}/go/bin
 PATH=${PATH}:${HOME}/.cabal/bin
 PATH=${PATH}:/usr/local/go/bin
+PATH=${PATH}:${JDK_HOME}
+PATH=${PATH}:${HOME}/.local/bin
 export PATH
 # APPDATA=$(wslpath ${APPDATA}) # TODO
 
@@ -124,7 +131,8 @@ mybash__find_dir() {
 mybash__clipborad() {
 	local stdin; read -r stdin
 	[ -z "${stdin}" ] && return 64
-	echo "${stdin}" | tr -d '\n' | tee >(xargs -I{} tmux set-buffer "{}") > /dev/clipboard
+	# echo "${stdin}" | tr -d '\n' | tee >(xargs -I{} tmux set-buffer "{}") > /dev/clipboard
+	echo "${stdin}" | tr -d '\n' | tee >(xargs -I{} tmux set-buffer "{}") | win32yank.exe -i
 	echo "Copied to Clipboard: ${stdin}" >&2
 }
 
@@ -175,14 +183,27 @@ mybash__cdls() {
 mybash__select_cheat() {
 	local c
 	if [ $# == 0 ] ; then
-		c=$(cheat list | cut -d' ' -f1 | ${selector}) || return 64
+		c=$(cheat --list | sed "1d"| cut -d' ' -f1 | ${selector}) || return 64
 	else
 		c=$1
 	fi
 	local stdin
-	cheat show "${c}" | ${selector} | while read -r stdin; do echo "${stdin#* }"; done | mybash__clipborad
+	# cheat "${c}" | ${selector} | while read -r stdin; do echo "${stdin#* }"; done | mybash__clipborad
+	cheat "${c}" | ${selector} | while read -r stdin; do echo "${stdin}"; done | mybash__clipborad
 }
 alias c='mybash__select_cheat'
+
+mybash__select_cheat_edit() {
+	local c
+	if [ $# == 0 ] ; then
+		c=$(cheat --list | sed "1d"| cut -d' ' -f1 | ${selector}) || return 64
+	else
+		c=$1
+	fi
+	local stdin
+	cheat -e "${c}"
+}
+alias ce='mybash__select_cheat_edit'
 
 mybash__cd() {
 	local t; t="$({ echo '..'; echo "$@" | mybash__find_dir; } | sort | ${selector})";
@@ -271,7 +292,7 @@ mybash__recurcive_directory() {
 	local s; s=$1
 	local t
 	# shellcheck disable=SC2086
-	t=$({ echo "${s:-.}/."; echo "${s:-.}/.."; find ${s} -maxdepth 1 -mindepth 1 -type 'd'; } | ${selector}) || return 64
+	t=$({ echo "${s:-.}/."; echo "${s:-.}/.."; find ${s} -maxdepth 1 -mindepth 1 -type 'd'; } | sort | ${selector}) || return 64
 	if [[ "${t}" =~ /\.$ ]] ; then
 		echo "${t}"
 	elif [ -d "${t}" ] ; then
@@ -403,7 +424,7 @@ mybash__memo_new() {
 }
 
 mybash__memo_list() {
-	local l; l=$(for d in ${memo_dirs[@]}; do echo "${d}/"*; done | mybash__find | sort | ${selector}) && ${vim} "${l}"
+	local l; l=$(for d in "${memo_dirs[@]}"; do echo "${d}/"*; done | mybash__find | sort | ${selector}) && ${vim} "${l}"
 }
 
 mybash__memo_cd_dir() {

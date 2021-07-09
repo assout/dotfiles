@@ -1,5 +1,5 @@
-MKLINK "C:\Users\porin\_gvimrc" "\\wsl$\Ubuntu\home\assout\ghq\github.com\assout\dotfiles\vim\.gvimrc"
-MKLINK "C:\Users\porin\_vimrc" "\\wsl$\Ubuntu\home\assout\ghq\github.com\assout\dotfiles\vim\.vimrc"
+MKLINK "C:\Users\22665952\_gvimrc" "\\wsl$\Ubuntu\home\hirokawak\ghq\github.com\assout\dotfiles\vim\.gvimrc"
+MKLINK "C:\Users\22665952\_vimrc" "\\wsl$\Ubuntu\home\hirokawak\ghq\github.com\assout\dotfiles\vim\.vimrc"
 
 MKLINK "C:\Users\porin\AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" "\\wsl$\Ubuntu\home\assout\ghq\github.com\assout\dotfiles\WindowsTerminal\settings.json"
 

@@ -12,8 +12,6 @@
 	undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 [color]
 	ui = true # 古いバージョンの場合defaultでないため
-[include]
-	path = .gitconfig.env
 [hub]
 	protocol = https
 [merge]
@@ -21,6 +19,12 @@
 [credential]
 	helper = store
 [ghq]
-	root = ~/go/src
+	# root = ~/go/src
 	root = ~/ghq
+
+[include]
+	path = .gitconfig.local
+
+[includeIf "gitdir:~/ghq/github.com/assout/dotfiles/"]
+	path = ~/ghq/github.com/assout/dotfiles/.gitconfig.home
 

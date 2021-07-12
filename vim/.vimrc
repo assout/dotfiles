@@ -355,9 +355,12 @@ endif
 " nmap           <C-p>      <Plug>(yankround-prev)
 " nmap           <C-n>      <Plug>(yankround-next)
 
-" Note: nmapだとyy,==が効かない
-map           y           <Plug>(operator-stay-cursor-yank)
-map     <expr>=           operator#stay_cursor#wrapper("=")
+if !has('gui_running')
+  " Note: nmapだとyy,==が効かない
+  map           y           <Plug>(operator-stay-cursor-yank)
+  map     <expr>=           operator#stay_cursor#wrapper("=")
+endif
+
 
 nnoremap       Y          y$
 " nmap           +          <SID>[switch]

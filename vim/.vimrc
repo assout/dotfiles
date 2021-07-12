@@ -85,6 +85,7 @@ endfunction
 function! s:FzyCommand(choice_command, vim_command)
   try
     let output = system(a:choice_command . " | fzy")
+    " let output = system(a:choice_command . " | fzf")
   catch /Vim:Interrupt/
     " Swallow errors from ^C, allow redraw! below
   endtry
@@ -108,13 +109,13 @@ function! s:InsertString(pos, str) range " Note: 引数にスペースを含め�
 endfunction
 
 function! s:JumpToNextTagSameIndent(dir)
-    call search('^' . matchstr(getline('.'), '\(^\s*\)') . '<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+  call search('^' . matchstr(getline('.'), '\(^\s*\)') . '<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
 endfunction
 function! s:JumpToNextTagText(dir) " Refs: [vim - Jump to next tag in pom.xml - Stack Overflow](https://stackoverflow.com/questions/42867955/jump-to-next-tag-in-pom-xml)
-    call search('<[^/][^>]\{-}>.', a:dir == 'backward' ? 'web' : 'we')
+  call search('<[^/][^>]\{-}>.', a:dir == 'backward' ? 'web' : 'we')
 endfunction
 function! s:JumpToNextTag(dir)
-    call search('<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
+  call search('<\(/\)\@!', a:dir == 'backward' ? 'web' : 'we')
 endfunction
 function! s:JumpToNextMapping() " Refs: [Move to next/previous line with same indentation | Vim Tips Wiki | FANDOM powered by Wikia](http://vim.wikia.com/wiki/Move_to_next/previous_line_with_same_indentation)
   nnoremap <silent><buffer>) :call <SID>JumpToNextTagSameIndent('forward')<CR>
@@ -245,6 +246,7 @@ map  <SID>[plugin]a <SID>[align]
 map  <SID>[plugin]c <SID>[camelize]
 nmap <SID>[plugin]e <Plug>[emmet]
 nmap <SID>[plugin]f <SID>[ale-fix]
+nmap <SID>[plugin]g <SID>[gitgutter]
 map  <SID>[plugin]H <SID>[markdown_h]
 map  <SID>[plugin]L <SID>[markdown_l]
 nmap <SID>[plugin]l <SID>[ale-lint]
@@ -320,7 +322,8 @@ nnoremap       <SID>[open]      <Nop>
 " Note: fugitiveで対象とするためresolveしている " Caution: Windows GUIのときシンボリックリンクを解決できない
 nnoremap <expr><SID>[open]v    ':<C-u>edit ' . resolve(expand($MYVIMRC)) . '<CR>'
 
-" TODO: fzyかdeniteに寄せる (できればterminalと同じfzyに寄せたいがGVimで動かない)
+" TODO: fzyかfzfかdeniteに寄せる (できればterminalと同じfzyに寄せたいがGVimで動かない)
+" TODO: かつfzfがgolangなので全部切り替えたい
 " Note: <SID>だとvim-plugのオンデマンドロードができない
 nmap <SID>[open]m <Plug>[fzy]m
 nmap <SID>[open]n <Plug>[fzy]n
@@ -340,25 +343,21 @@ nnoremap <expr>l          foldclosed('.') != -1 ? 'zo' : 'l'
 " nmap           <C-w>gf    <Plug>(gf-user-<C-w>gf)
 " nmap           <C-w>gF    <Plug>(gf-user-<C-w>gF)
 
-" win32yank内の文字を一旦vimのレジスタに登録してからペイストする.
+" win32yank内の文字を一旦vimのレジスタに登録してからペーストする.
 if !has('gui_running')
   " TODO 遅い。クリップボードからペーストしたければtmuxのpaste使えばよいが。(set pasteするのがめんどいけど)
   noremap <silent> p :call setreg('"',system('win32yank.exe -o'))<CR>""p
   noremap <silent> P :call setreg('"',system('win32yank.exe -o'))<CR>""P
 endif
-" nnoremap <silent>p :r !win32yank.exe -o<CR>
-" vnoremap <silent>p :r !win32yank.exe -o<CR>
 
 " nmap           p          <Plug>(yankround-p)
 " nmap           P          <Plug>(yankround-P)
 " nmap           <C-p>      <Plug>(yankround-prev)
 " nmap           <C-n>      <Plug>(yankround-next)
 
-if 1 " TODO:vrapperでunmapしてもyy、==が変になることへの暫定対応
-  " Note: nmapだとyy,==が効かない
-  " map           y           <Plug>(operator-stay-cursor-yank)
-  " map     <expr>=           operator#stay_cursor#wrapper("=")
-endif
+" Note: nmapだとyy,==が効かない
+map           y           <Plug>(operator-stay-cursor-yank)
+map     <expr>=           operator#stay_cursor#wrapper("=")
 
 nnoremap       Y          y$
 " nmap           +          <SID>[switch]
@@ -368,15 +367,9 @@ nnoremap       <C-m>      i<CR><Esc>
 " Note: <C-;>は無理らしい
 " nmap           <A-;>      <Plug>(fontzoom-larger)
 " nmap           <A-->      <Plug>(fontzoom-smaller)
+
 nnoremap <C-PageUp>   :tabprevious<CR>
 nnoremap <C-PageDown> :tabnext<CR>
-nnoremap ]g :tabnext<CR>
-nnoremap [G :tabfirst<CR>
-nnoremap ]G :tablast<CR>
-nnoremap [w :wincmd W<CR>
-nnoremap ]w :wincmd w<CR>
-nnoremap [W :wincmd t<CR>
-nnoremap ]W :wincmd b<CR>
 
 " }}}
 
@@ -399,8 +392,7 @@ endif
 
 " if !has('dummy') " XXX Windowsだと遅い
 if !has('gui_running')
-  call g:plug#begin(s:plugged_path)
-  " silent! call g:plug#begin(s:plugged_path)
+  silent! call g:plug#begin(s:plugged_path) " Windowsでgit入れてない場合silentが必要
 
   " Caution: `for : "*"`としたときfiletypeが設定されない拡張子のとき呼ばれない(e.g. foo.log)。(そもそも`for:"*"は遅延ロードしている意味がないためやらない)
   " General {{{
@@ -415,7 +407,7 @@ if !has('gui_running')
   " Plug 'Shougo/neosnippet.vim'
   "       \ | Plug 'Shougo/neosnippet-snippets'
   " Plug 'Vimjas/vim-python-pep8-indent', {'for' : ['python']}
-  " Plug 'airblade/vim-gitgutter'
+  Plug 'airblade/vim-gitgutter'
   " Plug 'aklt/plantuml-syntax', {'for' : 'plantuml'}
   " Plug 'chaquotay/ftl-vim-syntax', {'for' : 'html.ftl'}
   " Plug 'dzeban/vim-log-syntax', {'for' : 'log'} " 逆に見づらいことが多い
@@ -436,6 +428,8 @@ if !has('gui_running')
   " Plug 'https://gist.github.com/assout/524c4ae96928b3d2474a.git', {'dir' : g:plug_home . '/hz_ja.vim/plugin', 'rtp' : '..', 'on' : ['Hankaku', 'Zenkaku', 'ToggleHZ']}
   " Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install', 'for' : 'markdown' }
   " Plug 'itchyny/vim-parenmatch'
+  " Plug 'junegunn/fzf'
+  " Plug 'junegunn/fzf.vim', {'on' : ['FzfFiles','FzfGFiles']} " TODO 全コマンド記載
   Plug 'junegunn/vim-easy-align', {'on' : ['<Plug>(LiveEasyAlign)', '<Plug>(EasyAlign)']}
   " Plug 'kamichidu/vim-edit-properties'
   " Plug 'kana/vim-gf-user', {'on' : '<Plug>(gf-user-'}
@@ -450,7 +444,7 @@ if !has('gui_running')
   " Plug 'maxbrunsfeld/vim-emacs-bindings' " TODO: 'houtsnip/vim-emacscommandline' だとコマンドラインでescが待たされちゃう
   Plug 'mechatroner/rainbow_csv', {'for' : 'csv'}
   " Plug 'medihack/sh.vim', {'for' : 'sh'} " For function block indentation, caseラベルをインデントしたい場合、let g:sh_indent_case_labels = 1
-  " Plug 'mnishz/colorscheme-preview.vim', {'on' : 'ColorschemePreview'}
+  Plug 'mnishz/colorscheme-preview.vim', {'on' : 'ColorschemePreview'}
   " Plug 'moll/vim-node', g:is_win ? {'on' : []} : {} " Lazyできない TODO: たまにmarkdown開くとき2secくらいかかるっぽい(2分探索で見ていった結果)
   " Plug 'moznion/vim-ltsv', {'for' : 'ltsv'}
   Plug 'nathanaelkane/vim-indent-guides', {'on' : ['IndentGuidesEnable', 'IndentGuidesToggle']}
@@ -459,7 +453,7 @@ if !has('gui_running')
   " Plug 'osyo-manga/vim-over', {'on' : 'OverCommandLine'}
   " Plug 'powerman/vim-plugin-AnsiEsc', {'on' : 'AnsiEsc'} " vim-scripts/AnsiEsc.vim`でも試してみる？
   " Plug 'scrooloose/vim-slumlord', {'for' : 'plantuml'} " slumlord.vim#L87あたりをコメントアウトしたら動いたが、テキストに生成ダイアグラムが書き込まれるのも微妙なので一旦使わない
-  " Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
+  Plug 'schickling/vim-bufonly', {'on' : ['BufOnly', 'BOnly']}
   " Plug 'skanehira/preview-markdown.vim', {'for' : 'markdown'}
   " Plug 'szw/vim-maximizer', {'on' : ['Maximize', 'MaximizerToggle']} " Windowの最大化・復元
   " Plug 't9md/vim-textmanip', {'on' : '<Plug>(textmanip-'} " TODO: 代替探す(日本語化けるのと、たまに不要な空白が入るため)
@@ -472,20 +466,17 @@ if !has('gui_running')
   " Plug 'thinca/vim-singleton' " Note: 遅延ロード不可
   Plug 'tomtom/tcomment_vim' " TODO: markdownが`<!-- hoge --->`となるが`<!--- hoge -->`では？
   " Caution: on demand不可。Refs: <https://github.com/junegunn/vim-plug/issues/164>
-  " Plug 'tpope/vim-fugitive'
-  "       \ | Plug 'junegunn/gv.vim'
-  "       \ | Plug 'skywind3000/asyncrun.vim'
-  "       \ | Plug 'tpope/vim-rhubarb'
-  "       \ | Plug 'shumphrey/fugitive-gitlab.vim'
+  Plug 'tpope/vim-fugitive'
+        \ | Plug 'junegunn/gv.vim'
+        \ | Plug 'skywind3000/asyncrun.vim'
+        \ | Plug 'tpope/vim-rhubarb'
+        \ | Plug 'shumphrey/fugitive-gitlab.vim'
   " Plug 'tpope/vim-repeat'
   " Plug 'tpope/vim-speeddating'
   Plug 'tpope/vim-unimpaired'
-  " Plug 'tyru/capture.vim', {'on' : 'Capture'}
+  Plug 'tyru/capture.vim', {'on' : 'Capture'}
   Plug 'tyru/open-browser.vim', {'for' : 'markdown', 'on' : ['<Plug>(openbrowser-', 'OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch', 'PrevimOpen']}
         \ | Plug 'halkn/previm', {'for' : 'markdown', 'on' : 'PrevimOpen', 'branch': 'fix-img-path-in-wslmode' }
-        " \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
-        " \ | Plug 'previm/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
-        " \ | Plug 'kannokanno/previm', {'for' : 'markdown', 'on' : 'PrevimOpen' }
   " Plug 'tyru/restart.vim', {'on' : ['Restart', 'RestartWithSession']} " TODO: CUI上でも使いたい
   Plug 'vim-jp/vimdoc-ja'
   " Plug 'vim-scripts/DirDiff.vim', {'on' : 'DirDiff'} " TODO: 文字化けする
@@ -580,6 +571,10 @@ if s:HasPlugin('emmet-vim') " {{{
   let g:user_emmet_next_key = '<C-y>n'
   let g:user_emmet_prev_key = '<C-y>N'
   let g:user_emmet_anchorizeurl_key = '<Plug>[emmet]'
+endif " }}}
+
+if s:HasPlugin('fzf.vim') " {{{
+  let g:fzf_command_prefix = 'Fzf'
 endif " }}}
 
 if s:HasPlugin('fugitive-gitlab.vim') " {{{
@@ -728,7 +723,7 @@ if s:HasPlugin('switch.vim') " {{{
   " \  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
   " \  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
 
-  " Note: 以下は略称版と競合してしまうので設定しない
+  " Note: 以下は略称と競合してしまうので設定しない
   " \  ['Sunday',  'Monday',    'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   " \  ['Janualy', 'Februaly',  'March',   'April',     'May',      'June',   'July',      'August', 'SePtember', 'October', 'November', 'Decemer'],
 
@@ -834,8 +829,9 @@ endif " }}}
 
 if s:HasPlugin('vim-gitgutter') " {{{
   let g:gitgutter_map_keys = 0 " ic, acはvim-textobj-markdown用に取っておきたいため
-  nmap ]c <Plug>GitGutterNextHunk
-  nmap [c <Plug>GitGutterPrevHunk
+  nmap ]c <Plug>(GitGutterNextHunk)
+  nmap [c <Plug>(GitGutterPrevHunk)
+  nmap <buffer><SID>[gitgutter] <Plug>(GitGutterPreviewHunk)
 endif " }}}
 
 if s:HasPlugin('vim-go') " {{{
@@ -1103,7 +1099,7 @@ endif " }}}
 " # Auto-commands {{{1
 " Caution: 当セクションはVim-Plugより後に記述する必要がある(Vim-Plugの記述でfiletype onされる。autocomd FileTypeの処理はftpluginの処理より後に実行させたいため) Refs: <http://d.hatena.ne.jp/kuhukuhun/20081108/1226156420>
 augroup vimrc
-  " WSLでリフレッシュされないので..
+  " XXX WSLでリフレッシュされないので..
   if !has('gui_running')
     autocmd VimLeave * :!clear
   endif
@@ -1130,7 +1126,7 @@ augroup vimrc
   autocmd FileType *json
         \   setlocal foldmethod=syntax foldlevel=99
         \ | command! -buffer -range=% FormatJson <line1>,<line2>!jq "."
-        " \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
+  " \ | command! -buffer -range=% FormatJson <line1>,<line2>!python -m json.tool
   " Note: 箇条書きの2段落目のインデントがおかしくなることがあったのでcinkeysを空にする(行に:が含まれてたからかも)
   autocmd FileType markdown
         \   setlocal nospell tabstop=4 shiftwidth=4 cinkeys=''
@@ -1147,9 +1143,6 @@ augroup vimrc
   endfunction
 
   if !has('gui_running')
-    " autocmd TextYankPost * :call system('win32yank.exe -i', @") "XXX 同期だと遅い
-    " autocmd TextYankPost * if v:event.operator == 'y' | :call job_start(['echo'], { "callback" : "Yank"}) | endif " TODO vim内でd,xしたのがpasteできなくなる...
-
     autocmd TextYankPost * :call job_start(['echo'], { "callback" : "Yank"}) " XXX 非同期でも大きいと重くなる
   endif
 augroup END
@@ -1160,10 +1153,11 @@ nohlsearch " Don't (re)highlighting the last search pattern on reloading.
 " source $VIMRUNTIME/macros/matchit.vim " Enable matchit. Slow
 
 if has('vim_starting') && has('reltime')
-    let g:startuptime = reltime()
-    autocmd vimrc VimEnter * let g:startuptime = reltime(g:startuptime) | redraw | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+  let g:startuptime = reltime()
+  autocmd vimrc VimEnter * let g:startuptime = reltime(g:startuptime) | redraw | echomsg 'startuptime: ' . reltimestr(g:startuptime)
 endif
 
 " }}}1
+
 " vim:nofoldenable:
 

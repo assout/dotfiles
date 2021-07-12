@@ -25,6 +25,6 @@
 [include]
 	path = .gitconfig.local
 
-[includeIf "gitdir:~/ghq/github.com/assout/dotfiles/"]
+[includeIf "gitdir:~/ghq/github.com/"]
 	path = ~/ghq/github.com/assout/dotfiles/.gitconfig.home
 

@@ -24,4 +24,5 @@ inoremap <ESC> <ESC>:set iminsert=0<CR>
 
 " TODO: kaoriya版の場合vimrcに定義していても再定義が必要 TODO: プラグイン無効環境でエラー出る
 " colorscheme hybrid
+" colorscheme slate
 
